@@ -100,6 +100,7 @@
       font-size: 15px;
       font-weight: 700;
       margin-top: 12px;
+      cursor: pointer;
     }
     .footerNav {
       position: sticky;
@@ -135,15 +136,15 @@
     <div class="summary">
       <div class="sumBox">
         <div class="sumLabel">売上</div>
-        <div class="sumValue">120,000</div>
+        <div class="sumValue" id="sales">120,000</div>
       </div>
       <div class="sumBox">
         <div class="sumLabel">未回収</div>
-        <div class="sumValue">30,000</div>
+        <div class="sumValue" id="unpaid">30,000</div>
       </div>
       <div class="sumBox">
         <div class="sumLabel">確認済</div>
-        <div class="sumValue">90,000</div>
+        <div class="sumValue" id="confirmed">90,000</div>
       </div>
     </div>
 
@@ -156,9 +157,9 @@
       </div>
       <div class="line">セラ：さくら</div>
       <div class="line">売上：12,000円</div>
-      <div class="line">回収：未回収</div>
-      <div class="line">所在：セラ</div>
-      <button class="btn">回収する</button>
+      <div class="line">回収：<span id="roomA-status">未回収</span></div>
+      <div class="line">所在：<span id="roomA-location">セラ</span></div>
+      <button class="btn" id="collectBtnA">回収する</button>
     </div>
 
     <div class="card">
@@ -192,5 +193,18 @@
       </div>
     </div>
   </div>
+
+  <script>
+    document.getElementById("collectBtnA").addEventListener("click", function () {
+      document.getElementById("roomA-status").innerText = "回収済";
+      document.getElementById("roomA-location").innerText = "店";
+      document.getElementById("unpaid").innerText = "0";
+      document.getElementById("confirmed").innerText = "120,000";
+      this.innerText = "回収済み";
+      this.disabled = true;
+      this.style.opacity = "0.6";
+      alert("回収完了");
+    });
+  </script>
 </body>
 </html>
