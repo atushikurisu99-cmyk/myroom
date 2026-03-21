@@ -6,6 +6,10 @@
 <title>タクシー記録</title>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -48,6 +52,7 @@ input {
   border-radius: 12px;
   border: 1px solid #ccc;
   text-align: center;
+  background: #fff;
 }
 
 .hidden {
@@ -60,16 +65,18 @@ input {
 
 <div class="container">
 
-  <!-- 乗車 -->
   <button id="rideBtn" class="active">乗車</button>
-
-  <!-- 降車 -->
   <button id="dropBtn" class="sub">降車</button>
 
-  <!-- 金額入力 -->
-  <input id="priceInput" class="hidden" placeholder="金額入力">
+  <input
+    id="priceInput"
+    class="hidden"
+    type="tel"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    placeholder="金額入力"
+  >
 
-  <!-- 保存 -->
   <button id="saveBtn" class="sub">保存</button>
 
 </div>
@@ -82,9 +89,7 @@ const dropBtn = document.getElementById("dropBtn");
 const saveBtn = document.getElementById("saveBtn");
 const priceInput = document.getElementById("priceInput");
 
-// 状態更新
 function updateUI() {
-
   rideBtn.classList.remove("active");
   dropBtn.classList.remove("active");
   saveBtn.classList.remove("active");
@@ -101,22 +106,20 @@ function updateUI() {
   if (state === "after_drop") {
     priceInput.classList.remove("hidden");
     saveBtn.classList.add("active");
+    setTimeout(() => priceInput.focus(), 100);
   }
 }
 
-// 乗車
 rideBtn.onclick = () => {
   state = "riding";
   updateUI();
 };
 
-// 降車
 dropBtn.onclick = () => {
   state = "after_drop";
   updateUI();
 };
 
-// 保存
 saveBtn.onclick = () => {
   alert("保存（仮）");
   state = "idle";
@@ -124,7 +127,6 @@ saveBtn.onclick = () => {
   updateUI();
 };
 
-// 初期表示
 updateUI();
 </script>
 
