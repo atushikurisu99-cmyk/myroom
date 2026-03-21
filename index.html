@@ -1,134 +1,236 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>タクシー記録</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>タクシー記録</title>
 
-<style>
-* {
-  box-sizing: border-box;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f7fbfd;
-}
+    :root {
+      --bg: #eef2f4;
+      --panel: #e3e7ea;
+      --inactive-bg: #e9eef1;
+      --inactive-text: #555;
+      --ride: #6ea8e5;
+      --drop: #12b84f;
+      --save: #ea7a2f;
+      --white: #fff;
+      --border: #aeb8bf;
+      --input-bg: #f7f8f9;
+      --focus: #8fb2ff;
+    }
 
-.container {
-  max-width: 420px;
-  margin: 0 auto;
-  padding: 20px;
-}
+    body {
+      margin: 0;
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
+        "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      color: #222;
+    }
 
-button {
-  width: 100%;
-  padding: 22px;
-  margin-bottom: 14px;
-  font-size: 20px;
-  border-radius: 14px;
-  border: none;
-  background: #cfd8dc;
-  color: #333;
-  transition: 0.2s;
-}
+    .wrap {
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 24px 18px 40px;
+    }
 
-button.active {
-  background: #5da9e9;
-  color: #fff;
-  font-weight: bold;
-}
+    .panel {
+      background: var(--panel);
+      border-radius: 10px;
+      padding: 16px;
+      min-height: 68vh;
+    }
 
-button.sub {
-  background: #e5edf1;
-}
+    .btn {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px 18px;
+      margin-bottom: 14px;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1;
+      background: var(--inactive-bg);
+      color: var(--inactive-text);
+      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease,
+        transform 0.08s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-input {
-  width: 100%;
-  padding: 20px;
-  font-size: 22px;
-  margin-bottom: 14px;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  text-align: center;
-  background: #fff;
-}
+    .btn:active {
+      transform: scale(0.995);
+    }
 
-.hidden {
-  display: none;
-}
-</style>
+    .btn-ride.active {
+      background: var(--ride);
+      color: var(--white);
+      border-color: #5f97d2;
+    }
+
+    .btn-drop.active {
+      background: var(--drop);
+      color: #111;
+      border-color: #0ea347;
+    }
+
+    .btn-save.active {
+      background: var(--save);
+      color: #111;
+      border-color: #d56e29;
+    }
+
+    .btn.disabled {
+      opacity: 0.72;
+    }
+
+    .price-box {
+      display: none;
+      margin-bottom: 14px;
+    }
+
+    .price-box.show {
+      display: block;
+    }
+
+    .price-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--input-bg);
+      color: #222;
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      padding: 28px 18px;
+      outline: none;
+    }
+
+    .price-input::placeholder {
+      color: #a7a7a7;
+      font-weight: 700;
+    }
+
+    .price-input:focus {
+      border-color: var(--focus);
+      box-shadow: 0 0 0 4px rgba(143, 178, 255, 0.18);
+      background: #fff;
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #7b858d;
+      text-align: center;
+    }
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <div class="panel">
+      <button id="rideBtn" class="btn btn-ride">乗車</button>
+      <button id="dropBtn" class="btn btn-drop">降車</button>
 
-<div class="container">
+      <div id="priceBox" class="price-box">
+        <input
+          id="priceInput"
+          class="price-input"
+          type="tel"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          placeholder="金額入力"
+        />
+      </div>
 
-  <button id="rideBtn" class="active">乗車</button>
-  <button id="dropBtn" class="sub">降車</button>
+      <button id="saveBtn" class="btn btn-save">保存</button>
 
-  <input
-    id="priceInput"
-    class="hidden"
-    type="tel"
-    inputmode="numeric"
-    pattern="[0-9]*"
-    placeholder="金額入力"
-  >
+      <div class="hint" id="hintText">乗車を押してください</div>
+    </div>
+  </div>
 
-  <button id="saveBtn" class="sub">保存</button>
+  <script>
+    const rideBtn = document.getElementById("rideBtn");
+    const dropBtn = document.getElementById("dropBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const priceBox = document.getElementById("priceBox");
+    const priceInput = document.getElementById("priceInput");
+    const hintText = document.getElementById("hintText");
 
-</div>
+    let state = "idle"; // idle / riding / after_drop
 
-<script>
-let state = "idle";
+    function resetClasses() {
+      [rideBtn, dropBtn, saveBtn].forEach((btn) => {
+        btn.classList.remove("active", "disabled");
+      });
+    }
 
-const rideBtn = document.getElementById("rideBtn");
-const dropBtn = document.getElementById("dropBtn");
-const saveBtn = document.getElementById("saveBtn");
-const priceInput = document.getElementById("priceInput");
+    function updateUI() {
+      resetClasses();
+      priceBox.classList.remove("show");
 
-function updateUI() {
-  rideBtn.classList.remove("active");
-  dropBtn.classList.remove("active");
-  saveBtn.classList.remove("active");
-  priceInput.classList.add("hidden");
+      if (state === "idle") {
+        rideBtn.classList.add("active");
+        dropBtn.classList.add("disabled");
+        saveBtn.classList.add("disabled");
+        hintText.textContent = "乗車を押してください";
+      }
 
-  if (state === "idle") {
-    rideBtn.classList.add("active");
-  }
+      if (state === "riding") {
+        rideBtn.classList.add("disabled");
+        dropBtn.classList.add("active");
+        saveBtn.classList.add("disabled");
+        hintText.textContent = "降車を押してください";
+      }
 
-  if (state === "riding") {
-    dropBtn.classList.add("active");
-  }
+      if (state === "after_drop") {
+        rideBtn.classList.add("disabled");
+        dropBtn.classList.add("disabled");
+        priceBox.classList.add("show");
 
-  if (state === "after_drop") {
-    priceInput.classList.remove("hidden");
-    saveBtn.classList.add("active");
-    setTimeout(() => priceInput.focus(), 100);
-  }
-}
+        if (priceInput.value.trim() !== "") {
+          saveBtn.classList.add("active");
+          hintText.textContent = "保存を押してください";
+        } else {
+          saveBtn.classList.add("disabled");
+          hintText.textContent = "金額を入力してください";
+        }
+      }
+    }
 
-rideBtn.onclick = () => {
-  state = "riding";
-  updateUI();
-};
+    rideBtn.addEventListener("click", () => {
+      if (state !== "idle") return;
+      state = "riding";
+      updateUI();
+    });
 
-dropBtn.onclick = () => {
-  state = "after_drop";
-  updateUI();
-};
+    dropBtn.addEventListener("click", () => {
+      if (state !== "riding") return;
+      state = "after_drop";
+      updateUI();
+      setTimeout(() => priceInput.focus(), 80);
+    });
 
-saveBtn.onclick = () => {
-  alert("保存（仮）");
-  state = "idle";
-  priceInput.value = "";
-  updateUI();
-};
+    priceInput.addEventListener("input", () => {
+      // 数字以外は除去
+      priceInput.value = priceInput.value.replace(/[^\d]/g, "");
+      updateUI();
+    });
 
-updateUI();
-</script>
+    saveBtn.addEventListener("click", () => {
+      if (state !== "after_drop") return;
+      if (priceInput.value.trim() === "") return;
 
+      alert(`保存（仮）: ${priceInput.value}円`);
+      state = "idle";
+      priceInput.value = "";
+      updateUI();
+    });
+
+    updateUI();
+  </script>
 </body>
 </html>
