@@ -16,25 +16,18 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* 全体を少し下に */
+/* 上余白しっかり */
 .wrap {
   max-width: 430px;
   margin: 0 auto;
-  padding: 40px 18px 40px;
-}
-
-.panel {
-  background: #e3e7ea;
-  border-radius: 14px;
-  padding: 20px;
-  min-height: 70vh;
+  padding: 50px 18px 40px;
 }
 
 /* ボタン */
 .btn {
   width: 100%;
   padding: 30px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   font-size: 24px;
   border-radius: 20px;
   border: 1px solid #b8c2c9;
@@ -60,10 +53,10 @@ body {
   color: #111;
 }
 
-/* 入力エリア */
+/* 入力 */
 .price-wrap {
   display: none;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   position: relative;
 }
 
@@ -71,7 +64,6 @@ body {
   display: block;
 }
 
-/* 入力 */
 .price-input {
   width: 100%;
   padding: 28px;
@@ -83,7 +75,7 @@ body {
   font-weight: bold;
 }
 
-/* 円表示 */
+/* 円 */
 .yen {
   position: absolute;
   right: 20px;
@@ -96,7 +88,7 @@ body {
 /* 下テキスト */
 .hint {
   text-align: center;
-  margin-top: 10px;
+  margin-top: 14px;
   color: #7b858d;
   font-size: 14px;
 }
@@ -106,24 +98,22 @@ body {
 <body>
 
 <div class="wrap">
-  <div class="panel">
 
-    <button id="rideBtn" class="btn ride">乗車</button>
-    <button id="dropBtn" class="btn drop">降車</button>
+  <button id="rideBtn" class="btn ride">乗車</button>
+  <button id="dropBtn" class="btn drop">降車</button>
 
-    <div id="priceWrap" class="price-wrap">
-      <input id="priceInput" class="price-input"
-        type="tel"
-        inputmode="numeric"
-        placeholder="金額入力">
-      <span class="yen">円</span>
-    </div>
-
-    <button id="saveBtn" class="btn save">保存</button>
-
-    <div id="hint" class="hint">乗車を押してください</div>
-
+  <div id="priceWrap" class="price-wrap">
+    <input id="priceInput" class="price-input"
+      type="tel"
+      inputmode="numeric"
+      placeholder="金額入力">
+    <span class="yen">円</span>
   </div>
+
+  <button id="saveBtn" class="btn save">保存</button>
+
+  <div id="hint" class="hint">乗車を押してください</div>
+
 </div>
 
 <script>
