@@ -1,210 +1,132 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>マイルーム</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f7fbfd;
-      color: #222;
-    }
-    .wrap {
-      max-width: 420px;
-      margin: 0 auto;
-      padding: 20px 16px 40px;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: #94d8f7;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-    }
-    h1 {
-      margin: 0;
-      font-size: 24px;
-    }
-    .sub {
-      margin: 4px 0 0;
-      color: #666;
-      font-size: 13px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      margin-bottom: 14px;
-    }
-    .summary {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    .sumBox {
-      background: #fff;
-      border-radius: 16px;
-      padding: 14px 10px;
-      text-align: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    .sumLabel {
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 6px;
-    }
-    .sumValue {
-      font-size: 18px;
-      font-weight: 700;
-    }
-    .roomTop {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-    .roomName {
-      font-size: 18px;
-      font-weight: 700;
-    }
-    .status {
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #eaf7fd;
-      color: #227ca0;
-    }
-    .line {
-      margin: 6px 0;
-      font-size: 14px;
-    }
-    .btn {
-      width: 100%;
-      border: none;
-      background: #94d8f7;
-      color: #08394b;
-      border-radius: 14px;
-      padding: 12px;
-      font-size: 15px;
-      font-weight: 700;
-      margin-top: 12px;
-      cursor: pointer;
-    }
-    .footerNav {
-      position: sticky;
-      bottom: 0;
-      background: rgba(247,251,253,0.95);
-      padding-top: 10px;
-    }
-    .nav {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    .navBtn {
-      background: #fff;
-      border-radius: 14px;
-      text-align: center;
-      padding: 12px 8px;
-      font-size: 13px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>タクシー記録</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f7fbfd;
+}
+
+.container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+button {
+  width: 100%;
+  padding: 22px;
+  margin-bottom: 14px;
+  font-size: 20px;
+  border-radius: 14px;
+  border: none;
+  background: #cfd8dc;
+  color: #333;
+  transition: 0.2s;
+}
+
+button.active {
+  background: #5da9e9;
+  color: #fff;
+  font-weight: bold;
+}
+
+button.sub {
+  background: #e5edf1;
+}
+
+input {
+  width: 100%;
+  padding: 20px;
+  font-size: 22px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="header">
-      <div class="icon">🔑</div>
-      <div>
-        <h1>マイルーム</h1>
-        <p class="sub">ルーム管理アプリ</p>
-      </div>
-    </div>
 
-    <div class="summary">
-      <div class="sumBox">
-        <div class="sumLabel">売上</div>
-        <div class="sumValue" id="sales">120,000</div>
-      </div>
-      <div class="sumBox">
-        <div class="sumLabel">未回収</div>
-        <div class="sumValue" id="unpaid">30,000</div>
-      </div>
-      <div class="sumBox">
-        <div class="sumLabel">確認済</div>
-        <div class="sumValue" id="confirmed">90,000</div>
-      </div>
-    </div>
+<div class="container">
 
-    <div style="height: 16px;"></div>
+  <!-- 乗車 -->
+  <button id="rideBtn" class="active">乗車</button>
 
-    <div class="card">
-      <div class="roomTop">
-        <div class="roomName">ルームA</div>
-        <div class="status">使用中</div>
-      </div>
-      <div class="line">セラ：さくら</div>
-      <div class="line">売上：12,000円</div>
-      <div class="line">回収：<span id="roomA-status">未回収</span></div>
-      <div class="line">所在：<span id="roomA-location">セラ</span></div>
-      <button class="btn" id="collectBtnA">回収する</button>
-    </div>
+  <!-- 降車 -->
+  <button id="dropBtn" class="sub">降車</button>
 
-    <div class="card">
-      <div class="roomTop">
-        <div class="roomName">ルームB</div>
-        <div class="status" style="background:#f0f0f0;color:#666;">空室</div>
-      </div>
-      <div class="line">セラ：ー</div>
-      <div class="line">売上：0円</div>
-      <div class="line">回収：ー</div>
-      <div class="line">所在：ー</div>
-    </div>
+  <!-- 金額入力 -->
+  <input id="priceInput" class="hidden" placeholder="金額入力">
 
-    <div class="card">
-      <div class="roomTop">
-        <div class="roomName">ルームC</div>
-        <div class="status" style="background:#eef5f7;color:#4c6470;">清掃中</div>
-      </div>
-      <div class="line">セラ：みく</div>
-      <div class="line">売上：8,000円</div>
-      <div class="line">回収：回収済</div>
-      <div class="line">所在：ボックスA</div>
-      <button class="btn">確認する</button>
-    </div>
+  <!-- 保存 -->
+  <button id="saveBtn" class="sub">保存</button>
 
-    <div class="footerNav">
-      <div class="nav">
-        <div class="navBtn">ルーム</div>
-        <div class="navBtn">履歴</div>
-        <div class="navBtn">設定</div>
-      </div>
-    </div>
-  </div>
+</div>
 
-  <script>
-    document.getElementById("collectBtnA").addEventListener("click", function () {
-      document.getElementById("roomA-status").innerText = "回収済";
-      document.getElementById("roomA-location").innerText = "店";
-      document.getElementById("unpaid").innerText = "0";
-      document.getElementById("confirmed").innerText = "120,000";
-      this.innerText = "回収済み";
-      this.disabled = true;
-      this.style.opacity = "0.6";
-      alert("回収完了");
-    });
-  </script>
+<script>
+let state = "idle";
+
+const rideBtn = document.getElementById("rideBtn");
+const dropBtn = document.getElementById("dropBtn");
+const saveBtn = document.getElementById("saveBtn");
+const priceInput = document.getElementById("priceInput");
+
+// 状態更新
+function updateUI() {
+
+  rideBtn.classList.remove("active");
+  dropBtn.classList.remove("active");
+  saveBtn.classList.remove("active");
+  priceInput.classList.add("hidden");
+
+  if (state === "idle") {
+    rideBtn.classList.add("active");
+  }
+
+  if (state === "riding") {
+    dropBtn.classList.add("active");
+  }
+
+  if (state === "after_drop") {
+    priceInput.classList.remove("hidden");
+    saveBtn.classList.add("active");
+  }
+}
+
+// 乗車
+rideBtn.onclick = () => {
+  state = "riding";
+  updateUI();
+};
+
+// 降車
+dropBtn.onclick = () => {
+  state = "after_drop";
+  updateUI();
+};
+
+// 保存
+saveBtn.onclick = () => {
+  alert("保存（仮）");
+  state = "idle";
+  priceInput.value = "";
+  updateUI();
+};
+
+// 初期表示
+updateUI();
+</script>
+
 </body>
 </html>
