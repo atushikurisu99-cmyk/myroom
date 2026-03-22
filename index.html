@@ -16,25 +16,29 @@
       margin: 0;
       padding: 0;
       width: 100%;
-      height: 100%;
-      overflow: hidden;
+      min-height: 100%;
       background: #f8fafc;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overscroll-behavior: none;
+      overscroll-behavior-y: none;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
       touch-action: manipulation;
-      position: fixed;
-      inset: 0;
     }
 
     #root {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+      min-height: 100svh;
     }
 
     * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      cursor: pointer;
+      touch-action: manipulation;
     }
 
     input, button, textarea, select {
@@ -71,6 +75,11 @@
         return `${diffMin}分`;
       }, [rideStartAt, screen, isRiding]);
 
+      const formattedAmount = useMemo(() => {
+        if (!amount) return "";
+        return Number(amount).toLocaleString("ja-JP");
+      }, [amount]);
+
       const handleStartRide = () => {
         const start = new Date();
         setRideStartAt(start);
@@ -91,14 +100,20 @@
         setScreen("fare");
       };
 
+      const handleAmountChange = (e) => {
+        const raw = e.target.value.replace(/[^\d]/g, "");
+        setAmount(raw);
+      };
+
       const handleSaveFare = (selectedPayment) => {
         if (!rideStartAt || !rideEndAt) return;
+
         if (!amount.trim()) {
           alert("金額を入力してください");
           return;
         }
 
-        const numericAmount = Number(amount.replace(/[^\d]/g, ""));
+        const numericAmount = Number(amount);
         if (!numericAmount || numericAmount <= 0) {
           alert("正しい金額を入力してください");
           return;
@@ -125,8 +140,8 @@
       const totalToday = records.reduce((sum, record) => sum + record.amount, 0);
 
       return (
-        <div className="h-[100dvh] w-full bg-slate-50 flex items-center justify-center p-4 overflow-hidden">
-          <div className="w-full max-w-sm h-full max-h-[100dvh] rounded-[28px] bg-white shadow-xl border border-slate-200 overflow-hidden">
+        <div className="min-h-[100svh] bg-slate-50 flex items-start justify-center p-4 pb-8">
+          <div className="w-full max-w-sm rounded-[28px] bg-white shadow-xl border border-slate-200 overflow-hidden">
             <div className="px-5 pt-6 pb-4 border-b border-slate-100">
               <div className="text-sm text-slate-400">TAXI用LINEミニアプリ</div>
               <div className="mt-1 text-xl font-bold text-slate-800">
@@ -137,7 +152,7 @@
             </div>
 
             {screen === "top" && (
-              <div className="p-5 h-[calc(100%-77px)] overflow-hidden">
+              <div className="p-5">
                 <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-4 mb-5">
                   <div className="text-sm text-slate-500">状態</div>
                   <div className="mt-1 text-2xl font-bold text-slate-800">
@@ -154,6 +169,7 @@
 
                 <div className="grid gap-3">
                   <button
+                    type="button"
                     onClick={isRiding ? handleReturnToRide : handleStartRide}
                     className={`w-full rounded-2xl py-5 text-lg font-bold transition active:scale-[0.99] ${
                       isRiding
@@ -164,15 +180,24 @@
                     {isRiding ? "乗車中へ戻る" : "乗務開始"}
                   </button>
 
-                  <button className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]">
+                  <button
+                    type="button"
+                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                  >
                     修正
                   </button>
 
-                  <button className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]">
+                  <button
+                    type="button"
+                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                  >
                     分析
                   </button>
 
-                  <button className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]">
+                  <button
+                    type="button"
+                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                  >
                     設定
                   </button>
                 </div>
@@ -214,7 +239,7 @@
             )}
 
             {screen === "ride" && (
-              <div className="p-5 h-[calc(100%-77px)] flex flex-col overflow-hidden">
+              <div className="p-5 min-h-[560px] flex flex-col">
                 <div className="rounded-2xl bg-sky-50 border border-sky-100 px-4 py-5 mb-6">
                   <div className="text-sm text-slate-500">状態</div>
                   <div className="mt-1 text-3xl font-bold text-slate-800">乗車中</div>
@@ -230,6 +255,7 @@
 
                 <div className="flex-1 flex items-center">
                   <button
+                    type="button"
                     onClick={handleDropOff}
                     className="w-full rounded-[28px] bg-emerald-500 text-white py-10 text-3xl font-bold shadow-lg active:scale-[0.99]"
                   >
@@ -239,6 +265,7 @@
 
                 <div className="pt-5">
                   <button
+                    type="button"
                     onClick={() => setScreen("top")}
                     className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
                   >
@@ -249,7 +276,7 @@
             )}
 
             {screen === "fare" && (
-              <div className="p-5 h-[calc(100%-77px)] flex flex-col overflow-hidden">
+              <div className="p-5 min-h-[560px] flex flex-col">
                 <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-4 mb-5">
                   <div className="text-sm text-slate-500">乗車情報</div>
                   <div className="mt-2 text-sm text-slate-600">
@@ -272,9 +299,10 @@
                       ¥
                     </span>
                     <input
+                      type="text"
                       inputMode="numeric"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ""))}
+                      value={formattedAmount}
+                      onChange={handleAmountChange}
                       placeholder="0"
                       className="w-full rounded-[24px] border border-slate-200 bg-white pl-12 pr-4 py-6 text-4xl font-bold text-slate-800 outline-none focus:border-sky-300"
                     />
@@ -284,7 +312,7 @@
                 <button
                   type="button"
                   onClick={() => setReceipt((prev) => !prev)}
-                  className={`w-full rounded-2xl py-4 mb-5 text-base font-semibold border ${
+                  className={`w-full rounded-2xl py-4 mb-5 text-base font-semibold border active:scale-[0.99] ${
                     receipt
                       ? "bg-slate-200 text-slate-800 border-slate-300"
                       : "bg-[#ffd700] text-black border-[#e6c200]"
@@ -296,12 +324,14 @@
                 <div className="text-sm text-slate-500 mb-2">支払い方法</div>
                 <div className="grid grid-cols-2 gap-3 mt-auto">
                   <button
+                    type="button"
                     onClick={() => handleSaveFare("cash")}
                     className="rounded-[24px] bg-sky-500 text-white py-6 text-xl font-bold shadow-md active:scale-[0.99]"
                   >
                     現金
                   </button>
                   <button
+                    type="button"
                     onClick={() => handleSaveFare("cardQr")}
                     className="rounded-[24px] bg-slate-800 text-white py-6 text-xl font-bold shadow-md active:scale-[0.99]"
                   >
