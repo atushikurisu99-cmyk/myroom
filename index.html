@@ -53,7 +53,7 @@
     const { useMemo, useState, useRef, useEffect } = React;
 
     function TaxiMiniAppMock() {
-      const [screen, setScreen] = useState("top");
+      const [screen, setScreen] = useState("top"); // top | standby | ride | fare
       const [dutyStarted, setDutyStarted] = useState(false);
       const [isRiding, setIsRiding] = useState(false);
 
@@ -74,7 +74,7 @@
           hour: "2-digit",
           minute: "2-digit",
         });
-      }, [screen, dutyStarted, isRiding]);
+      }, [screen, dutyStarted, isRiding, records.length]);
 
       const elapsedText = useMemo(() => {
         if (!rideStartAt) return "00分";
@@ -103,18 +103,26 @@
         };
       }, []);
 
+      const totalToday = records.reduce((sum, record) => sum + record.amount, 0);
+
       const handleDutyStart = () => {
         setDutyStarted(true);
+        setScreen("standby");
       };
 
       const handleDutyEnd = () => {
         if (isRiding) return;
         setDutyStarted(false);
+        setScreen("top");
         setRideStartAt(null);
         setRideEndAt(null);
         setAmount("");
         setReceipt(false);
-        setScreen("top");
+      };
+
+      const handleGoToStandby = () => {
+        if (!dutyStarted || isRiding) return;
+        setScreen("standby");
       };
 
       const handleStartRide = () => {
@@ -126,7 +134,7 @@
       };
 
       const handleReturnToRide = () => {
-        setScreen("ride");
+        if (isRiding) setScreen("ride");
       };
 
       const handleDropOff = () => {
@@ -171,7 +179,7 @@
         setRideEndAt(null);
         setAmount("");
         setReceipt(false);
-        setScreen("top");
+        setScreen("standby");
 
         setShowSaved(true);
         if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
@@ -179,8 +187,6 @@
           setShowSaved(false);
         }, 3000);
       };
-
-      const totalToday = records.reduce((sum, record) => sum + record.amount, 0);
 
       return (
         <div className="min-h-[100svh] bg-slate-50 flex items-start justify-center p-4 pb-8">
@@ -195,6 +201,7 @@
               <div className="text-sm text-slate-400">TAXI用LINEミニアプリ</div>
               <div className="mt-1 text-xl font-bold text-slate-800">
                 {screen === "top" && "TOP"}
+                {screen === "standby" && "乗車待機"}
                 {screen === "ride" && "乗車画面"}
                 {screen === "fare" && "金額入力"}
               </div>
@@ -205,19 +212,18 @@
                 <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-4 mb-5">
                   <div className="text-sm text-slate-500">状態</div>
                   <div className="mt-1 text-2xl font-bold text-slate-800">
-                    {!dutyStarted ? "乗務開始前" : isRiding ? "乗車中" : "乗務中"}
+                    {dutyStarted ? "乗務中" : "乗務開始前"}
                   </div>
                   <div className="mt-2 text-sm text-slate-500">
                     現在時刻 {nowText}
-                    {isRiding && rideStartAt ? ` ・ 経過 ${elapsedText}` : ""}
                   </div>
                   <div className="mt-2 text-sm text-slate-500">
                     本日売上 ¥{totalToday.toLocaleString("ja-JP")}
                   </div>
                 </div>
 
-                {!dutyStarted && (
-                  <div className="grid gap-3">
+                <div className="grid gap-3">
+                  {!dutyStarted && (
                     <button
                       type="button"
                       onClick={handleDutyStart}
@@ -225,89 +231,39 @@
                     >
                       乗務開始
                     </button>
+                  )}
 
-                    <button
-                      type="button"
-                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
-                    >
-                      乗務終了
-                    </button>
-
-                    <button
-                      type="button"
-                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
-                    >
-                      修正
-                    </button>
-
-                    <button
-                      type="button"
-                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
-                    >
-                      分析
-                    </button>
-
-                    <button
-                      type="button"
-                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
-                    >
-                      設定
-                    </button>
-                  </div>
-                )}
-
-                {dutyStarted && !isRiding && (
-                  <div className="grid gap-3">
-                    <button
-                      type="button"
-                      onClick={handleStartRide}
-                      className="w-full rounded-2xl py-5 text-lg font-bold bg-sky-500 text-white shadow-md active:scale-[0.99]"
-                    >
-                      乗車
-                    </button>
-
+                  {dutyStarted && (
                     <button
                       type="button"
                       onClick={handleDutyEnd}
-                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                      className="w-full rounded-2xl py-5 text-lg font-bold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
                     >
                       乗務終了
                     </button>
-                  </div>
-                )}
+                  )}
 
-                {dutyStarted && isRiding && (
-                  <div className="grid gap-3">
-                    <button
-                      type="button"
-                      onClick={handleReturnToRide}
-                      className="w-full rounded-2xl py-5 text-lg font-bold bg-sky-100 text-sky-700 border border-sky-200 active:scale-[0.99]"
-                    >
-                      乗車中へ戻る
-                    </button>
+                  <button
+                    type="button"
+                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                  >
+                    修正
+                  </button>
 
-                    <button
-                      type="button"
-                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
-                    >
-                      修正
-                    </button>
+                  <button
+                    type="button"
+                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                  >
+                    分析
+                  </button>
 
-                    <button
-                      type="button"
-                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
-                    >
-                      分析
-                    </button>
-
-                    <button
-                      type="button"
-                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
-                    >
-                      設定
-                    </button>
-                  </div>
-                )}
+                  <button
+                    type="button"
+                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                  >
+                    設定
+                  </button>
+                </div>
 
                 {records.length > 0 && (
                   <div className="mt-5 rounded-2xl border border-slate-200 bg-white overflow-hidden">
@@ -345,6 +301,38 @@
               </div>
             )}
 
+            {screen === "standby" && (
+              <div className="p-5 min-h-[560px] flex flex-col">
+                <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-5 mb-6">
+                  <div className="text-sm text-slate-500">状態</div>
+                  <div className="mt-1 text-3xl font-bold text-slate-800">乗車待機</div>
+                  <div className="mt-2 text-sm text-slate-500">
+                    現在時刻 {nowText}
+                  </div>
+                </div>
+
+                <div className="flex-1 flex items-center">
+                  <button
+                    type="button"
+                    onClick={handleStartRide}
+                    className="w-full rounded-[28px] bg-sky-500 text-white py-10 text-3xl font-bold shadow-lg active:scale-[0.99]"
+                  >
+                    乗車
+                  </button>
+                </div>
+
+                <div className="pt-5">
+                  <button
+                    type="button"
+                    onClick={() => setScreen("top")}
+                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                  >
+                    TOP
+                  </button>
+                </div>
+              </div>
+            )}
+
             {screen === "ride" && (
               <div className="p-5 min-h-[560px] flex flex-col">
                 <div className="rounded-2xl bg-sky-50 border border-sky-100 px-4 py-5 mb-6">
@@ -374,7 +362,7 @@
                 <div className="pt-5">
                   <button
                     type="button"
-                    onClick={() => setScreen("top")}
+                    onClick={() => setScreen("standby")}
                     className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
                   >
                     TOP
