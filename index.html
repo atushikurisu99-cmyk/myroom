@@ -1,199 +1,368 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>タクシー記録</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>タクシー記録</title>
 
-<style>
-* {
-  box-sizing: border-box;
-}
+  <style>
+    * { box-sizing: border-box; }
 
-body {
-  margin: 0;
-  background: #eef2f4;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-/* 上余白しっかり */
-.wrap {
-  max-width: 430px;
-  margin: 0 auto;
-  padding: 50px 18px 40px;
-}
-
-/* ボタン */
-.btn {
-  width: 100%;
-  padding: 30px;
-  margin-bottom: 18px;
-  font-size: 24px;
-  border-radius: 20px;
-  border: 1px solid #b8c2c9;
-  background: #e9eef1;
-  color: #666;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-/* 強調 */
-.ride.active {
-  background: #6ea8e5;
-  color: #fff;
-}
-
-.drop.active {
-  background: #12b84f;
-  color: #111;
-}
-
-.save.active {
-  background: #ea7a2f;
-  color: #111;
-}
-
-/* 入力 */
-.price-wrap {
-  display: none;
-  margin-bottom: 18px;
-  position: relative;
-}
-
-.price-wrap.show {
-  display: block;
-}
-
-.price-input {
-  width: 100%;
-  padding: 28px;
-  font-size: 28px;
-  text-align: center;
-  border-radius: 20px;
-  border: 1px solid #b8c2c9;
-  background: #f7f8f9;
-  font-weight: bold;
-}
-
-/* 円 */
-.yen {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 20px;
-  color: #888;
-}
-
-/* 下テキスト */
-.hint {
-  text-align: center;
-  margin-top: 14px;
-  color: #7b858d;
-  font-size: 14px;
-}
-</style>
-</head>
-
-<body>
-
-<div class="wrap">
-
-  <button id="rideBtn" class="btn ride">乗車</button>
-  <button id="dropBtn" class="btn drop">降車</button>
-
-  <div id="priceWrap" class="price-wrap">
-    <input id="priceInput" class="price-input"
-      type="tel"
-      inputmode="numeric"
-      placeholder="金額入力">
-    <span class="yen">円</span>
-  </div>
-
-  <button id="saveBtn" class="btn save">保存</button>
-
-  <div id="hint" class="hint">乗車を押してください</div>
-
-</div>
-
-<script>
-let state = "idle";
-
-const rideBtn = document.getElementById("rideBtn");
-const dropBtn = document.getElementById("dropBtn");
-const saveBtn = document.getElementById("saveBtn");
-const priceWrap = document.getElementById("priceWrap");
-const priceInput = document.getElementById("priceInput");
-const hint = document.getElementById("hint");
-
-function reset() {
-  rideBtn.classList.remove("active");
-  dropBtn.classList.remove("active");
-  saveBtn.classList.remove("active");
-  priceWrap.classList.remove("show");
-}
-
-function updateUI() {
-  reset();
-
-  if (state === "idle") {
-    rideBtn.classList.add("active");
-    hint.textContent = "乗車を押してください";
-  }
-
-  if (state === "riding") {
-    dropBtn.classList.add("active");
-    hint.textContent = "降車を押してください";
-  }
-
-  if (state === "after_drop") {
-    priceWrap.classList.add("show");
-
-    if (priceInput.value !== "") {
-      saveBtn.classList.add("active");
-      hint.textContent = "保存を押してください";
-    } else {
-      hint.textContent = "金額を入力してください";
+    :root {
+      --bg: #eef2f4;
+      --panel: #e3e7ea;
+      --inactive-bg: #e9eef1;
+      --inactive-text: #777;
+      --ride: #6ea8e5;
+      --drop: #58b95a;
+      --save: #e1853f;
+      --border: #aeb8bf;
+      --focus: #8fb2ff;
+      --toast-bg: rgba(34, 34, 34, 0.92);
+      --toast-text: #fff;
+      --undo: #8fb2ff;
     }
 
-    setTimeout(() => priceInput.focus(), 100);
-  }
-}
+    body {
+      margin: 0;
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
+        "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      color: #222;
+    }
 
-/* 乗車 */
-rideBtn.onclick = () => {
-  if (state !== "idle") return;
-  state = "riding";
-  updateUI();
-};
+    .wrap {
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 34px 18px 40px;
+      position: relative;
+    }
 
-/* 降車 */
-dropBtn.onclick = () => {
-  if (state !== "riding") return;
-  state = "after_drop";
-  updateUI();
-};
+    .panel {
+      background: var(--panel);
+      border-radius: 10px;
+      padding: 26px 16px 40px;
+      min-height: 68vh;
+    }
 
-/* 入力 */
-priceInput.addEventListener("input", () => {
-  priceInput.value = priceInput.value.replace(/[^\d]/g, "");
-  updateUI();
-});
+    .btn {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px 18px;
+      margin-bottom: 14px;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1;
+      background: var(--inactive-bg);
+      color: var(--inactive-text);
+      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-/* 保存 */
-saveBtn.onclick = () => {
-  if (state !== "after_drop") return;
-  if (priceInput.value === "") return;
+    .btn-ride.active {
+      background: var(--ride);
+      color: #fff;
+      border-color: #5f97d2;
+    }
 
-  alert(`保存（仮）: ${priceInput.value}円`);
+    .btn-drop.active {
+      background: var(--drop);
+      color: #111;
+      border-color: #4ca54e;
+    }
 
-  state = "idle";
-  priceInput.value = "";
-  updateUI();
-};
+    .btn.disabled {
+      opacity: 0.8;
+    }
 
-updateUI();
-</script>
+    .price-box {
+      display: none;
+      margin-bottom: 14px;
+      position: relative;
+    }
 
+    .price-box.show {
+      display: block;
+    }
+
+    .price-wrap {
+      position: relative;
+    }
+
+    .price-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: #f7f8f9;
+      color: #222;
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      padding: 28px 56px 28px 18px;
+      outline: none;
+    }
+
+    .price-input:focus {
+      border-color: var(--focus);
+      box-shadow: 0 0 0 4px rgba(143, 178, 255, 0.18);
+      background: #fff;
+    }
+
+    .yen {
+      position: absolute;
+      right: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 22px;
+      font-weight: 700;
+      color: #666;
+      pointer-events: none;
+    }
+
+    .options {
+      display: none;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .options.show {
+      display: flex;
+    }
+
+    .opt {
+      flex: 1 1 calc(33.333% - 7px);
+      min-width: 90px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 8px;
+      font-size: 20px;
+      font-weight: 700;
+      background: #f0f3f5;
+      color: #555;
+    }
+
+    .hint {
+      margin-top: 16px;
+      font-size: 14px;
+      color: #7b858d;
+      text-align: center;
+      font-weight: 700;
+      min-height: 1.4em;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%) translateY(20px);
+      width: min(92vw, 420px);
+      background: var(--toast-bg);
+      color: var(--toast-text);
+      border-radius: 18px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.22s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    .toast-text {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .undo-btn {
+      border: none;
+      background: transparent;
+      color: var(--undo);
+      font-size: 18px;
+      font-weight: 800;
+      white-space: nowrap;
+      padding: 0;
+    }
+
+    .saved-note {
+      margin-top: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #6f7b84;
+      text-align: center;
+      min-height: 1.4em;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <button id="rideBtn" class="btn btn-ride">乗車</button>
+      <button id="dropBtn" class="btn btn-drop">降車</button>
+
+      <div id="priceBox" class="price-box">
+        <div class="price-wrap">
+          <input
+            id="priceInput"
+            class="price-input"
+            type="tel"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            placeholder="金額入力"
+          />
+          <span class="yen">円</span>
+        </div>
+
+        <div id="options" class="options">
+          <button class="opt" data-pay="現金">現金</button>
+          <button class="opt" data-pay="売掛">売掛</button>
+          <button class="opt" data-pay="領収書発行">領収書</button>
+        </div>
+      </div>
+
+      <div id="hintText" class="hint">乗車を押してください</div>
+      <div id="savedNote" class="saved-note"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">
+    <div id="toastText" class="toast-text"></div>
+    <button id="undoBtn" class="undo-btn">戻る</button>
+  </div>
+
+  <script>
+    const rideBtn = document.getElementById("rideBtn");
+    const dropBtn = document.getElementById("dropBtn");
+    const priceBox = document.getElementById("priceBox");
+    const priceInput = document.getElementById("priceInput");
+    const options = document.getElementById("options");
+    const hintText = document.getElementById("hintText");
+    const savedNote = document.getElementById("savedNote");
+    const toast = document.getElementById("toast");
+    const toastText = document.getElementById("toastText");
+    const undoBtn = document.getElementById("undoBtn");
+
+    let state = "idle"; // idle / riding / after_drop
+    let pendingSaveTimer = null;
+    let pendingSelection = null;
+
+    function clearPendingSave() {
+      if (pendingSaveTimer) {
+        clearTimeout(pendingSaveTimer);
+        pendingSaveTimer = null;
+      }
+      pendingSelection = null;
+      toast.classList.remove("show");
+    }
+
+    function resetClasses() {
+      rideBtn.classList.remove("active", "disabled");
+      dropBtn.classList.remove("active", "disabled");
+    }
+
+    function updateUI() {
+      resetClasses();
+      priceBox.classList.remove("show");
+      options.classList.remove("show");
+      savedNote.textContent = "";
+
+      if (state === "idle") {
+        rideBtn.classList.add("active");
+        dropBtn.classList.add("disabled");
+        hintText.textContent = "乗車を押してください";
+      }
+
+      if (state === "riding") {
+        rideBtn.classList.add("disabled");
+        dropBtn.classList.add("active");
+        hintText.textContent = "降車を押してください";
+      }
+
+      if (state === "after_drop") {
+        rideBtn.classList.add("disabled");
+        dropBtn.classList.add("disabled");
+        priceBox.classList.add("show");
+
+        if (priceInput.value.trim() !== "") {
+          options.classList.add("show");
+          hintText.textContent = "決済を選んでください";
+        } else {
+          hintText.textContent = "金額を入力してください";
+        }
+      }
+    }
+
+    function saveRecord(payType) {
+      clearPendingSave();
+      const amount = priceInput.value.trim();
+
+      // 本当はここで保存処理
+      savedNote.textContent = `${amount}円 / ${payType} で保存しました`;
+
+      state = "idle";
+      priceInput.value = "";
+      updateUI();
+    }
+
+    function reserveSave(payType) {
+      const amount = priceInput.value.trim();
+      if (!amount) return;
+
+      clearPendingSave();
+      pendingSelection = payType;
+      toastText.textContent = `${payType}で保存します`;
+      toast.classList.add("show");
+
+      pendingSaveTimer = setTimeout(() => {
+        saveRecord(payType);
+      }, 2500);
+    }
+
+    rideBtn.addEventListener("click", () => {
+      if (state !== "idle") return;
+      clearPendingSave();
+      state = "riding";
+      updateUI();
+    });
+
+    dropBtn.addEventListener("click", () => {
+      if (state !== "riding") return;
+      clearPendingSave();
+      state = "after_drop";
+      updateUI();
+      setTimeout(() => priceInput.focus(), 80);
+    });
+
+    priceInput.addEventListener("input", () => {
+      priceInput.value = priceInput.value.replace(/[^\d]/g, "");
+      clearPendingSave();
+      updateUI();
+    });
+
+    document.querySelectorAll(".opt").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (state !== "after_drop") return;
+        if (!priceInput.value.trim()) return;
+        reserveSave(btn.dataset.pay);
+      });
+    });
+
+    undoBtn.addEventListener("click", () => {
+      clearPendingSave();
+      hintText.textContent = "決済を選び直してください";
+    });
+
+    updateUI();
+  </script>
 </body>
 </html>
