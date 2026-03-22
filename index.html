@@ -54,11 +54,15 @@
 
     function TaxiMiniAppMock() {
       const [screen, setScreen] = useState("top");
+      const [dutyStarted, setDutyStarted] = useState(false);
       const [isRiding, setIsRiding] = useState(false);
+
       const [rideStartAt, setRideStartAt] = useState(null);
       const [rideEndAt, setRideEndAt] = useState(null);
+
       const [amount, setAmount] = useState("");
       const [receipt, setReceipt] = useState(false);
+
       const [records, setRecords] = useState([]);
       const [showSaved, setShowSaved] = useState(false);
 
@@ -70,7 +74,7 @@
           hour: "2-digit",
           minute: "2-digit",
         });
-      }, [screen, isRiding]);
+      }, [screen, dutyStarted, isRiding]);
 
       const elapsedText = useMemo(() => {
         if (!rideStartAt) return "00分";
@@ -95,11 +99,23 @@
 
       useEffect(() => {
         return () => {
-          if (savedTimerRef.current) {
-            clearTimeout(savedTimerRef.current);
-          }
+          if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
         };
       }, []);
+
+      const handleDutyStart = () => {
+        setDutyStarted(true);
+      };
+
+      const handleDutyEnd = () => {
+        if (isRiding) return;
+        setDutyStarted(false);
+        setRideStartAt(null);
+        setRideEndAt(null);
+        setAmount("");
+        setReceipt(false);
+        setScreen("top");
+      };
 
       const handleStartRide = () => {
         const start = new Date();
@@ -158,9 +174,7 @@
         setScreen("top");
 
         setShowSaved(true);
-        if (savedTimerRef.current) {
-          clearTimeout(savedTimerRef.current);
-        }
+        if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
         savedTimerRef.current = setTimeout(() => {
           setShowSaved(false);
         }, 3000);
@@ -191,7 +205,7 @@
                 <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-4 mb-5">
                   <div className="text-sm text-slate-500">状態</div>
                   <div className="mt-1 text-2xl font-bold text-slate-800">
-                    {isRiding ? "乗車中" : "待機中"}
+                    {!dutyStarted ? "乗務開始前" : isRiding ? "乗車中" : "乗務中"}
                   </div>
                   <div className="mt-2 text-sm text-slate-500">
                     現在時刻 {nowText}
@@ -202,40 +216,98 @@
                   </div>
                 </div>
 
-                <div className="grid gap-3">
-                  <button
-                    type="button"
-                    onClick={isRiding ? handleReturnToRide : handleStartRide}
-                    className={`w-full rounded-2xl py-5 text-lg font-bold transition active:scale-[0.99] ${
-                      isRiding
-                        ? "bg-sky-100 text-sky-700 border border-sky-200"
-                        : "bg-sky-500 text-white shadow-md"
-                    }`}
-                  >
-                    {isRiding ? "乗車中へ戻る" : "乗務開始"}
-                  </button>
+                {!dutyStarted && (
+                  <div className="grid gap-3">
+                    <button
+                      type="button"
+                      onClick={handleDutyStart}
+                      className="w-full rounded-2xl py-5 text-lg font-bold bg-sky-500 text-white shadow-md active:scale-[0.99]"
+                    >
+                      乗務開始
+                    </button>
 
-                  <button
-                    type="button"
-                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
-                  >
-                    修正
-                  </button>
+                    <button
+                      type="button"
+                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                    >
+                      乗務終了
+                    </button>
 
-                  <button
-                    type="button"
-                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
-                  >
-                    分析
-                  </button>
+                    <button
+                      type="button"
+                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                    >
+                      修正
+                    </button>
 
-                  <button
-                    type="button"
-                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
-                  >
-                    設定
-                  </button>
-                </div>
+                    <button
+                      type="button"
+                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                    >
+                      分析
+                    </button>
+
+                    <button
+                      type="button"
+                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                    >
+                      設定
+                    </button>
+                  </div>
+                )}
+
+                {dutyStarted && !isRiding && (
+                  <div className="grid gap-3">
+                    <button
+                      type="button"
+                      onClick={handleStartRide}
+                      className="w-full rounded-2xl py-5 text-lg font-bold bg-sky-500 text-white shadow-md active:scale-[0.99]"
+                    >
+                      乗車
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleDutyEnd}
+                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                    >
+                      乗務終了
+                    </button>
+                  </div>
+                )}
+
+                {dutyStarted && isRiding && (
+                  <div className="grid gap-3">
+                    <button
+                      type="button"
+                      onClick={handleReturnToRide}
+                      className="w-full rounded-2xl py-5 text-lg font-bold bg-sky-100 text-sky-700 border border-sky-200 active:scale-[0.99]"
+                    >
+                      乗車中へ戻る
+                    </button>
+
+                    <button
+                      type="button"
+                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                    >
+                      修正
+                    </button>
+
+                    <button
+                      type="button"
+                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                    >
+                      分析
+                    </button>
+
+                    <button
+                      type="button"
+                      className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                    >
+                      設定
+                    </button>
+                  </div>
+                )}
 
                 {records.length > 0 && (
                   <div className="mt-5 rounded-2xl border border-slate-200 bg-white overflow-hidden">
@@ -283,8 +355,9 @@
                     {rideStartAt?.toLocaleTimeString("ja-JP", {
                       hour: "2-digit",
                       minute: "2-digit",
-                    })}{" "}
-                    ・ 経過 {elapsedText}
+                    })}
+                    {" ・ "}
+                    経過 {elapsedText}
                   </div>
                 </div>
 
@@ -338,7 +411,10 @@
                       type="text"
                       inputMode="numeric"
                       value={formattedAmount}
-                      onChange={handleAmountChange}
+                      onChange={(e) => {
+                        const raw = e.target.value.replace(/[^\d]/g, "");
+                        setAmount(raw);
+                      }}
                       placeholder="0"
                       className="w-full rounded-[24px] border border-slate-200 bg-white pl-12 pr-4 py-6 text-4xl font-bold text-slate-800 outline-none focus:border-sky-300"
                     />
