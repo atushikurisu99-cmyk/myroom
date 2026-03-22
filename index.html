@@ -20,20 +20,20 @@ body {
   padding: 24px 16px;
 }
 
-/* 共通ボタン */
+/* ボタン共通 */
 .btn {
   width: 100%;
   border: none;
   border-radius: 20px;
-  padding: 32px 16px;
-  font-size: 26px;
+  padding: 34px 16px;
+  font-size: 28px;
   font-weight: bold;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 /* 状態ボタン */
 .ride { background: #6ea8e5; color: #fff; }
-.drop { background: #58b95a; color: #111; }
+.drop { background: #6fb063; color: #111; }
 
 /* 金額 */
 .price-input {
@@ -46,7 +46,7 @@ body {
   margin-bottom: 20px;
 }
 
-/* 決済ボタン（大） */
+/* 決済ボタン */
 .pay-btn {
   width: 100%;
   border-radius: 20px;
@@ -57,7 +57,7 @@ body {
   border: none;
 }
 
-/* 色分け */
+/* 色 */
 .cash { background: #ffc107; }
 .credit { background: #6aa84f; color: #fff; }
 .receipt { background: #ffeb3b; }
@@ -94,8 +94,10 @@ body {
 
 <div class="wrap">
 
-  <!-- 乗車 / 降車 -->
+  <!-- 乗車 -->
   <button id="rideBtn" class="btn ride">乗車</button>
+
+  <!-- 降車 -->
   <button id="dropBtn" class="btn drop">降車</button>
 
   <!-- 金額 -->
@@ -133,7 +135,7 @@ function updateUI() {
 
   if (state === "idle") {
     rideBtn.style.display = "block";
-    dropBtn.style.display = "block";
+    dropBtn.style.display = "none";
     priceInput.classList.add("hidden");
     payArea.classList.add("hidden");
   }
@@ -178,6 +180,7 @@ priceInput.oninput = () => {
 /* 決済 */
 document.querySelectorAll(".pay-btn").forEach(btn => {
   btn.onclick = () => {
+
     const pay = btn.dataset.pay;
     const amount = priceInput.value;
 
@@ -220,6 +223,7 @@ function save(pay, amount) {
   updateUI();
 }
 
+/* 初期 */
 updateUI();
 </script>
 
