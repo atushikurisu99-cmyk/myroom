@@ -1,185 +1,387 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Taxi Mini App</title>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Taxi Mini App Mock</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overscroll-behavior-y: none;
+      -webkit-text-size-adjust: 100%;
+    }
 
-<script src="https://cdn.tailwindcss.com"></script>
-<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    body {
+      touch-action: manipulation;
+    }
 
-<style>
-html,body{
-  margin:0;
-  background:#f8fafc;
-  font-family:-apple-system;
-}
-</style>
+    #root {
+      min-height: 100svh;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    input, button, textarea, select {
+      font: inherit;
+    }
+  </style>
 </head>
-
 <body>
-<div id="root"></div>
+  <div id="root"></div>
 
-<script type="text/babel">
-const {useState,useMemo,useRef,useEffect} = React;
+  <script type="text/babel">
+    const { useMemo, useState, useRef, useEffect } = React;
 
-function App(){
+    function TaxiMiniAppMock() {
+      const [screen, setScreen] = useState("top");
+      const [isRiding, setIsRiding] = useState(false);
+      const [rideStartAt, setRideStartAt] = useState(null);
+      const [rideEndAt, setRideEndAt] = useState(null);
+      const [amount, setAmount] = useState("");
+      const [receipt, setReceipt] = useState(false);
+      const [records, setRecords] = useState([]);
+      const [showSaved, setShowSaved] = useState(false);
 
-const [screen,setScreen]=useState("top");
-const [isRiding,setIsRiding]=useState(false);
-const [start,setStart]=useState(null);
-const [end,setEnd]=useState(null);
-const [amount,setAmount]=useState("");
-const [receipt,setReceipt]=useState(false);
-const [saved,setSaved]=useState(false);
+      const amountInputRef = useRef(null);
+      const savedTimerRef = useRef(null);
 
-const inputRef=useRef(null);
+      const nowText = useMemo(() => {
+        return new Date().toLocaleTimeString("ja-JP", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }, [screen, isRiding]);
 
-// 金額フォーマット
-const displayAmount=useMemo(()=>{
- if(!amount)return "";
- return Number(amount).toLocaleString("ja-JP");
-},[amount]);
+      const elapsedText = useMemo(() => {
+        if (!rideStartAt) return "00分";
+        const diffMs = Date.now() - rideStartAt.getTime();
+        const diffMin = Math.max(0, Math.floor(diffMs / 1000 / 60));
+        return `${diffMin}分`;
+      }, [rideStartAt, screen, isRiding]);
 
-// カーソル自動ON
-useEffect(()=>{
- if(screen==="fare"){
-  setTimeout(()=>inputRef.current?.focus(),100);
- }
-},[screen]);
+      const formattedAmount = useMemo(() => {
+        if (!amount) return "";
+        return Number(amount).toLocaleString("ja-JP");
+      }, [amount]);
 
-// 保存後メッセージ3秒
-useEffect(()=>{
- if(saved){
-  setTimeout(()=>setSaved(false),3000);
- }
-},[saved]);
+      useEffect(() => {
+        if (screen === "fare") {
+          const timer = setTimeout(() => {
+            amountInputRef.current?.focus();
+          }, 120);
+          return () => clearTimeout(timer);
+        }
+      }, [screen]);
 
-// 開始
-const startRide=()=>{
- setStart(new Date());
- setIsRiding(true);
- setScreen("ride");
-};
+      useEffect(() => {
+        return () => {
+          if (savedTimerRef.current) {
+            clearTimeout(savedTimerRef.current);
+          }
+        };
+      }, []);
 
-// 降車
-const drop=()=>{
- setEnd(new Date());
- setScreen("fare");
-};
+      const handleStartRide = () => {
+        const start = new Date();
+        setRideStartAt(start);
+        setRideEndAt(null);
+        setIsRiding(true);
+        setScreen("ride");
+      };
 
-// 保存
-const save=()=>{
- setSaved(true);
- setIsRiding(false);
- setAmount("");
- setReceipt(false);
- setScreen("top");
-};
+      const handleReturnToRide = () => {
+        setScreen("ride");
+      };
 
-// 金額入力
-const onChange=(e)=>{
- setAmount(e.target.value.replace(/[^\d]/g,""));
-};
+      const handleDropOff = () => {
+        const end = new Date();
+        setRideEndAt(end);
+        setAmount("");
+        setReceipt(false);
+        setScreen("fare");
+      };
 
-return(
-<div className="min-h-screen flex items-center justify-center p-4">
+      const handleAmountChange = (e) => {
+        const raw = e.target.value.replace(/[^\d]/g, "");
+        setAmount(raw);
+      };
 
-<div className="w-full max-w-sm bg-white rounded-3xl shadow-xl p-5">
+      const handleSaveFare = (selectedPayment) => {
+        if (!rideStartAt || !rideEndAt) return;
 
-{/* 保存メッセージ */}
-{saved && (
-<div className="mb-4 text-center text-sm font-bold text-green-600">
-保存しました
-</div>
-)}
+        if (!amount.trim()) {
+          alert("金額を入力してください");
+          return;
+        }
 
-{/* TOP */}
-{screen==="top" && (
-<>
-<button
-onClick={isRiding?()=>setScreen("ride"):startRide}
-className="w-full py-5 rounded-2xl bg-blue-500 text-white font-bold mb-3 active:scale-95">
-{isRiding?"乗車中へ戻る":"乗務開始"}
-</button>
+        const numericAmount = Number(amount);
+        if (!numericAmount || numericAmount <= 0) {
+          alert("正しい金額を入力してください");
+          return;
+        }
 
-<button className="w-full py-4 rounded-2xl bg-gray-100 mb-2">修正</button>
-<button className="w-full py-4 rounded-2xl bg-gray-100 mb-2">分析</button>
-<button className="w-full py-4 rounded-2xl bg-gray-100">設定</button>
-</>
-)}
+        const newRecord = {
+          id: Date.now(),
+          startAt: rideStartAt,
+          endAt: rideEndAt,
+          amount: numericAmount,
+          payment: selectedPayment,
+          receipt,
+        };
 
-{/* 乗車中 */}
-{screen==="ride" && (
-<>
-<button
-onClick={drop}
-className="w-full py-10 rounded-3xl bg-green-500 text-white text-3xl font-bold mb-5 active:scale-95">
-降車
-</button>
+        setRecords((prev) => [newRecord, ...prev]);
+        setIsRiding(false);
+        setRideStartAt(null);
+        setRideEndAt(null);
+        setAmount("");
+        setReceipt(false);
+        setScreen("top");
 
-<button
-onClick={()=>setScreen("top")}
-className="w-full py-4 rounded-2xl bg-gray-100">
-TOP
-</button>
-</>
-)}
+        setShowSaved(true);
+        if (savedTimerRef.current) {
+          clearTimeout(savedTimerRef.current);
+        }
+        savedTimerRef.current = setTimeout(() => {
+          setShowSaved(false);
+        }, 3000);
+      };
 
-{/* 金額入力 */}
-{screen==="fare" && (
-<>
-<div className="mb-4">
-<div className="text-sm text-gray-500 mb-2">金額</div>
+      const totalToday = records.reduce((sum, record) => sum + record.amount, 0);
 
-<div className="relative">
-<span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-gray-400">¥</span>
+      return (
+        <div className="min-h-[100svh] bg-slate-50 flex items-start justify-center p-4 pb-8">
+          <div className="w-full max-w-sm rounded-[28px] bg-white shadow-xl border border-slate-200 overflow-hidden relative">
+            {showSaved && (
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 rounded-full bg-emerald-500 text-white text-sm font-bold px-4 py-2 shadow-lg">
+                保存しました
+              </div>
+            )}
 
-<input
-ref={inputRef}
-value={displayAmount}
-onChange={onChange}
-inputMode="numeric"
-className="w-full text-4xl font-bold border rounded-2xl p-5 pl-12"
-placeholder="0"
-/>
-</div>
-</div>
+            <div className="px-5 pt-6 pb-4 border-b border-slate-100">
+              <div className="text-sm text-slate-400">TAXI用LINEミニアプリ</div>
+              <div className="mt-1 text-xl font-bold text-slate-800">
+                {screen === "top" && "TOP"}
+                {screen === "ride" && "乗車画面"}
+                {screen === "fare" && "金額入力"}
+              </div>
+            </div>
 
-{/* 領収証 */}
-<button
-onClick={()=>setReceipt(!receipt)}
-className={`w-full py-4 rounded-2xl mb-4 font-bold ${
- receipt?"bg-gray-300":"bg-[#ffd700]"
-}`}>
-領収証発行
-</button>
+            {screen === "top" && (
+              <div className="p-5">
+                <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-4 mb-5">
+                  <div className="text-sm text-slate-500">状態</div>
+                  <div className="mt-1 text-2xl font-bold text-slate-800">
+                    {isRiding ? "乗車中" : "待機中"}
+                  </div>
+                  <div className="mt-2 text-sm text-slate-500">
+                    現在時刻 {nowText}
+                    {isRiding && rideStartAt ? ` ・ 経過 ${elapsedText}` : ""}
+                  </div>
+                  <div className="mt-2 text-sm text-slate-500">
+                    本日売上 ¥{totalToday.toLocaleString("ja-JP")}
+                  </div>
+                </div>
 
-{/* 支払い */}
-<div className="grid grid-cols-2 gap-3">
-<button
-onClick={save}
-className="py-6 rounded-2xl bg-blue-500 text-white font-bold shadow-md active:scale-95">
-現金
-</button>
+                <div className="grid gap-3">
+                  <button
+                    type="button"
+                    onClick={isRiding ? handleReturnToRide : handleStartRide}
+                    className={`w-full rounded-2xl py-5 text-lg font-bold transition active:scale-[0.99] ${
+                      isRiding
+                        ? "bg-sky-100 text-sky-700 border border-sky-200"
+                        : "bg-sky-500 text-white shadow-md"
+                    }`}
+                  >
+                    {isRiding ? "乗車中へ戻る" : "乗務開始"}
+                  </button>
 
-<button
-onClick={save}
-className="py-6 rounded-2xl bg-gray-800 text-white font-bold shadow-md active:scale-95">
-カード・QR
-</button>
-</div>
-</>
-)}
+                  <button
+                    type="button"
+                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                  >
+                    修正
+                  </button>
 
-</div>
-</div>
-);
-}
+                  <button
+                    type="button"
+                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                  >
+                    分析
+                  </button>
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
-</script>
+                  <button
+                    type="button"
+                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                  >
+                    設定
+                  </button>
+                </div>
+
+                {records.length > 0 && (
+                  <div className="mt-5 rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                    <div className="px-4 py-3 text-sm font-semibold text-slate-700 border-b border-slate-100">
+                      最新履歴
+                    </div>
+                    <div className="max-h-52 overflow-auto">
+                      {records.slice(0, 5).map((record) => (
+                        <div
+                          key={record.id}
+                          className="px-4 py-3 border-b last:border-b-0 border-slate-100"
+                        >
+                          <div className="text-sm font-semibold text-slate-800">
+                            ¥{record.amount.toLocaleString("ja-JP")}
+                          </div>
+                          <div className="mt-1 text-xs text-slate-500">
+                            {record.startAt.toLocaleTimeString("ja-JP", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                            {" → "}
+                            {record.endAt.toLocaleTimeString("ja-JP", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                            {" ・ "}
+                            {record.payment === "cash" ? "現金" : "カード・QR"}
+                            {record.receipt ? " ・ 領収証あり" : ""}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {screen === "ride" && (
+              <div className="p-5 min-h-[560px] flex flex-col">
+                <div className="rounded-2xl bg-sky-50 border border-sky-100 px-4 py-5 mb-6">
+                  <div className="text-sm text-slate-500">状態</div>
+                  <div className="mt-1 text-3xl font-bold text-slate-800">乗車中</div>
+                  <div className="mt-2 text-sm text-slate-500">
+                    開始{" "}
+                    {rideStartAt?.toLocaleTimeString("ja-JP", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}{" "}
+                    ・ 経過 {elapsedText}
+                  </div>
+                </div>
+
+                <div className="flex-1 flex items-center">
+                  <button
+                    type="button"
+                    onClick={handleDropOff}
+                    className="w-full rounded-[28px] bg-emerald-500 text-white py-10 text-3xl font-bold shadow-lg active:scale-[0.99]"
+                  >
+                    降車
+                  </button>
+                </div>
+
+                <div className="pt-5">
+                  <button
+                    type="button"
+                    onClick={() => setScreen("top")}
+                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
+                  >
+                    TOP
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {screen === "fare" && (
+              <div className="p-5 min-h-[560px] flex flex-col">
+                <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-4 mb-5">
+                  <div className="text-sm text-slate-500">乗車情報</div>
+                  <div className="mt-2 text-sm text-slate-600">
+                    {rideStartAt?.toLocaleTimeString("ja-JP", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                    {" → "}
+                    {rideEndAt?.toLocaleTimeString("ja-JP", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </div>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm text-slate-500 mb-2">金額</label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-slate-400">
+                      ¥
+                    </span>
+                    <input
+                      ref={amountInputRef}
+                      type="text"
+                      inputMode="numeric"
+                      value={formattedAmount}
+                      onChange={handleAmountChange}
+                      placeholder="0"
+                      className="w-full rounded-[24px] border border-slate-200 bg-white pl-12 pr-4 py-6 text-4xl font-bold text-slate-800 outline-none focus:border-sky-300"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setReceipt((prev) => !prev)}
+                  className={`w-full rounded-2xl py-4 mb-5 text-base font-semibold border active:scale-[0.99] ${
+                    receipt
+                      ? "bg-slate-200 text-slate-800 border-slate-300"
+                      : "bg-[#ffd700] text-black border-[#e6c200]"
+                  }`}
+                >
+                  領収証発行
+                </button>
+
+                <div className="text-sm text-slate-500 mb-2">支払い方法</div>
+                <div className="grid grid-cols-2 gap-3 mt-auto">
+                  <button
+                    type="button"
+                    onClick={() => handleSaveFare("cash")}
+                    className="rounded-[24px] bg-sky-500 text-white py-6 text-xl font-bold shadow-md active:scale-[0.98] transition"
+                  >
+                    現金
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSaveFare("cardQr")}
+                    className="rounded-[24px] bg-slate-800 text-white py-6 text-xl font-bold shadow-md active:scale-[0.98] transition"
+                  >
+                    カード・QR
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<TaxiMiniAppMock />);
+  </script>
 </body>
 </html>
