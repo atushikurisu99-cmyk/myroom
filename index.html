@@ -1,368 +1,227 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>タクシー記録</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>タクシー記録</title>
 
-  <style>
-    * { box-sizing: border-box; }
+<style>
+* { box-sizing: border-box; }
 
-    :root {
-      --bg: #eef2f4;
-      --panel: #e3e7ea;
-      --inactive-bg: #e9eef1;
-      --inactive-text: #777;
-      --ride: #6ea8e5;
-      --drop: #58b95a;
-      --save: #e1853f;
-      --border: #aeb8bf;
-      --focus: #8fb2ff;
-      --toast-bg: rgba(34, 34, 34, 0.92);
-      --toast-text: #fff;
-      --undo: #8fb2ff;
-    }
+body {
+  margin: 0;
+  background: #f5f7f8;
+  font-family: sans-serif;
+}
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
-        "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-      color: #222;
-    }
+.wrap {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
 
-    .wrap {
-      max-width: 430px;
-      margin: 0 auto;
-      min-height: 100vh;
-      padding: 34px 18px 40px;
-      position: relative;
-    }
+/* 共通ボタン */
+.btn {
+  width: 100%;
+  border: none;
+  border-radius: 20px;
+  padding: 32px 16px;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
 
-    .panel {
-      background: var(--panel);
-      border-radius: 10px;
-      padding: 26px 16px 40px;
-      min-height: 68vh;
-    }
+/* 状態ボタン */
+.ride { background: #6ea8e5; color: #fff; }
+.drop { background: #58b95a; color: #111; }
 
-    .btn {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 30px 18px;
-      margin-bottom: 14px;
-      font-size: 24px;
-      font-weight: 700;
-      line-height: 1;
-      background: var(--inactive-bg);
-      color: var(--inactive-text);
-      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
+/* 金額 */
+.price-input {
+  width: 100%;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  font-size: 32px;
+  text-align: center;
+  padding: 28px;
+  margin-bottom: 20px;
+}
 
-    .btn-ride.active {
-      background: var(--ride);
-      color: #fff;
-      border-color: #5f97d2;
-    }
+/* 決済ボタン（大） */
+.pay-btn {
+  width: 100%;
+  border-radius: 20px;
+  padding: 34px 16px;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 14px;
+  border: none;
+}
 
-    .btn-drop.active {
-      background: var(--drop);
-      color: #111;
-      border-color: #4ca54e;
-    }
+/* 色分け */
+.cash { background: #ffc107; }
+.credit { background: #6aa84f; color: #fff; }
+.receipt { background: #ffeb3b; }
 
-    .btn.disabled {
-      opacity: 0.8;
-    }
+/* 非表示 */
+.hidden { display: none; }
 
-    .price-box {
-      display: none;
-      margin-bottom: 14px;
-      position: relative;
-    }
+/* トースト */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: #fff;
+  padding: 14px 18px;
+  border-radius: 12px;
+  display: none;
+}
 
-    .price-box.show {
-      display: block;
-    }
+.toast.show { display: block; }
 
-    .price-wrap {
-      position: relative;
-    }
-
-    .price-input {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      background: #f7f8f9;
-      color: #222;
-      font-size: 28px;
-      font-weight: 800;
-      text-align: center;
-      padding: 28px 56px 28px 18px;
-      outline: none;
-    }
-
-    .price-input:focus {
-      border-color: var(--focus);
-      box-shadow: 0 0 0 4px rgba(143, 178, 255, 0.18);
-      background: #fff;
-    }
-
-    .yen {
-      position: absolute;
-      right: 22px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 22px;
-      font-weight: 700;
-      color: #666;
-      pointer-events: none;
-    }
-
-    .options {
-      display: none;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-
-    .options.show {
-      display: flex;
-    }
-
-    .opt {
-      flex: 1 1 calc(33.333% - 7px);
-      min-width: 90px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px 8px;
-      font-size: 20px;
-      font-weight: 700;
-      background: #f0f3f5;
-      color: #555;
-    }
-
-    .hint {
-      margin-top: 16px;
-      font-size: 14px;
-      color: #7b858d;
-      text-align: center;
-      font-weight: 700;
-      min-height: 1.4em;
-    }
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 28px;
-      transform: translateX(-50%) translateY(20px);
-      width: min(92vw, 420px);
-      background: var(--toast-bg);
-      color: var(--toast-text);
-      border-radius: 18px;
-      padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      opacity: 0;
-      pointer-events: none;
-      transition: 0.22s ease;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-      pointer-events: auto;
-    }
-
-    .toast-text {
-      font-size: 17px;
-      font-weight: 700;
-      line-height: 1.4;
-    }
-
-    .undo-btn {
-      border: none;
-      background: transparent;
-      color: var(--undo);
-      font-size: 18px;
-      font-weight: 800;
-      white-space: nowrap;
-      padding: 0;
-    }
-
-    .saved-note {
-      margin-top: 14px;
-      font-size: 15px;
-      font-weight: 700;
-      color: #6f7b84;
-      text-align: center;
-      min-height: 1.4em;
-    }
-  </style>
+.undo {
+  margin-left: 10px;
+  color: #8fb2ff;
+  background: none;
+  border: none;
+  font-weight: bold;
+}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="panel">
-      <button id="rideBtn" class="btn btn-ride">乗車</button>
-      <button id="dropBtn" class="btn btn-drop">降車</button>
 
-      <div id="priceBox" class="price-box">
-        <div class="price-wrap">
-          <input
-            id="priceInput"
-            class="price-input"
-            type="tel"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            placeholder="金額入力"
-          />
-          <span class="yen">円</span>
-        </div>
+<div class="wrap">
 
-        <div id="options" class="options">
-          <button class="opt" data-pay="現金">現金</button>
-          <button class="opt" data-pay="売掛">売掛</button>
-          <button class="opt" data-pay="領収書発行">領収書</button>
-        </div>
-      </div>
+  <!-- 乗車 / 降車 -->
+  <button id="rideBtn" class="btn ride">乗車</button>
+  <button id="dropBtn" class="btn drop">降車</button>
 
-      <div id="hintText" class="hint">乗車を押してください</div>
-      <div id="savedNote" class="saved-note"></div>
-    </div>
+  <!-- 金額 -->
+  <input id="priceInput" class="price-input hidden" type="tel" placeholder="金額入力">
+
+  <!-- 決済 -->
+  <div id="payArea" class="hidden">
+    <button class="pay-btn cash" data-pay="現金">現金</button>
+    <button class="pay-btn credit" data-pay="売掛">売掛</button>
+    <button class="pay-btn receipt" data-pay="領収書">領収書発行</button>
   </div>
 
-  <div id="toast" class="toast">
-    <div id="toastText" class="toast-text"></div>
-    <button id="undoBtn" class="undo-btn">戻る</button>
-  </div>
+</div>
 
-  <script>
-    const rideBtn = document.getElementById("rideBtn");
-    const dropBtn = document.getElementById("dropBtn");
-    const priceBox = document.getElementById("priceBox");
-    const priceInput = document.getElementById("priceInput");
-    const options = document.getElementById("options");
-    const hintText = document.getElementById("hintText");
-    const savedNote = document.getElementById("savedNote");
-    const toast = document.getElementById("toast");
-    const toastText = document.getElementById("toastText");
-    const undoBtn = document.getElementById("undoBtn");
+<!-- トースト -->
+<div id="toast" class="toast">
+  <span id="toastText"></span>
+  <button id="undo" class="undo">戻る</button>
+</div>
 
-    let state = "idle"; // idle / riding / after_drop
-    let pendingSaveTimer = null;
-    let pendingSelection = null;
+<script>
+let state = "idle";
+let timer = null;
 
-    function clearPendingSave() {
-      if (pendingSaveTimer) {
-        clearTimeout(pendingSaveTimer);
-        pendingSaveTimer = null;
-      }
-      pendingSelection = null;
-      toast.classList.remove("show");
+const rideBtn = document.getElementById("rideBtn");
+const dropBtn = document.getElementById("dropBtn");
+const priceInput = document.getElementById("priceInput");
+const payArea = document.getElementById("payArea");
+const toast = document.getElementById("toast");
+const toastText = document.getElementById("toastText");
+const undo = document.getElementById("undo");
+
+/* UI更新 */
+function updateUI() {
+
+  if (state === "idle") {
+    rideBtn.style.display = "block";
+    dropBtn.style.display = "block";
+    priceInput.classList.add("hidden");
+    payArea.classList.add("hidden");
+  }
+
+  if (state === "riding") {
+    rideBtn.style.display = "none";
+    dropBtn.style.display = "block";
+  }
+
+  if (state === "after_drop") {
+    rideBtn.style.display = "none";
+    dropBtn.style.display = "none";
+    priceInput.classList.remove("hidden");
+
+    if (priceInput.value !== "") {
+      payArea.classList.remove("hidden");
+    } else {
+      payArea.classList.add("hidden");
     }
+  }
+}
 
-    function resetClasses() {
-      rideBtn.classList.remove("active", "disabled");
-      dropBtn.classList.remove("active", "disabled");
-    }
+/* 乗車 */
+rideBtn.onclick = () => {
+  state = "riding";
+  updateUI();
+};
 
-    function updateUI() {
-      resetClasses();
-      priceBox.classList.remove("show");
-      options.classList.remove("show");
-      savedNote.textContent = "";
+/* 降車 */
+dropBtn.onclick = () => {
+  state = "after_drop";
+  updateUI();
+  setTimeout(() => priceInput.focus(), 100);
+};
 
-      if (state === "idle") {
-        rideBtn.classList.add("active");
-        dropBtn.classList.add("disabled");
-        hintText.textContent = "乗車を押してください";
-      }
+/* 金額入力 */
+priceInput.oninput = () => {
+  priceInput.value = priceInput.value.replace(/[^\d]/g, "");
+  updateUI();
+};
 
-      if (state === "riding") {
-        rideBtn.classList.add("disabled");
-        dropBtn.classList.add("active");
-        hintText.textContent = "降車を押してください";
-      }
+/* 決済 */
+document.querySelectorAll(".pay-btn").forEach(btn => {
+  btn.onclick = () => {
+    const pay = btn.dataset.pay;
+    const amount = priceInput.value;
 
-      if (state === "after_drop") {
-        rideBtn.classList.add("disabled");
-        dropBtn.classList.add("disabled");
-        priceBox.classList.add("show");
+    if (!amount) return;
 
-        if (priceInput.value.trim() !== "") {
-          options.classList.add("show");
-          hintText.textContent = "決済を選んでください";
-        } else {
-          hintText.textContent = "金額を入力してください";
-        }
-      }
-    }
+    clearTimeout(timer);
 
-    function saveRecord(payType) {
-      clearPendingSave();
-      const amount = priceInput.value.trim();
+    toastText.textContent = `${pay}で保存（2秒後）`;
+    toast.classList.add("show");
 
-      // 本当はここで保存処理
-      savedNote.textContent = `${amount}円 / ${payType} で保存しました`;
+    timer = setTimeout(() => {
+      save(pay, amount);
+    }, 2000);
+  };
+});
 
-      state = "idle";
-      priceInput.value = "";
-      updateUI();
-    }
+/* 戻る */
+undo.onclick = () => {
+  clearTimeout(timer);
+  toast.classList.remove("show");
+};
 
-    function reserveSave(payType) {
-      const amount = priceInput.value.trim();
-      if (!amount) return;
+/* 保存 */
+function save(pay, amount) {
 
-      clearPendingSave();
-      pendingSelection = payType;
-      toastText.textContent = `${payType}で保存します`;
-      toast.classList.add("show");
+  const data = JSON.parse(localStorage.getItem("taxi") || "[]");
 
-      pendingSaveTimer = setTimeout(() => {
-        saveRecord(payType);
-      }, 2500);
-    }
+  data.push({
+    amount: amount,
+    pay: pay,
+    time: new Date().toISOString()
+  });
 
-    rideBtn.addEventListener("click", () => {
-      if (state !== "idle") return;
-      clearPendingSave();
-      state = "riding";
-      updateUI();
-    });
+  localStorage.setItem("taxi", JSON.stringify(data));
 
-    dropBtn.addEventListener("click", () => {
-      if (state !== "riding") return;
-      clearPendingSave();
-      state = "after_drop";
-      updateUI();
-      setTimeout(() => priceInput.focus(), 80);
-    });
+  toast.classList.remove("show");
 
-    priceInput.addEventListener("input", () => {
-      priceInput.value = priceInput.value.replace(/[^\d]/g, "");
-      clearPendingSave();
-      updateUI();
-    });
+  state = "idle";
+  priceInput.value = "";
+  updateUI();
+}
 
-    document.querySelectorAll(".opt").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        if (state !== "after_drop") return;
-        if (!priceInput.value.trim()) return;
-        reserveSave(btn.dataset.pay);
-      });
-    });
+updateUI();
+</script>
 
-    undoBtn.addEventListener("click", () => {
-      clearPendingSave();
-      hintText.textContent = "決済を選び直してください";
-    });
-
-    updateUI();
-  </script>
 </body>
 </html>
