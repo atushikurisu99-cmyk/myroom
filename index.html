@@ -66,6 +66,7 @@
       const [rideStartAt, setRideStartAt] = useState(null);
       const [rideEndAt, setRideEndAt] = useState(null);
 
+      // 自動取得前提。今は未取得時に空文字のまま扱う
       const [pickup, setPickup] = useState("");
       const [dropoff, setDropoff] = useState("");
 
@@ -199,9 +200,6 @@
         `w-full h-[52px] rounded-2xl text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`;
       const mainButtonClass =
         `w-full h-full rounded-[28px] text-white text-3xl font-bold active:scale-[0.99] ${shadowMain}`;
-
-      const textFieldClass =
-        `w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[17px] text-slate-800 outline-none focus:border-sky-300 ${shadowSub}`;
 
       const confirmButtonClass = (() => {
         if (confirmButtonMode === "idle") {
@@ -416,8 +414,8 @@
                             </div>
 
                             <div className="mt-3 grid gap-1 text-sm text-slate-600">
-                              <div>乗車地：{record.pickup || "未入力"}</div>
-                              <div>降車地：{record.dropoff || "未入力"}</div>
+                              <div>乗車地：{record.pickup || "未取得"}</div>
+                              <div>降車地：{record.dropoff || "未取得"}</div>
                             </div>
                           </div>
                         ))}
@@ -601,7 +599,7 @@
                       乗車地
                     </div>
                     <div className="mt-1 text-[18px] font-bold text-slate-800">
-                      {pickup || "未入力"}
+                      {pickup || "未取得"}
                     </div>
                   </div>
 
@@ -620,32 +618,33 @@
 
               {screen === "fare" && (
                 <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-                  <div className={`${cardClass} h-[116px] px-4 py-4 shrink-0`}>
-                    <div className="mt-1 text-[24px] font-bold text-slate-700">
-                      {formatTime(rideStartAt)} → {formatTime(rideEndAt)}
-                    </div>
-                    <div className="mt-6 text-[14px] font-semibold text-slate-500">
-                      乗車地・降車地と金額を入力してください
+                  <div className={`${cardClass} h-[128px] px-4 py-4 shrink-0`}>
+                    <div className="flex items-start justify-center gap-6">
+                      <div className="flex-1 min-w-0 text-left">
+                        <div className="text-[26px] font-bold text-slate-800 leading-none">
+                          {formatTime(rideStartAt)}
+                        </div>
+                        <div className="mt-3 text-[15px] font-semibold text-slate-600 truncate">
+                          {pickup || "未取得"}
+                        </div>
+                      </div>
+
+                      <div className="pt-1 text-[22px] font-bold text-slate-400 shrink-0">
+                        →
+                      </div>
+
+                      <div className="flex-1 min-w-0 text-right">
+                        <div className="text-[26px] font-bold text-slate-800 leading-none">
+                          {formatTime(rideEndAt)}
+                        </div>
+                        <div className="mt-3 text-[15px] font-semibold text-slate-600 truncate">
+                          {dropoff || "未取得"}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="pt-4 shrink-0 grid gap-3">
-                    <input
-                      type="text"
-                      value={pickup}
-                      onChange={(e) => setPickup(e.target.value)}
-                      placeholder="乗車地"
-                      className={textFieldClass}
-                    />
-
-                    <input
-                      type="text"
-                      value={dropoff}
-                      onChange={(e) => setDropoff(e.target.value)}
-                      placeholder="降車地"
-                      className={textFieldClass}
-                    />
-
+                  <div className="pt-4 shrink-0">
                     <div className="relative">
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-slate-400">
                         ¥
