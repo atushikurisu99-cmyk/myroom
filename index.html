@@ -1,467 +1,170 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
-  />
-  <title>Taxi Mini App Mock</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100%;
-      background: #f8fafc;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overscroll-behavior-y: none;
-      -webkit-text-size-adjust: 100%;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Taxi UI</title>
 
-    body {
-      touch-action: manipulation;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #f5f6f8;
+}
 
-    #root {
-      min-height: 100svh;
-    }
+/* 全体 */
+.container {
+  padding: 16px;
+}
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+/* 状態カード（高さ固定） */
+.status-card {
+  height: 120px; /* ←統一 */
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-    button {
-      cursor: pointer;
-      touch-action: manipulation;
-    }
+/* メインボタン（位置固定エリア） */
+.main-area {
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    input, button, textarea, select {
-      font: inherit;
-    }
-  </style>
+/* メインボタン */
+.main-button {
+  width: 100%;
+  height: 100px;
+  border-radius: 20px;
+  font-size: 24px;
+  border: none;
+  color: #fff;
+}
+
+/* 状態別 */
+.blue { background: #4aa3df; }
+.green { background: #4caf50; }
+
+/* サブボタン */
+.sub-area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sub-button {
+  height: 56px;
+  border-radius: 14px;
+  border: none;
+  font-size: 16px;
+  background: #e0e0e0;
+}
+
+/* 金額入力 */
+.input-box {
+  width: 100%;
+  height: 70px;
+  font-size: 28px;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+  padding: 0 12px;
+  margin-bottom: 12px;
+}
+
+/* 確定ボタン */
+.confirm {
+  background: #000;
+  color: #fff;
+  height: 60px;
+  border-radius: 12px;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+/* 支払いボタン */
+.pay-btn {
+  height: 60px;
+  border-radius: 12px;
+  font-size: 18px;
+  border: none;
+  color: #fff;
+}
+
+/* 有効 */
+.cash { background: #4aa3df; }
+.card { background: #2ecc71; }
+.receipt { background: #f1c40f; color:#000; }
+
+/* 無効状態 */
+.disabled {
+  background: #ccc !important;
+  color: #888 !important;
+  pointer-events: none;
+}
+</style>
 </head>
+
 <body>
-  <div id="root"></div>
 
-  <script type="text/babel">
-    const { useMemo, useState, useRef, useEffect } = React;
+<div class="container">
 
-    function TaxiMiniAppMock() {
-      const [screen, setScreen] = useState("top"); // top | standby | ride | fare
-      const [dutyStarted, setDutyStarted] = useState(false);
-      const [isRiding, setIsRiding] = useState(false);
+  <!-- 状態カード -->
+  <div class="status-card">
+    <div>乗車待機</div>
+    <div>現在時刻 17:23</div>
+    <div>乗務合計 ¥0</div>
+  </div>
 
-      const [rideStartAt, setRideStartAt] = useState(null);
-      const [rideEndAt, setRideEndAt] = useState(null);
+  <!-- メインボタン -->
+  <div class="main-area">
+    <button class="main-button blue">乗車</button>
+  </div>
 
-      const [amount, setAmount] = useState("");
-      const [receipt, setReceipt] = useState(false);
+  <!-- サブ -->
+  <div class="sub-area">
+    <button class="sub-button">分析</button>
+    <button class="sub-button">設定</button>
+  </div>
 
-      const [records, setRecords] = useState([]);
-      const [showSaved, setShowSaved] = useState(false);
+  <hr style="margin:24px 0">
 
-      const amountInputRef = useRef(null);
-      const savedTimerRef = useRef(null);
+  <!-- 金額入力 -->
+  <input type="number" id="amount" class="input-box" placeholder="¥ 0">
 
-      const nowText = useMemo(() => {
-        return new Date().toLocaleTimeString("ja-JP", {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-      }, [screen, dutyStarted, isRiding, records.length]);
+  <button class="confirm" onclick="confirmAmount()">金額確定</button>
 
-      const elapsedText = useMemo(() => {
-        if (!rideStartAt) return "00分";
-        const diffMs = Date.now() - rideStartAt.getTime();
-        const diffMin = Math.max(0, Math.floor(diffMs / 1000 / 60));
-        return `${diffMin}分`;
-      }, [rideStartAt, screen, isRiding]);
+  <!-- 支払い -->
+  <button id="cash" class="pay-btn cash disabled">現金</button>
+  <button id="card" class="pay-btn card disabled">カード・QR</button>
+  <button id="receipt" class="pay-btn receipt disabled">領収証発行</button>
 
-      const formattedAmount = useMemo(() => {
-        if (!amount) return "";
-        return Number(amount).toLocaleString("ja-JP");
-      }, [amount]);
+</div>
 
-      const totalAmount = useMemo(() => {
-        return records.reduce((sum, record) => sum + record.amount, 0);
-      }, [records]);
+<script>
+function confirmAmount() {
+  const val = document.getElementById("amount").value;
 
-      // ①＝現金・領収証なし
-      const amount1 = useMemo(() => {
-        return records
-          .filter((record) => record.payment === "cash" && !record.receipt)
-          .reduce((sum, record) => sum + record.amount, 0);
-      }, [records]);
+  if (!val || val <= 0) {
+    alert("金額を入力してください");
+    return;
+  }
 
-      // ②＝カード・QR または 領収証あり
-      const amount2 = useMemo(() => {
-        return records
-          .filter((record) => record.payment === "cardQr" || record.receipt)
-          .reduce((sum, record) => sum + record.amount, 0);
-      }, [records]);
+  // キーボード閉じる
+  document.getElementById("amount").blur();
 
-      useEffect(() => {
-        if (screen === "fare") {
-          const timer = setTimeout(() => {
-            amountInputRef.current?.focus();
-          }, 120);
-          return () => clearTimeout(timer);
-        }
-      }, [screen]);
+  // ボタン有効化
+  document.getElementById("cash").classList.remove("disabled");
+  document.getElementById("card").classList.remove("disabled");
+  document.getElementById("receipt").classList.remove("disabled");
+}
+</script>
 
-      useEffect(() => {
-        return () => {
-          if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
-        };
-      }, []);
-
-      const handleDutyStart = () => {
-        setDutyStarted(true);
-        setScreen("standby");
-      };
-
-      const handleDutyEnd = () => {
-        if (isRiding) return;
-        setDutyStarted(false);
-        setScreen("top");
-        setRideStartAt(null);
-        setRideEndAt(null);
-        setAmount("");
-        setReceipt(false);
-        setRecords([]);
-      };
-
-      const handleStartRide = () => {
-        const start = new Date();
-        setRideStartAt(start);
-        setRideEndAt(null);
-        setIsRiding(true);
-        setScreen("ride");
-      };
-
-      const handleDropOff = () => {
-        const end = new Date();
-        setRideEndAt(end);
-        setAmount("");
-        setReceipt(false);
-        setScreen("fare");
-      };
-
-      const handleAmountChange = (e) => {
-        const raw = e.target.value.replace(/[^\d]/g, "");
-        setAmount(raw);
-      };
-
-      const handleSaveFare = (selectedPayment) => {
-        if (!rideStartAt || !rideEndAt) return;
-
-        if (!amount.trim()) {
-          alert("金額を入力してください");
-          return;
-        }
-
-        const numericAmount = Number(amount);
-        if (!numericAmount || numericAmount <= 0) {
-          alert("正しい金額を入力してください");
-          return;
-        }
-
-        const newRecord = {
-          id: Date.now(),
-          startAt: rideStartAt,
-          endAt: rideEndAt,
-          amount: numericAmount,
-          payment: selectedPayment,
-          receipt,
-        };
-
-        setRecords((prev) => [newRecord, ...prev]);
-        setIsRiding(false);
-        setRideStartAt(null);
-        setRideEndAt(null);
-        setAmount("");
-        setReceipt(false);
-        setScreen("standby");
-
-        setShowSaved(true);
-        if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
-        savedTimerRef.current = setTimeout(() => {
-          setShowSaved(false);
-        }, 3000);
-      };
-
-      const shadowMain = "shadow-[0_10px_20px_rgba(15,23,42,0.12)]";
-      const shadowSub = "shadow-[0_6px_12px_rgba(15,23,42,0.08)]";
-
-      const statusCardClass = `rounded-2xl bg-white border border-slate-200 px-4 py-4 ${shadowSub}`;
-      const mainActionClass = `w-full rounded-[28px] py-12 text-3xl font-bold text-white active:scale-[0.99] ${shadowMain}`;
-      const bottomButtonClass = `w-full rounded-2xl py-4 text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`;
-      const subButtonClass = `w-full rounded-2xl py-4 text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`;
-      const topMainButtonClass = `w-full rounded-2xl py-5 text-xl font-bold text-white active:scale-[0.99] ${shadowMain}`;
-
-      return (
-        <div className="min-h-[100svh] bg-slate-50 flex items-start justify-center px-4 pt-4 pb-6">
-          <div className="w-full max-w-sm relative">
-            {showSaved && (
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 rounded-full bg-emerald-500 text-white text-sm font-bold px-4 py-2 shadow-lg">
-                保存しました
-              </div>
-            )}
-
-            <div className="px-1 pt-2 pb-3">
-              <div className="text-sm text-slate-400">TAXI用LINEミニアプリ</div>
-              <div className="mt-1 text-xl font-bold text-slate-800">
-                {screen === "top" && "TOP"}
-                {screen === "standby" && "乗車待機"}
-                {screen === "ride" && "乗車画面"}
-                {screen === "fare" && "金額入力"}
-              </div>
-            </div>
-
-            {screen === "top" && (
-              <div>
-                <div className={`${statusCardClass} mb-4`}>
-                  <div className="text-sm text-slate-500">状態</div>
-                  <div className="mt-1 text-2xl font-bold text-slate-800">
-                    {dutyStarted ? "乗務中" : "乗務開始前"}
-                  </div>
-                  <div className="mt-2 text-sm text-slate-500">
-                    現在時刻 {nowText}
-                  </div>
-                  <div className="mt-2 text-sm font-semibold text-slate-700">
-                    乗務合計 ¥{totalAmount.toLocaleString("ja-JP")}
-                  </div>
-                </div>
-
-                <div className="grid gap-2.5">
-                  {!dutyStarted && (
-                    <button
-                      type="button"
-                      onClick={handleDutyStart}
-                      className={`${topMainButtonClass} bg-sky-500`}
-                    >
-                      乗務開始
-                    </button>
-                  )}
-
-                  {dutyStarted && (
-                    <button
-                      type="button"
-                      onClick={handleDutyEnd}
-                      className="w-full rounded-2xl py-5 text-xl font-bold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] shadow-[0_10px_20px_rgba(15,23,42,0.10)]"
-                    >
-                      乗務終了
-                    </button>
-                  )}
-
-                  <button type="button" className={subButtonClass}>
-                    修正
-                  </button>
-
-                  <button type="button" className={subButtonClass}>
-                    分析
-                  </button>
-
-                  <button type="button" className={subButtonClass}>
-                    設定
-                  </button>
-                </div>
-
-                {records.length > 0 && (
-                  <div className={`mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden ${shadowSub}`}>
-                    <div className="px-4 py-3 text-sm font-semibold text-slate-700 border-b border-slate-100">
-                      最新履歴
-                    </div>
-                    <div className="h-[182px] overflow-auto">
-                      {records.map((record) => (
-                        <div
-                          key={record.id}
-                          className="px-4 py-3 border-b last:border-b-0 border-slate-100"
-                        >
-                          <div className="text-sm font-semibold text-slate-800">
-                            ¥{record.amount.toLocaleString("ja-JP")}
-                          </div>
-                          <div className="mt-1 text-xs text-slate-500">
-                            {record.startAt.toLocaleTimeString("ja-JP", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                            {" → "}
-                            {record.endAt.toLocaleTimeString("ja-JP", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                            {" ・ "}
-                            {record.payment === "cash" ? "現金" : "カード・QR"}
-                            {record.receipt ? " ・ 領収証あり" : ""}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {screen === "standby" && (
-              <div className="min-h-[560px] flex flex-col">
-                <div className={`${statusCardClass} mb-5`}>
-                  <div className="text-sm text-slate-500">状態</div>
-                  <div className="mt-1 text-3xl font-bold text-slate-800">乗車待機</div>
-                  <div className="mt-2 text-sm text-slate-500">
-                    現在時刻 {nowText}
-                  </div>
-                  <div className="mt-3 text-lg font-bold text-slate-800">
-                    乗務合計 ¥{totalAmount.toLocaleString("ja-JP")}
-                  </div>
-                  <div className="mt-2 flex items-center justify-between text-sm text-slate-600">
-                    <span>①</span>
-                    <span>¥{amount1.toLocaleString("ja-JP")}</span>
-                  </div>
-                  <div className="mt-1 flex items-center justify-between text-sm text-slate-600">
-                    <span>②</span>
-                    <span>¥{amount2.toLocaleString("ja-JP")}</span>
-                  </div>
-                </div>
-
-                <div className="flex-1 flex items-center justify-center">
-                  <button
-                    type="button"
-                    onClick={handleStartRide}
-                    className={`${mainActionClass} bg-sky-500`}
-                  >
-                    乗車
-                  </button>
-                </div>
-
-                <div className="pt-5">
-                  <button
-                    type="button"
-                    onClick={() => setScreen("top")}
-                    className={bottomButtonClass}
-                  >
-                    TOP
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {screen === "ride" && (
-              <div className="min-h-[560px] flex flex-col">
-                <div className={`${statusCardClass} mb-5`}>
-                  <div className="text-sm text-slate-500">状態</div>
-                  <div className="mt-1 text-3xl font-bold text-slate-800">乗車中</div>
-                  <div className="mt-2 text-sm text-slate-500">
-                    開始{" "}
-                    {rideStartAt?.toLocaleTimeString("ja-JP", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                    {" ・ "}
-                    経過 {elapsedText}
-                  </div>
-                </div>
-
-                <div className="flex-1 flex items-center justify-center">
-                  <button
-                    type="button"
-                    onClick={handleDropOff}
-                    className={`${mainActionClass} bg-emerald-500`}
-                  >
-                    降車
-                  </button>
-                </div>
-
-                <div className="pt-5">
-                  <button
-                    type="button"
-                    onClick={() => setScreen("standby")}
-                    className={bottomButtonClass}
-                  >
-                    TOP
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {screen === "fare" && (
-              <div className="min-h-[560px] flex flex-col">
-                <div className={`${statusCardClass} mb-5`}>
-                  <div className="text-sm text-slate-500">乗車情報</div>
-                  <div className="mt-2 text-sm text-slate-600">
-                    {rideStartAt?.toLocaleTimeString("ja-JP", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                    {" → "}
-                    {rideEndAt?.toLocaleTimeString("ja-JP", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <label className="block text-sm text-slate-500 mb-2">金額</label>
-                  <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-slate-400">
-                      ¥
-                    </span>
-                    <input
-                      ref={amountInputRef}
-                      type="text"
-                      inputMode="numeric"
-                      value={formattedAmount}
-                      onChange={handleAmountChange}
-                      placeholder="0"
-                      className={`w-full rounded-[24px] border border-slate-300 bg-white pl-12 pr-4 py-6 text-4xl font-bold text-slate-800 outline-none focus:border-slate-300 ${shadowSub}`}
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setReceipt((prev) => !prev)}
-                  className={`w-full rounded-2xl py-4 mb-5 text-base font-semibold border active:scale-[0.99] ${
-                    receipt
-                      ? "bg-slate-200 text-slate-800 border-slate-300"
-                      : "bg-[#ffd700] text-black border-[#e6c200]"
-                  } ${shadowSub}`}
-                >
-                  領収証発行
-                </button>
-
-                <div className="text-sm text-slate-500 mb-2">支払い方法</div>
-                <div className="grid grid-cols-2 gap-3 mt-auto">
-                  <button
-                    type="button"
-                    onClick={() => handleSaveFare("cash")}
-                    className={`rounded-[24px] bg-sky-500 text-white py-6 text-xl font-bold active:scale-[0.98] transition ${shadowMain}`}
-                  >
-                    現金
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleSaveFare("cardQr")}
-                    className={`rounded-[24px] bg-slate-800 text-white py-6 text-xl font-bold active:scale-[0.98] transition ${shadowMain}`}
-                  >
-                    カード・QR
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
-
-    ReactDOM.createRoot(document.getElementById("root")).render(<TaxiMiniAppMock />);
-  </script>
 </body>
 </html>
