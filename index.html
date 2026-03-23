@@ -168,12 +168,15 @@
 
         let text = String(raw).trim();
 
-        text = text.replace(/^日本、?/, "");
+        // 先頭の不要語を削る
+        text = text.replace(/^日本[,、]?\s*/, "");
         text = text.replace(/^〒?\d{3}-?\d{4}\s*/, "");
+
+        // 広島県広島市は省略
         text = text.replace(/^広島県広島市/, "");
         text = text.replace(/^広島市/, "");
-        text = text.replace(/^広島県/, "");
 
+        // 区も省略
         text = text.replace(/^中区/, "");
         text = text.replace(/^東区/, "");
         text = text.replace(/^南区/, "");
@@ -183,10 +186,10 @@
         text = text.replace(/^安芸区/, "");
         text = text.replace(/^佐伯区/, "");
 
-        text = text.replace(/^\s+/, "").replace(/\s+$/, "");
-        text = text.replace(/\s{2,}/g, " ");
-        text = text.replace(/^、+/, "");
-        text = text.replace(/、+/g, " ");
+        // 余計な区切りや空白を整理
+        text = text.replace(/^[,、\s]+/, "");
+        text = text.replace(/[,、]+/g, " ");
+        text = text.replace(/\s{2,}/g, " ").trim();
 
         return text || "未取得";
       };
@@ -203,12 +206,8 @@
       const showReturnLinkOnTop =
         screen === "top" && dutyStarted && (returnTarget === "standby" || returnTarget === "ride");
 
-      const topMainLabel = (() => {
-        if (!dutyStarted) return "乗務開始";
-        return "乗務終了";
-      })();
-
-      const topMainButtonDisabled = dutyStarted && isRiding;
+      const topMainLabel = !dutyStarted ? "乗務開始" : "乗務終了";
+      const topMainButtonDisabled = screen === "top" && isRiding;
 
       const formattedAmount = useMemo(() => {
         if (!amount) return "";
@@ -249,25 +248,22 @@
           if (!response.ok) throw new Error("reverse geocode failed");
 
           const data = await response.json();
-          const address = data.address || {};
 
-          const raw =
-            [
-              address.prefecture || "",
-              address.city || address.town || address.village || "",
-              address.suburb || address.neighbourhood || address.quarter || "",
-              address.road || ""
-            ]
-              .filter(Boolean)
-              .join("");
-
-          if (raw) return normalizePlaceLabel(raw);
-
+          // 前に動いていたのは display_name ベースだったので、まずそれを使う
           if (data.display_name) {
-            return normalizePlaceLabel(String(data.display_name));
+            return normalizePlaceLabel(data.display_name);
           }
 
-          return "未取得";
+          // display_nameが無い時だけaddressを組み立てる
+          const address = data.address || {};
+          const raw = [
+            address.prefecture || "",
+            address.city || address.town || address.village || "",
+            address.suburb || address.neighbourhood || address.quarter || "",
+            address.road || ""
+          ].filter(Boolean).join("");
+
+          return normalizePlaceLabel(raw);
         } catch {
           return "未取得";
         }
@@ -309,7 +305,6 @@
       };
 
       const performDutyEnd = () => {
-        if (isRiding) return;
         setDutyStarted(false);
         setIsRiding(false);
         setReturnTarget(null);
