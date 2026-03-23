@@ -173,7 +173,6 @@
 
       const topMainLabel = (() => {
         if (!dutyStarted) return "乗務開始";
-        if (isRiding) return "実車中";
         return "乗務終了";
       })();
 
@@ -261,9 +260,7 @@
           handleDutyStart();
           return;
         }
-        if (!isRiding) {
-          handleDutyEnd();
-        }
+        handleDutyEnd();
       };
 
       const handleStartRide = () => {
@@ -516,16 +513,6 @@
               {screen === "top" && (
                 <div className="flex-1 min-h-0 pt-3 flex flex-col overflow-hidden">
                   <div className="grid gap-2.5 shrink-0">
-                    {dutyStarted && !isRiding && (
-                      <button
-                        type="button"
-                        onClick={handleDutyEnd}
-                        className={subButtonClass}
-                      >
-                        乗務終了
-                      </button>
-                    )}
-
                     <button type="button" className={subButtonClass}>修正</button>
                     <button type="button" className={subButtonClass}>分析</button>
                     <button type="button" className={subButtonClass}>設定</button>
