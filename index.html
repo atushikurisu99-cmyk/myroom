@@ -231,6 +231,9 @@
         setDropoff("");
         setAmount("");
         setAmountConfirmed(false);
+        setRecords([]);              // ← 追加：履歴リセット
+        setShowHistoryModal(false);  // ← ついでに閉じる
+        setShowSaved(false);         // ← 保存表示も消す
         setScreen("top");
       };
 
