@@ -16,24 +16,19 @@
       margin: 0;
       padding: 0;
       width: 100%;
-      height: 100%;
-      overflow: hidden;
+      min-height: 100%;
       background: #f8fafc;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overscroll-behavior: none;
+      overscroll-behavior-y: none;
       -webkit-text-size-adjust: 100%;
     }
 
     body {
       touch-action: manipulation;
-      position: fixed;
-      inset: 0;
     }
 
     #root {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+      min-height: 100svh;
     }
 
     * {
@@ -60,10 +55,8 @@
     function TaxiMiniAppMock() {
       const [screen, setScreen] = useState("top"); // top | standby | ride | fare
       const [dutyStarted, setDutyStarted] = useState(false);
-      const [dutyStartAt, setDutyStartAt] = useState(null);
-      const [dutyEndAt, setDutyEndAt] = useState(null);
-
       const [isRiding, setIsRiding] = useState(false);
+
       const [rideStartAt, setRideStartAt] = useState(null);
       const [rideEndAt, setRideEndAt] = useState(null);
 
@@ -72,46 +65,23 @@
 
       const [records, setRecords] = useState([]);
       const [showSaved, setShowSaved] = useState(false);
-      const [now, setNow] = useState(new Date());
 
       const amountInputRef = useRef(null);
       const savedTimerRef = useRef(null);
 
-      useEffect(() => {
-        const timer = setInterval(() => {
-          setNow(new Date());
-        }, 1000 * 30);
-        return () => clearInterval(timer);
-      }, []);
-
-      useEffect(() => {
-        if (screen === "fare") {
-          const timer = setTimeout(() => {
-            amountInputRef.current?.focus();
-          }, 120);
-          return () => clearTimeout(timer);
-        }
-      }, [screen]);
-
-      useEffect(() => {
-        return () => {
-          if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
-        };
-      }, []);
-
       const nowText = useMemo(() => {
-        return now.toLocaleTimeString("ja-JP", {
+        return new Date().toLocaleTimeString("ja-JP", {
           hour: "2-digit",
           minute: "2-digit",
         });
-      }, [now]);
+      }, [screen, dutyStarted, isRiding, records.length]);
 
       const elapsedText = useMemo(() => {
         if (!rideStartAt) return "00分";
         const diffMs = Date.now() - rideStartAt.getTime();
         const diffMin = Math.max(0, Math.floor(diffMs / 1000 / 60));
         return `${diffMin}分`;
-      }, [rideStartAt, now]);
+      }, [rideStartAt, screen, isRiding]);
 
       const formattedAmount = useMemo(() => {
         if (!amount) return "";
@@ -134,40 +104,35 @@
           .reduce((sum, record) => sum + record.amount, 0);
       }, [records]);
 
-      const activeSubButtonClass =
-        "w-full rounded-2xl py-4 text-base font-semibold bg-sky-50 text-slate-700 border border-sky-100 shadow-sm active:scale-[0.99] transition";
+      useEffect(() => {
+        if (screen === "fare") {
+          const timer = setTimeout(() => {
+            amountInputRef.current?.focus();
+          }, 120);
+          return () => clearTimeout(timer);
+        }
+      }, [screen]);
 
-      const activeWeakButtonClass =
-        "w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 shadow-sm active:scale-[0.99] transition";
-
-      const disabledButtonClass =
-        "w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-300 border border-slate-200";
+      useEffect(() => {
+        return () => {
+          if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+        };
+      }, []);
 
       const handleDutyStart = () => {
-        const start = new Date();
         setDutyStarted(true);
-        setDutyStartAt(start);
-        setDutyEndAt(null);
         setScreen("standby");
       };
 
       const handleDutyEnd = () => {
-        if (!dutyStarted || isRiding) return;
-        const end = new Date();
-        setDutyEndAt(end);
+        if (isRiding) return;
         setDutyStarted(false);
-        setDutyStartAt(null);
+        setScreen("top");
         setRideStartAt(null);
         setRideEndAt(null);
         setAmount("");
         setReceipt(false);
         setRecords([]);
-        setScreen("top");
-      };
-
-      const handleGoToStandby = () => {
-        if (!dutyStarted || isRiding) return;
-        setScreen("standby");
       };
 
       const handleStartRide = () => {
@@ -229,22 +194,19 @@
         }, 3000);
       };
 
-      const topStatusText = !dutyStarted
-        ? "乗務開始前"
-        : isRiding
-        ? "乗車中"
-        : "乗務中";
+      const shadowMain = "shadow-[0_10px_20px_rgba(15,23,42,0.12)]";
+      const shadowSub = "shadow-[0_6px_12px_rgba(15,23,42,0.08)]";
 
       return (
-        <div className="h-[100dvh] bg-slate-50 flex items-start justify-center p-4 overflow-hidden">
-          <div className="w-full max-w-sm h-full rounded-[28px] bg-white shadow-xl border border-slate-200 overflow-hidden relative">
+        <div className="min-h-[100svh] bg-slate-50 flex items-start justify-center px-4 pt-4 pb-6">
+          <div className="w-full max-w-sm relative">
             {showSaved && (
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 rounded-full bg-emerald-500 text-white text-sm font-bold px-4 py-2 shadow-lg">
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 rounded-full bg-emerald-500 text-white text-sm font-bold px-4 py-2 shadow-lg">
                 保存しました
               </div>
             )}
 
-            <div className="px-5 pt-5 pb-3 border-b border-slate-100">
+            <div className="px-1 pt-2 pb-3">
               <div className="text-sm text-slate-400">TAXI用LINEミニアプリ</div>
               <div className="mt-1 text-xl font-bold text-slate-800">
                 {screen === "top" && "TOP"}
@@ -255,142 +217,104 @@
             </div>
 
             {screen === "top" && (
-              <div className="p-5 h-[calc(100%-73px)] flex flex-col overflow-hidden">
-                <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-3 mb-4">
+              <div>
+                <div className={`rounded-2xl bg-white border border-slate-200 px-4 py-4 mb-4 ${shadowSub}`}>
                   <div className="text-sm text-slate-500">状態</div>
                   <div className="mt-1 text-2xl font-bold text-slate-800">
-                    {topStatusText}
+                    {dutyStarted ? "乗務中" : "乗務開始前"}
                   </div>
                   <div className="mt-2 text-sm text-slate-500">
                     現在時刻 {nowText}
-                    {isRiding && rideStartAt ? ` ・ 経過 ${elapsedText}` : ""}
                   </div>
-                  {dutyStarted && !isRiding && (
-                    <div className="mt-2 text-sm text-slate-500">
-                      乗務開始{" "}
-                      {dutyStartAt?.toLocaleTimeString("ja-JP", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </div>
-                  )}
+                  <div className="mt-2 text-sm font-semibold text-slate-700">
+                    乗務合計 ¥{totalAmount.toLocaleString("ja-JP")}
+                  </div>
                 </div>
 
-                <div className="grid gap-3">
+                <div className="grid gap-2.5">
                   {!dutyStarted && (
                     <button
                       type="button"
                       onClick={handleDutyStart}
-                      className="w-full rounded-2xl py-5 text-lg font-bold bg-sky-500 text-white shadow-md active:scale-[0.99] transition"
+                      className={`w-full rounded-2xl py-4.5 text-lg font-bold bg-sky-500 text-white active:scale-[0.99] ${shadowMain}`}
                     >
                       乗務開始
                     </button>
                   )}
 
-                  {dutyStarted && !isRiding && (
+                  {dutyStarted && (
                     <button
                       type="button"
                       onClick={handleDutyEnd}
-                      className="w-full rounded-2xl py-5 text-lg font-bold bg-slate-100 text-slate-700 border border-slate-200 shadow-md active:scale-[0.99] transition"
+                      className={`w-full rounded-2xl py-4.5 text-lg font-bold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`}
                     >
                       乗務終了
                     </button>
                   )}
 
-                  {dutyStarted && isRiding && (
-                    <button
-                      type="button"
-                      onClick={() => setScreen("ride")}
-                      className="w-full rounded-2xl py-5 text-lg font-bold bg-sky-500 text-white shadow-md active:scale-[0.99] transition"
-                    >
-                      乗車中へ戻る
-                    </button>
-                  )}
-
-                  {!dutyStarted && (
-                    <button type="button" className={disabledButtonClass}>
-                      乗務終了
-                    </button>
-                  )}
-
-                  {dutyStarted && !isRiding && (
-                    <button
-                      type="button"
-                      onClick={handleGoToStandby}
-                      className={activeWeakButtonClass}
-                    >
-                      待機中へ戻る
-                    </button>
-                  )}
-
-                  {dutyStarted && isRiding && (
-                    <button type="button" className={disabledButtonClass}>
-                      乗務終了
-                    </button>
-                  )}
-
-                  <button type="button" className={activeSubButtonClass}>
+                  <button
+                    type="button"
+                    className={`w-full rounded-2xl py-4 text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`}
+                  >
                     修正
                   </button>
 
-                  <button type="button" className={activeSubButtonClass}>
+                  <button
+                    type="button"
+                    className={`w-full rounded-2xl py-4 text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`}
+                  >
                     分析
                   </button>
 
-                  <button type="button" className={activeSubButtonClass}>
+                  <button
+                    type="button"
+                    className={`w-full rounded-2xl py-4 text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`}
+                  >
                     設定
                   </button>
                 </div>
 
-                <div className="mt-4 min-h-0 flex-1 flex flex-col">
-                  <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden h-[170px]">
+                {records.length > 0 && (
+                  <div className={`mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden ${shadowSub}`}>
                     <div className="px-4 py-3 text-sm font-semibold text-slate-700 border-b border-slate-100">
                       最新履歴
                     </div>
-                    <div className="h-[118px] overflow-y-auto">
-                      {records.length === 0 ? (
-                        <div className="px-4 py-5 text-sm text-slate-400">
-                          まだ履歴はありません
-                        </div>
-                      ) : (
-                        records.map((record) => (
-                          <div
-                            key={record.id}
-                            className="px-4 py-3 border-b last:border-b-0 border-slate-100"
-                          >
-                            <div className="text-sm font-semibold text-slate-800">
-                              ¥{record.amount.toLocaleString("ja-JP")}
-                            </div>
-                            <div className="mt-1 text-xs text-slate-500">
-                              {record.startAt.toLocaleTimeString("ja-JP", {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
-                              {" → "}
-                              {record.endAt.toLocaleTimeString("ja-JP", {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
-                              {" ・ "}
-                              {record.payment === "cash" ? "現金" : "カード・QR"}
-                              {record.receipt ? " ・ 領収証あり" : ""}
-                            </div>
+                    <div className="h-[154px] overflow-auto">
+                      {records.map((record) => (
+                        <div
+                          key={record.id}
+                          className="px-4 py-3 border-b last:border-b-0 border-slate-100"
+                        >
+                          <div className="text-sm font-semibold text-slate-800">
+                            ¥{record.amount.toLocaleString("ja-JP")}
                           </div>
-                        ))
-                      )}
+                          <div className="mt-1 text-xs text-slate-500">
+                            {record.startAt.toLocaleTimeString("ja-JP", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                            {" → "}
+                            {record.endAt.toLocaleTimeString("ja-JP", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                            {" ・ "}
+                            {record.payment === "cash" ? "現金" : "カード・QR"}
+                            {record.receipt ? " ・ 領収証あり" : ""}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             )}
 
             {screen === "standby" && (
-              <div className="p-5 h-[calc(100%-73px)] flex flex-col overflow-hidden">
-                <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-3 mb-4">
+              <div className="min-h-[560px] flex flex-col">
+                <div className={`rounded-2xl bg-white border border-slate-200 px-4 py-4 mb-5 ${shadowSub}`}>
                   <div className="text-sm text-slate-500">状態</div>
-                  <div className="mt-1 text-3xl font-bold text-slate-800">
-                    乗車待機
-                  </div>
+                  <div className="mt-1 text-3xl font-bold text-slate-800">乗車待機</div>
                   <div className="mt-2 text-sm text-slate-500">
                     現在時刻 {nowText}
                   </div>
@@ -407,23 +331,21 @@
                   </div>
                 </div>
 
-                <div className="flex-1 grid grid-rows-5 gap-3">
+                <div className="flex-1 flex items-center">
                   <button
                     type="button"
                     onClick={handleStartRide}
-                    className="rounded-2xl bg-sky-500 text-white text-3xl font-bold shadow-lg active:scale-[0.99] transition"
+                    className={`w-full rounded-[28px] bg-sky-500 text-white py-12 text-3xl font-bold active:scale-[0.99] ${shadowMain}`}
                   >
                     乗車
                   </button>
+                </div>
 
-                  <div></div>
-                  <div></div>
-                  <div></div>
-
+                <div className="pt-5">
                   <button
                     type="button"
                     onClick={() => setScreen("top")}
-                    className="rounded-2xl bg-slate-100 text-slate-700 border border-slate-200 shadow-sm active:scale-[0.99] transition text-base font-semibold"
+                    className={`w-full rounded-2xl py-4 text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`}
                   >
                     TOP
                   </button>
@@ -432,12 +354,10 @@
             )}
 
             {screen === "ride" && (
-              <div className="p-5 h-[calc(100%-73px)] flex flex-col overflow-hidden">
-                <div className="rounded-2xl bg-sky-50 border border-sky-100 px-4 py-5 mb-4">
+              <div className="min-h-[560px] flex flex-col">
+                <div className={`rounded-2xl bg-white border border-slate-200 px-4 py-4 mb-5 ${shadowSub}`}>
                   <div className="text-sm text-slate-500">状態</div>
-                  <div className="mt-1 text-3xl font-bold text-slate-800">
-                    乗車中
-                  </div>
+                  <div className="mt-1 text-3xl font-bold text-slate-800">乗車中</div>
                   <div className="mt-2 text-sm text-slate-500">
                     開始{" "}
                     {rideStartAt?.toLocaleTimeString("ja-JP", {
@@ -449,23 +369,21 @@
                   </div>
                 </div>
 
-                <div className="flex-1 grid grid-rows-5 gap-3">
+                <div className="flex-1 flex items-center">
                   <button
                     type="button"
                     onClick={handleDropOff}
-                    className="rounded-2xl bg-emerald-500 text-white text-3xl font-bold shadow-lg active:scale-[0.99] transition"
+                    className={`w-full rounded-[28px] bg-emerald-500 text-white py-12 text-3xl font-bold active:scale-[0.99] ${shadowMain}`}
                   >
                     降車
                   </button>
+                </div>
 
-                  <div></div>
-                  <div></div>
-                  <div></div>
-
+                <div className="pt-5">
                   <button
                     type="button"
-                    onClick={() => setScreen("top")}
-                    className="rounded-2xl bg-slate-100 text-slate-700 border border-slate-200 shadow-sm active:scale-[0.99] transition text-base font-semibold"
+                    onClick={() => setScreen("standby")}
+                    className={`w-full rounded-2xl py-4 text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`}
                   >
                     TOP
                   </button>
@@ -474,8 +392,8 @@
             )}
 
             {screen === "fare" && (
-              <div className="p-5 h-[calc(100%-73px)] flex flex-col overflow-hidden">
-                <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-4 mb-4">
+              <div className="min-h-[560px] flex flex-col">
+                <div className={`rounded-2xl bg-white border border-slate-200 px-4 py-4 mb-5 ${shadowSub}`}>
                   <div className="text-sm text-slate-500">乗車情報</div>
                   <div className="mt-2 text-sm text-slate-600">
                     {rideStartAt?.toLocaleTimeString("ja-JP", {
@@ -503,7 +421,7 @@
                       value={formattedAmount}
                       onChange={handleAmountChange}
                       placeholder="0"
-                      className="w-full rounded-[24px] border border-slate-200 bg-white pl-12 pr-4 py-6 text-4xl font-bold text-slate-800 outline-none focus:border-sky-300"
+                      className={`w-full rounded-[24px] border border-slate-200 bg-white pl-12 pr-4 py-6 text-4xl font-bold text-slate-800 outline-none focus:border-sky-300 ${shadowSub}`}
                     />
                   </div>
                 </div>
@@ -511,11 +429,11 @@
                 <button
                   type="button"
                   onClick={() => setReceipt((prev) => !prev)}
-                  className={`w-full rounded-2xl py-4 mb-4 text-base font-semibold border ${
+                  className={`w-full rounded-2xl py-4 mb-5 text-base font-semibold border active:scale-[0.99] ${
                     receipt
-                      ? "bg-slate-200 text-slate-800 border-slate-300 shadow-sm active:scale-[0.99]"
-                      : "bg-[#ffd700] text-black border-[#e6c200] shadow-sm active:scale-[0.99]"
-                  } transition`}
+                      ? "bg-slate-200 text-slate-800 border-slate-300"
+                      : "bg-[#ffd700] text-black border-[#e6c200]"
+                  } ${shadowSub}`}
                 >
                   領収証発行
                 </button>
@@ -525,14 +443,14 @@
                   <button
                     type="button"
                     onClick={() => handleSaveFare("cash")}
-                    className="rounded-[24px] bg-sky-500 text-white py-6 text-xl font-bold shadow-md active:scale-[0.98] transition"
+                    className={`rounded-[24px] bg-sky-500 text-white py-6 text-xl font-bold active:scale-[0.98] transition ${shadowMain}`}
                   >
                     現金
                   </button>
                   <button
                     type="button"
                     onClick={() => handleSaveFare("cardQr")}
-                    className="rounded-[24px] bg-slate-800 text-white py-6 text-xl font-bold shadow-md active:scale-[0.98] transition"
+                    className={`rounded-[24px] bg-slate-800 text-white py-6 text-xl font-bold active:scale-[0.98] transition ${shadowMain}`}
                   >
                     カード・QR
                   </button>
