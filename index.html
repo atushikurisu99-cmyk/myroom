@@ -112,12 +112,14 @@
         return records.length;
       }, [records]);
 
+      // ①＝現金・領収証なし
       const amount1 = useMemo(() => {
         return records
           .filter((record) => record.payment === "cash" && !record.receipt)
           .reduce((sum, record) => sum + record.amount, 0);
       }, [records]);
 
+      // ②＝カード・QR または 領収証あり
       const amount2 = useMemo(() => {
         return records
           .filter((record) => !(record.payment === "cash" && !record.receipt))
@@ -360,39 +362,40 @@
 
               {screen !== "fare" && (
                 <>
-                  <div className={`${cardClass} h-[168px] px-4 py-4 shrink-0`}>
-                    <div className="text-sm text-slate-500">状態</div>
-                    <div className="mt-1 text-[30px] leading-none font-bold text-slate-800">
+                  <div className={`${cardClass} h-[208px] px-4 py-3 shrink-0 overflow-hidden`}>
+                    <div className="text-[26px] leading-none font-bold text-slate-800">
                       {stateLabel}
                     </div>
 
-                    <div className="mt-2 text-sm text-slate-500">
+                    <div className="mt-1 text-sm text-slate-500">
                       {screen === "ride"
                         ? `開始 ${formatTime(rideStartAt)} ・ 経過 ${elapsedText}`
                         : `現在時刻 ${nowText}`}
                     </div>
 
-                    <div className="mt-4 grid grid-cols-2 gap-3">
-                      <div className="rounded-2xl bg-slate-50 border border-slate-200 px-3 py-2.5">
-                        <div className="text-[11px] text-slate-500">売上合計</div>
-                        <div className="mt-1 text-lg font-bold text-slate-800">
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      <div className="rounded-xl bg-slate-50 border border-slate-200 px-3 py-2">
+                        <div className="text-[10px] text-slate-500">売上合計</div>
+                        <div className="mt-0.5 text-base font-bold text-slate-800 leading-tight">
                           ¥{totalAmount.toLocaleString("ja-JP")}
                         </div>
                       </div>
-                      <div className="rounded-2xl bg-slate-50 border border-slate-200 px-3 py-2.5">
-                        <div className="text-[11px] text-slate-500">件数</div>
-                        <div className="mt-1 text-lg font-bold text-slate-800">
+
+                      <div className="rounded-xl bg-slate-50 border border-slate-200 px-3 py-2">
+                        <div className="text-[10px] text-slate-500">件数</div>
+                        <div className="mt-0.5 text-base font-bold text-slate-800 leading-tight">
                           {recordCount}件
                         </div>
                       </div>
                     </div>
 
-                    <div className="mt-3 grid grid-cols-2 gap-3 text-sm text-slate-600">
-                      <div className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2 border border-slate-200">
+                    <div className="mt-2 grid grid-cols-2 gap-2 text-sm text-slate-600">
+                      <div className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-1.5 border border-slate-200">
                         <span>①</span>
                         <span className="font-semibold">¥{amount1.toLocaleString("ja-JP")}</span>
                       </div>
-                      <div className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2 border border-slate-200">
+
+                      <div className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-1.5 border border-slate-200">
                         <span>②</span>
                         <span className="font-semibold">¥{amount2.toLocaleString("ja-JP")}</span>
                       </div>
