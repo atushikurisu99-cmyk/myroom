@@ -249,9 +249,12 @@
                     {!dutyStarted ? "乗務開始前" : isRiding ? "乗車中" : "乗務中"}
                   </div>
                   {renderTopReturnLink()}
-                  <div className="mt-2 text-sm text-slate-500">
-                    現在時刻 {nowText}
+
+                  {/* 時刻大表示 */}
+                  <div className="mt-3 text-4xl font-bold text-slate-800 tracking-wide">
+                    {nowText}
                   </div>
+
                   <div className="mt-2 text-sm font-semibold text-slate-700">
                     乗務合計 ¥{totalAmount.toLocaleString("ja-JP")}
                   </div>
@@ -332,9 +335,12 @@
                 <div className={`${statusCardClass} mb-5`}>
                   <div className="text-sm text-slate-500">状態</div>
                   <div className="mt-1 text-3xl font-bold text-slate-800">乗車待機</div>
-                  <div className="mt-2 text-sm text-slate-500">
-                    現在時刻 {nowText}
+
+                  {/* 時刻大表示 */}
+                  <div className="mt-3 text-4xl font-bold text-slate-800 tracking-wide">
+                    {nowText}
                   </div>
+
                   <div className="mt-3 text-lg font-bold text-slate-800">
                     乗務合計 ¥{totalAmount.toLocaleString("ja-JP")}
                   </div>
@@ -375,6 +381,12 @@
                 <div className={`${statusCardClass} mb-5`}>
                   <div className="text-sm text-slate-500">状態</div>
                   <div className="mt-1 text-3xl font-bold text-slate-800">乗車中</div>
+
+                  {/* 時刻大表示 */}
+                  <div className="mt-3 text-4xl font-bold text-slate-800 tracking-wide">
+                    {nowText}
+                  </div>
+
                   <div className="mt-2 text-sm text-slate-500">
                     開始{" "}
                     {rideStartAt?.toLocaleTimeString("ja-JP", {
@@ -412,7 +424,9 @@
               <div className="min-h-[560px] flex flex-col">
                 <div className={`${statusCardClass} mb-5`}>
                   <div className="text-sm text-slate-500">乗車情報</div>
-                  <div className="mt-2 text-sm text-slate-600">
+
+                  {/* 時刻大表示 */}
+                  <div className="mt-2 text-4xl font-bold text-slate-800 tracking-wide">
                     {rideStartAt?.toLocaleTimeString("ja-JP", {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -438,7 +452,7 @@
                       value={formattedAmount}
                       onChange={handleAmountChange}
                       placeholder="0"
-                      className={`w-full rounded-[24px] border border-slate-300 bg-white pl-12 pr-4 py-6 text-4xl font-bold text-slate-800 outline-none focus:border-slate-300 ${shadowSub}`}
+                      className={`w-full rounded-[24px] border border-slate-200 bg-white pl-12 pr-4 py-6 text-4xl font-bold text-slate-800 outline-none focus:border-slate-200 ${shadowSub}`}
                     />
                   </div>
                 </div>
