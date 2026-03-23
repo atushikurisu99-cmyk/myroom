@@ -66,6 +66,9 @@
       const [rideStartAt, setRideStartAt] = useState(null);
       const [rideEndAt, setRideEndAt] = useState(null);
 
+      const [pickup, setPickup] = useState("");
+      const [dropoff, setDropoff] = useState("");
+
       const [amount, setAmount] = useState("");
       const [amountConfirmed, setAmountConfirmed] = useState(false);
 
@@ -197,6 +200,9 @@
       const mainButtonClass =
         `w-full h-full rounded-[28px] text-white text-3xl font-bold active:scale-[0.99] ${shadowMain}`;
 
+      const textFieldClass =
+        `w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[17px] text-slate-800 outline-none focus:border-sky-300 ${shadowSub}`;
+
       const confirmButtonClass = (() => {
         if (confirmButtonMode === "idle") {
           return `w-full rounded-2xl h-[56px] text-xl font-bold bg-slate-300 text-white ${shadowMain}`;
@@ -223,6 +229,8 @@
         setReturnTarget(null);
         setRideStartAt(null);
         setRideEndAt(null);
+        setPickup("");
+        setDropoff("");
         setAmount("");
         setAmountConfirmed(false);
         setScreen("top");
@@ -269,6 +277,8 @@
         setRideEndAt(null);
         setIsRiding(true);
         setReturnTarget("ride");
+        setPickup("");
+        setDropoff("");
         setScreen("ride");
       };
 
@@ -330,8 +340,8 @@
           amount: numericAmount,
           payment,
           receipt,
-          pickup: "",
-          dropoff: "",
+          pickup: pickup.trim(),
+          dropoff: dropoff.trim(),
         };
 
         setRecords((prev) => [newRecord, ...prev]);
@@ -339,6 +349,8 @@
         setReturnTarget("standby");
         setRideStartAt(null);
         setRideEndAt(null);
+        setPickup("");
+        setDropoff("");
         setAmount("");
         setAmountConfirmed(false);
         setScreen("standby");
@@ -404,8 +416,8 @@
                             </div>
 
                             <div className="mt-3 grid gap-1 text-sm text-slate-600">
-                              <div>乗車地：{record.pickup || "未設定"}</div>
-                              <div>降車地：{record.dropoff || "未設定"}</div>
+                              <div>乗車地：{record.pickup || "未入力"}</div>
+                              <div>降車地：{record.dropoff || "未入力"}</div>
                             </div>
                           </div>
                         ))}
@@ -561,12 +573,43 @@
                 </div>
               )}
 
-              {(screen === "standby" || screen === "ride") && (
+              {screen === "standby" && (
                 <div className="flex-1 min-h-0 pt-3 flex flex-col">
                   <div className="flex-1"></div>
                   <button
                     type="button"
-                    onClick={screen === "standby" ? handleGoTopFromStandby : handleGoTopFromRide}
+                    onClick={handleGoTopFromStandby}
+                    className={subButtonClass}
+                  >
+                    TOP
+                  </button>
+                  <div className="h-2 shrink-0"></div>
+                </div>
+              )}
+
+              {screen === "ride" && (
+                <div className="flex-1 min-h-0 pt-3 flex flex-col">
+                  <div className={`${cardClass} px-4 py-3 shrink-0`}>
+                    <div className="text-[14px] font-semibold text-slate-500">
+                      乗車時間
+                    </div>
+                    <div className="mt-1 text-[18px] font-bold text-slate-800">
+                      {formatTime(rideStartAt)}
+                    </div>
+
+                    <div className="mt-3 text-[14px] font-semibold text-slate-500">
+                      乗車地
+                    </div>
+                    <div className="mt-1 text-[18px] font-bold text-slate-800">
+                      {pickup || "未入力"}
+                    </div>
+                  </div>
+
+                  <div className="flex-1"></div>
+
+                  <button
+                    type="button"
+                    onClick={handleGoTopFromRide}
                     className={subButtonClass}
                   >
                     TOP
@@ -582,11 +625,27 @@
                       {formatTime(rideStartAt)} → {formatTime(rideEndAt)}
                     </div>
                     <div className="mt-6 text-[14px] font-semibold text-slate-500">
-                      金額入力後に金額確定を押してください
+                      乗車地・降車地と金額を入力してください
                     </div>
                   </div>
 
-                  <div className="pt-4 shrink-0">
+                  <div className="pt-4 shrink-0 grid gap-3">
+                    <input
+                      type="text"
+                      value={pickup}
+                      onChange={(e) => setPickup(e.target.value)}
+                      placeholder="乗車地"
+                      className={textFieldClass}
+                    />
+
+                    <input
+                      type="text"
+                      value={dropoff}
+                      onChange={(e) => setDropoff(e.target.value)}
+                      placeholder="降車地"
+                      className={textFieldClass}
+                    />
+
                     <div className="relative">
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-slate-400">
                         ¥
