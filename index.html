@@ -16,10 +16,11 @@
       margin: 0;
       padding: 0;
       width: 100%;
-      min-height: 100%;
+      height: 100%;
       background: #f8fafc;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overscroll-behavior-y: none;
+      overflow: hidden;
+      overscroll-behavior: none;
       -webkit-text-size-adjust: 100%;
     }
 
@@ -28,7 +29,9 @@
     }
 
     #root {
-      min-height: 100svh;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
     }
 
     * {
@@ -66,23 +69,36 @@
 
       const [records, setRecords] = useState([]);
       const [showSaved, setShowSaved] = useState(false);
+      const [showHistoryModal, setShowHistoryModal] = useState(false);
 
       const amountInputRef = useRef(null);
       const savedTimerRef = useRef(null);
+      const clockTimerRef = useRef(null);
+
+      const [now, setNow] = useState(new Date());
+
+      useEffect(() => {
+        clockTimerRef.current = setInterval(() => {
+          setNow(new Date());
+        }, 1000 * 30);
+        return () => {
+          if (clockTimerRef.current) clearInterval(clockTimerRef.current);
+        };
+      }, []);
 
       const nowText = useMemo(() => {
-        return new Date().toLocaleTimeString("ja-JP", {
+        return now.toLocaleTimeString("ja-JP", {
           hour: "2-digit",
           minute: "2-digit",
         });
-      }, [screen, dutyStarted, isRiding, records.length]);
+      }, [now]);
 
       const elapsedText = useMemo(() => {
         if (!rideStartAt) return "00分";
-        const diffMs = Date.now() - rideStartAt.getTime();
+        const diffMs = now.getTime() - rideStartAt.getTime();
         const diffMin = Math.max(0, Math.floor(diffMs / 1000 / 60));
         return `${diffMin}分`;
-      }, [rideStartAt, screen, isRiding]);
+      }, [rideStartAt, now]);
 
       const formattedAmount = useMemo(() => {
         if (!amount) return "";
@@ -91,6 +107,10 @@
 
       const totalAmount = useMemo(() => {
         return records.reduce((sum, record) => sum + record.amount, 0);
+      }, [records]);
+
+      const recordCount = useMemo(() => {
+        return records.length;
       }, [records]);
 
       const amount1 = useMemo(() => {
@@ -189,11 +209,6 @@
           return;
         }
 
-        if (!amount.trim()) {
-          alert("金額を入力してください");
-          return;
-        }
-
         const numericAmount = Number(amount);
         if (!numericAmount || numericAmount <= 0) {
           alert("正しい金額を入力してください");
@@ -207,6 +222,8 @@
           amount: numericAmount,
           payment: selectedPayment,
           receipt,
+          pickup: "",
+          dropoff: "",
         };
 
         setRecords((prev) => [newRecord, ...prev]);
@@ -225,291 +242,363 @@
         }, 3000);
       };
 
+      const paymentText = (payment) => {
+        return payment === "cash" ? "現金" : "カード・QR";
+      };
+
+      const formatTime = (dateValue) => {
+        if (!dateValue) return "";
+        return dateValue.toLocaleTimeString("ja-JP", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      };
+
+      const screenTitle = (() => {
+        if (screen === "top") return "TOP";
+        if (screen === "standby") return "乗車待機";
+        if (screen === "ride") return "実車画面";
+        if (screen === "fare") return "金額入力";
+        return "";
+      })();
+
+      const stateLabel = (() => {
+        if (screen === "standby") return "乗車待機";
+        if (screen === "ride") return "実車中";
+        if (screen === "fare") return "降車後";
+        return dutyStarted ? "乗務中" : "乗務開始前";
+      })();
+
       const shadowMain = "shadow-[0_10px_20px_rgba(15,23,42,0.12)]";
       const shadowSub = "shadow-[0_6px_12px_rgba(15,23,42,0.08)]";
 
-      const statusCardClass =
-        `rounded-2xl bg-white border border-slate-200 px-4 py-4 min-h-[168px] ${shadowSub}`;
+      const cardClass = `rounded-2xl bg-white border border-slate-200 ${shadowSub}`;
+      const subButtonClass = `w-full h-[52px] rounded-2xl text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`;
+      const mainButtonClass = `w-full h-full rounded-[28px] text-white text-3xl font-bold active:scale-[0.99] ${shadowMain}`;
 
-      const mainAreaClass = "flex-1 flex items-center min-h-[220px]";
-      const disabledClass = amountConfirmed ? "" : "opacity-40 pointer-events-none";
+      const previewRecords = records.slice(0, 8);
 
       return (
-        <div className="min-h-[100svh] bg-slate-50 flex items-start justify-center px-4 pt-4 pb-6">
-          <div className="w-full max-w-sm relative">
+        <div className="w-full h-full bg-slate-50 flex justify-center overflow-hidden">
+          <div className="w-full max-w-sm h-[100svh] px-4 pt-3 pb-3 relative overflow-hidden">
             {showSaved && (
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 rounded-full bg-emerald-500 text-white text-sm font-bold px-4 py-2 shadow-lg">
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-4 py-2 shadow-lg">
                 保存しました
               </div>
             )}
 
-            <div className="px-1 pt-2 pb-3">
-              <div className="text-sm text-slate-400">TAXI用LINEミニアプリ</div>
-              <div className="mt-1 text-xl font-bold text-slate-800">
-                {screen === "top" && "TOP"}
-                {screen === "standby" && "乗車待機"}
-                {screen === "ride" && "乗車画面"}
-                {screen === "fare" && "金額入力"}
-              </div>
-            </div>
-
-            {screen === "top" && (
-              <div>
-                <div className={`${statusCardClass} mb-4`}>
-                  <div className="text-sm text-slate-500">状態</div>
-                  <div className="mt-1 text-2xl font-bold text-slate-800">
-                    {dutyStarted ? "乗務中" : "乗務開始前"}
-                  </div>
-                  <div className="mt-2 text-sm text-slate-500">
-                    現在時刻 {nowText}
-                  </div>
-                  <div className="mt-2 text-sm font-semibold text-slate-700">
-                    乗務合計 ¥{totalAmount.toLocaleString("ja-JP")}
-                  </div>
-                </div>
-
-                <div className="grid gap-2.5">
-                  {!dutyStarted && (
-                    <button
-                      type="button"
-                      onClick={handleDutyStart}
-                      className={`w-full rounded-2xl py-4.5 text-lg font-bold bg-sky-500 text-white active:scale-[0.99] ${shadowMain}`}
-                    >
-                      乗務開始
-                    </button>
-                  )}
-
-                  {dutyStarted && (
-                    <button
-                      type="button"
-                      onClick={handleDutyEnd}
-                      className={`w-full rounded-2xl py-4.5 text-lg font-bold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`}
-                    >
-                      乗務終了
-                    </button>
-                  )}
-
-                  <button
-                    type="button"
-                    className={`w-full rounded-2xl py-4 text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`}
-                  >
-                    修正
-                  </button>
-
-                  <button
-                    type="button"
-                    className={`w-full rounded-2xl py-4 text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`}
-                  >
-                    分析
-                  </button>
-
-                  <button
-                    type="button"
-                    className={`w-full rounded-2xl py-4 text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`}
-                  >
-                    設定
-                  </button>
-                </div>
-
-                {records.length > 0 && (
-                  <div className={`mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden ${shadowSub}`}>
-                    <div className="px-4 py-3 text-sm font-semibold text-slate-700 border-b border-slate-100">
-                      最新履歴
+            {showHistoryModal && (
+              <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-end">
+                <div className="w-full h-[78svh] rounded-t-[28px] bg-white shadow-2xl flex flex-col overflow-hidden">
+                  <div className="px-4 pt-3 pb-2 border-b border-slate-100">
+                    <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-lg font-bold text-slate-800">履歴一覧</div>
+                      <button
+                        type="button"
+                        onClick={() => setShowHistoryModal(false)}
+                        className="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold"
+                      >
+                        閉じる
+                      </button>
                     </div>
-                    <div className="h-[154px] overflow-auto">
-                      {records.map((record) => (
-                        <div
-                          key={record.id}
-                          className="px-4 py-3 border-b last:border-b-0 border-slate-100"
-                        >
-                          <div className="text-sm font-semibold text-slate-800">
-                            ¥{record.amount.toLocaleString("ja-JP")}
+                  </div>
+
+                  <div className="flex-1 overflow-y-auto px-4 py-3">
+                    {records.length === 0 ? (
+                      <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
+                        まだ履歴はありません
+                      </div>
+                    ) : (
+                      <div className="grid gap-3">
+                        {records.map((record) => (
+                          <div
+                            key={record.id}
+                            className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <div>
+                                <div className="text-xl font-bold text-slate-800">
+                                  ¥{record.amount.toLocaleString("ja-JP")}
+                                </div>
+                                <div className="mt-1 text-xs text-slate-500">
+                                  {formatTime(record.startAt)} → {formatTime(record.endAt)}
+                                </div>
+                              </div>
+                              <div className="text-right text-xs text-slate-500">
+                                <div>{paymentText(record.payment)}</div>
+                                <div>{record.receipt ? "領収証あり" : "領収証なし"}</div>
+                              </div>
+                            </div>
+
+                            <div className="mt-3 grid gap-1 text-sm text-slate-600">
+                              <div>乗車地：{record.pickup || "未設定"}</div>
+                              <div>降車地：{record.dropoff || "未設定"}</div>
+                            </div>
                           </div>
-                          <div className="mt-1 text-xs text-slate-500">
-                            {record.startAt.toLocaleTimeString("ja-JP", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                            {" → "}
-                            {record.endAt.toLocaleTimeString("ja-JP", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                            {" ・ "}
-                            {record.payment === "cash" ? "現金" : "カード・QR"}
-                            {record.receipt ? " ・ 領収証あり" : ""}
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="h-full flex flex-col overflow-hidden">
+              <div className="px-1 pt-1 pb-3 shrink-0">
+                <div className="text-sm text-slate-400">TAXI用LINEミニアプリ</div>
+                <div className="mt-1 text-xl font-bold text-slate-800">{screenTitle}</div>
+              </div>
+
+              {screen !== "fare" && (
+                <>
+                  <div className={`${cardClass} h-[168px] px-4 py-4 shrink-0`}>
+                    <div className="text-sm text-slate-500">状態</div>
+                    <div className="mt-1 text-[30px] leading-none font-bold text-slate-800">
+                      {stateLabel}
+                    </div>
+
+                    <div className="mt-2 text-sm text-slate-500">
+                      {screen === "ride"
+                        ? `開始 ${formatTime(rideStartAt)} ・ 経過 ${elapsedText}`
+                        : `現在時刻 ${nowText}`}
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-2 gap-3">
+                      <div className="rounded-2xl bg-slate-50 border border-slate-200 px-3 py-2.5">
+                        <div className="text-[11px] text-slate-500">売上合計</div>
+                        <div className="mt-1 text-lg font-bold text-slate-800">
+                          ¥{totalAmount.toLocaleString("ja-JP")}
+                        </div>
+                      </div>
+                      <div className="rounded-2xl bg-slate-50 border border-slate-200 px-3 py-2.5">
+                        <div className="text-[11px] text-slate-500">件数</div>
+                        <div className="mt-1 text-lg font-bold text-slate-800">
+                          {recordCount}件
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 grid grid-cols-2 gap-3 text-sm text-slate-600">
+                      <div className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2 border border-slate-200">
+                        <span>①</span>
+                        <span className="font-semibold">¥{amount1.toLocaleString("ja-JP")}</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2 border border-slate-200">
+                        <span>②</span>
+                        <span className="font-semibold">¥{amount2.toLocaleString("ja-JP")}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="h-[132px] pt-4 shrink-0">
+                    {screen === "top" && (
+                      <>
+                        {!dutyStarted ? (
+                          <button
+                            type="button"
+                            onClick={handleDutyStart}
+                            className={`${mainButtonClass} bg-sky-500`}
+                          >
+                            乗務開始
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={handleDutyEnd}
+                            className={`${mainButtonClass} bg-slate-300 text-slate-800`}
+                          >
+                            乗務終了
+                          </button>
+                        )}
+                      </>
+                    )}
+
+                    {screen === "standby" && (
+                      <button
+                        type="button"
+                        onClick={handleStartRide}
+                        className={`${mainButtonClass} bg-sky-500`}
+                      >
+                        実車
+                      </button>
+                    )}
+
+                    {screen === "ride" && (
+                      <button
+                        type="button"
+                        onClick={handleDropOff}
+                        className={`${mainButtonClass} bg-emerald-500`}
+                      >
+                        降車
+                      </button>
+                    )}
+                  </div>
+
+                  {screen === "top" && (
+                    <div className="flex-1 min-h-0 pt-3 flex flex-col overflow-hidden">
+                      <div className="grid gap-2.5 shrink-0">
+                        <button type="button" className={subButtonClass}>修正</button>
+                        <button type="button" className={subButtonClass}>分析</button>
+                        <button type="button" className={subButtonClass}>設定</button>
+                      </div>
+
+                      <div className="pt-3 flex-1 min-h-0">
+                        <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
+                          <button
+                            type="button"
+                            onClick={() => setShowHistoryModal(true)}
+                            className="px-4 py-3 border-b border-slate-100 flex items-center justify-between active:bg-slate-50"
+                          >
+                            <div className="text-sm font-semibold text-slate-700">履歴</div>
+                            <div className="text-sm font-bold text-sky-600">＋ 履歴一覧</div>
+                          </button>
+
+                          <div
+                            className="flex-1 overflow-y-auto"
+                            onClick={() => setShowHistoryModal(true)}
+                          >
+                            {previewRecords.length === 0 ? (
+                              <div className="px-4 py-4 text-sm text-slate-500">
+                                まだ履歴はありません
+                              </div>
+                            ) : (
+                              previewRecords.map((record) => (
+                                <div
+                                  key={record.id}
+                                  className="px-4 py-3 border-b last:border-b-0 border-slate-100"
+                                >
+                                  <div className="flex items-start justify-between gap-3">
+                                    <div className="text-base font-bold text-slate-800">
+                                      ¥{record.amount.toLocaleString("ja-JP")}
+                                    </div>
+                                    <div className="text-xs text-slate-500 shrink-0">
+                                      {paymentText(record.payment)}
+                                      {record.receipt ? " ・ 領収証" : ""}
+                                    </div>
+                                  </div>
+                                  <div className="mt-1 text-xs text-slate-500">
+                                    {formatTime(record.startAt)} → {formatTime(record.endAt)}
+                                  </div>
+                                </div>
+                              ))
+                            )}
                           </div>
                         </div>
-                      ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {(screen === "standby" || screen === "ride") && (
+                    <div className="flex-1 min-h-0 pt-3 flex flex-col">
+                      <div className="flex-1"></div>
+                      <button
+                        type="button"
+                        onClick={() => setScreen("top")}
+                        className={subButtonClass}
+                      >
+                        TOP
+                      </button>
+                      <div className="h-2 shrink-0"></div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {screen === "fare" && (
+                <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+                  <div className={`${cardClass} h-[106px] px-4 py-4 shrink-0`}>
+                    <div className="text-sm text-slate-500">乗車情報</div>
+                    <div className="mt-2 text-base font-semibold text-slate-700">
+                      {formatTime(rideStartAt)} → {formatTime(rideEndAt)}
+                    </div>
+                    <div className="mt-2 text-xs text-slate-500">
+                      金額入力後に金額確定を押してください
                     </div>
                   </div>
-                )}
-              </div>
-            )}
 
-            {screen === "standby" && (
-              <div className="min-h-[560px] flex flex-col">
-                <div className={`${statusCardClass} mb-5`}>
-                  <div className="text-sm text-slate-500">状態</div>
-                  <div className="mt-1 text-3xl font-bold text-slate-800">乗車待機</div>
-                  <div className="mt-2 text-sm text-slate-500">
-                    現在時刻 {nowText}
+                  <div className="pt-4 shrink-0">
+                    <label className="block text-sm text-slate-500 mb-2">金額</label>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-slate-400">
+                        ¥
+                      </span>
+                      <input
+                        ref={amountInputRef}
+                        type="text"
+                        inputMode="numeric"
+                        value={formattedAmount}
+                        onChange={handleAmountChange}
+                        placeholder="0"
+                        className={`w-full rounded-[24px] border pl-12 pr-4 py-5 text-4xl font-bold text-slate-800 outline-none focus:border-sky-300 ${
+                          amountConfirmed
+                            ? "border-emerald-300 bg-emerald-50"
+                            : "border-slate-200 bg-white"
+                        } ${shadowSub}`}
+                      />
+                    </div>
                   </div>
-                  <div className="mt-3 text-lg font-bold text-slate-800">
-                    乗務合計 ¥{totalAmount.toLocaleString("ja-JP")}
-                  </div>
-                  <div className="mt-2 flex items-center justify-between text-sm text-slate-600">
-                    <span>①</span>
-                    <span>¥{amount1.toLocaleString("ja-JP")}</span>
-                  </div>
-                  <div className="mt-1 flex items-center justify-between text-sm text-slate-600">
-                    <span>②</span>
-                    <span>¥{amount2.toLocaleString("ja-JP")}</span>
-                  </div>
-                </div>
 
-                <div className={mainAreaClass}>
-                  <button
-                    type="button"
-                    onClick={handleStartRide}
-                    className={`w-full rounded-[28px] bg-sky-500 text-white py-12 text-3xl font-bold active:scale-[0.99] ${shadowMain}`}
-                  >
-                    乗車
-                  </button>
-                </div>
+                  <div className="pt-4 flex-1 min-h-0 flex flex-col">
+                    <div className="grid gap-3 shrink-0">
+                      <button
+                        type="button"
+                        onClick={handleConfirmAmount}
+                        className={`w-full rounded-2xl h-[56px] text-xl font-bold active:scale-[0.99] ${
+                          amountConfirmed ? "bg-emerald-500 text-white" : "bg-black text-white"
+                        } ${shadowMain}`}
+                      >
+                        {amountConfirmed ? "金額確定済み" : "金額確定"}
+                      </button>
 
-                <div className="pt-5">
-                  <button
-                    type="button"
-                    onClick={() => setScreen("top")}
-                    className={`w-full rounded-2xl py-4 text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`}
-                  >
-                    TOP
-                  </button>
-                </div>
-              </div>
-            )}
+                      <button
+                        type="button"
+                        onClick={() => handleSaveFare("cash")}
+                        disabled={!amountConfirmed}
+                        className={`w-full rounded-2xl h-[56px] text-xl font-bold active:scale-[0.98] ${
+                          amountConfirmed
+                            ? "bg-sky-500 text-white"
+                            : "bg-slate-200 text-slate-400"
+                        } ${shadowMain}`}
+                      >
+                        現金
+                      </button>
 
-            {screen === "ride" && (
-              <div className="min-h-[560px] flex flex-col">
-                <div className={`${statusCardClass} mb-5`}>
-                  <div className="text-sm text-slate-500">状態</div>
-                  <div className="mt-1 text-3xl font-bold text-slate-800">乗車中</div>
-                  <div className="mt-2 text-sm text-slate-500">
-                    開始{" "}
-                    {rideStartAt?.toLocaleTimeString("ja-JP", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                    {" ・ "}
-                    経過 {elapsedText}
-                  </div>
-                </div>
+                      <button
+                        type="button"
+                        onClick={() => handleSaveFare("cardQr")}
+                        disabled={!amountConfirmed}
+                        className={`w-full rounded-2xl h-[56px] text-xl font-bold active:scale-[0.98] ${
+                          amountConfirmed
+                            ? "bg-emerald-500 text-white"
+                            : "bg-slate-200 text-slate-400"
+                        } ${shadowMain}`}
+                      >
+                        カード・QR
+                      </button>
 
-                <div className={mainAreaClass}>
-                  <button
-                    type="button"
-                    onClick={handleDropOff}
-                    className={`w-full rounded-[28px] bg-emerald-500 text-white py-12 text-3xl font-bold active:scale-[0.99] ${shadowMain}`}
-                  >
-                    降車
-                  </button>
-                </div>
+                      <button
+                        type="button"
+                        onClick={handleToggleReceipt}
+                        disabled={!amountConfirmed}
+                        className={`w-full rounded-2xl h-[56px] text-xl font-bold border active:scale-[0.98] ${
+                          amountConfirmed
+                            ? receipt
+                              ? "bg-[#ffe45c] text-black border-[#e6c200]"
+                              : "bg-[#ffd700] text-black border-[#e6c200]"
+                            : "bg-slate-200 text-slate-400 border-slate-200"
+                        } ${shadowMain}`}
+                      >
+                        領収証発行
+                      </button>
+                    </div>
 
-                <div className="pt-5">
-                  <button
-                    type="button"
-                    onClick={() => setScreen("standby")}
-                    className={`w-full rounded-2xl py-4 text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`}
-                  >
-                    TOP
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {screen === "fare" && (
-              <div className="min-h-[560px] flex flex-col">
-                <div className={`rounded-2xl bg-white border border-slate-200 px-4 py-4 mb-5 ${shadowSub}`}>
-                  <div className="text-sm text-slate-500">乗車情報</div>
-                  <div className="mt-2 text-sm text-slate-600">
-                    {rideStartAt?.toLocaleTimeString("ja-JP", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                    {" → "}
-                    {rideEndAt?.toLocaleTimeString("ja-JP", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
+                    <div className="flex-1"></div>
+                    <div className="h-2 shrink-0"></div>
                   </div>
                 </div>
-
-                <div className="mb-4">
-                  <label className="block text-sm text-slate-500 mb-2">金額</label>
-                  <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-slate-400">
-                      ¥
-                    </span>
-                    <input
-                      ref={amountInputRef}
-                      type="text"
-                      inputMode="numeric"
-                      value={formattedAmount}
-                      onChange={handleAmountChange}
-                      placeholder="0"
-                      className={`w-full rounded-[24px] border pl-12 pr-4 py-6 text-4xl font-bold text-slate-800 outline-none focus:border-sky-300 ${
-                        amountConfirmed
-                          ? "border-emerald-300 bg-emerald-50"
-                          : "border-sky-200 bg-white"
-                      } ${shadowSub}`}
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={handleConfirmAmount}
-                  className={`w-full rounded-2xl py-4 mb-3 text-xl font-bold active:scale-[0.99] ${
-                    amountConfirmed
-                      ? "bg-emerald-500 text-white"
-                      : "bg-black text-white"
-                  } ${shadowMain}`}
-                >
-                  {amountConfirmed ? "金額確定済み" : "金額確定"}
-                </button>
-
-                <div className={`grid gap-3 ${disabledClass}`}>
-                  <button
-                    type="button"
-                    onClick={() => handleSaveFare("cash")}
-                    className={`w-full rounded-2xl py-4 text-xl font-bold bg-sky-500 text-white active:scale-[0.98] ${shadowMain}`}
-                  >
-                    現金
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleSaveFare("cardQr")}
-                    className={`w-full rounded-2xl py-4 text-xl font-bold bg-emerald-500 text-white active:scale-[0.98] ${shadowMain}`}
-                  >
-                    カード・QR
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleToggleReceipt}
-                    className={`w-full rounded-2xl py-4 text-xl font-bold border active:scale-[0.98] ${
-                      receipt
-                        ? "bg-[#ffe45c] text-black border-[#e6c200]"
-                        : "bg-[#ffd700] text-black border-[#e6c200]"
-                    } ${shadowMain}`}
-                  >
-                    領収証発行
-                  </button>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       );
