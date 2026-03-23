@@ -190,6 +190,26 @@
         return "idle";
       })();
 
+      const shadowSub = "shadow-[0_6px_12px_rgba(15,23,42,0.08)]";
+      const shadowMain = "shadow-[0_10px_20px_rgba(15,23,42,0.12)]";
+      const cardClass = `rounded-2xl bg-white border border-slate-200 ${shadowSub}`;
+      const subButtonClass =
+        `w-full h-[52px] rounded-2xl text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`;
+      const mainButtonClass =
+        `w-full h-full rounded-[28px] text-white text-3xl font-bold active:scale-[0.99] ${shadowMain}`;
+
+      const confirmButtonClass = (() => {
+        if (confirmButtonMode === "idle") {
+          return `w-full rounded-2xl h-[56px] text-xl font-bold bg-slate-300 text-white ${shadowMain}`;
+        }
+        if (confirmButtonMode === "ready") {
+          return `w-full rounded-2xl h-[56px] text-xl font-bold bg-black text-white ${shadowMain}`;
+        }
+        return `w-full rounded-2xl h-[56px] text-xl font-bold bg-slate-500 text-white ${shadowMain}`;
+      })();
+
+      const confirmButtonText = amountConfirmed ? "金額確定済" : "金額確定";
+
       const handleDutyStart = () => {
         setDutyStarted(true);
         setIsRiding(false);
@@ -197,7 +217,7 @@
         setScreen("standby");
       };
 
-      const handleDutyEnd = () => {
+      const performDutyEnd = () => {
         if (isRiding) return;
         setDutyStarted(false);
         setIsRiding(false);
@@ -207,6 +227,13 @@
         setAmount("");
         setAmountConfirmed(false);
         setScreen("top");
+      };
+
+      const handleDutyEnd = () => {
+        if (isRiding) return;
+        const ok = window.confirm("乗務を終了しますか？");
+        if (!ok) return;
+        performDutyEnd();
       };
 
       const handleGoTopFromStandby = () => {
@@ -325,26 +352,6 @@
           setShowSaved(false);
         }, 2200);
       };
-
-      const shadowSub = "shadow-[0_6px_12px_rgba(15,23,42,0.08)]";
-      const shadowMain = "shadow-[0_10px_20px_rgba(15,23,42,0.12)]";
-      const cardClass = `rounded-2xl bg-white border border-slate-200 ${shadowSub}`;
-      const subButtonClass =
-        `w-full h-[52px] rounded-2xl text-base font-semibold bg-slate-200 text-slate-800 border border-slate-300 active:scale-[0.99] ${shadowSub}`;
-      const mainButtonClass =
-        `w-full h-full rounded-[28px] text-white text-3xl font-bold active:scale-[0.99] ${shadowMain}`;
-
-      const confirmButtonClass = (() => {
-        if (confirmButtonMode === "idle") {
-          return `w-full rounded-2xl h-[56px] text-xl font-bold bg-slate-300 text-white ${shadowMain}`;
-        }
-        if (confirmButtonMode === "ready") {
-          return `w-full rounded-2xl h-[56px] text-xl font-bold bg-black text-white ${shadowMain}`;
-        }
-        return `w-full rounded-2xl h-[56px] text-xl font-bold bg-slate-500 text-white ${shadowMain}`;
-      })();
-
-      const confirmButtonText = amountConfirmed ? "金額確定済" : "金額確定";
 
       return (
         <div className="w-full h-full bg-slate-50 flex justify-center overflow-hidden">
