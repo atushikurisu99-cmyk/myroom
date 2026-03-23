@@ -64,7 +64,6 @@
       const [rideEndAt, setRideEndAt] = useState(null);
 
       const [amount, setAmount] = useState("");
-      const [receipt, setReceipt] = useState(false);
       const [amountConfirmed, setAmountConfirmed] = useState(false);
 
       const [records, setRecords] = useState([]);
@@ -115,13 +114,13 @@
 
       const amount1 = useMemo(() => {
         return records
-          .filter((record) => !record.receipt)
+          .filter((record) => record.payment === "cash" && !record.receipt)
           .reduce((sum, record) => sum + record.amount, 0);
       }, [records]);
 
       const amount2 = useMemo(() => {
         return records
-          .filter((record) => record.receipt)
+          .filter((record) => !(record.payment === "cash" && !record.receipt))
           .reduce((sum, record) => sum + record.amount, 0);
       }, [records]);
 
@@ -152,7 +151,6 @@
         setRideStartAt(null);
         setRideEndAt(null);
         setAmount("");
-        setReceipt(false);
         setAmountConfirmed(false);
         setRecords([]);
       };
@@ -169,7 +167,6 @@
         const end = new Date();
         setRideEndAt(end);
         setAmount("");
-        setReceipt(false);
         setAmountConfirmed(false);
         setScreen("fare");
       };
@@ -196,12 +193,7 @@
         setAmountConfirmed(true);
       };
 
-      const handleToggleReceipt = () => {
-        if (!amountConfirmed) return;
-        setReceipt((prev) => !prev);
-      };
-
-      const handleSaveFare = (selectedPayment) => {
+      const handleSaveFare = (saveType) => {
         if (!rideStartAt || !rideEndAt) return;
 
         if (!amountConfirmed) {
@@ -215,12 +207,26 @@
           return;
         }
 
+        let payment = "cash";
+        let receipt = false;
+
+        if (saveType === "cash") {
+          payment = "cash";
+          receipt = false;
+        } else if (saveType === "cardQr") {
+          payment = "cardQr";
+          receipt = false;
+        } else if (saveType === "receipt") {
+          payment = "receipt";
+          receipt = true;
+        }
+
         const newRecord = {
           id: Date.now(),
           startAt: rideStartAt,
           endAt: rideEndAt,
           amount: numericAmount,
-          payment: selectedPayment,
+          payment,
           receipt,
           pickup: "",
           dropoff: "",
@@ -231,7 +237,6 @@
         setRideStartAt(null);
         setRideEndAt(null);
         setAmount("");
-        setReceipt(false);
         setAmountConfirmed(false);
         setScreen("standby");
 
@@ -243,7 +248,10 @@
       };
 
       const paymentText = (payment) => {
-        return payment === "cash" ? "現金" : "カード・QR";
+        if (payment === "cash") return "現金";
+        if (payment === "cardQr") return "カード・QR";
+        if (payment === "receipt") return "領収証発行";
+        return "";
       };
 
       const formatTime = (dateValue) => {
@@ -579,13 +587,11 @@
 
                       <button
                         type="button"
-                        onClick={handleToggleReceipt}
+                        onClick={() => handleSaveFare("receipt")}
                         disabled={!amountConfirmed}
                         className={`w-full rounded-2xl h-[56px] text-xl font-bold border active:scale-[0.98] ${
                           amountConfirmed
-                            ? receipt
-                              ? "bg-[#ffe45c] text-black border-[#e6c200]"
-                              : "bg-[#ffd700] text-black border-[#e6c200]"
+                            ? "bg-[#ffd700] text-black border-[#e6c200]"
                             : "bg-slate-200 text-slate-400 border-slate-200"
                         } ${shadowMain}`}
                       >
