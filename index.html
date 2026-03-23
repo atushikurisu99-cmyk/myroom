@@ -50,31 +50,23 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useMemo, useState, useRef, useEffect } = React;
+    const { useMemo, useState } = React;
 
     function TaxiMiniAppMock() {
-      const [screen, setScreen] = useState("top"); // top | standby | ride | fare
-      const [dutyStarted, setDutyStarted] = useState(false);
+      const [screen, setScreen] = useState("top");
       const [isRiding, setIsRiding] = useState(false);
-
       const [rideStartAt, setRideStartAt] = useState(null);
       const [rideEndAt, setRideEndAt] = useState(null);
-
       const [amount, setAmount] = useState("");
       const [receipt, setReceipt] = useState(false);
-
       const [records, setRecords] = useState([]);
-      const [showSaved, setShowSaved] = useState(false);
-
-      const amountInputRef = useRef(null);
-      const savedTimerRef = useRef(null);
 
       const nowText = useMemo(() => {
         return new Date().toLocaleTimeString("ja-JP", {
           hour: "2-digit",
           minute: "2-digit",
         });
-      }, [screen, dutyStarted, isRiding, records.length]);
+      }, [screen, isRiding]);
 
       const elapsedText = useMemo(() => {
         if (!rideStartAt) return "00分";
@@ -88,43 +80,6 @@
         return Number(amount).toLocaleString("ja-JP");
       }, [amount]);
 
-      useEffect(() => {
-        if (screen === "fare") {
-          const timer = setTimeout(() => {
-            amountInputRef.current?.focus();
-          }, 120);
-          return () => clearTimeout(timer);
-        }
-      }, [screen]);
-
-      useEffect(() => {
-        return () => {
-          if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
-        };
-      }, []);
-
-      const totalToday = records.reduce((sum, record) => sum + record.amount, 0);
-
-      const handleDutyStart = () => {
-        setDutyStarted(true);
-        setScreen("standby");
-      };
-
-      const handleDutyEnd = () => {
-        if (isRiding) return;
-        setDutyStarted(false);
-        setScreen("top");
-        setRideStartAt(null);
-        setRideEndAt(null);
-        setAmount("");
-        setReceipt(false);
-      };
-
-      const handleGoToStandby = () => {
-        if (!dutyStarted || isRiding) return;
-        setScreen("standby");
-      };
-
       const handleStartRide = () => {
         const start = new Date();
         setRideStartAt(start);
@@ -134,7 +89,7 @@
       };
 
       const handleReturnToRide = () => {
-        if (isRiding) setScreen("ride");
+        setScreen("ride");
       };
 
       const handleDropOff = () => {
@@ -179,29 +134,18 @@
         setRideEndAt(null);
         setAmount("");
         setReceipt(false);
-        setScreen("standby");
-
-        setShowSaved(true);
-        if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
-        savedTimerRef.current = setTimeout(() => {
-          setShowSaved(false);
-        }, 3000);
+        setScreen("top");
       };
+
+      const totalToday = records.reduce((sum, record) => sum + record.amount, 0);
 
       return (
         <div className="min-h-[100svh] bg-slate-50 flex items-start justify-center p-4 pb-8">
-          <div className="w-full max-w-sm rounded-[28px] bg-white shadow-xl border border-slate-200 overflow-hidden relative">
-            {showSaved && (
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 rounded-full bg-emerald-500 text-white text-sm font-bold px-4 py-2 shadow-lg">
-                保存しました
-              </div>
-            )}
-
+          <div className="w-full max-w-sm rounded-[28px] bg-white shadow-xl border border-slate-200 overflow-hidden">
             <div className="px-5 pt-6 pb-4 border-b border-slate-100">
               <div className="text-sm text-slate-400">TAXI用LINEミニアプリ</div>
               <div className="mt-1 text-xl font-bold text-slate-800">
                 {screen === "top" && "TOP"}
-                {screen === "standby" && "乗車待機"}
                 {screen === "ride" && "乗車画面"}
                 {screen === "fare" && "金額入力"}
               </div>
@@ -212,10 +156,11 @@
                 <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-4 mb-5">
                   <div className="text-sm text-slate-500">状態</div>
                   <div className="mt-1 text-2xl font-bold text-slate-800">
-                    {dutyStarted ? "乗務中" : "乗務開始前"}
+                    {isRiding ? "乗車中" : "待機中"}
                   </div>
                   <div className="mt-2 text-sm text-slate-500">
                     現在時刻 {nowText}
+                    {isRiding && rideStartAt ? ` ・ 経過 ${elapsedText}` : ""}
                   </div>
                   <div className="mt-2 text-sm text-slate-500">
                     本日売上 ¥{totalToday.toLocaleString("ja-JP")}
@@ -223,25 +168,17 @@
                 </div>
 
                 <div className="grid gap-3">
-                  {!dutyStarted && (
-                    <button
-                      type="button"
-                      onClick={handleDutyStart}
-                      className="w-full rounded-2xl py-5 text-lg font-bold bg-sky-500 text-white shadow-md active:scale-[0.99]"
-                    >
-                      乗務開始
-                    </button>
-                  )}
-
-                  {dutyStarted && (
-                    <button
-                      type="button"
-                      onClick={handleDutyEnd}
-                      className="w-full rounded-2xl py-5 text-lg font-bold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
-                    >
-                      乗務終了
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    onClick={isRiding ? handleReturnToRide : handleStartRide}
+                    className={`w-full rounded-2xl py-5 text-lg font-bold transition active:scale-[0.99] ${
+                      isRiding
+                        ? "bg-sky-100 text-sky-700 border border-sky-200"
+                        : "bg-sky-500 text-white shadow-md"
+                    }`}
+                  >
+                    {isRiding ? "乗車中へ戻る" : "乗務開始"}
+                  </button>
 
                   <button
                     type="button"
@@ -301,38 +238,6 @@
               </div>
             )}
 
-            {screen === "standby" && (
-              <div className="p-5 min-h-[560px] flex flex-col">
-                <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-5 mb-6">
-                  <div className="text-sm text-slate-500">状態</div>
-                  <div className="mt-1 text-3xl font-bold text-slate-800">乗車待機</div>
-                  <div className="mt-2 text-sm text-slate-500">
-                    現在時刻 {nowText}
-                  </div>
-                </div>
-
-                <div className="flex-1 flex items-center">
-                  <button
-                    type="button"
-                    onClick={handleStartRide}
-                    className="w-full rounded-[28px] bg-sky-500 text-white py-10 text-3xl font-bold shadow-lg active:scale-[0.99]"
-                  >
-                    乗車
-                  </button>
-                </div>
-
-                <div className="pt-5">
-                  <button
-                    type="button"
-                    onClick={() => setScreen("top")}
-                    className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
-                  >
-                    TOP
-                  </button>
-                </div>
-              </div>
-            )}
-
             {screen === "ride" && (
               <div className="p-5 min-h-[560px] flex flex-col">
                 <div className="rounded-2xl bg-sky-50 border border-sky-100 px-4 py-5 mb-6">
@@ -343,9 +248,8 @@
                     {rideStartAt?.toLocaleTimeString("ja-JP", {
                       hour: "2-digit",
                       minute: "2-digit",
-                    })}
-                    {" ・ "}
-                    経過 {elapsedText}
+                    })}{" "}
+                    ・ 経過 {elapsedText}
                   </div>
                 </div>
 
@@ -362,7 +266,7 @@
                 <div className="pt-5">
                   <button
                     type="button"
-                    onClick={() => setScreen("standby")}
+                    onClick={() => setScreen("top")}
                     className="w-full rounded-2xl py-4 text-base font-semibold bg-slate-100 text-slate-700 border border-slate-200 active:scale-[0.99]"
                   >
                     TOP
@@ -395,14 +299,10 @@
                       ¥
                     </span>
                     <input
-                      ref={amountInputRef}
                       type="text"
                       inputMode="numeric"
                       value={formattedAmount}
-                      onChange={(e) => {
-                        const raw = e.target.value.replace(/[^\d]/g, "");
-                        setAmount(raw);
-                      }}
+                      onChange={handleAmountChange}
                       placeholder="0"
                       className="w-full rounded-[24px] border border-slate-200 bg-white pl-12 pr-4 py-6 text-4xl font-bold text-slate-800 outline-none focus:border-sky-300"
                     />
@@ -426,14 +326,14 @@
                   <button
                     type="button"
                     onClick={() => handleSaveFare("cash")}
-                    className="rounded-[24px] bg-sky-500 text-white py-6 text-xl font-bold shadow-md active:scale-[0.98] transition"
+                    className="rounded-[24px] bg-sky-500 text-white py-6 text-xl font-bold shadow-md active:scale-[0.99]"
                   >
                     現金
                   </button>
                   <button
                     type="button"
                     onClick={() => handleSaveFare("cardQr")}
-                    className="rounded-[24px] bg-slate-800 text-white py-6 text-xl font-bold shadow-md active:scale-[0.98] transition"
+                    className="rounded-[24px] bg-slate-800 text-white py-6 text-xl font-bold shadow-md active:scale-[0.99]"
                   >
                     カード・QR
                   </button>
