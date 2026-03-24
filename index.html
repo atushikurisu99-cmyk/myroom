@@ -45,7 +45,9 @@
       font: inherit;
     }
 
-    input[type="text"] {
+    input[type="text"],
+    input[type="time"],
+    input[type="datetime-local"] {
       appearance: none;
       -webkit-appearance: none;
     }
@@ -81,6 +83,9 @@
       const [historyFilter, setHistoryFilter] = useState("all"); // all | 1 | 2
       const [historyBaseDate, setHistoryBaseDate] = useState(new Date());
       const [expandedMonthDays, setExpandedMonthDays] = useState({});
+
+      // 修正
+      const [editingRecord, setEditingRecord] = useState(null);
 
       const amountInputRef = useRef(null);
       const savedTimerRef = useRef(null);
@@ -135,14 +140,12 @@
         return records.length;
       }, [records]);
 
-      // ①＝現金・領収証なし
       const amount1 = useMemo(() => {
         return records
           .filter((record) => record.payment === "cash" && !record.receipt)
           .reduce((sum, record) => sum + record.amount, 0);
       }, [records]);
 
-      // ②＝カード・QR または 領収証あり
       const amount2 = useMemo(() => {
         return records
           .filter((record) => !(record.payment === "cash" && !record.receipt))
@@ -151,7 +154,7 @@
 
       const previewRecords = useMemo(() => records.slice(0, 8), [records]);
 
-      const formatMoney = (value) => `¥${value.toLocaleString("ja-JP")}`;
+      const formatMoney = (value) => `¥${Number(value || 0).toLocaleString("ja-JP")}`;
 
       const formatTime = (dateValue) => {
         if (!dateValue) return "";
@@ -177,6 +180,17 @@
         return `${d.getFullYear()}/${d.getMonth() + 1}`;
       };
 
+      const formatDateTimeLocal = (dateValue) => {
+        if (!dateValue) return "";
+        const d = new Date(dateValue);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        const hh = String(d.getHours()).padStart(2, "0");
+        const mi = String(d.getMinutes()).padStart(2, "0");
+        return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+      };
+
       const paymentText = (payment, receipt) => {
         if (payment === "cash" && !receipt) return "現金";
         if (payment === "cardQr" && !receipt) return "カード・QR";
@@ -200,9 +214,14 @@
           .replace(/,/g, " ")
           .replace(/、/g, " ");
 
+        // 広島市は省略
         text = text
+          .replace(/広島県広島市/g, " ")
           .replace(/広島県/g, " ")
-          .replace(/広島市/g, " ")
+          .replace(/広島市/g, " ");
+
+        // 区は広島市の一部なので省略
+        text = text
           .replace(/中区/g, " ")
           .replace(/東区/g, " ")
           .replace(/南区/g, " ")
@@ -447,7 +466,7 @@
 
           const group = map.get(key);
           group.records.push(record);
-          group.total += record.amount;
+          group.total += Number(record.amount || 0);
           group.count += 1;
         });
 
@@ -456,7 +475,6 @@
 
       useEffect(() => {
         if (!showHistoryModal) return;
-
         if (historyMode !== "month") return;
 
         const nextExpanded = {};
@@ -469,6 +487,24 @@
         });
         setExpandedMonthDays(nextExpanded);
       }, [showHistoryModal, historyMode, groupedHistory]);
+
+      const resetHistoryView = () => {
+        setHistoryMode("day");
+        setHistoryFilter("all");
+        setHistoryBaseDate(new Date());
+        setExpandedMonthDays({});
+      };
+
+      const openHistoryModal = () => {
+        resetHistoryView();
+        setEditingRecord(null);
+        setShowHistoryModal(true);
+      };
+
+      const closeHistoryModal = () => {
+        setEditingRecord(null);
+        setShowHistoryModal(false);
+      };
 
       const moveHistoryPeriod = (diff) => {
         const next = new Date(historyBaseDate);
@@ -487,6 +523,87 @@
           ...prev,
           [key]: !prev[key],
         }));
+      };
+
+      const openEditRecord = (record) => {
+        setEditingRecord({
+          ...record,
+          amountInput: String(record.amount ?? ""),
+          startAtInput: formatDateTimeLocal(record.startAt),
+          endAtInput: formatDateTimeLocal(record.endAt),
+          pickupInput: record.pickup || "",
+          dropoffInput: record.dropoff || "",
+          typeInput: recordType(record),
+        });
+      };
+
+      const closeEditRecord = () => {
+        setEditingRecord(null);
+      };
+
+      const saveEditedRecord = () => {
+        if (!editingRecord) return;
+
+        const numericAmount = Number(String(editingRecord.amountInput || "").replace(/[^\d]/g, ""));
+        if (!numericAmount || numericAmount <= 0) {
+          alert("正しい金額を入力してください");
+          return;
+        }
+
+        if (!editingRecord.startAtInput || !editingRecord.endAtInput) {
+          alert("時刻を入力してください");
+          return;
+        }
+
+        const nextStartAt = new Date(editingRecord.startAtInput);
+        const nextEndAt = new Date(editingRecord.endAtInput);
+
+        if (Number.isNaN(nextStartAt.getTime()) || Number.isNaN(nextEndAt.getTime())) {
+          alert("時刻の形式が正しくありません");
+          return;
+        }
+
+        if (nextEndAt.getTime() < nextStartAt.getTime()) {
+          alert("降車時刻は乗車時刻より後にしてください");
+          return;
+        }
+
+        let nextPayment = "cash";
+        let nextReceipt = false;
+
+        if (editingRecord.typeInput === "1") {
+          nextPayment = "cash";
+          nextReceipt = false;
+        } else {
+          nextPayment = "cardQr";
+          nextReceipt = false;
+        }
+
+        const updatedRecord = {
+          id: editingRecord.id,
+          startAt: nextStartAt,
+          endAt: nextEndAt,
+          amount: numericAmount,
+          payment: nextPayment,
+          receipt: nextReceipt,
+          pickup: (editingRecord.pickupInput || "").trim() || "未取得",
+          dropoff: (editingRecord.dropoffInput || "").trim() || "未取得",
+        };
+
+        setRecords((prev) =>
+          prev.map((record) => (record.id === updatedRecord.id ? updatedRecord : record))
+        );
+
+        setEditingRecord(null);
+      };
+
+      const deleteEditedRecord = () => {
+        if (!editingRecord) return;
+        const ok = window.confirm("この履歴を削除しますか？\n削除すると元に戻せません。");
+        if (!ok) return;
+
+        setRecords((prev) => prev.filter((record) => record.id !== editingRecord.id));
+        setEditingRecord(null);
       };
 
       const handleDutyStart = () => {
@@ -508,6 +625,7 @@
         setAmountConfirmed(false);
         setRecords([]);
         setShowHistoryModal(false);
+        setEditingRecord(null);
         setShowSaved(false);
         setScreen("top");
       };
@@ -612,7 +730,8 @@
           payment = "cardQr";
           receipt = false;
         } else if (saveType === "receipt") {
-          payment = "cash";
+          // 現仕様：領収証ありは②扱い
+          payment = "cardQr";
           receipt = true;
         }
 
@@ -623,8 +742,8 @@
           amount: numericAmount,
           payment,
           receipt,
-          pickup: pickup.trim(),
-          dropoff: dropoff.trim(),
+          pickup: pickup.trim() || "未取得",
+          dropoff: dropoff.trim() || "未取得",
         };
 
         setRecords((prev) => [newRecord, ...prev]);
@@ -652,7 +771,7 @@
           <button
             key={record.id}
             type="button"
-            onClick={() => alert("次で修正画面を追加します")}
+            onClick={() => openEditRecord(record)}
             className={`w-full text-left rounded-2xl border border-slate-200 bg-white p-4 active:bg-slate-50 ${shadowSub}`}
           >
             <div className="flex items-start justify-between gap-3">
@@ -676,7 +795,7 @@
                   {type === "1" ? "①" : "②"}
                 </div>
                 <div className="mt-2 text-[11px] text-slate-500">
-                  {paymentText(record.payment, record.receipt)}
+                  {type === "1" ? "現金" : "カード・QR / 領収証"}
                 </div>
               </div>
             </div>
@@ -701,188 +820,342 @@
             {showHistoryModal && (
               <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-end">
                 <div className="w-full h-[78svh] rounded-t-[28px] bg-white shadow-2xl flex flex-col overflow-hidden">
-                  <div className="px-4 pt-3 pb-2 border-b border-slate-100 shrink-0">
-                    <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
+                  {!editingRecord ? (
+                    <>
+                      <div className="px-4 pt-3 pb-2 border-b border-slate-100 shrink-0">
+                        <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
 
-                    <div className="flex items-center justify-between">
-                      <div className="text-lg font-bold text-slate-800">履歴一覧</div>
-                      <button
-                        type="button"
-                        onClick={() => setShowHistoryModal(false)}
-                        className="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold"
-                      >
-                        閉じる
-                      </button>
-                    </div>
-
-                    <div className="mt-3 grid gap-2">
-                      <div className="grid grid-cols-3 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setHistoryMode("day")}
-                          className={`h-[42px] rounded-2xl text-sm font-bold border ${
-                            historyMode === "day"
-                              ? "bg-slate-800 text-white border-slate-800"
-                              : "bg-slate-100 text-slate-700 border-slate-200"
-                          }`}
-                        >
-                          日
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setHistoryMode("week")}
-                          className={`h-[42px] rounded-2xl text-sm font-bold border ${
-                            historyMode === "week"
-                              ? "bg-slate-800 text-white border-slate-800"
-                              : "bg-slate-100 text-slate-700 border-slate-200"
-                          }`}
-                        >
-                          週
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setHistoryMode("month")}
-                          className={`h-[42px] rounded-2xl text-sm font-bold border ${
-                            historyMode === "month"
-                              ? "bg-slate-800 text-white border-slate-800"
-                              : "bg-slate-100 text-slate-700 border-slate-200"
-                          }`}
-                        >
-                          月
-                        </button>
-                      </div>
-
-                      <div className="grid grid-cols-[48px_1fr_48px] gap-2 items-center">
-                        <button
-                          type="button"
-                          onClick={() => moveHistoryPeriod(-1)}
-                          className="h-[42px] rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 text-lg font-bold"
-                        >
-                          ←
-                        </button>
-                        <div className="h-[42px] rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center px-3 text-sm font-bold text-slate-800">
-                          {getHistoryPeriodText()}
+                        <div className="flex items-center justify-between">
+                          <div className="text-lg font-bold text-slate-800">履歴一覧</div>
+                          <button
+                            type="button"
+                            onClick={closeHistoryModal}
+                            className="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold"
+                          >
+                            閉じる
+                          </button>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => moveHistoryPeriod(1)}
-                          className="h-[42px] rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 text-lg font-bold"
-                        >
-                          →
-                        </button>
-                      </div>
 
-                      <div className="grid grid-cols-3 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setHistoryFilter("all")}
-                          className={`h-[40px] rounded-2xl text-sm font-bold border ${
-                            historyFilter === "all"
-                              ? "bg-sky-500 text-white border-sky-500"
-                              : "bg-white text-slate-700 border-slate-200"
-                          }`}
-                        >
-                          すべて
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setHistoryFilter("1")}
-                          className={`h-[40px] rounded-2xl text-sm font-bold border ${
-                            historyFilter === "1"
-                              ? "bg-sky-500 text-white border-sky-500"
-                              : "bg-white text-slate-700 border-slate-200"
-                          }`}
-                        >
-                          ①
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setHistoryFilter("2")}
-                          className={`h-[40px] rounded-2xl text-sm font-bold border ${
-                            historyFilter === "2"
-                              ? "bg-sky-500 text-white border-sky-500"
-                              : "bg-white text-slate-700 border-slate-200"
-                          }`}
-                        >
-                          ②
-                        </button>
-                      </div>
+                        <div className="mt-3 grid gap-2">
+                          <div className="grid grid-cols-3 gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setHistoryMode("day")}
+                              className={`h-[42px] rounded-2xl text-sm font-bold border ${
+                                historyMode === "day"
+                                  ? "bg-slate-800 text-white border-slate-800"
+                                  : "bg-slate-100 text-slate-700 border-slate-200"
+                              }`}
+                            >
+                              日
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setHistoryMode("week")}
+                              className={`h-[42px] rounded-2xl text-sm font-bold border ${
+                                historyMode === "week"
+                                  ? "bg-slate-800 text-white border-slate-800"
+                                  : "bg-slate-100 text-slate-700 border-slate-200"
+                              }`}
+                            >
+                              週
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setHistoryMode("month")}
+                              className={`h-[42px] rounded-2xl text-sm font-bold border ${
+                                historyMode === "month"
+                                  ? "bg-slate-800 text-white border-slate-800"
+                                  : "bg-slate-100 text-slate-700 border-slate-200"
+                              }`}
+                            >
+                              月
+                            </button>
+                          </div>
 
-                      <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-3 flex items-center justify-between">
-                        <div className="text-sm text-slate-600">件数 {historySummary.count}件</div>
-                        <div className="text-base font-bold text-slate-800">
-                          {formatMoney(historySummary.total)}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex-1 overflow-y-auto px-4 py-3">
-                    {filteredHistoryRecords.length === 0 ? (
-                      <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
-                        該当する履歴はありません
-                      </div>
-                    ) : historyMode === "month" ? (
-                      <div className="grid gap-3">
-                        {groupedHistory.map((group) => {
-                          const opened = expandedMonthDays[group.key] === true;
-                          return (
-                            <div key={group.key} className="grid gap-2">
-                              <button
-                                type="button"
-                                onClick={() => toggleMonthDay(group.key)}
-                                className={`w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left active:bg-slate-50 ${shadowSub}`}
-                              >
-                                <div className="flex items-center justify-between gap-3">
-                                  <div className="min-w-0">
-                                    <div className="text-[18px] font-bold text-slate-800">
-                                      {formatFullDate(group.date)}
-                                    </div>
-                                    <div className="mt-1 text-xs text-slate-500">
-                                      {group.count}件
-                                    </div>
-                                  </div>
-                                  <div className="shrink-0 text-right">
-                                    <div className="text-base font-bold text-slate-800">
-                                      {formatMoney(group.total)}
-                                    </div>
-                                    <div className="mt-1 text-xs font-semibold text-slate-500">
-                                      {opened ? "閉じる" : "開く"}
-                                    </div>
-                                  </div>
-                                </div>
-                              </button>
-
-                              {opened && (
-                                <div className="pl-3 grid gap-2">
-                                  {group.records.map((record) => renderHistoryRecordCard(record))}
-                                </div>
-                              )}
+                          <div className="grid grid-cols-[48px_1fr_48px] gap-2 items-center">
+                            <button
+                              type="button"
+                              onClick={() => moveHistoryPeriod(-1)}
+                              className="h-[42px] rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 text-lg font-bold"
+                            >
+                              ←
+                            </button>
+                            <div className="h-[42px] rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center px-3 text-sm font-bold text-slate-800">
+                              {getHistoryPeriodText()}
                             </div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <div className="grid gap-4">
-                        {groupedHistory.map((group) => (
-                          <div key={group.key} className="grid gap-2">
-                            <div className="pt-2">
-                              <div className="text-[19px] font-bold text-slate-800 tracking-[-0.01em]">
-                                {formatFullDate(group.date)}
-                              </div>
-                              <div className="mt-1 text-xs text-slate-500">
-                                {group.count}件 ・ {formatMoney(group.total)}
-                              </div>
-                            </div>
+                            <button
+                              type="button"
+                              onClick={() => moveHistoryPeriod(1)}
+                              className="h-[42px] rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 text-lg font-bold"
+                            >
+                              →
+                            </button>
+                          </div>
 
-                            <div className="grid gap-2">
-                              {group.records.map((record) => renderHistoryRecordCard(record))}
+                          <div className="grid grid-cols-3 gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setHistoryFilter("all")}
+                              className={`h-[40px] rounded-2xl text-sm font-bold border ${
+                                historyFilter === "all"
+                                  ? "bg-sky-500 text-white border-sky-500"
+                                  : "bg-white text-slate-700 border-slate-200"
+                              }`}
+                            >
+                              すべて
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setHistoryFilter("1")}
+                              className={`h-[40px] rounded-2xl text-sm font-bold border ${
+                                historyFilter === "1"
+                                  ? "bg-sky-500 text-white border-sky-500"
+                                  : "bg-white text-slate-700 border-slate-200"
+                              }`}
+                            >
+                              ①
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setHistoryFilter("2")}
+                              className={`h-[40px] rounded-2xl text-sm font-bold border ${
+                                historyFilter === "2"
+                                  ? "bg-sky-500 text-white border-sky-500"
+                                  : "bg-white text-slate-700 border-slate-200"
+                              }`}
+                            >
+                              ②
+                            </button>
+                          </div>
+
+                          <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-3 flex items-center justify-between">
+                            <div className="text-sm text-slate-600">件数 {historySummary.count}件</div>
+                            <div className="text-base font-bold text-slate-800">
+                              {formatMoney(historySummary.total)}
                             </div>
                           </div>
-                        ))}
+                        </div>
                       </div>
-                    )}
-                  </div>
+
+                      <div className="flex-1 overflow-y-auto px-4 py-3">
+                        {filteredHistoryRecords.length === 0 ? (
+                          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
+                            該当する履歴はありません
+                          </div>
+                        ) : historyMode === "month" ? (
+                          <div className="grid gap-3">
+                            {groupedHistory.map((group) => {
+                              const opened = expandedMonthDays[group.key] === true;
+                              return (
+                                <div key={group.key} className="grid gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleMonthDay(group.key)}
+                                    className={`w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left active:bg-slate-50 ${shadowSub}`}
+                                  >
+                                    <div className="flex items-center justify-between gap-3">
+                                      <div className="min-w-0">
+                                        <div className="text-[18px] font-bold text-slate-800">
+                                          {formatFullDate(group.date)}
+                                        </div>
+                                        <div className="mt-1 text-xs text-slate-500">
+                                          {group.count}件
+                                        </div>
+                                      </div>
+                                      <div className="shrink-0 text-right">
+                                        <div className="text-base font-bold text-slate-800">
+                                          {formatMoney(group.total)}
+                                        </div>
+                                        <div className="mt-1 text-xs font-semibold text-slate-500">
+                                          {opened ? "閉じる" : "開く"}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </button>
+
+                                  {opened && (
+                                    <div className="pl-3 grid gap-2">
+                                      {group.records.map((record) => renderHistoryRecordCard(record))}
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div className="grid gap-4">
+                            {groupedHistory.map((group) => (
+                              <div key={group.key} className="grid gap-2">
+                                <div className="pt-2">
+                                  <div className="text-[19px] font-bold text-slate-800 tracking-[-0.01em]">
+                                    {formatFullDate(group.date)}
+                                  </div>
+                                  <div className="mt-1 text-xs text-slate-500">
+                                    {group.count}件 ・ {formatMoney(group.total)}
+                                  </div>
+                                </div>
+
+                                <div className="grid gap-2">
+                                  {group.records.map((record) => renderHistoryRecordCard(record))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="px-4 pt-3 pb-2 border-b border-slate-100 shrink-0">
+                        <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
+
+                        <div className="flex items-center justify-between">
+                          <button
+                            type="button"
+                            onClick={closeEditRecord}
+                            className="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold"
+                          >
+                            戻る
+                          </button>
+                          <div className="text-lg font-bold text-slate-800">履歴修正</div>
+                          <button
+                            type="button"
+                            onClick={saveEditedRecord}
+                            className="px-3 py-2 rounded-xl bg-sky-500 text-white text-sm font-bold"
+                          >
+                            保存
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="flex-1 overflow-y-auto px-4 py-3">
+                        <div className="grid gap-3">
+                          <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
+                            <div className="text-xs font-semibold text-slate-500">対象履歴</div>
+                            <div className="mt-2 text-[18px] font-bold text-slate-800">
+                              {formatFullDate(editingRecord.startAt)}
+                            </div>
+                            <div className="mt-1 text-sm text-slate-500">
+                              {formatTime(editingRecord.startAt)} → {formatTime(editingRecord.endAt)}
+                            </div>
+                          </div>
+
+                          <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
+                            <div className="text-sm font-semibold text-slate-600">金額</div>
+                            <div className="mt-2 relative">
+                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-slate-400">¥</span>
+                              <input
+                                type="text"
+                                inputMode="numeric"
+                                value={Number(editingRecord.amountInput || 0).toLocaleString("ja-JP")}
+                                onChange={(e) => {
+                                  const raw = e.target.value.replace(/[^\d]/g, "");
+                                  setEditingRecord((prev) => ({ ...prev, amountInput: raw }));
+                                }}
+                                className="w-full rounded-2xl border border-slate-300 pl-12 pr-4 py-4 text-3xl font-bold text-slate-800 outline-none focus:border-sky-300"
+                              />
+                            </div>
+                          </div>
+
+                          <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
+                            <div className="text-sm font-semibold text-slate-600">区分</div>
+                            <div className="mt-3 grid grid-cols-2 gap-2">
+                              <button
+                                type="button"
+                                onClick={() => setEditingRecord((prev) => ({ ...prev, typeInput: "1" }))}
+                                className={`h-[52px] rounded-2xl text-lg font-bold border ${
+                                  editingRecord.typeInput === "1"
+                                    ? "bg-sky-500 text-white border-sky-500"
+                                    : "bg-slate-50 text-slate-700 border-slate-200"
+                                }`}
+                              >
+                                ①
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setEditingRecord((prev) => ({ ...prev, typeInput: "2" }))}
+                                className={`h-[52px] rounded-2xl text-lg font-bold border ${
+                                  editingRecord.typeInput === "2"
+                                    ? "bg-emerald-500 text-white border-emerald-500"
+                                    : "bg-slate-50 text-slate-700 border-slate-200"
+                                }`}
+                              >
+                                ②
+                              </button>
+                            </div>
+                            <div className="mt-2 text-xs text-slate-500">
+                              ①＝現金・領収証なし　②＝カード/QR・領収証あり含む
+                            </div>
+                          </div>
+
+                          <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
+                            <div className="text-sm font-semibold text-slate-600">乗車地</div>
+                            <input
+                              type="text"
+                              value={editingRecord.pickupInput}
+                              onChange={(e) =>
+                                setEditingRecord((prev) => ({ ...prev, pickupInput: e.target.value }))
+                              }
+                              className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 text-base text-slate-800 outline-none focus:border-sky-300"
+                            />
+                          </div>
+
+                          <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
+                            <div className="text-sm font-semibold text-slate-600">降車地</div>
+                            <input
+                              type="text"
+                              value={editingRecord.dropoffInput}
+                              onChange={(e) =>
+                                setEditingRecord((prev) => ({ ...prev, dropoffInput: e.target.value }))
+                              }
+                              className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 text-base text-slate-800 outline-none focus:border-sky-300"
+                            />
+                          </div>
+
+                          <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
+                            <div className="text-sm font-semibold text-slate-600">乗車時刻</div>
+                            <input
+                              type="datetime-local"
+                              value={editingRecord.startAtInput}
+                              onChange={(e) =>
+                                setEditingRecord((prev) => ({ ...prev, startAtInput: e.target.value }))
+                              }
+                              className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 text-base text-slate-800 outline-none focus:border-sky-300"
+                            />
+                          </div>
+
+                          <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
+                            <div className="text-sm font-semibold text-slate-600">降車時刻</div>
+                            <input
+                              type="datetime-local"
+                              value={editingRecord.endAtInput}
+                              onChange={(e) =>
+                                setEditingRecord((prev) => ({ ...prev, endAtInput: e.target.value }))
+                              }
+                              className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 text-base text-slate-800 outline-none focus:border-sky-300"
+                            />
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={saveEditedRecord}
+                            className={`w-full rounded-2xl h-[56px] text-xl font-bold bg-sky-500 text-white ${shadowMain}`}
+                          >
+                            保存する
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={deleteEditedRecord}
+                            className={`w-full rounded-2xl h-[52px] text-base font-bold bg-red-50 text-red-600 border border-red-200 ${shadowSub}`}
+                          >
+                            この履歴を削除
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             )}
@@ -993,14 +1266,14 @@
                     <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
                       <button
                         type="button"
-                        onClick={() => setShowHistoryModal(true)}
+                        onClick={openHistoryModal}
                         className="px-4 py-3 border-b border-slate-100 flex items-center justify-between active:bg-slate-50"
                       >
                         <div className="text-sm font-semibold text-slate-700">履歴</div>
                         <div className="text-sm font-bold text-sky-600">＋ 履歴一覧</div>
                       </button>
 
-                      <div className="flex-1 overflow-y-auto" onClick={() => setShowHistoryModal(true)}>
+                      <div className="flex-1 overflow-y-auto" onClick={openHistoryModal}>
                         {previewRecords.length === 0 ? (
                           <div className="px-4 py-4 text-sm text-slate-500">
                             まだ履歴はありません
@@ -1016,8 +1289,7 @@
                                   {formatMoney(record.amount)}
                                 </div>
                                 <div className="text-xs text-slate-500 shrink-0">
-                                  {paymentText(record.payment, record.receipt)}
-                                  {record.receipt ? " ・ 領収証" : ""}
+                                  {recordType(record) === "1" ? "①" : "②"}
                                 </div>
                               </div>
                               <div className="mt-1 text-xs text-slate-500">
