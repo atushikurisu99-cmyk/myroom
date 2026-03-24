@@ -131,12 +131,6 @@
         });
       }, [now]);
 
-      const nowSecondsText = useMemo(() => {
-        return now.toLocaleTimeString("ja-JP", {
-          second: "2-digit",
-        });
-      }, [now]);
-
       const elapsedText = useMemo(() => {
         if (!rideStartAt) return "0分";
         const diffMs = now.getTime() - rideStartAt.getTime();
@@ -825,7 +819,6 @@
       };
 
       const getPaceTextColor = () => {
-        // 仮色。後でロジック連動可
         return "#66cdaa";
       };
 
@@ -864,12 +857,12 @@
 
         if (cardMode === 2) {
           return (
-            <div className="flex-1 min-h-0 flex flex-col items-center justify-center pb-1 text-center">
-              <div className="text-[14px] font-semibold text-slate-500">
+            <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
+              <div className="text-[15px] font-semibold text-slate-500">
                 売上目標達成率
               </div>
-              <div className="mt-3 text-[28px] leading-none font-black tracking-[-0.02em] text-slate-800">
-                --<span className="ml-1 text-[20px] font-bold text-slate-500">%</span>
+              <div className="mt-3 text-[22px] leading-none font-bold tracking-[-0.01em] text-slate-800">
+                -- %
               </div>
             </div>
           );
@@ -877,8 +870,8 @@
 
         if (cardMode === 3) {
           return (
-            <div className="flex-1 min-h-0 flex flex-col items-center justify-center pb-1 text-center">
-              <div className="text-[14px] font-semibold text-slate-500">
+            <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
+              <div className="text-[15px] font-semibold text-slate-500">
                 今日のペース
               </div>
               <div
@@ -897,13 +890,8 @@
               <div className="text-[15px] font-semibold text-slate-500">
                 ① 売上
               </div>
-              <div className="mt-3 flex items-end justify-between gap-3">
-                <div className="text-[30px] leading-none font-black tracking-[-0.03em] text-slate-800">
-                  {formatMoney(amount1)}
-                </div>
-                <div className="text-[14px] leading-none font-semibold text-slate-500">
-                  現金
-                </div>
+              <div className="mt-3 text-[22px] leading-none font-bold tracking-[-0.01em] text-slate-800">
+                {formatMoney(amount1)}
               </div>
             </div>
           );
@@ -914,13 +902,8 @@
             <div className="text-[15px] font-semibold text-slate-500">
               ② 売上
             </div>
-            <div className="mt-3 flex items-end justify-between gap-3">
-              <div className="text-[30px] leading-none font-black tracking-[-0.03em] text-slate-800">
-                {formatMoney(amount2)}
-              </div>
-              <div className="text-[14px] leading-none font-semibold text-slate-500">
-                カード・QR等
-              </div>
+            <div className="mt-3 text-[22px] leading-none font-bold tracking-[-0.01em] text-slate-800">
+              {formatMoney(amount2)}
             </div>
           </div>
         );
@@ -1306,9 +1289,6 @@
                         <div className="shrink-0 text-right">
                           <div className="text-[58px] leading-[0.9] font-black tracking-[-0.04em] text-slate-800">
                             {nowText}
-                          </div>
-                          <div className="mt-1 text-right text-[14px] font-semibold text-[#696969]">
-                            {nowSecondsText}
                           </div>
                         </div>
                       </div>
