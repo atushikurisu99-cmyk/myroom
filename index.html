@@ -164,11 +164,6 @@
           .reduce((sum, record) => sum + record.amount, 0);
       }, [records]);
 
-      const averageAmount = useMemo(() => {
-        if (recordCount === 0) return 0;
-        return Math.round(totalAmount / recordCount);
-      }, [totalAmount, recordCount]);
-
       const previewRecords = useMemo(() => records.slice(0, 8), [records]);
 
       const formatMoney = (value) => `¥${Number(value || 0).toLocaleString("ja-JP")}`;
@@ -208,13 +203,6 @@
         return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
       };
 
-      const paymentText = (payment, receipt) => {
-        if (payment === "cash" && !receipt) return "現金";
-        if (payment === "cardQr" && !receipt) return "カード・QR";
-        if (receipt) return "領収証発行";
-        return "";
-      };
-
       const recordType = (record) => {
         return record.payment === "cash" && !record.receipt ? "1" : "2";
       };
@@ -231,13 +219,11 @@
           .replace(/,/g, " ")
           .replace(/、/g, " ");
 
-        // 広島市は省略
         text = text
           .replace(/広島県広島市/g, " ")
           .replace(/広島県/g, " ")
           .replace(/広島市/g, " ");
 
-        // 区は広島市の一部なので省略
         text = text
           .replace(/中区/g, " ")
           .replace(/東区/g, " ")
@@ -373,12 +359,6 @@
       const getDayStart = (dateValue) => {
         const d = new Date(dateValue);
         d.setHours(0, 0, 0, 0);
-        return d;
-      };
-
-      const getDayEnd = (dateValue) => {
-        const d = new Date(dateValue);
-        d.setHours(23, 59, 59, 999);
         return d;
       };
 
@@ -847,17 +827,17 @@
       const renderCardModeContent = () => {
         if (cardMode === 1) {
           return (
-            <>
-              <div className="mt-5 flex items-end justify-between gap-3">
-                <div className="text-[17px] font-bold text-slate-800">
+            <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
+              <div className="flex items-end justify-between gap-3">
+                <div className="text-[16px] leading-none font-bold text-slate-800">
                   売上合計 {formatMoney(totalAmount)}
                 </div>
-                <div className="text-[17px] font-semibold text-slate-700">
+                <div className="text-[16px] leading-none font-semibold text-slate-700">
                   {recordCount}件
                 </div>
               </div>
 
-              <div className="mt-4 flex items-center justify-between gap-4 text-[15px] text-slate-600">
+              <div className="mt-3 flex items-center justify-between gap-4 text-[13px] leading-none text-slate-600">
                 <div className="flex items-center gap-1">
                   <span>①</span>
                   <span className="font-semibold">{formatMoney(amount1)}</span>
@@ -869,22 +849,22 @@
               </div>
 
               {screen === "ride" && (
-                <div className="mt-4 text-[14px] font-semibold text-slate-500">
+                <div className="mt-3 text-[12px] font-semibold text-slate-500">
                   開始 {formatTime(rideStartAt)} ・ 経過 {elapsedText}
                 </div>
               )}
-            </>
+            </div>
           );
         }
 
         if (cardMode === 2) {
           return (
-            <div className="mt-7 flex flex-col items-center justify-center text-center">
-              <div className="text-[15px] font-semibold text-slate-500">
+            <div className="flex-1 min-h-0 flex flex-col items-center justify-center pb-1 text-center">
+              <div className="text-[14px] font-semibold text-slate-500">
                 売上目標達成率
               </div>
-              <div className="mt-2 text-[34px] leading-none font-black tracking-[-0.03em] text-slate-800">
-                --<span className="ml-1 text-[24px] font-bold text-slate-500">%</span>
+              <div className="mt-3 text-[28px] leading-none font-black tracking-[-0.02em] text-slate-800">
+                --<span className="ml-1 text-[20px] font-bold text-slate-500">%</span>
               </div>
             </div>
           );
@@ -892,11 +872,11 @@
 
         if (cardMode === 3) {
           return (
-            <div className="mt-7 flex flex-col items-center justify-center text-center">
-              <div className="text-[15px] font-semibold text-slate-500">
+            <div className="flex-1 min-h-0 flex flex-col items-center justify-center pb-1 text-center">
+              <div className="text-[14px] font-semibold text-slate-500">
                 今日のペース
               </div>
-              <div className="mt-2 text-[30px] leading-none font-black tracking-[-0.02em] text-emerald-500">
+              <div className="mt-3 text-[28px] leading-none font-black tracking-[-0.02em] text-emerald-500">
                 良好
               </div>
             </div>
@@ -905,15 +885,15 @@
 
         if (cardMode === 4) {
           return (
-            <div className="mt-6">
+            <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
               <div className="text-[15px] font-semibold text-slate-500">
                 ① 売上
               </div>
-              <div className="mt-2 flex items-end justify-between gap-3">
+              <div className="mt-3 flex items-end justify-between gap-3">
                 <div className="text-[30px] leading-none font-black tracking-[-0.03em] text-slate-800">
                   {formatMoney(amount1)}
                 </div>
-                <div className="text-[16px] font-semibold text-slate-600">
+                <div className="text-[14px] leading-none font-semibold text-slate-500">
                   現金
                 </div>
               </div>
@@ -922,16 +902,16 @@
         }
 
         return (
-          <div className="mt-6">
+          <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
             <div className="text-[15px] font-semibold text-slate-500">
               ② 売上
             </div>
-            <div className="mt-2 flex items-end justify-between gap-3">
+            <div className="mt-3 flex items-end justify-between gap-3">
               <div className="text-[30px] leading-none font-black tracking-[-0.03em] text-slate-800">
                 {formatMoney(amount2)}
               </div>
-              <div className="text-[16px] font-semibold text-slate-600">
-                カード・QR / 領収証
+              <div className="text-[14px] leading-none font-semibold text-slate-500">
+                カード・QR等
               </div>
             </div>
           </div>
@@ -940,7 +920,7 @@
 
       return (
         <div className="w-full h-full bg-slate-50 flex justify-center overflow-hidden">
-          <div className="w-full max-w-sm h-[100svh] px-4 pt-4 pb-3 relative overflow-hidden">
+          <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
             {showSaved && (
               <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-5 py-2.5 shadow-lg">
                 保存しました
@@ -1297,34 +1277,36 @@
                     className={`${cardClass} h-[172px] px-4 py-4 shrink-0 overflow-hidden`}
                     onClick={handleCardModeNext}
                   >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        <div className="text-[15px] leading-none font-semibold text-slate-700 pt-1">
-                          {stateLabel}
+                    <div className="h-full flex flex-col">
+                      <div className="flex items-start justify-between gap-4 shrink-0">
+                        <div className="min-w-0">
+                          <div className="text-[15px] leading-none font-semibold text-slate-700 pt-1">
+                            {stateLabel}
+                          </div>
+
+                          {showReturnLinkOnTop && (
+                            <button
+                              type="button"
+                              onClick={handleReturnLink}
+                              className="mt-2 text-[14px] font-semibold text-sky-600 active:opacity-70"
+                            >
+                              戻る
+                            </button>
+                          )}
                         </div>
 
-                        {showReturnLinkOnTop && (
-                          <button
-                            type="button"
-                            onClick={handleReturnLink}
-                            className="mt-2 text-[14px] font-semibold text-sky-600 active:opacity-70"
-                          >
-                            戻る
-                          </button>
-                        )}
+                        <div className="shrink-0 text-right">
+                          <div className="text-[58px] leading-[0.9] font-black tracking-[-0.04em] text-slate-800">
+                            {nowText}
+                          </div>
+                          <div className="mt-1 text-right text-[14px] font-semibold text-[#696969]">
+                            {nowSecondsText}
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="shrink-0 text-right">
-                        <div className="text-[58px] leading-[0.9] font-black tracking-[-0.04em] text-slate-800">
-                          {nowText}
-                        </div>
-                        <div className="mt-1 text-right text-[14px] font-semibold text-[#696969]">
-                          {nowSecondsText}
-                        </div>
-                      </div>
+                      {renderCardModeContent()}
                     </div>
-
-                    {renderCardModeContent()}
                   </div>
 
                   <div className="h-[132px] pt-4 shrink-0">
