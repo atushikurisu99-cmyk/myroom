@@ -273,7 +273,7 @@
       const bigButtonText = "text-[30px] font-extrabold tracking-[-0.03em]";
 
       const chipButtonBase =
-        "relative overflow-hidden h-[46px] rounded-2xl border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.20),0_5px_10px_rgba(0,0,0,0.12)] active:scale-[0.98]";
+        "relative overflow-hidden h-[46px] rounded-2xl border border-white/70 active:scale-[0.98]";
 
       const smallButtonBase =
         "relative overflow-hidden w-full h-[58px] rounded-[20px] border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.20),0_6px_12px_rgba(0,0,0,0.14)] active:scale-[0.985]";
@@ -1339,7 +1339,7 @@
             )}
 
             <div className="h-full flex flex-col overflow-hidden">
-              {(screen === "top" || screen === "standby" || screen === "ride") && (
+              {(screen === "top" || screen === "standby" || screen === "ride" || screen === "fare") && (
                 <>
                   <div
                     className={`${cardClass} h-[172px] px-4 py-4 shrink-0 overflow-hidden`}
@@ -1370,44 +1370,46 @@
                     </div>
                   </div>
 
-                  <div className="h-[132px] pt-4 shrink-0">
-                    {screen === "top" && (
-                      <button
-                        type="button"
-                        onClick={handleTopMain}
-                        disabled={topMainButtonDisabled}
-                        className={`${mainButtonBase} ${mainButtonShine} ${
-                          topMainButtonDisabled
-                            ? "bg-[linear-gradient(180deg,#d5dbe3,#bcc6d2,#97a3b2)] text-white"
-                            : dutyStarted
-                            ? "bg-[linear-gradient(180deg,#ffdf6b,#ffb100,#cc7900)] text-white"
-                            : "bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white"
-                        }`}
-                      >
-                        <span className={bigButtonText}>{topMainLabel}</span>
-                      </button>
-                    )}
+                  {(screen === "top" || screen === "standby" || screen === "ride") && (
+                    <div className="h-[132px] pt-4 shrink-0">
+                      {screen === "top" && (
+                        <button
+                          type="button"
+                          onClick={handleTopMain}
+                          disabled={topMainButtonDisabled}
+                          className={`${mainButtonBase} ${mainButtonShine} ${
+                            topMainButtonDisabled
+                              ? "bg-[linear-gradient(180deg,#d5dbe3,#bcc6d2,#97a3b2)] text-white"
+                              : dutyStarted
+                              ? "bg-[linear-gradient(180deg,#ffdf6b,#ffb100,#cc7900)] text-white"
+                              : "bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white"
+                          }`}
+                        >
+                          <span className={bigButtonText}>{topMainLabel}</span>
+                        </button>
+                      )}
 
-                    {screen === "standby" && (
-                      <button
-                        type="button"
-                        onClick={handleStartRide}
-                        className={`${mainButtonBase} ${mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)]`}
-                      >
-                        <span className={bigButtonText}>実車</span>
-                      </button>
-                    )}
+                      {screen === "standby" && (
+                        <button
+                          type="button"
+                          onClick={handleStartRide}
+                          className={`${mainButtonBase} ${mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)]`}
+                        >
+                          <span className={bigButtonText}>実車</span>
+                        </button>
+                      )}
 
-                    {screen === "ride" && (
-                      <button
-                        type="button"
-                        onClick={handleDropOff}
-                        className={`${mainButtonBase} ${mainButtonShine} bg-[linear-gradient(180deg,#ffe066,#ffb400,#cc7a00)]`}
-                      >
-                        <span className={bigButtonText}>降車</span>
-                      </button>
-                    )}
-                  </div>
+                      {screen === "ride" && (
+                        <button
+                          type="button"
+                          onClick={handleDropOff}
+                          className={`${mainButtonBase} ${mainButtonShine} bg-[linear-gradient(180deg,#ffe066,#ffb400,#cc7a00)]`}
+                        >
+                          <span className={bigButtonText}>降車</span>
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </>
               )}
 
@@ -1454,7 +1456,7 @@
               )}
 
               {screen === "fare" && (
-                <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+                <div className="flex-1 min-h-0 flex flex-col overflow-hidden pt-4">
                   <div className={`${cardClass} h-[128px] px-4 py-4 shrink-0`}>
                     <div className="flex items-start justify-center gap-6">
                       <div className="flex-1 min-w-0 text-left">
@@ -1510,8 +1512,8 @@
                               onClick={() => handlePassengerSelect(count)}
                               className={`${chipButtonBase} ${
                                 selected
-                                  ? "text-slate-800 bg-[linear-gradient(180deg,#e6ebf1,#d8dee7,#c9d1dc)]"
-                                  : "text-slate-600 bg-[linear-gradient(180deg,#f4f6f8,#eceff3,#e2e8f0)]"
+                                  ? "text-slate-800 border-slate-300 bg-[linear-gradient(180deg,#dde3ea,#c8d0da,#b8c2cf)] shadow-[inset_0_2px_0_rgba(255,255,255,0.72),inset_0_-2px_7px_rgba(0,0,0,0.16),0_6px_12px_rgba(0,0,0,0.14)]"
+                                  : "text-slate-600 border-slate-200 bg-[linear-gradient(180deg,#f8fafc,#eef2f6,#e3e8ef)] shadow-[inset_0_2px_0_rgba(255,255,255,0.82),inset_0_-2px_6px_rgba(0,0,0,0.08),0_4px_9px_rgba(0,0,0,0.08)]"
                               }`}
                             >
                               <span className="relative z-10">{count}</span>
