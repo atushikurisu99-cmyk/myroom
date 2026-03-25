@@ -78,19 +78,21 @@
       const [showHistoryModal, setShowHistoryModal] = useState(false);
       const [showOtherSheet, setShowOtherSheet] = useState(false);
 
-      const [historyMode, setHistoryMode] = useState("day");
-      const [historyFilter, setHistoryFilter] = useState("all");
+      const [historyMode, setHistoryMode] = useState("day"); // day | week | month
+      const [historyFilter, setHistoryFilter] = useState("all"); // all | 1 | 2
       const [historyBaseDate, setHistoryBaseDate] = useState(new Date());
       const [expandedMonthDays, setExpandedMonthDays] = useState({});
 
       const [editingRecord, setEditingRecord] = useState(null);
 
-      const [cardMode, setCardMode] = useState(3);
+      const [cardMode, setCardMode] = useState(3); // 1〜5
       const [workDate, setWorkDate] = useState(null);
 
       const amountInputRef = useRef(null);
       const savedTimerRef = useRef(null);
       const clockTimerRef = useRef(null);
+
+      const standbyScrollRef = useRef(null);
 
       const [now, setNow] = useState(new Date());
 
@@ -118,6 +120,14 @@
           if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
         };
       }, []);
+
+      useEffect(() => {
+        if (screen === "standby") {
+          requestAnimationFrame(() => {
+            if (standbyScrollRef.current) standbyScrollRef.current.scrollTop = 0;
+          });
+        }
+      }, [screen]);
 
       const timeParts = useMemo(() => {
         const hh = String(now.getHours()).padStart(2, "0");
@@ -798,7 +808,9 @@
         if (cardMode === 1) {
           return (
             <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-              <div className="text-[12px] font-medium text-slate-500">売上合計</div>
+              <div className="text-[12px] font-medium text-slate-500">
+                売上合計
+              </div>
               <div className="mt-1 flex items-end justify-between gap-3">
                 <div className="text-[16px] leading-none font-normal text-slate-600">
                   {formatMoney(totalAmount)}
@@ -814,8 +826,12 @@
         if (cardMode === 2) {
           return (
             <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-              <div className="text-[12px] font-medium text-slate-500">売上目標達成率</div>
-              <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">-- %</div>
+              <div className="text-[12px] font-medium text-slate-500">
+                売上目標達成率
+              </div>
+              <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
+                -- %
+              </div>
             </div>
           );
         }
@@ -823,8 +839,12 @@
         if (cardMode === 3) {
           return (
             <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-              <div className="text-[12px] font-medium text-slate-500">今日のペース</div>
-              <div className="mt-1 text-[16px] leading-none font-normal text-[#00a676]">良好</div>
+              <div className="text-[12px] font-medium text-slate-500">
+                今日のペース
+              </div>
+              <div className="mt-1 text-[16px] leading-none font-normal text-[#00a676]">
+                良好
+              </div>
             </div>
           );
         }
@@ -832,7 +852,9 @@
         if (cardMode === 4) {
           return (
             <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-              <div className="text-[12px] font-medium text-slate-500">① 売上</div>
+              <div className="text-[12px] font-medium text-slate-500">
+                ① 売上
+              </div>
               <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
                 {formatMoney(amount1)}
               </div>
@@ -842,7 +864,9 @@
 
         return (
           <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-            <div className="text-[12px] font-medium text-slate-500">② 売上</div>
+            <div className="text-[12px] font-medium text-slate-500">
+              ② 売上
+            </div>
             <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
               {formatMoney(amount2)}
             </div>
@@ -1036,6 +1060,7 @@
                               className="h-[42px] rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 text-lg font-bold"
                             >
                               →
+
                             </button>
                           </div>
 
@@ -1403,24 +1428,34 @@
                     </button>
                   </div>
 
-                  <div className="pt-4 text-center shrink-0">
-                    <div className="text-[13px] font-semibold tracking-[0.02em] text-slate-400">
-                      ↓ 下へ
+                  <div
+                    ref={standbyScrollRef}
+                    className="flex-1 min-h-0 overflow-y-auto pt-4"
+                  >
+                    {renderBottomCard()}
+
+                    <div className="pt-3 text-center">
+                      <div className="text-[13px] font-semibold text-slate-400">
+                        ↓ 下へ
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="h-4 shrink-0"></div>
+                    <div className="pt-3 pb-2 flex flex-col items-center gap-2">
+                      <div className="w-full h-[1px] bg-slate-200"></div>
+                      <div className="w-10 h-[4px] rounded-full bg-slate-300"></div>
+                    </div>
 
-                  {renderBottomCard()}
+                    <div className="h-6"></div>
 
-                  <div className="pt-3 shrink-0">
-                    <button
-                      type="button"
-                      onClick={handleDutyEnd}
-                      className={endDutyButtonClass}
-                    >
-                      乗務終了
-                    </button>
+                    <div className="px-1 pb-6">
+                      <button
+                        type="button"
+                        onClick={handleDutyEnd}
+                        className={endDutyButtonClass}
+                      >
+                        乗務終了
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
