@@ -6,76 +6,102 @@
 <title>Taxi App</title>
 
 <style>
-body { margin:0; font-family:sans-serif; background:#f5f5f5; }
-.container { padding:16px; }
+body {
+  margin:0;
+  font-family:sans-serif;
+  background:#f5f5f5;
+}
 
+.container {
+  padding:16px;
+}
+
+/* 状態カード */
 .card {
   background:#fff;
-  border-radius:14px;
+  border-radius:16px;
   padding:16px;
   margin-bottom:12px;
 }
 
+/* メインボタン */
 .main-btn {
   width:100%;
-  padding:24px;
+  padding:26px;
   font-size:22px;
   border:none;
-  border-radius:14px;
+  border-radius:16px;
   background:#007aff;
   color:#fff;
   margin-bottom:16px;
 }
 
-.subtle { opacity:0.7; }
-.small { font-size:13px; }
+/* ちょい履歴 */
+.subtle {
+  opacity:0.7;
+}
 
+/* ボトムシート */
 .bottom-sheet {
   position:fixed;
-  left:0; right:0; bottom:-100%;
+  left:0;
+  right:0;
+  bottom:-100%;
   background:#fff;
-  border-radius:18px 18px 0 0;
+  border-radius:20px 20px 0 0;
   padding:16px;
   transition:.3s;
   max-height:85%;
   overflow:auto;
 }
 
-.bottom-sheet.active { bottom:0; }
+.bottom-sheet.active {
+  bottom:0;
+}
 
-.close { text-align:right; font-size:22px; margin-bottom:10px; }
+.close {
+  text-align:right;
+  font-size:22px;
+  margin-bottom:10px;
+}
 
+/* 金額 */
 .input-box {
-  font-size:32px;
+  font-size:34px;
   text-align:center;
   padding:20px;
   border:1px solid #ddd;
-  border-radius:12px;
-  margin-bottom:12px;
+  border-radius:14px;
+  margin-bottom:14px;
 }
 
-.btn-row { display:flex; gap:10px; }
+/* ボタン群 */
+.btn-row {
+  display:flex;
+  gap:10px;
+}
 
 .btn {
   flex:1;
   padding:16px;
   border:none;
-  border-radius:10px;
+  border-radius:12px;
   background:#eee;
 }
 
 .pay-btn {
   flex:1;
-  padding:20px;
+  padding:22px;
   font-size:18px;
   border:none;
-  border-radius:12px;
+  border-radius:14px;
   background:#007aff;
   color:#fff;
 }
 
+/* 履歴 */
 .history-item {
-  padding:10px 0;
+  padding:12px 0;
   border-bottom:1px solid #eee;
 }
 </style>
@@ -85,210 +111,103 @@ body { margin:0; font-family:sans-serif; background:#f5f5f5; }
 
 <div class="container">
 
-<!-- 状態カード -->
-<div class="card" onclick="toggleCard()">
-  <div id="cardMain">
-    今日のペース<br>
-    <strong id="pace">--</strong>
+  <!-- 状態カード -->
+  <div class="card" id="stateCard">
+    <div id="cardView">
+      今日のペース<br>
+      <strong>--</strong>
+    </div>
   </div>
+
+  <!-- メインボタン -->
+  <button class="main-btn" id="mainBtn">
+    乗務開始
+  </button>
+
+  <!-- ちょい履歴 -->
+  <div class="card subtle">
+    <div id="miniHistory">
+      --
+    </div>
+  </div>
+
+  <!-- その他 -->
+  <div class="card subtle" id="otherBtn">
+    その他
+  </div>
+
 </div>
 
-<!-- メインボタン -->
-<button class="main-btn" id="mainBtn" onclick="mainAction()">乗務開始</button>
-
-<!-- ちょい履歴 -->
-<div class="card subtle">
-  <div id="miniHistory">--</div>
-</div>
-
-<!-- その他 -->
-<div class="card subtle" onclick="openOther()">その他</div>
-
-</div>
-
+<!-- ===================== -->
 <!-- 金額入力 -->
+<!-- ===================== -->
+
 <div class="bottom-sheet" id="fareSheet">
-<div class="close" onclick="closeFare()">×</div>
 
-<div class="input-box" id="amount">0</div>
+  <div class="close" id="closeFare">×</div>
 
-<div class="btn-row">
-  <button class="btn" onclick="addAmount(100)">+100</button>
-  <button class="btn" onclick="addAmount(500)">+500</button>
-  <button class="btn" onclick="addAmount(1000)">+1000</button>
+  <div class="input-box" id="amount">
+    0
+  </div>
+
+  <div class="btn-row">
+    <button class="btn">+100</button>
+    <button class="btn">+500</button>
+    <button class="btn">+1000</button>
+  </div>
+
+  <br>
+
+  人数：
+  <div class="btn-row">
+    <button class="btn">1</button>
+    <button class="btn">2</button>
+    <button class="btn">3</button>
+    <button class="btn">4</button>
+  </div>
+
+  <br>
+
+  <div class="btn-row">
+    <button class="pay-btn">① 現金</button>
+    <button class="pay-btn">② カード</button>
+  </div>
+
 </div>
 
-<br>
-
-人数：
-<div class="btn-row">
-  <button class="btn" onclick="setPeople(1)">1</button>
-  <button class="btn" onclick="setPeople(2)">2</button>
-  <button class="btn" onclick="setPeople(3)">3</button>
-  <button class="btn" onclick="setPeople(4)">4</button>
-</div>
-
-<br>
-
-<div class="btn-row">
-  <button class="pay-btn" onclick="saveRide(1)">① 現金</button>
-  <button class="pay-btn" onclick="saveRide(2)">② カード</button>
-</div>
-
-</div>
-
+<!-- ===================== -->
 <!-- その他 -->
+<!-- ===================== -->
+
 <div class="bottom-sheet" id="otherSheet">
-<div class="close" onclick="closeOther()">×</div>
 
-<div onclick="openHistory()">履歴</div>
-<div onclick="alert('分析（後で実装）')">分析</div>
-<div onclick="alert('設定（後で実装）')">設定</div>
+  <div class="close" id="closeOther">×</div>
+
+  <div id="openHistory">履歴</div>
+  <div>分析</div>
+  <div>設定</div>
 
 </div>
 
+<!-- ===================== -->
 <!-- 履歴 -->
-<div class="bottom-sheet" id="historySheet">
-<div class="close" onclick="closeHistory()">×</div>
+<!-- ===================== -->
 
-<h3>履歴</h3>
-<div id="historyList"></div>
+<div class="bottom-sheet" id="historySheet">
+
+  <div class="close" id="closeHistory">×</div>
+
+  <h3>履歴</h3>
+
+  <div id="historyList">
+  </div>
 
 </div>
 
-<script>
-
-let state = "idle";
-let amount = 0;
-let people = 1;
-let history = JSON.parse(localStorage.getItem("history") || "[]");
-
-init();
-
-function init(){
-  updateMainBtn();
-  updateMini();
-  updateHistory();
-  updatePace();
-}
-
-function mainAction(){
-  if(state==="idle"){
-    state="waiting";
-  }else if(state==="waiting"){
-    state="riding";
-  }else if(state==="riding"){
-    openFare();
-  }
-  updateMainBtn();
-}
-
-function updateMainBtn(){
-  if(state==="idle") mainBtn.innerText="乗務開始";
-  if(state==="waiting") mainBtn.innerText="実車";
-  if(state==="riding") mainBtn.innerText="降車";
-}
-
-function openFare(){
-  document.getElementById("fareSheet").classList.add("active");
-}
-
-function closeFare(){
-  document.getElementById("fareSheet").classList.remove("active");
-  amount=0;
-  updateAmount();
-}
-
-function addAmount(n){
-  amount += n;
-  updateAmount();
-}
-
-function updateAmount(){
-  document.getElementById("amount").innerText = amount;
-}
-
-function setPeople(n){
-  people = n;
-}
-
-function saveRide(type){
-  const now = new Date();
-
-  const data = {
-    amount,
-    type,
-    people,
-    time: now.toLocaleTimeString(),
-    ts: now.getTime()
-  };
-
-  history.unshift(data);
-  localStorage.setItem("history", JSON.stringify(history));
-
-  closeFare();
-  state="waiting";
-  updateMainBtn();
-
-  updateMini();
-  updateHistory();
-  updatePace();
-}
-
-function updateMini(){
-  if(history.length===0){
-    miniHistory.innerText="--";
-    return;
-  }
-  const h = history[0];
-  miniHistory.innerHTML = `¥${h.amount}<br>${h.time}`;
-}
-
-function updateHistory(){
-  const list = document.getElementById("historyList");
-  list.innerHTML = "";
-
-  history.forEach(h=>{
-    const div = document.createElement("div");
-    div.className="history-item";
-    div.innerText = `${h.type===1?"①":"②"} ¥${h.amount} / ${h.people}人 / ${h.time}`;
-    list.appendChild(div);
-  });
-}
-
-function updatePace(){
-  if(history.length===0){
-    pace.innerText="--";
-    return;
-  }
-
-  const total = history.reduce((a,b)=>a+b.amount,0);
-
-  if(total>10000) pace.innerText="良好";
-  else if(total>4000) pace.innerText="普通";
-  else pace.innerText="やや不調";
-}
-
-function toggleCard(){
-  // 将来拡張用
-}
-
-function openOther(){
-  otherSheet.classList.add("active");
-}
-function closeOther(){
-  otherSheet.classList.remove("active");
-}
-
-function openHistory(){
-  closeOther();
-  historySheet.classList.add("active");
-}
-function closeHistory(){
-  historySheet.classList.remove("active");
-}
-
-</script>
+<!-- JS読み込み -->
+<script src="data.js"></script>
+<script src="calc.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
