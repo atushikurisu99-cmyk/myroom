@@ -71,7 +71,7 @@
       const [dropoff, setDropoff] = useState("");
 
       const [amount, setAmount] = useState("");
-      const [selectedPassengers, setSelectedPassengers] = useState(1);
+      const [selectedPassengers, setSelectedPassengers] = useState(null);
 
       const [records, setRecords] = useState([]);
       const [showSaved, setShowSaved] = useState(false);
@@ -97,7 +97,7 @@
       useEffect(() => {
         clockTimerRef.current = setInterval(() => {
           setNow(new Date());
-        }, 1000);
+        }, 600);
 
         return () => {
           if (clockTimerRef.current) clearInterval(clockTimerRef.current);
@@ -122,7 +122,8 @@
       const timeParts = useMemo(() => {
         const hh = String(now.getHours()).padStart(2, "0");
         const mm = String(now.getMinutes()).padStart(2, "0");
-        return { hh, mm, showColon: now.getSeconds() % 2 === 0 };
+        const showColon = Math.floor(now.getTime() / 600) % 2 === 0;
+        return { hh, mm, showColon };
       }, [now]);
 
       const elapsedText = useMemo(() => {
@@ -522,7 +523,7 @@
           乗車地入力: record.乗車地 || "",
           降車地入力: record.降車地 || "",
           区分入力: recordType(record),
-          人数入力: record.人数 || 1,
+          人数入力: record.人数 || "",
         });
       };
 
@@ -581,7 +582,7 @@
           receipt: nextReceipt,
           乗車地: (editingRecord.乗車地入力 || "").trim() || "未取得",
           降車地: (editingRecord.降車地入力 || "").trim() || "未取得",
-          人数: Number(editingRecord.人数入力 || 1),
+          人数: editingRecord.人数入力 === "" ? "" : Number(editingRecord.人数入力 || ""),
         };
 
         setRecords((prev) =>
@@ -613,7 +614,7 @@
         setPickup("");
         setDropoff("");
         setAmount("");
-        setSelectedPassengers(1);
+        setSelectedPassengers(null);
         setScreen("standby");
         setWorkDate(startDutyDate);
       };
@@ -626,7 +627,7 @@
         setPickup("");
         setDropoff("");
         setAmount("");
-        setSelectedPassengers(1);
+        setSelectedPassengers(null);
         setShowHistoryModal(false);
         setShowOtherSheet(false);
         setEditingRecord(null);
@@ -658,6 +659,7 @@
         setIsRiding(true);
         setPickup("取得中…");
         setDropoff("");
+        setSelectedPassengers(null);
         setScreen("ride");
 
         const best = await getBestCurrentPlace();
@@ -715,7 +717,7 @@
           降車時刻: rideEndAt,
           乗車地: pickup.trim() || "未取得",
           降車地: dropoff.trim() || "未取得",
-          人数: selectedPassengers,
+          人数: selectedPassengers === null ? "" : selectedPassengers,
           金額: numericAmount,
           決済方法: payment,
           payment,
@@ -733,7 +735,7 @@
         setPickup("");
         setDropoff("");
         setAmount("");
-        setSelectedPassengers(1);
+        setSelectedPassengers(null);
         setScreen("standby");
 
         setShowSaved(true);
@@ -901,15 +903,15 @@
                 <div className="text-sm font-medium text-slate-400">その他</div>
               </button>
 
-              <button
-                type="button"
-                onClick={openHistoryModal}
-                className="flex-1 min-h-0 text-left active:bg-slate-50 overflow-hidden"
-              >
-                <div className="h-[145px] overflow-hidden">
+              <div className="flex-1 min-h-0 overflow-y-auto">
+                <button
+                  type="button"
+                  onClick={openHistoryModal}
+                  className="w-full text-left active:bg-slate-50"
+                >
                   {renderPreviewHistoryRows()}
-                </div>
-              </button>
+                </button>
+              </div>
             </div>
           </div>
         );
@@ -1352,9 +1354,11 @@
                         </div>
 
                         <div className="shrink-0 text-right">
-                          <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.04em] text-slate-800">
+                          <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-800">
                             <span>{timeParts.hh}</span>
-                            <span className={`${timeParts.showColon ? "opacity-100" : "opacity-0"} transition-opacity duration-150`}>
+                            <span
+                              className={`${timeParts.showColon ? "opacity-100" : "opacity-0"} transition-opacity duration-150 mx-[-0.08em]`}
+                            >
                               ：
                             </span>
                             <span>{timeParts.mm}</span>
@@ -1432,7 +1436,7 @@
                           人数
                         </div>
                         <div className="mt-1 text-[17px] font-bold text-slate-800">
-                          {selectedPassengers}人
+                          {selectedPassengers ? `${selectedPassengers}人` : ""}
                         </div>
                       </div>
 
@@ -1494,7 +1498,7 @@
                     </div>
                   </div>
 
-                  <div className="pt-4 flex-1 min-h-0 flex flex-col">
+                  <div className="pt-4 flex-1 min-h-0 flex flex-col overflow-hidden">
                     <div className="grid gap-3 shrink-0">
                       <div className="grid grid-cols-4 gap-2">
                         {[1, 2, 3, 4].map((count) => {
@@ -1506,8 +1510,8 @@
                               onClick={() => handlePassengerSelect(count)}
                               className={`${chipButtonBase} ${
                                 selected
-                                  ? "text-white bg-[linear-gradient(180deg,#a347ff,#7a1fff,#5a00cc)]"
-                                  : "text-slate-700 bg-[linear-gradient(180deg,#e5eaf1,#cfd6e0,#b8c2cf)]"
+                                  ? "text-slate-800 bg-[linear-gradient(180deg,#e6ebf1,#d8dee7,#c9d1dc)]"
+                                  : "text-slate-600 bg-[linear-gradient(180deg,#f4f6f8,#eceff3,#e2e8f0)]"
                               }`}
                             >
                               <span className="relative z-10">{count}</span>
@@ -1541,7 +1545,7 @@
                       </button>
                     </div>
 
-                    <div className="flex-1"></div>
+                    <div className="flex-1 min-h-0"></div>
                     <div className="h-2 shrink-0"></div>
                   </div>
                 </div>
