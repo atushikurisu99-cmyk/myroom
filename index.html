@@ -78,14 +78,14 @@
       const [showHistoryModal, setShowHistoryModal] = useState(false);
       const [showOtherSheet, setShowOtherSheet] = useState(false);
 
-      const [historyMode, setHistoryMode] = useState("day"); // day | week | month
-      const [historyFilter, setHistoryFilter] = useState("all"); // all | 1 | 2
+      const [historyMode, setHistoryMode] = useState("day");
+      const [historyFilter, setHistoryFilter] = useState("all");
       const [historyBaseDate, setHistoryBaseDate] = useState(new Date());
       const [expandedMonthDays, setExpandedMonthDays] = useState({});
 
       const [editingRecord, setEditingRecord] = useState(null);
 
-      const [cardMode, setCardMode] = useState(3); // 1〜5
+      const [cardMode, setCardMode] = useState(3);
       const [workDate, setWorkDate] = useState(null);
 
       const amountInputRef = useRef(null);
@@ -277,6 +277,9 @@
 
       const smallButtonBase =
         "relative overflow-hidden w-full h-[58px] rounded-[20px] border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.20),0_6px_12px_rgba(0,0,0,0.14)] active:scale-[0.985]";
+
+      const endDutyButtonClass =
+        "relative overflow-hidden w-full h-[56px] rounded-[20px] border border-[#d8c7c7] text-slate-800 font-bold shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.18),0_6px_12px_rgba(0,0,0,0.12)] active:scale-[0.985] bg-[linear-gradient(180deg,#d8cdcd,#bdaead,#a38f8e)]";
 
       const getLocationCandidates = async () => {
         if (!("geolocation" in navigator)) {
@@ -638,7 +641,6 @@
       };
 
       const handleDutyEnd = () => {
-        if (isRiding) return;
         const ok = window.confirm("乗務を終了しますか？");
         if (!ok) return;
         performDutyEnd();
@@ -796,9 +798,7 @@
         if (cardMode === 1) {
           return (
             <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-              <div className="text-[12px] font-medium text-slate-500">
-                売上合計
-              </div>
+              <div className="text-[12px] font-medium text-slate-500">売上合計</div>
               <div className="mt-1 flex items-end justify-between gap-3">
                 <div className="text-[16px] leading-none font-normal text-slate-600">
                   {formatMoney(totalAmount)}
@@ -814,12 +814,8 @@
         if (cardMode === 2) {
           return (
             <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-              <div className="text-[12px] font-medium text-slate-500">
-                売上目標達成率
-              </div>
-              <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
-                -- %
-              </div>
+              <div className="text-[12px] font-medium text-slate-500">売上目標達成率</div>
+              <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">-- %</div>
             </div>
           );
         }
@@ -827,12 +823,8 @@
         if (cardMode === 3) {
           return (
             <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-              <div className="text-[12px] font-medium text-slate-500">
-                今日のペース
-              </div>
-              <div className="mt-1 text-[16px] leading-none font-normal text-[#00a676]">
-                良好
-              </div>
+              <div className="text-[12px] font-medium text-slate-500">今日のペース</div>
+              <div className="mt-1 text-[16px] leading-none font-normal text-[#00a676]">良好</div>
             </div>
           );
         }
@@ -840,9 +832,7 @@
         if (cardMode === 4) {
           return (
             <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-              <div className="text-[12px] font-medium text-slate-500">
-                ① 売上
-              </div>
+              <div className="text-[12px] font-medium text-slate-500">① 売上</div>
               <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
                 {formatMoney(amount1)}
               </div>
@@ -852,9 +842,7 @@
 
         return (
           <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-            <div className="text-[12px] font-medium text-slate-500">
-              ② 売上
-            </div>
+            <div className="text-[12px] font-medium text-slate-500">② 売上</div>
             <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
               {formatMoney(amount2)}
             </div>
@@ -1370,7 +1358,7 @@
                     </div>
                   </div>
 
-                  {(screen === "top" || screen === "standby" || screen === "ride") && (
+                  {(screen === "top" || screen === "ride") && (
                     <div className="h-[132px] pt-4 shrink-0">
                       {screen === "top" && (
                         <button
@@ -1389,16 +1377,6 @@
                         </button>
                       )}
 
-                      {screen === "standby" && (
-                        <button
-                          type="button"
-                          onClick={handleStartRide}
-                          className={`${mainButtonBase} ${mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)]`}
-                        >
-                          <span className={bigButtonText}>実車</span>
-                        </button>
-                      )}
-
                       {screen === "ride" && (
                         <button
                           type="button"
@@ -1413,46 +1391,85 @@
                 </>
               )}
 
+              {screen === "standby" && (
+                <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+                  <div className="h-[132px] pt-4 shrink-0">
+                    <button
+                      type="button"
+                      onClick={handleStartRide}
+                      className={`${mainButtonBase} ${mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)]`}
+                    >
+                      <span className={bigButtonText}>実車</span>
+                    </button>
+                  </div>
+
+                  <div className="pt-4 text-center shrink-0">
+                    <div className="text-[13px] font-semibold tracking-[0.02em] text-slate-400">
+                      ↓ 下へ
+                    </div>
+                  </div>
+
+                  <div className="h-4 shrink-0"></div>
+
+                  {renderBottomCard()}
+
+                  <div className="pt-3 shrink-0">
+                    <button
+                      type="button"
+                      onClick={handleDutyEnd}
+                      className={endDutyButtonClass}
+                    >
+                      乗務終了
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {screen === "ride" && (
-                <div className="pt-3 shrink-0">
-                  <div className={`${cardClass} px-4 py-3`}>
-                    <div className="text-[14px] font-semibold text-slate-500">
-                      乗車地
-                    </div>
-                    <div className="mt-1 text-[18px] font-bold text-slate-800">
-                      {pickup || "未取得"}
-                    </div>
-
-                    <div className="mt-3 grid grid-cols-3 gap-3">
-                      <div>
-                        <div className="text-[13px] font-semibold text-slate-500">
-                          乗車時刻
-                        </div>
-                        <div className="mt-1 text-[17px] font-bold text-slate-800">
-                          {formatTime(rideStartAt)}
-                        </div>
+                <>
+                  <div className="pt-3 shrink-0">
+                    <div className={`${cardClass} px-4 py-3`}>
+                      <div className="text-[14px] font-semibold text-slate-500">
+                        乗車地
+                      </div>
+                      <div className="mt-1 text-[18px] font-bold text-slate-800">
+                        {pickup || "未取得"}
                       </div>
 
-                      <div>
-                        <div className="text-[13px] font-semibold text-slate-500">
-                          人数
+                      <div className="mt-3 grid grid-cols-3 gap-3">
+                        <div>
+                          <div className="text-[13px] font-semibold text-slate-500">
+                            乗車時刻
+                          </div>
+                          <div className="mt-1 text-[17px] font-bold text-slate-800">
+                            {formatTime(rideStartAt)}
+                          </div>
                         </div>
-                        <div className="mt-1 text-[17px] font-bold text-slate-800">
-                          {selectedPassengers ? `${selectedPassengers}人` : ""}
-                        </div>
-                      </div>
 
-                      <div className="text-right">
-                        <div className="text-[13px] font-semibold text-slate-500">
-                          経過時間
+                        <div>
+                          <div className="text-[13px] font-semibold text-slate-500">
+                            人数
+                          </div>
+                          <div className="mt-1 text-[17px] font-bold text-slate-800">
+                            {selectedPassengers ? `${selectedPassengers}人` : ""}
+                          </div>
                         </div>
-                        <div className="mt-1 text-[17px] font-bold text-slate-800">
-                          {elapsedText}
+
+                        <div className="text-right">
+                          <div className="text-[13px] font-semibold text-slate-500">
+                            経過時間
+                          </div>
+                          <div className="mt-1 text-[17px] font-bold text-slate-800">
+                            {elapsedText}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
+
+                  <div className="flex-1 min-h-0"></div>
+                  {renderBottomCard()}
+                </>
               )}
 
               {screen === "fare" && (
@@ -1551,13 +1568,6 @@
                     <div className="h-2 shrink-0"></div>
                   </div>
                 </div>
-              )}
-
-              {(screen === "top" || screen === "standby" || screen === "ride") && (
-                <>
-                  <div className="flex-1 min-h-0"></div>
-                  {renderBottomCard()}
-                </>
               )}
             </div>
           </div>
