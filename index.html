@@ -93,6 +93,7 @@
       const clockTimerRef = useRef(null);
 
       const standbyScrollRef = useRef(null);
+      const topScrollRef = useRef(null);
 
       const [now, setNow] = useState(new Date());
 
@@ -125,6 +126,14 @@
         if (screen === "standby") {
           requestAnimationFrame(() => {
             if (standbyScrollRef.current) standbyScrollRef.current.scrollTop = 0;
+          });
+        }
+      }, [screen]);
+
+      useEffect(() => {
+        if (screen === "top") {
+          requestAnimationFrame(() => {
+            if (topScrollRef.current) topScrollRef.current.scrollTop = 0;
           });
         }
       }, [screen]);
@@ -1060,7 +1069,6 @@
                               className="h-[42px] rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 text-lg font-bold"
                             >
                               →
-
                             </button>
                           </div>
 
@@ -1383,37 +1391,52 @@
                     </div>
                   </div>
 
-                  {(screen === "top" || screen === "ride") && (
+                  {(screen === "ride") && (
                     <div className="h-[132px] pt-4 shrink-0">
-                      {screen === "top" && (
-                        <button
-                          type="button"
-                          onClick={handleTopMain}
-                          disabled={topMainButtonDisabled}
-                          className={`${mainButtonBase} ${mainButtonShine} ${
-                            topMainButtonDisabled
-                              ? "bg-[linear-gradient(180deg,#d5dbe3,#bcc6d2,#97a3b2)] text-white"
-                              : dutyStarted
-                              ? "bg-[linear-gradient(180deg,#ffdf6b,#ffb100,#cc7900)] text-white"
-                              : "bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white"
-                          }`}
-                        >
-                          <span className={bigButtonText}>{topMainLabel}</span>
-                        </button>
-                      )}
-
-                      {screen === "ride" && (
-                        <button
-                          type="button"
-                          onClick={handleDropOff}
-                          className={`${mainButtonBase} ${mainButtonShine} bg-[linear-gradient(180deg,#ffe066,#ffb400,#cc7a00)]`}
-                        >
-                          <span className={bigButtonText}>降車</span>
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        onClick={handleDropOff}
+                        className={`${mainButtonBase} ${mainButtonShine} bg-[linear-gradient(180deg,#ffe066,#ffb400,#cc7a00)]`}
+                      >
+                        <span className={bigButtonText}>降車</span>
+                      </button>
                     </div>
                   )}
                 </>
+              )}
+
+              {screen === "top" && (
+                <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+                  <div className="h-[132px] pt-4 shrink-0">
+                    <button
+                      type="button"
+                      onClick={handleTopMain}
+                      disabled={topMainButtonDisabled}
+                      className={`${mainButtonBase} ${mainButtonShine} ${
+                        topMainButtonDisabled
+                          ? "bg-[linear-gradient(180deg,#d5dbe3,#bcc6d2,#97a3b2)] text-white"
+                          : dutyStarted
+                          ? "bg-[linear-gradient(180deg,#ffdf6b,#ffb100,#cc7900)] text-white"
+                          : "bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white"
+                      }`}
+                    >
+                      <span className={bigButtonText}>{topMainLabel}</span>
+                    </button>
+                  </div>
+
+                  <div
+                    ref={topScrollRef}
+                    className="flex-1 min-h-0 overflow-y-auto pt-4"
+                  >
+                    <div className="text-center pb-1">
+                      <div className="text-[13px] font-semibold text-slate-400">
+                        ↓ 下へ
+                      </div>
+                    </div>
+
+                    {renderBottomCard()}
+                  </div>
+                </div>
               )}
 
               {screen === "standby" && (
@@ -1432,13 +1455,13 @@
                     ref={standbyScrollRef}
                     className="flex-1 min-h-0 overflow-y-auto pt-4"
                   >
-                    {renderBottomCard()}
-
-                    <div className="pt-3 text-center">
+                    <div className="text-center pb-1">
                       <div className="text-[13px] font-semibold text-slate-400">
                         ↓ 下へ
                       </div>
                     </div>
+
+                    {renderBottomCard()}
 
                     <div className="pt-3 pb-2 flex flex-col items-center gap-2">
                       <div className="w-full h-[1px] bg-slate-200"></div>
