@@ -19,7 +19,7 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      background: #f8fafc;
+      background: #eef3f9;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       overflow: hidden;
       overscroll-behavior: none;
@@ -63,7 +63,6 @@
       const [screen, setScreen] = useState("top"); // top | standby | ride | fare
       const [dutyStarted, setDutyStarted] = useState(false);
       const [isRiding, setIsRiding] = useState(false);
-      const [returnTarget, setReturnTarget] = useState(null); // standby | ride | null
 
       const [rideStartAt, setRideStartAt] = useState(null);
       const [rideEndAt, setRideEndAt] = useState(null);
@@ -72,7 +71,7 @@
       const [dropoff, setDropoff] = useState("");
 
       const [amount, setAmount] = useState("");
-      const [amountConfirmed, setAmountConfirmed] = useState(false);
+      const [selectedPassengers, setSelectedPassengers] = useState(1);
 
       const [records, setRecords] = useState([]);
       const [showSaved, setShowSaved] = useState(false);
@@ -92,12 +91,8 @@
       const amountInputRef = useRef(null);
       const savedTimerRef = useRef(null);
       const clockTimerRef = useRef(null);
-      const standbyHintIntervalRef = useRef(null);
-      const standbyHintTimeoutRef = useRef(null);
-      const lastClockTapRef = useRef(0);
 
       const [now, setNow] = useState(new Date());
-      const [showStandbyHint, setShowStandbyHint] = useState(false);
 
       useEffect(() => {
         clockTimerRef.current = setInterval(() => {
@@ -121,38 +116,13 @@
       useEffect(() => {
         return () => {
           if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
-          if (standbyHintIntervalRef.current) clearInterval(standbyHintIntervalRef.current);
-          if (standbyHintTimeoutRef.current) clearTimeout(standbyHintTimeoutRef.current);
         };
       }, []);
 
-      useEffect(() => {
-        if (standbyHintIntervalRef.current) clearInterval(standbyHintIntervalRef.current);
-        if (standbyHintTimeoutRef.current) clearTimeout(standbyHintTimeoutRef.current);
-        setShowStandbyHint(false);
-
-        if (screen !== "standby") return;
-
-        standbyHintIntervalRef.current = setInterval(() => {
-          setShowStandbyHint(true);
-
-          if (standbyHintTimeoutRef.current) clearTimeout(standbyHintTimeoutRef.current);
-          standbyHintTimeoutRef.current = setTimeout(() => {
-            setShowStandbyHint(false);
-          }, 1000);
-        }, 3000);
-
-        return () => {
-          if (standbyHintIntervalRef.current) clearInterval(standbyHintIntervalRef.current);
-          if (standbyHintTimeoutRef.current) clearTimeout(standbyHintTimeoutRef.current);
-        };
-      }, [screen]);
-
-      const nowText = useMemo(() => {
-        return now.toLocaleTimeString("ja-JP", {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
+      const timeParts = useMemo(() => {
+        const hh = String(now.getHours()).padStart(2, "0");
+        const mm = String(now.getMinutes()).padStart(2, "0");
+        return { hh, mm, showColon: now.getSeconds() % 2 === 0 };
       }, [now]);
 
       const elapsedText = useMemo(() => {
@@ -163,7 +133,7 @@
       }, [rideStartAt, now]);
 
       const totalAmount = useMemo(() => {
-        return records.reduce((sum, record) => sum + record.amount, 0);
+        return records.reduce((sum, record) => sum + Number(record.amount || 0), 0);
       }, [records]);
 
       const recordCount = useMemo(() => {
@@ -173,13 +143,13 @@
       const amount1 = useMemo(() => {
         return records
           .filter((record) => record.payment === "cash" && !record.receipt)
-          .reduce((sum, record) => sum + record.amount, 0);
+          .reduce((sum, record) => sum + Number(record.amount || 0), 0);
       }, [records]);
 
       const amount2 = useMemo(() => {
         return records
           .filter((record) => !(record.payment === "cash" && !record.receipt))
-          .reduce((sum, record) => sum + record.amount, 0);
+          .reduce((sum, record) => sum + Number(record.amount || 0), 0);
       }, [records]);
 
       const previewRecords = useMemo(() => records.slice(0, 3), [records]);
@@ -284,9 +254,6 @@
         return "乗務開始前";
       })();
 
-      const showReturnLinkOnTop =
-        screen === "top" && dutyStarted && (returnTarget === "standby" || returnTarget === "ride");
-
       const topMainLabel = !dutyStarted ? "乗務開始" : "乗務終了";
       const topMainButtonDisabled = screen === "top" && isRiding;
 
@@ -295,81 +262,84 @@
         return Number(amount).toLocaleString("ja-JP");
       }, [amount]);
 
-      const confirmButtonMode = (() => {
-        if (amountConfirmed) return "done";
-        if (amount.length > 0) return "ready";
-        return "idle";
-      })();
+      const shadowSub = "shadow-[0_8px_16px_rgba(0,0,0,0.10)]";
+      const cardClass = `rounded-[28px] bg-white/85 backdrop-blur border border-white/60 ${shadowSub}`;
 
-      const shadowSub = "shadow-[0_6px_12px_rgba(15,23,42,0.08)]";
-      const shadowMain = "shadow-[0_10px_20px_rgba(15,23,42,0.12)]";
-      const cardClass = `rounded-2xl bg-white border border-slate-200 ${shadowSub}`;
-      const mainButtonClass =
-        `w-full h-full rounded-[28px] text-white text-3xl font-bold active:scale-[0.99] ${shadowMain}`;
+      const mainButtonBase =
+        "relative overflow-hidden w-full h-full rounded-[28px] text-white active:scale-[0.985] border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.7),inset_0_-3px_8px_rgba(0,0,0,0.30),0_8px_16px_rgba(0,0,0,0.18)]";
+      const mainButtonShine =
+        "before:content-[''] before:absolute before:top-[6px] before:left-3 before:right-3 before:h-[40%] before:rounded-full before:bg-[linear-gradient(to_bottom,rgba(255,255,255,0.55),transparent)]";
+      const bigButtonText = "text-[30px] font-extrabold tracking-[-0.03em]";
 
-      const confirmButtonClass = (() => {
-        if (confirmButtonMode === "idle") {
-          return `w-full rounded-2xl h-[56px] text-xl font-bold bg-slate-300 text-white ${shadowMain}`;
+      const chipButtonBase =
+        "relative overflow-hidden h-[46px] rounded-2xl border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.20),0_5px_10px_rgba(0,0,0,0.12)] active:scale-[0.98]";
+
+      const smallButtonBase =
+        "relative overflow-hidden w-full h-[58px] rounded-[20px] border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.20),0_6px_12px_rgba(0,0,0,0.14)] active:scale-[0.985]";
+
+      const getLocationCandidates = async () => {
+        if (!("geolocation" in navigator)) {
+          return [{ label: "未取得", accuracy: null }];
         }
-        if (confirmButtonMode === "ready") {
-          return `w-full rounded-2xl h-[56px] text-xl font-bold bg-black text-white ${shadowMain}`;
-        }
-        return `w-full rounded-2xl h-[56px] text-xl font-bold bg-slate-500 text-white ${shadowMain}`;
-      })();
 
-      const getLocationLabel = async (latitude, longitude) => {
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=ja`
-          );
-          if (!response.ok) throw new Error("reverse geocode failed");
+        const samples = [];
+        const tryCount = 3;
 
-          const data = await response.json();
+        for (let i = 0; i < tryCount; i += 1) {
+          try {
+            const position = await new Promise((resolve, reject) => {
+              navigator.geolocation.getCurrentPosition(
+                resolve,
+                reject,
+                {
+                  enableHighAccuracy: true,
+                  timeout: 5000,
+                  maximumAge: 0,
+                }
+              );
+            });
 
-          if (data.display_name) {
-            return normalizePlaceLabel(data.display_name);
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const accuracy = Number(position.coords.accuracy || 9999);
+
+            let label = "未取得";
+            try {
+              const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=ja`
+              );
+              if (response.ok) {
+                const data = await response.json();
+                if (data.display_name) {
+                  label = normalizePlaceLabel(data.display_name);
+                } else {
+                  const address = data.address || {};
+                  const raw = [
+                    address.prefecture || "",
+                    address.city || address.town || address.village || "",
+                    address.suburb || address.neighbourhood || address.quarter || "",
+                    address.road || ""
+                  ].filter(Boolean).join(" ");
+                  label = normalizePlaceLabel(raw);
+                }
+              }
+            } catch {
+              label = "未取得";
+            }
+
+            samples.push({ label, accuracy });
+          } catch {
+            samples.push({ label: "未取得", accuracy: 9999 });
           }
-
-          const address = data.address || {};
-          const raw = [
-            address.prefecture || "",
-            address.city || address.town || address.village || "",
-            address.suburb || address.neighbourhood || address.quarter || "",
-            address.road || ""
-          ].filter(Boolean).join(" ");
-
-          return normalizePlaceLabel(raw);
-        } catch {
-          return "未取得";
         }
+
+        return samples;
       };
 
-      const getCurrentPlace = async () => {
-        if (!("geolocation" in navigator)) {
-          return "未取得";
-        }
-
-        try {
-          const position = await new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(
-              resolve,
-              reject,
-              {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0,
-              }
-            );
-          });
-
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-
-          const label = await getLocationLabel(latitude, longitude);
-          return label || "未取得";
-        } catch {
-          return "未取得";
-        }
+      const getBestCurrentPlace = async () => {
+        const candidates = await getLocationCandidates();
+        const sorted = [...candidates].sort((a, b) => (a.accuracy ?? 9999) - (b.accuracy ?? 9999));
+        return sorted[0] || { label: "未取得", accuracy: null };
       };
 
       const getDayStart = (dateValue) => {
@@ -419,7 +389,7 @@
       };
 
       const getHistoryTargetDate = (record) => {
-        return record.workDate ? new Date(record.workDate) : new Date(record.startAt);
+        return record.乗務日 ? new Date(record.乗務日) : new Date(record.乗車時刻);
       };
 
       const getHistoryPeriodText = () => {
@@ -455,11 +425,11 @@
           list = list.filter((record) => isInRange(getHistoryTargetDate(record), start, end));
         }
 
-        return list.sort((a, b) => new Date(b.startAt) - new Date(a.startAt));
+        return list.sort((a, b) => new Date(b.乗車時刻) - new Date(a.乗車時刻));
       }, [records, historyFilter, historyMode, historyBaseDate]);
 
       const historySummary = useMemo(() => {
-        const total = filteredHistoryRecords.reduce((sum, record) => sum + record.amount, 0);
+        const total = filteredHistoryRecords.reduce((sum, record) => sum + Number(record.金額 || 0), 0);
         const count = filteredHistoryRecords.length;
         return { total, count };
       }, [filteredHistoryRecords]);
@@ -483,7 +453,7 @@
 
           const group = map.get(key);
           group.records.push(record);
-          group.total += Number(record.amount || 0);
+          group.total += Number(record.金額 || 0);
           group.count += 1;
         });
 
@@ -546,12 +516,13 @@
       const openEditRecord = (record) => {
         setEditingRecord({
           ...record,
-          amountInput: String(record.amount ?? ""),
-          startAtInput: formatDateTimeLocal(record.startAt),
-          endAtInput: formatDateTimeLocal(record.endAt),
-          pickupInput: record.pickup || "",
-          dropoffInput: record.dropoff || "",
-          typeInput: recordType(record),
+          金額入力: String(record.金額 ?? ""),
+          乗車時刻入力: formatDateTimeLocal(record.乗車時刻),
+          降車時刻入力: formatDateTimeLocal(record.降車時刻),
+          乗車地入力: record.乗車地 || "",
+          降車地入力: record.降車地 || "",
+          区分入力: recordType(record),
+          人数入力: record.人数 || 1,
         });
       };
 
@@ -562,19 +533,19 @@
       const saveEditedRecord = () => {
         if (!editingRecord) return;
 
-        const numericAmount = Number(String(editingRecord.amountInput || "").replace(/[^\d]/g, ""));
+        const numericAmount = Number(String(editingRecord.金額入力 || "").replace(/[^\d]/g, ""));
         if (!numericAmount || numericAmount <= 0) {
           alert("正しい金額を入力してください");
           return;
         }
 
-        if (!editingRecord.startAtInput || !editingRecord.endAtInput) {
+        if (!editingRecord.乗車時刻入力 || !editingRecord.降車時刻入力) {
           alert("時刻を入力してください");
           return;
         }
 
-        const nextStartAt = new Date(editingRecord.startAtInput);
-        const nextEndAt = new Date(editingRecord.endAtInput);
+        const nextStartAt = new Date(editingRecord.乗車時刻入力);
+        const nextEndAt = new Date(editingRecord.降車時刻入力);
 
         if (Number.isNaN(nextStartAt.getTime()) || Number.isNaN(nextEndAt.getTime())) {
           alert("時刻の形式が正しくありません");
@@ -589,7 +560,7 @@
         let nextPayment = "cash";
         let nextReceipt = false;
 
-        if (editingRecord.typeInput === "1") {
+        if (editingRecord.区分入力 === "1") {
           nextPayment = "cash";
           nextReceipt = false;
         } else {
@@ -598,15 +569,19 @@
         }
 
         const updatedRecord = {
+          ...editingRecord,
           id: editingRecord.id,
-          startAt: nextStartAt,
-          endAt: nextEndAt,
-          amount: numericAmount,
+          乗務日: editingRecord.乗務日 || editingRecord.乗車時刻,
+          乗車時刻: nextStartAt,
+          降車時刻: nextEndAt,
+          金額: numericAmount,
+          決済方法: nextPayment,
           payment: nextPayment,
+          領収証: nextReceipt,
           receipt: nextReceipt,
-          pickup: (editingRecord.pickupInput || "").trim() || "未取得",
-          dropoff: (editingRecord.dropoffInput || "").trim() || "未取得",
-          workDate: editingRecord.workDate || editingRecord.startAt,
+          乗車地: (editingRecord.乗車地入力 || "").trim() || "未取得",
+          降車地: (editingRecord.降車地入力 || "").trim() || "未取得",
+          人数: Number(editingRecord.人数入力 || 1),
         };
 
         setRecords((prev) =>
@@ -633,7 +608,12 @@
         const startDutyDate = new Date();
         setDutyStarted(true);
         setIsRiding(false);
-        setReturnTarget("standby");
+        setRideStartAt(null);
+        setRideEndAt(null);
+        setPickup("");
+        setDropoff("");
+        setAmount("");
+        setSelectedPassengers(1);
         setScreen("standby");
         setWorkDate(startDutyDate);
       };
@@ -641,14 +621,12 @@
       const performDutyEnd = () => {
         setDutyStarted(false);
         setIsRiding(false);
-        setReturnTarget(null);
         setRideStartAt(null);
         setRideEndAt(null);
         setPickup("");
         setDropoff("");
         setAmount("");
-        setAmountConfirmed(false);
-        setRecords([]);
+        setSelectedPassengers(1);
         setShowHistoryModal(false);
         setShowOtherSheet(false);
         setEditingRecord(null);
@@ -665,18 +643,6 @@
         performDutyEnd();
       };
 
-      const handleClockDoubleTap = () => {
-        if (!dutyStarted) return;
-        if (isRiding) return;
-        if (screen !== "top" && screen !== "standby") return;
-
-        const nowTap = Date.now();
-        if (nowTap - lastClockTapRef.current < 350) {
-          handleDutyEnd();
-        }
-        lastClockTapRef.current = nowTap;
-      };
-
       const handleTopMain = () => {
         if (!dutyStarted) {
           handleDutyStart();
@@ -690,49 +656,37 @@
         setRideStartAt(start);
         setRideEndAt(null);
         setIsRiding(true);
-        setReturnTarget("ride");
         setPickup("取得中…");
         setDropoff("");
         setScreen("ride");
 
-        const place = await getCurrentPlace();
-        setPickup(place);
+        const best = await getBestCurrentPlace();
+        setPickup(best.label || "未取得");
       };
 
       const handleDropOff = async () => {
         const end = new Date();
         setRideEndAt(end);
         setAmount("");
-        setAmountConfirmed(false);
         setDropoff("取得中…");
         setScreen("fare");
 
-        const place = await getCurrentPlace();
-        setDropoff(place);
+        const best = await getBestCurrentPlace();
+        setDropoff(best.label || "未取得");
       };
 
       const handleAmountChange = (e) => {
         const raw = e.target.value.replace(/[^\d]/g, "");
         setAmount(raw);
-        setAmountConfirmed(false);
       };
 
-      const handleConfirmAmount = () => {
-        if (!amount.trim()) return;
-
-        const numericAmount = Number(amount);
-        if (!numericAmount || numericAmount <= 0) {
-          alert("正しい金額を入力してください");
-          return;
-        }
-
+      const handlePassengerSelect = (count) => {
+        setSelectedPassengers(count);
         amountInputRef.current?.blur();
-        setAmountConfirmed(true);
       };
 
       const saveFare = (saveType) => {
         if (!rideStartAt || !rideEndAt) return;
-        if (!amountConfirmed) return;
 
         const numericAmount = Number(amount);
         if (!numericAmount || numericAmount <= 0) {
@@ -754,29 +708,32 @@
           receipt = true;
         }
 
-        const dutyBaseDate = workDate || new Date();
-
         const newRecord = {
           id: Date.now(),
-          startAt: rideStartAt,
-          endAt: rideEndAt,
-          amount: numericAmount,
+          乗務日: workDate || new Date(),
+          乗車時刻: rideStartAt,
+          降車時刻: rideEndAt,
+          乗車地: pickup.trim() || "未取得",
+          降車地: dropoff.trim() || "未取得",
+          人数: selectedPassengers,
+          金額: numericAmount,
+          決済方法: payment,
           payment,
+          領収証: receipt,
           receipt,
-          pickup: pickup.trim() || "未取得",
-          dropoff: dropoff.trim() || "未取得",
-          workDate: dutyBaseDate,
+          天気: "",
+          乗車位置精度: null,
+          降車位置精度: null,
         };
 
         setRecords((prev) => [newRecord, ...prev]);
         setIsRiding(false);
-        setReturnTarget("standby");
         setRideStartAt(null);
         setRideEndAt(null);
         setPickup("");
         setDropoff("");
         setAmount("");
-        setAmountConfirmed(false);
+        setSelectedPassengers(1);
         setScreen("standby");
 
         setShowSaved(true);
@@ -799,10 +756,10 @@
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <div className="text-xl font-bold text-slate-800">
-                  {formatMoney(record.amount)}
+                  {formatMoney(record.金額)}
                 </div>
                 <div className="mt-1 text-xs text-slate-500">
-                  {formatTime(record.startAt)} → {formatTime(record.endAt)}
+                  {formatTime(record.乗車時刻)} → {formatTime(record.降車時刻)}
                 </div>
               </div>
 
@@ -823,18 +780,14 @@
             </div>
 
             <div className="mt-3 grid gap-1 text-sm text-slate-600">
-              <div className="truncate">乗車地：{record.pickup || "未取得"}</div>
-              <div className="truncate">降車地：{record.dropoff || "未取得"}</div>
+              <div className="truncate">乗車地：{record.乗車地 || "未取得"}</div>
+              <div className="truncate">降車地：{record.降車地 || "未取得"}</div>
               <div className="truncate text-xs text-slate-400">
-                売上日：{formatFullDate(record.workDate || record.startAt)}
+                乗務日：{formatFullDate(record.乗務日 || record.乗車時刻)}
               </div>
             </div>
           </button>
         );
-      };
-
-      const getPaceTextColor = () => {
-        return "#66cdaa";
       };
 
       const renderCardModeContent = () => {
@@ -875,10 +828,7 @@
               <div className="text-[12px] font-medium text-slate-500">
                 今日のペース
               </div>
-              <div
-                className="mt-1 text-[16px] leading-none font-normal"
-                style={{ color: getPaceTextColor() }}
-              >
+              <div className="mt-1 text-[16px] leading-none font-normal text-[#00a676]">
                 良好
               </div>
             </div>
@@ -926,14 +876,14 @@
           >
             <div className="flex items-start justify-between gap-3">
               <div className="text-[15px] font-normal text-slate-700">
-                {formatMoney(record.amount)}
+                {formatMoney(record.金額)}
               </div>
               <div className="text-xs text-slate-500 shrink-0">
                 {recordType(record) === "1" ? "①" : "②"}
               </div>
             </div>
             <div className="mt-1 text-xs text-slate-500">
-              {formatTime(record.startAt)} → {formatTime(record.endAt)}
+              {formatTime(record.乗車時刻)} → {formatTime(record.降車時刻)}
             </div>
           </div>
         ));
@@ -965,20 +915,8 @@
         );
       };
 
-      const renderStandbyButtonText = () => {
-        if (showStandbyHint) {
-          return (
-            <span className="text-[26px] leading-none font-bold tracking-[-0.02em]">
-              時刻ダブルタップ終了
-            </span>
-          );
-        }
-
-        return <span>実車</span>;
-      };
-
       return (
-        <div className="w-full h-full bg-slate-50 flex justify-center overflow-hidden">
+        <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
           <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
             {showSaved && (
               <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-5 py-2.5 shadow-lg">
@@ -1252,10 +1190,10 @@
                           <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
                             <div className="text-xs font-semibold text-slate-500">対象履歴</div>
                             <div className="mt-2 text-[18px] font-bold text-slate-800">
-                              {formatFullDate(editingRecord.workDate || editingRecord.startAt)}
+                              {formatFullDate(editingRecord.乗務日 || editingRecord.乗車時刻)}
                             </div>
                             <div className="mt-1 text-sm text-slate-500">
-                              {formatTime(editingRecord.startAt)} → {formatTime(editingRecord.endAt)}
+                              {formatTime(editingRecord.乗車時刻)} → {formatTime(editingRecord.降車時刻)}
                             </div>
                           </div>
 
@@ -1266,10 +1204,10 @@
                               <input
                                 type="text"
                                 inputMode="numeric"
-                                value={Number(editingRecord.amountInput || 0).toLocaleString("ja-JP")}
+                                value={Number(editingRecord.金額入力 || 0).toLocaleString("ja-JP")}
                                 onChange={(e) => {
                                   const raw = e.target.value.replace(/[^\d]/g, "");
-                                  setEditingRecord((prev) => ({ ...prev, amountInput: raw }));
+                                  setEditingRecord((prev) => ({ ...prev, 金額入力: raw }));
                                 }}
                                 className="w-full rounded-2xl border border-slate-300 pl-12 pr-4 py-4 text-3xl font-bold text-slate-800 outline-none focus:border-sky-300"
                               />
@@ -1281,9 +1219,9 @@
                             <div className="mt-3 grid grid-cols-2 gap-2">
                               <button
                                 type="button"
-                                onClick={() => setEditingRecord((prev) => ({ ...prev, typeInput: "1" }))}
+                                onClick={() => setEditingRecord((prev) => ({ ...prev, 区分入力: "1" }))}
                                 className={`h-[52px] rounded-2xl text-lg font-bold border ${
-                                  editingRecord.typeInput === "1"
+                                  editingRecord.区分入力 === "1"
                                     ? "bg-sky-500 text-white border-sky-500"
                                     : "bg-slate-50 text-slate-700 border-slate-200"
                                 }`}
@@ -1292,9 +1230,9 @@
                               </button>
                               <button
                                 type="button"
-                                onClick={() => setEditingRecord((prev) => ({ ...prev, typeInput: "2" }))}
+                                onClick={() => setEditingRecord((prev) => ({ ...prev, 区分入力: "2" }))}
                                 className={`h-[52px] rounded-2xl text-lg font-bold border ${
-                                  editingRecord.typeInput === "2"
+                                  editingRecord.区分入力 === "2"
                                     ? "bg-emerald-500 text-white border-emerald-500"
                                     : "bg-slate-50 text-slate-700 border-slate-200"
                                 }`}
@@ -1308,12 +1246,32 @@
                           </div>
 
                           <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
+                            <div className="text-sm font-semibold text-slate-600">人数</div>
+                            <div className="mt-3 grid grid-cols-4 gap-2">
+                              {[1,2,3,4].map((count) => (
+                                <button
+                                  key={count}
+                                  type="button"
+                                  onClick={() => setEditingRecord((prev) => ({ ...prev, 人数入力: count }))}
+                                  className={`h-[46px] rounded-2xl text-lg font-bold border ${
+                                    Number(editingRecord.人数入力) === count
+                                      ? "bg-sky-500 text-white border-sky-500"
+                                      : "bg-slate-50 text-slate-700 border-slate-200"
+                                  }`}
+                                >
+                                  {count}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
                             <div className="text-sm font-semibold text-slate-600">乗車地</div>
                             <input
                               type="text"
-                              value={editingRecord.pickupInput}
+                              value={editingRecord.乗車地入力}
                               onChange={(e) =>
-                                setEditingRecord((prev) => ({ ...prev, pickupInput: e.target.value }))
+                                setEditingRecord((prev) => ({ ...prev, 乗車地入力: e.target.value }))
                               }
                               className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 text-base text-slate-800 outline-none focus:border-sky-300"
                             />
@@ -1323,9 +1281,9 @@
                             <div className="text-sm font-semibold text-slate-600">降車地</div>
                             <input
                               type="text"
-                              value={editingRecord.dropoffInput}
+                              value={editingRecord.降車地入力}
                               onChange={(e) =>
-                                setEditingRecord((prev) => ({ ...prev, dropoffInput: e.target.value }))
+                                setEditingRecord((prev) => ({ ...prev, 降車地入力: e.target.value }))
                               }
                               className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 text-base text-slate-800 outline-none focus:border-sky-300"
                             />
@@ -1335,9 +1293,9 @@
                             <div className="text-sm font-semibold text-slate-600">乗車時刻</div>
                             <input
                               type="datetime-local"
-                              value={editingRecord.startAtInput}
+                              value={editingRecord.乗車時刻入力}
                               onChange={(e) =>
-                                setEditingRecord((prev) => ({ ...prev, startAtInput: e.target.value }))
+                                setEditingRecord((prev) => ({ ...prev, 乗車時刻入力: e.target.value }))
                               }
                               className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 text-base text-slate-800 outline-none focus:border-sky-300"
                             />
@@ -1347,9 +1305,9 @@
                             <div className="text-sm font-semibold text-slate-600">降車時刻</div>
                             <input
                               type="datetime-local"
-                              value={editingRecord.endAtInput}
+                              value={editingRecord.降車時刻入力}
                               onChange={(e) =>
-                                setEditingRecord((prev) => ({ ...prev, endAtInput: e.target.value }))
+                                setEditingRecord((prev) => ({ ...prev, 降車時刻入力: e.target.value }))
                               }
                               className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 text-base text-slate-800 outline-none focus:border-sky-300"
                             />
@@ -1358,7 +1316,7 @@
                           <button
                             type="button"
                             onClick={saveEditedRecord}
-                            className={`w-full rounded-2xl h-[56px] text-xl font-bold bg-sky-500 text-white ${shadowMain}`}
+                            className={`w-full rounded-2xl h-[56px] text-xl font-bold bg-sky-500 text-white ${shadowSub}`}
                           >
                             保存する
                           </button>
@@ -1391,39 +1349,17 @@
                           <div className="text-[15px] leading-none font-semibold text-slate-700 pt-1">
                             {stateLabel}
                           </div>
-
-                          {showReturnLinkOnTop && (
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (returnTarget === "ride") {
-                                  setScreen("ride");
-                                  return;
-                                }
-                                if (returnTarget === "standby") {
-                                  setScreen("standby");
-                                }
-                              }}
-                              className="mt-2 text-[14px] font-semibold text-sky-600 active:opacity-70"
-                            >
-                              戻る
-                            </button>
-                          )}
                         </div>
 
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleClockDoubleTap();
-                          }}
-                          className="shrink-0 text-right"
-                        >
-                          <div className="text-[58px] leading-[0.9] font-black tracking-[-0.04em] text-slate-800">
-                            {nowText}
+                        <div className="shrink-0 text-right">
+                          <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.04em] text-slate-800">
+                            <span>{timeParts.hh}</span>
+                            <span className={`${timeParts.showColon ? "opacity-100" : "opacity-0"} transition-opacity duration-150`}>
+                              ：
+                            </span>
+                            <span>{timeParts.mm}</span>
                           </div>
-                        </button>
+                        </div>
                       </div>
 
                       {renderCardModeContent()}
@@ -1436,15 +1372,15 @@
                         type="button"
                         onClick={handleTopMain}
                         disabled={topMainButtonDisabled}
-                        className={`${mainButtonClass} ${
+                        className={`${mainButtonBase} ${mainButtonShine} ${
                           topMainButtonDisabled
-                            ? "bg-slate-300 text-white"
+                            ? "bg-[linear-gradient(180deg,#d5dbe3,#bcc6d2,#97a3b2)] text-white"
                             : dutyStarted
-                            ? "bg-slate-400 text-white"
-                            : "bg-sky-500 text-white"
+                            ? "bg-[linear-gradient(180deg,#ffdf6b,#ffb100,#cc7900)] text-white"
+                            : "bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white"
                         }`}
                       >
-                        {topMainLabel}
+                        <span className={bigButtonText}>{topMainLabel}</span>
                       </button>
                     )}
 
@@ -1452,9 +1388,9 @@
                       <button
                         type="button"
                         onClick={handleStartRide}
-                        className={`${mainButtonClass} bg-sky-500`}
+                        className={`${mainButtonBase} ${mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)]`}
                       >
-                        {renderStandbyButtonText()}
+                        <span className={bigButtonText}>実車</span>
                       </button>
                     )}
 
@@ -1462,25 +1398,18 @@
                       <button
                         type="button"
                         onClick={handleDropOff}
-                        className={`${mainButtonClass} bg-emerald-500`}
+                        className={`${mainButtonBase} ${mainButtonShine} bg-[linear-gradient(180deg,#ffe066,#ffb400,#cc7a00)]`}
                       >
-                        降車
+                        <span className={bigButtonText}>降車</span>
                       </button>
                     )}
                   </div>
                 </>
               )}
 
-              {(screen === "top" || screen === "standby") && (
-                <>
-                  <div className="flex-1 min-h-0"></div>
-                  {renderBottomCard()}
-                </>
-              )}
-
               {screen === "ride" && (
-                <div className="flex-1 min-h-0 pt-3 flex flex-col overflow-hidden">
-                  <div className={`${cardClass} px-4 py-3 shrink-0`}>
+                <div className="pt-3 shrink-0">
+                  <div className={`${cardClass} px-4 py-3`}>
                     <div className="text-[14px] font-semibold text-slate-500">
                       乗車地
                     </div>
@@ -1488,28 +1417,35 @@
                       {pickup || "未取得"}
                     </div>
 
-                    <div className="mt-3 flex items-center justify-between gap-4">
+                    <div className="mt-3 grid grid-cols-3 gap-3">
                       <div>
-                        <div className="text-[14px] font-semibold text-slate-500">
+                        <div className="text-[13px] font-semibold text-slate-500">
                           乗車時刻
                         </div>
-                        <div className="mt-1 text-[18px] font-bold text-slate-800">
+                        <div className="mt-1 text-[17px] font-bold text-slate-800">
                           {formatTime(rideStartAt)}
                         </div>
                       </div>
 
+                      <div>
+                        <div className="text-[13px] font-semibold text-slate-500">
+                          人数
+                        </div>
+                        <div className="mt-1 text-[17px] font-bold text-slate-800">
+                          {selectedPassengers}人
+                        </div>
+                      </div>
+
                       <div className="text-right">
-                        <div className="text-[14px] font-semibold text-slate-500">
+                        <div className="text-[13px] font-semibold text-slate-500">
                           経過時間
                         </div>
-                        <div className="mt-1 text-[18px] font-bold text-slate-800">
+                        <div className="mt-1 text-[17px] font-bold text-slate-800">
                           {elapsedText}
                         </div>
                       </div>
                     </div>
                   </div>
-
-                  <div className="flex-1"></div>
                 </div>
               )}
 
@@ -1553,63 +1489,55 @@
                         value={formattedAmount}
                         onChange={handleAmountChange}
                         placeholder="0"
-                        className={`w-full rounded-[24px] border pl-12 pr-4 py-5 text-4xl font-bold text-slate-800 outline-none focus:border-sky-300 bg-white ${
-                          amountConfirmed
-                            ? "border-slate-400"
-                            : "border-sky-300"
-                        } ${shadowSub}`}
+                        className={`w-full rounded-[24px] border border-white/60 bg-white pl-12 pr-4 py-5 text-4xl font-bold text-slate-800 outline-none shadow-[0_8px_16px_rgba(0,0,0,0.10)] focus:border-sky-300`}
                       />
                     </div>
                   </div>
 
                   <div className="pt-4 flex-1 min-h-0 flex flex-col">
                     <div className="grid gap-3 shrink-0">
-                      <button
-                        type="button"
-                        onClick={handleConfirmAmount}
-                        disabled={amount.length === 0 || amountConfirmed}
-                        className={confirmButtonClass}
-                      >
-                        決済方法
-                      </button>
+                      <div className="grid grid-cols-4 gap-2">
+                        {[1, 2, 3, 4].map((count) => {
+                          const selected = selectedPassengers === count;
+                          return (
+                            <button
+                              key={count}
+                              type="button"
+                              onClick={() => handlePassengerSelect(count)}
+                              className={`${chipButtonBase} ${
+                                selected
+                                  ? "text-white bg-[linear-gradient(180deg,#a347ff,#7a1fff,#5a00cc)]"
+                                  : "text-slate-700 bg-[linear-gradient(180deg,#e5eaf1,#cfd6e0,#b8c2cf)]"
+                              }`}
+                            >
+                              <span className="relative z-10">{count}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
 
                       <button
                         type="button"
                         onClick={() => saveFare("cash")}
-                        disabled={!amountConfirmed}
-                        className={`w-full rounded-2xl h-[56px] text-xl font-bold active:scale-[0.98] ${
-                          amountConfirmed
-                            ? "bg-sky-500 text-white"
-                            : "bg-slate-200 text-slate-400"
-                        } ${shadowMain}`}
+                        className={`${smallButtonBase} text-white text-xl font-extrabold bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)]`}
                       >
-                        現金
+                        <span className="relative z-10">現金</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => saveFare("cardQr")}
-                        disabled={!amountConfirmed}
-                        className={`w-full rounded-2xl h-[56px] text-xl font-bold active:scale-[0.98] ${
-                          amountConfirmed
-                            ? "bg-emerald-500 text-white"
-                            : "bg-slate-200 text-slate-400"
-                        } ${shadowMain}`}
+                        className={`${smallButtonBase} text-white text-xl font-extrabold bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)]`}
                       >
-                        カード・QR
+                        <span className="relative z-10">カード・QR</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => saveFare("receipt")}
-                        disabled={!amountConfirmed}
-                        className={`w-full rounded-2xl h-[56px] text-xl font-bold active:scale-[0.98] ${
-                          amountConfirmed
-                            ? "bg-[#ffd700] text-black"
-                            : "bg-slate-200 text-slate-400"
-                        } ${shadowMain}`}
+                        className={`${smallButtonBase} text-white text-xl font-extrabold bg-[linear-gradient(180deg,#ff7a7a,#ff3b3b,#b80000)]`}
                       >
-                        領収証発行
+                        <span className="relative z-10">領収証発行</span>
                       </button>
                     </div>
 
@@ -1617,6 +1545,13 @@
                     <div className="h-2 shrink-0"></div>
                   </div>
                 </div>
+              )}
+
+              {(screen === "top" || screen === "standby" || screen === "ride") && (
+                <>
+                  <div className="flex-1 min-h-0"></div>
+                  {renderBottomCard()}
+                </>
               )}
             </div>
           </div>
