@@ -103,10 +103,11 @@
 
       const [now, setNow] = useState(new Date());
 
-      const STANDBY_OTHER_BASE_BOTTOM = 150;
-      const STANDBY_OTHER_MOVE_RANGE = 96;
+      const SHARED_INFO_SLOT_HEIGHT = 116;
+      const STANDBY_OTHER_MOVE_RANGE = 92;
+      const STANDBY_END_BUTTON_BOTTOM = 26;
+      const STANDBY_END_BUTTON_REVEAL_TOP = 138;
       const STANDBY_OTHER_CARD_HEIGHT = 220;
-      const STANDBY_END_BUTTON_BOTTOM = 84;
 
       useEffect(() => {
         clockTimerRef.current = setInterval(() => {
@@ -981,99 +982,69 @@
         ));
       };
 
-      const renderBottomCard = () => {
+      const renderBottomCard = ({ movable = false, showHandle = false } = {}) => {
         return (
-          <div className="pt-3 h-[220px] shrink-0">
-            <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
-              <button
-                type="button"
-                onClick={() => setShowOtherSheet(true)}
-                className="px-4 pt-3 pb-2 text-left shrink-0 active:bg-slate-50"
-              >
-                <div className="text-sm font-medium text-slate-400">その他</div>
-              </button>
-
-              <div className="flex-1 min-h-0 overflow-y-auto">
-                <button
-                  type="button"
-                  onClick={openHistoryModal}
-                  className="w-full text-left active:bg-slate-50"
-                >
-                  {renderPreviewHistoryRows()}
-                </button>
-              </div>
-            </div>
-          </div>
-        );
-      };
-
-      const renderStandbyBottomCover = () => {
-        const opened = standbySheetOffset >= STANDBY_OTHER_MOVE_RANGE - 4;
-
-        return (
-          <div className="flex-1 min-h-0 relative overflow-hidden pt-4">
-            <div className="absolute inset-x-0 bottom-[20px] z-10 px-1">
-              <button
-                type="button"
-                onClick={handleDutyEnd}
-                className={endDutyButtonClass}
-              >
-                乗務終了
-              </button>
-            </div>
-
-            <div
-              className="absolute inset-x-0 bottom-0 z-20"
-              style={{
-                transform: `translateY(${standbySheetOffset}px)`,
-                transition: sheetDragRef.current.dragging ? "none" : "transform 180ms ease-out",
-              }}
-            >
+          <div
+            className="shrink-0"
+            style={{
+              transform: movable ? `translateY(${standbySheetOffset}px)` : "translateY(0)",
+              transition: movable && !sheetDragRef.current.dragging ? "transform 180ms ease-out" : "none",
+            }}
+          >
+            {showHandle && (
               <div
-                className="pb-0 select-none"
+                className="text-center pb-1 select-none"
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
               >
-                <div className="text-center pb-1">
-                  <div className="text-[13px] font-semibold text-slate-400">
-                    ↓ 下へ
-                  </div>
+                <div className="text-[13px] font-semibold text-slate-400">
+                  ↓ 下へ
                 </div>
+              </div>
+            )}
 
-                <div className="pt-3 h-[320px]">
-                  <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
-                    <div className="px-4 pt-3 pb-2 text-left shrink-0">
-                      <div className="text-sm font-medium text-slate-400">その他</div>
-                    </div>
+            <div className={`h-[${STANDBY_OTHER_CARD_HEIGHT}px] ${showHandle ? "pt-3" : "pt-0"}`}>
+              <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
+                <button
+                  type="button"
+                  onClick={() => setShowOtherSheet(true)}
+                  className="px-4 pt-3 pb-2 text-left shrink-0 active:bg-slate-50"
+                >
+                  <div className="text-sm font-medium text-slate-400">その他</div>
+                </button>
 
-                    <button
-                      type="button"
-                      onClick={openHistoryModal}
-                      className="flex-1 min-h-0 overflow-y-auto text-left active:bg-slate-50"
-                    >
-                      {renderPreviewHistoryRows()}
-                    </button>
-                  </div>
+                <div className="flex-1 min-h-0 overflow-y-auto">
+                  <button
+                    type="button"
+                    onClick={openHistoryModal}
+                    className="w-full text-left active:bg-slate-50"
+                  >
+                    {renderPreviewHistoryRows()}
+                  </button>
                 </div>
+              </div>
+            </div>
 
+            {showHandle && (
+              <>
                 <div className="pt-3 pb-2 flex flex-col items-center gap-2">
                   <div className="w-full h-[1px] bg-slate-200"></div>
                   <div className="w-10 h-[4px] rounded-full bg-slate-300"></div>
                 </div>
+                <div className="h-[20px]"></div>
+              </>
+            )}
+          </div>
+        );
+      };
 
-                <div className="h-[24px]"></div>
-              </div>
-            </div>
-
-            <div className="absolute inset-x-0 bottom-[92px] z-0 flex justify-center pointer-events-none">
-              <div
-                className={`text-[12px] font-semibold transition-opacity duration-150 ${
-                  opened ? "opacity-100 text-slate-500" : "opacity-0"
-                }`}
-              >
-                乗務終了
-              </div>
-            </div>
+      const renderSharedInfoSpacer = () => {
+        return (
+          <div className="pt-3 shrink-0">
+            <div
+              className="rounded-[28px] opacity-0 pointer-events-none"
+              style={{ height: `${SHARED_INFO_SLOT_HEIGHT}px` }}
+            />
           </div>
         );
       };
@@ -1564,9 +1535,11 @@
                     </button>
                   </div>
 
+                  {renderSharedInfoSpacer()}
+
                   <div
                     ref={topScrollRef}
-                    className="flex-1 min-h-0 overflow-y-auto pt-4"
+                    className="flex-1 min-h-0 overflow-y-auto"
                   >
                     {renderBottomCard()}
                   </div>
@@ -1585,14 +1558,36 @@
                     </button>
                   </div>
 
-                  {renderStandbyBottomCover()}
+                  {renderSharedInfoSpacer()}
+
+                  <div className="flex-1 min-h-0 relative overflow-hidden">
+                    <div
+                      className="absolute inset-x-0 z-0 px-1"
+                      style={{ top: `${STANDBY_END_BUTTON_REVEAL_TOP}px`, bottom: `${STANDBY_END_BUTTON_BOTTOM}px` }}
+                    >
+                      <button
+                        type="button"
+                        onClick={handleDutyEnd}
+                        className={endDutyButtonClass}
+                      >
+                        乗務終了
+                      </button>
+                    </div>
+
+                    <div className="absolute inset-x-0 top-0 z-20">
+                      {renderBottomCard({ movable: true, showHandle: true })}
+                    </div>
+                  </div>
                 </div>
               )}
 
               {screen === "ride" && (
                 <>
                   <div className="pt-3 shrink-0">
-                    <div className={`${cardClass} px-4 py-3`}>
+                    <div
+                      className={`${cardClass} px-4 py-3`}
+                      style={{ minHeight: `${SHARED_INFO_SLOT_HEIGHT}px` }}
+                    >
                       <div className="text-[14px] font-semibold text-slate-500">
                         乗車地
                       </div>
@@ -1663,6 +1658,8 @@
                       </div>
                     </div>
                   </div>
+
+                  {renderSharedInfoSpacer()}
 
                   <div className="pt-4 shrink-0">
                     <div className="relative">
