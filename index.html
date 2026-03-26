@@ -104,10 +104,9 @@
       const [now, setNow] = useState(new Date());
 
       const SHARED_INFO_SLOT_HEIGHT = 116;
-      const STANDBY_OTHER_MOVE_RANGE = 92;
-      const STANDBY_END_BUTTON_BOTTOM = 26;
-      const STANDBY_END_BUTTON_REVEAL_TOP = 138;
+      const STANDBY_OTHER_MOVE_RANGE = 112;
       const STANDBY_OTHER_CARD_HEIGHT = 220;
+      const STANDBY_END_BUTTON_TOP = 148;
 
       useEffect(() => {
         clockTimerRef.current = setInterval(() => {
@@ -983,14 +982,15 @@
       };
 
       const renderBottomCard = ({ movable = false, showHandle = false } = {}) => {
+        const translateStyle = movable
+          ? {
+              transform: `translateY(${standbySheetOffset}px)`,
+              transition: sheetDragRef.current.dragging ? "none" : "transform 180ms ease-out",
+            }
+          : {};
+
         return (
-          <div
-            className="shrink-0"
-            style={{
-              transform: movable ? `translateY(${standbySheetOffset}px)` : "translateY(0)",
-              transition: movable && !sheetDragRef.current.dragging ? "transform 180ms ease-out" : "none",
-            }}
-          >
+          <div className="shrink-0" style={translateStyle}>
             {showHandle && (
               <div
                 className="text-center pb-1 select-none"
@@ -1561,10 +1561,7 @@
                   {renderSharedInfoSpacer()}
 
                   <div className="flex-1 min-h-0 relative overflow-hidden">
-                    <div
-                      className="absolute inset-x-0 z-0 px-1"
-                      style={{ top: `${STANDBY_END_BUTTON_REVEAL_TOP}px`, bottom: `${STANDBY_END_BUTTON_BOTTOM}px` }}
-                    >
+                    <div className="absolute inset-x-0 z-0 px-1" style={{ top: `${STANDBY_END_BUTTON_TOP}px` }}>
                       <button
                         type="button"
                         onClick={handleDutyEnd}
