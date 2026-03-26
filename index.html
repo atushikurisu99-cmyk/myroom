@@ -103,7 +103,10 @@
 
       const [now, setNow] = useState(new Date());
 
-      const STANDBY_SHEET_MAX_OFFSET = 220;
+      const STANDBY_OTHER_BASE_BOTTOM = 150;
+      const STANDBY_OTHER_MOVE_RANGE = 96;
+      const STANDBY_OTHER_CARD_HEIGHT = 220;
+      const STANDBY_END_BUTTON_BOTTOM = 84;
 
       useEffect(() => {
         clockTimerRef.current = setInterval(() => {
@@ -160,7 +163,7 @@
         const nextOffset = clamp(
           sheetDragRef.current.startOffset + delta,
           0,
-          STANDBY_SHEET_MAX_OFFSET
+          STANDBY_OTHER_MOVE_RANGE
         );
         setStandbySheetOffset(nextOffset);
       };
@@ -169,7 +172,7 @@
         if (!sheetDragRef.current.dragging) return;
         sheetDragRef.current.dragging = false;
         setStandbySheetOffset((prev) =>
-          prev > STANDBY_SHEET_MAX_OFFSET * 0.42 ? STANDBY_SHEET_MAX_OFFSET : 0
+          prev > STANDBY_OTHER_MOVE_RANGE * 0.42 ? STANDBY_OTHER_MOVE_RANGE : 0
         );
       };
 
@@ -1005,7 +1008,7 @@
       };
 
       const renderStandbyBottomCover = () => {
-        const opened = standbySheetOffset >= STANDBY_SHEET_MAX_OFFSET - 4;
+        const opened = standbySheetOffset >= STANDBY_OTHER_MOVE_RANGE - 4;
 
         return (
           <div className="flex-1 min-h-0 relative overflow-hidden pt-4">
