@@ -88,14 +88,22 @@
       const [cardMode, setCardMode] = useState(3); // 1〜5
       const [workDate, setWorkDate] = useState(null);
 
+      const [standbySheetOffset, setStandbySheetOffset] = useState(0);
+
       const amountInputRef = useRef(null);
       const savedTimerRef = useRef(null);
       const clockTimerRef = useRef(null);
-
-      const standbyScrollRef = useRef(null);
       const topScrollRef = useRef(null);
 
+      const sheetDragRef = useRef({
+        dragging: false,
+        startY: 0,
+        startOffset: 0,
+      });
+
       const [now, setNow] = useState(new Date());
+
+      const STANDBY_SHEET_MAX_OFFSET = 128;
 
       useEffect(() => {
         clockTimerRef.current = setInterval(() => {
@@ -123,20 +131,73 @@
       }, []);
 
       useEffect(() => {
-        if (screen === "standby") {
-          requestAnimationFrame(() => {
-            if (standbyScrollRef.current) standbyScrollRef.current.scrollTop = 0;
-          });
-        }
-      }, [screen]);
-
-      useEffect(() => {
         if (screen === "top") {
           requestAnimationFrame(() => {
             if (topScrollRef.current) topScrollRef.current.scrollTop = 0;
           });
         }
       }, [screen]);
+
+      useEffect(() => {
+        if (screen !== "standby") {
+          setStandbySheetOffset(0);
+        }
+      }, [screen]);
+
+      const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+      const beginStandbySheetDrag = (clientY) => {
+        sheetDragRef.current = {
+          dragging: true,
+          startY: clientY,
+          startOffset: standbySheetOffset,
+        };
+      };
+
+      const updateStandbySheetDrag = (clientY) => {
+        if (!sheetDragRef.current.dragging) return;
+        const delta = clientY - sheetDragRef.current.startY;
+        const nextOffset = clamp(
+          sheetDragRef.current.startOffset + delta,
+          0,
+          STANDBY_SHEET_MAX_OFFSET
+        );
+        setStandbySheetOffset(nextOffset);
+      };
+
+      const endStandbySheetDrag = () => {
+        if (!sheetDragRef.current.dragging) return;
+        sheetDragRef.current.dragging = false;
+        setStandbySheetOffset((prev) =>
+          prev > STANDBY_SHEET_MAX_OFFSET * 0.42 ? STANDBY_SHEET_MAX_OFFSET : 0
+        );
+      };
+
+      useEffect(() => {
+        const handleMouseMove = (e) => updateStandbySheetDrag(e.clientY);
+        const handleMouseUp = () => endStandbySheetDrag();
+
+        const handleTouchMove = (e) => {
+          if (!sheetDragRef.current.dragging) return;
+          if (e.cancelable) e.preventDefault();
+          updateStandbySheetDrag(e.touches[0].clientY);
+        };
+        const handleTouchEnd = () => endStandbySheetDrag();
+
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseup", handleMouseUp);
+        window.addEventListener("touchmove", handleTouchMove, { passive: false });
+        window.addEventListener("touchend", handleTouchEnd);
+        window.addEventListener("touchcancel", handleTouchEnd);
+
+        return () => {
+          window.removeEventListener("mousemove", handleMouseMove);
+          window.removeEventListener("mouseup", handleMouseUp);
+          window.removeEventListener("touchmove", handleTouchMove);
+          window.removeEventListener("touchend", handleTouchEnd);
+          window.removeEventListener("touchcancel", handleTouchEnd);
+        };
+      }, [standbySheetOffset]);
 
       const timeParts = useMemo(() => {
         const hh = String(now.getHours()).padStart(2, "0");
@@ -153,23 +214,21 @@
       }, [rideStartAt, now]);
 
       const totalAmount = useMemo(() => {
-        return records.reduce((sum, record) => sum + Number(record.amount || 0), 0);
+        return records.reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0);
       }, [records]);
 
-      const recordCount = useMemo(() => {
-        return records.length;
-      }, [records]);
+      const recordCount = useMemo(() => records.length, [records]);
 
       const amount1 = useMemo(() => {
         return records
           .filter((record) => record.payment === "cash" && !record.receipt)
-          .reduce((sum, record) => sum + Number(record.amount || 0), 0);
+          .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0);
       }, [records]);
 
       const amount2 = useMemo(() => {
         return records
           .filter((record) => !(record.payment === "cash" && !record.receipt))
-          .reduce((sum, record) => sum + Number(record.amount || 0), 0);
+          .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0);
       }, [records]);
 
       const previewRecords = useMemo(() => records.slice(0, 3), [records]);
@@ -227,10 +286,13 @@
           .replace(/,/g, " ")
           .replace(/、/g, " ");
 
-        text = text
-          .replace(/広島県広島市/g, " ")
-          .replace(/広島県/g, " ")
-          .replace(/広島市/g, " ");
+        if (/広島県広島市/.test(text)) {
+          text = text.replace(/広島県広島市/g, " ");
+        } else if (/広島県/.test(text)) {
+          text = text.replace(/広島県/g, " ");
+        }
+
+        text = text.replace(/広島市/g, " ");
 
         text = text
           .replace(/中区/g, " ")
@@ -639,6 +701,7 @@
         setSelectedPassengers(null);
         setScreen("standby");
         setWorkDate(startDutyDate);
+        setStandbySheetOffset(0);
       };
 
       const performDutyEnd = () => {
@@ -656,6 +719,7 @@
         setShowSaved(false);
         setWorkDate(null);
         setCardMode(3);
+        setStandbySheetOffset(0);
         setScreen("top");
       };
 
@@ -681,6 +745,7 @@
         setPickup("取得中…");
         setDropoff("");
         setSelectedPassengers(null);
+        setStandbySheetOffset(0);
         setScreen("ride");
 
         const best = await getBestCurrentPlace();
@@ -757,6 +822,7 @@
         setDropoff("");
         setAmount("");
         setSelectedPassengers(null);
+        setStandbySheetOffset(0);
         setScreen("standby");
 
         setShowSaved(true);
@@ -932,6 +998,77 @@
                 >
                   {renderPreviewHistoryRows()}
                 </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const renderStandbyBottomCover = () => {
+        const opened = standbySheetOffset >= STANDBY_SHEET_MAX_OFFSET - 4;
+
+        return (
+          <div className="flex-1 min-h-0 relative overflow-hidden pt-4">
+            <div className="absolute inset-x-0 bottom-0 z-10 px-1 pb-4">
+              <button
+                type="button"
+                onClick={handleDutyEnd}
+                className={endDutyButtonClass}
+              >
+                乗務終了
+              </button>
+            </div>
+
+            <div
+              className="absolute inset-x-0 bottom-0 z-20"
+              style={{
+                transform: `translateY(${standbySheetOffset}px)`,
+                transition: sheetDragRef.current.dragging ? "none" : "transform 180ms ease-out",
+              }}
+            >
+              <div
+                className="pb-0 select-none"
+                onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
+                onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
+              >
+                <div className="text-center pb-1">
+                  <div className="text-[13px] font-semibold text-slate-400">
+                    ↓ 下へ
+                  </div>
+                </div>
+
+                <div className="pt-3 h-[220px]">
+                  <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
+                    <div className="px-4 pt-3 pb-2 text-left shrink-0">
+                      <div className="text-sm font-medium text-slate-400">その他</div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={openHistoryModal}
+                      className="flex-1 min-h-0 overflow-y-auto text-left active:bg-slate-50"
+                    >
+                      {renderPreviewHistoryRows()}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="pt-3 pb-2 flex flex-col items-center gap-2">
+                  <div className="w-full h-[1px] bg-slate-200"></div>
+                  <div className="w-10 h-[4px] rounded-full bg-slate-300"></div>
+                </div>
+
+                <div className="h-[40px]"></div>
+              </div>
+            </div>
+
+            <div className="absolute inset-x-0 bottom-[76px] z-0 flex justify-center pointer-events-none">
+              <div
+                className={`text-[12px] font-semibold transition-opacity duration-150 ${
+                  opened ? "opacity-100 text-slate-500" : "opacity-0"
+                }`}
+              >
+                乗務終了
               </div>
             </div>
           </div>
@@ -1271,7 +1408,7 @@
                           <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
                             <div className="text-sm font-semibold text-slate-600">人数</div>
                             <div className="mt-3 grid grid-cols-4 gap-2">
-                              {[1,2,3,4].map((count) => (
+                              {[1, 2, 3, 4].map((count) => (
                                 <button
                                   key={count}
                                   type="button"
@@ -1391,7 +1528,7 @@
                     </div>
                   </div>
 
-                  {(screen === "ride") && (
+                  {screen === "ride" && (
                     <div className="h-[132px] pt-4 shrink-0">
                       <button
                         type="button"
@@ -1445,35 +1582,7 @@
                     </button>
                   </div>
 
-                  <div
-                    ref={standbyScrollRef}
-                    className="flex-1 min-h-0 overflow-y-auto pt-4"
-                  >
-                    <div className="text-center pb-1">
-                      <div className="text-[13px] font-semibold text-slate-400">
-                        ↓ 下へ
-                      </div>
-                    </div>
-
-                    {renderBottomCard()}
-
-                    <div className="pt-3 pb-2 flex flex-col items-center gap-2">
-                      <div className="w-full h-[1px] bg-slate-200"></div>
-                      <div className="w-10 h-[4px] rounded-full bg-slate-300"></div>
-                    </div>
-
-                    <div className="h-24"></div>
-
-                    <div className="px-1 pb-20">
-                      <button
-                        type="button"
-                        onClick={handleDutyEnd}
-                        className={endDutyButtonClass}
-                      >
-                        乗務終了
-                      </button>
-                    </div>
-                  </div>
+                  {renderStandbyBottomCover()}
                 </div>
               )}
 
