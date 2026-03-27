@@ -77,6 +77,7 @@
       const [showSaved, setShowSaved] = useState(false);
       const [showHistoryModal, setShowHistoryModal] = useState(false);
       const [showOtherSheet, setShowOtherSheet] = useState(false);
+
       const [showPaymentDialog, setShowPaymentDialog] = useState(false);
       const [pendingPaymentType, setPendingPaymentType] = useState(null);
       const [paymentCountdown, setPaymentCountdown] = useState(3);
@@ -118,9 +119,9 @@
       const [now, setNow] = useState(new Date());
 
       const SHARED_INFO_SLOT_HEIGHT = 116;
-      const STANDBY_OTHER_MOVE_RANGE = 118;
-      const STANDBY_OTHER_CARD_HEIGHT = 220;
-      const STANDBY_FINISH_TOP = 144;
+      const STANDBY_OTHER_MOVE_RANGE = 126;
+      const BOTTOM_CARD_HEIGHT = 220;
+      const STANDBY_FINISH_TOP = 152;
 
       const PASSENGER_ACTIVE = "#e3e548";
       const PASSENGER_INACTIVE = "#cfd6df";
@@ -399,7 +400,7 @@
       const bigButtonText = "text-[30px] font-extrabold tracking-[-0.03em]";
 
       const smallButtonBase =
-        "relative overflow-hidden w-full h-[58px] rounded-[20px] border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.20),0_6px_12px_rgba(0,0,0,0.14)] active:scale-[0.985]";
+        "relative overflow-hidden w-full h-[54px] rounded-[20px] border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.20),0_6px_12px_rgba(0,0,0,0.14)] active:scale-[0.985]";
 
       const endDutyButtonClass =
         "relative overflow-hidden w-full h-[56px] rounded-[20px] border border-[#d8c7c7] text-slate-800 font-bold shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.18),0_6px_12px_rgba(0,0,0,0.12)] active:scale-[0.985] bg-[linear-gradient(180deg,#d8cdcd,#bdaead,#a38f8e)]";
@@ -921,6 +922,8 @@
       };
 
       const openPaymentDialog = (type) => {
+        if (selectedPassengers === null) return;
+
         const numericAmount = Number(amount);
         if (!numericAmount || numericAmount <= 0) {
           alert("正しい金額を入力してください");
@@ -962,7 +965,7 @@
       const cancelViaDialog = () => {
         setShowViaDialog(false);
         setPendingViaPlace("");
-        showToast("キャンセルしました");
+        showToast("キャンセルします");
       };
 
       const paymentLabel = (type) => {
@@ -1133,7 +1136,7 @@
           <div className="shrink-0" style={translateStyle}>
             {showHandle && (
               <div
-                className="text-center pb-1 select-none"
+                className="text-center pb-2 select-none"
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
               >
@@ -1143,7 +1146,7 @@
               </div>
             )}
 
-            <div className={`h-[${STANDBY_OTHER_CARD_HEIGHT}px] ${showHandle ? "pt-3" : "pt-0"}`}>
+            <div style={{ height: `${BOTTOM_CARD_HEIGHT}px` }}>
               <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
                 <button
                   type="button"
@@ -1180,7 +1183,7 @@
 
       const renderSharedInfoSpacer = () => {
         return (
-          <div className="pt-3 shrink-0">
+          <div className="pt-4 shrink-0">
             <div
               className="rounded-[28px] opacity-0 pointer-events-none"
               style={{ height: `${SHARED_INFO_SLOT_HEIGHT}px` }}
@@ -1256,26 +1259,12 @@
             {showPaymentDialog && (
               <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
                 <div className="w-full rounded-[28px] bg-white shadow-2xl p-5">
-                  <div className="text-[30px] font-black text-slate-800 tracking-[-0.04em]">
+                  <div className="text-[34px] font-black text-slate-800 tracking-[-0.04em]">
                     {formatMoney(amount)}
                   </div>
-                  <div className="mt-2 text-[16px] font-semibold text-slate-700">
-                    {(selectedPassengers || 1)}人 / {paymentLabel(pendingPaymentType)}
-                  </div>
-                  <div className="mt-3 text-sm text-slate-500 truncate">
-                    {pickup || "未取得"} → {dropoff || "未取得"}
-                  </div>
-                  {viaStops.length > 0 && (
-                    <div className="mt-2 text-xs text-slate-500">
-                      経由あり（{viaStops.length}件）
-                    </div>
-                  )}
 
                   <div className="mt-5 text-[18px] font-bold text-slate-800">
-                    この内容で記録します
-                  </div>
-                  <div className="mt-2 text-[20px] font-black text-slate-800 tracking-[-0.02em]">
-                    保存まで {paymentCountdown}…{Math.max(paymentCountdown - 1, 0)}…{Math.max(paymentCountdown - 2, 0)}
+                    この内容で{paymentCountdown}秒後に記録します。
                   </div>
 
                   <div className="mt-5 flex justify-end">
@@ -1760,7 +1749,7 @@
                   </div>
 
                   {screen === "ride" && (
-                    <div className="h-[132px] pt-4 shrink-0">
+                    <div className="pt-4 shrink-0" style={{ height: "148px" }}>
                       <button
                         type="button"
                         onClick={handleDropOffTap}
@@ -1775,7 +1764,7 @@
 
               {screen === "top" && (
                 <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-                  <div className="h-[132px] pt-4 shrink-0">
+                  <div className="pt-4 shrink-0" style={{ height: "148px" }}>
                     <button
                       type="button"
                       onClick={handleTopMain}
@@ -1805,7 +1794,7 @@
 
               {screen === "standby" && (
                 <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-                  <div className="h-[132px] pt-4 shrink-0">
+                  <div className="pt-4 shrink-0" style={{ height: "148px" }}>
                     <button
                       type="button"
                       onClick={handleStartRide}
@@ -1836,10 +1825,10 @@
               )}
 
               {screen === "ride" && (
-                <>
-                  <div className="pt-3 shrink-0">
+                <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+                  <div className="pt-4 shrink-0">
                     <div
-                      className={`${cardClass} px-4 py-3`}
+                      className={`${cardClass} px-4 py-4`}
                       style={{ minHeight: `${SHARED_INFO_SLOT_HEIGHT}px` }}
                     >
                       <div className="text-[14px] font-semibold text-slate-500">
@@ -1886,17 +1875,18 @@
                     </div>
                   </div>
 
-                  <div className="flex-1 min-h-0"></div>
-                  {renderBottomCard()}
-                </>
+                  <div className="pt-4 flex-1 min-h-0 overflow-y-auto">
+                    {renderBottomCard()}
+                  </div>
+                </div>
               )}
 
               {screen === "fare" && (
                 <div className="flex-1 min-h-0 flex flex-col overflow-hidden pt-4">
-                  <div className={`${cardClass} h-[128px] px-4 py-4 shrink-0`}>
-                    <div className="flex items-start justify-center gap-6">
+                  <div className={`${cardClass} h-[122px] px-4 py-4 shrink-0`}>
+                    <div className="flex items-start justify-center gap-4">
                       <div className="flex-1 min-w-0 text-left">
-                        <div className="text-[26px] font-bold text-slate-800 leading-none">
+                        <div className="text-[24px] font-bold text-slate-800 leading-none">
                           {formatTime(rideStartAt)}
                         </div>
                         <div className="mt-3 text-[15px] font-semibold text-slate-600 truncate">
@@ -1904,12 +1894,12 @@
                         </div>
                       </div>
 
-                      <div className="pt-1 text-[22px] font-bold text-slate-400 shrink-0">
+                      <div className="pt-1 text-[20px] font-bold text-slate-400 shrink-0">
                         →
                       </div>
 
                       <div className="flex-1 min-w-0 text-right">
-                        <div className="text-[26px] font-bold text-slate-800 leading-none">
+                        <div className="text-[24px] font-bold text-slate-800 leading-none">
                           {formatTime(rideEndAt)}
                         </div>
                         <div className="mt-3 text-[15px] font-semibold text-slate-600 truncate">
@@ -1931,13 +1921,13 @@
                         value={formattedAmount}
                         onChange={handleAmountChange}
                         placeholder="0"
-                        className={`w-full rounded-[24px] border border-white/60 bg-white pl-12 pr-4 py-5 text-4xl font-bold text-slate-800 outline-none shadow-[0_8px_16px_rgba(0,0,0,0.10)] focus:border-sky-300`}
+                        className={`w-full rounded-[24px] border border-white/60 bg-white pl-12 pr-4 py-4 text-4xl font-bold text-slate-800 outline-none shadow-[0_8px_16px_rgba(0,0,0,0.10)] focus:border-sky-300`}
                       />
                     </div>
                   </div>
 
-                  <div className="pt-4 flex-1 min-h-0 flex flex-col overflow-hidden">
-                    <div className="grid gap-3 shrink-0">
+                  <div className="pt-4 flex-1 min-h-0 overflow-y-auto">
+                    <div className="grid gap-3 pb-2">
                       <div className="grid grid-cols-6 gap-2">
                         {Array.from({ length: passengerDisplayCount }).map((_, index) => {
                           const count = index + 1;
@@ -1951,7 +1941,6 @@
                                   : PASSENGER_INACTIVE)
                             : "transparent";
 
-                          const border = enabled ? "border-slate-300" : "border-transparent";
                           const textColor = enabled ? "text-slate-800" : "text-transparent";
 
                           return (
@@ -1973,8 +1962,9 @@
 
                       <button
                         type="button"
+                        disabled={selectedPassengers === null}
                         onClick={() => openPaymentDialog("cash")}
-                        className={`${smallButtonBase} text-slate-900 text-xl font-extrabold`}
+                        className={`${smallButtonBase} text-slate-900 text-xl font-extrabold disabled:opacity-100`}
                         style={{ background: selectedPassengers === null ? PAYMENT_DISABLED : PAYMENT_CASH }}
                       >
                         <span className="relative z-10">現金</span>
@@ -1982,8 +1972,9 @@
 
                       <button
                         type="button"
+                        disabled={selectedPassengers === null}
                         onClick={() => openPaymentDialog("cardQr")}
-                        className={`${smallButtonBase} text-slate-900 text-xl font-extrabold`}
+                        className={`${smallButtonBase} text-slate-900 text-xl font-extrabold disabled:opacity-100`}
                         style={{ background: selectedPassengers === null ? PAYMENT_DISABLED : PAYMENT_CARD }}
                       >
                         <span className="relative z-10">カード・QR</span>
@@ -1991,16 +1982,14 @@
 
                       <button
                         type="button"
+                        disabled={selectedPassengers === null}
                         onClick={() => openPaymentDialog("receipt")}
-                        className={`${smallButtonBase} text-slate-900 text-xl font-extrabold`}
+                        className={`${smallButtonBase} text-slate-900 text-xl font-extrabold disabled:opacity-100`}
                         style={{ background: selectedPassengers === null ? PAYMENT_DISABLED : PAYMENT_RECEIPT }}
                       >
                         <span className="relative z-10">領収証発行</span>
                       </button>
                     </div>
-
-                    <div className="flex-1 min-h-0"></div>
-                    <div className="h-2 shrink-0"></div>
                   </div>
                 </div>
               )}
