@@ -6,7 +6,6 @@ window.AppScreens.RideScreen = (() => {
   return function RideScreen(props) {
     const {
       pickup,
-      pickupMeta,
       rideStartAt,
       selectedPassengers,
       elapsedText,
@@ -38,14 +37,12 @@ window.AppScreens.RideScreen = (() => {
             style={{ minHeight: `${C.SHARED_INFO_SLOT_HEIGHT}px` }}
           >
             <div className="text-[14px] font-semibold text-slate-500">乗車地</div>
-            <div className="mt-1 text-[18px] font-bold text-slate-800">
+
+            <div className="mt-1 text-[18px] font-bold text-slate-800 truncate">
               {pickup || "未取得"}
             </div>
-            <div className="mt-1 text-[11px] text-slate-400">
-              精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}
-            </div>
 
-            <div className="mt-3 grid grid-cols-3 gap-3">
+            <div className="mt-4 grid grid-cols-3 gap-3">
               <div>
                 <div className="text-[13px] font-semibold text-slate-500">乗車時刻</div>
                 <div className="mt-1 text-[17px] font-bold text-slate-800">
@@ -69,7 +66,7 @@ window.AppScreens.RideScreen = (() => {
             </div>
 
             {viaStops.length > 0 && (
-              <div className="mt-3 text-xs font-semibold text-slate-500">
+              <div className="mt-3 text-xs font-semibold text-slate-500 truncate">
                 経由あり（{viaStops.length}件）
               </div>
             )}
