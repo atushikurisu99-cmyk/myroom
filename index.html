@@ -69,6 +69,8 @@
 
       const [pickup, setPickup] = useState("");
       const [dropoff, setDropoff] = useState("");
+      const [pickupMeta, setPickupMeta] = useState(null);
+      const [dropoffMeta, setDropoffMeta] = useState(null);
 
       const [amount, setAmount] = useState("");
       const [selectedPassengers, setSelectedPassengers] = useState(null);
@@ -407,69 +409,107 @@
       const endDutyButtonClass =
         "relative overflow-hidden w-full h-[56px] rounded-[20px] border border-[#d8c7c7] text-slate-800 font-bold shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.18),0_6px_12px_rgba(0,0,0,0.12)] active:scale-[0.985] bg-[linear-gradient(180deg,#d8cdcd,#bdaead,#a38f8e)]";
 
-      const getLocationCandidates = async () => {
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      const reverseGeocode = async (latitude, longitude) => {
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=ja`
+          );
+
+          if (!response.ok) return "未取得";
+
+          const data = await response.json();
+
+          if (data.display_name) {
+            return normalizePlaceLabel(data.display_name);
+          }
+
+          const address = data.address || {};
+          const raw = [
+            address.prefecture || "",
+            address.city || address.town || address.village || "",
+            address.suburb || address.neighbourhood || address.quarter || "",
+            address.road || "",
+          ]
+            .filter(Boolean)
+            .join(" ");
+
+          return normalizePlaceLabel(raw);
+        } catch {
+          return "未取得";
+        }
+      };
+
+      const getSinglePosition = () =>
+        new Promise((resolve, reject) => {
+          if (!("geolocation" in navigator)) {
+            reject(new Error("geolocation unavailable"));
+            return;
+          }
+
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 4500,
+            maximumAge: 0,
+          });
+        });
+
+      const getBestCurrentPlace = async () => {
         if (!("geolocation" in navigator)) {
-          return [{ label: "未取得", accuracy: null }];
+          return {
+            label: "未取得",
+            accuracy: null,
+            latitude: null,
+            longitude: null,
+          };
         }
 
         const samples = [];
-        const tryCount = 3;
+        const tryCount = 5;
+        const goodEnoughAccuracy = 25;
 
         for (let i = 0; i < tryCount; i += 1) {
           try {
-            const position = await new Promise((resolve, reject) => {
-              navigator.geolocation.getCurrentPosition(
-                resolve,
-                reject,
-                {
-                  enableHighAccuracy: true,
-                  timeout: 5000,
-                  maximumAge: 0,
-                }
-              );
-            });
-
+            const position = await getSinglePosition();
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
             const accuracy = Number(position.coords.accuracy || 9999);
 
-            let label = "未取得";
-            try {
-              const response = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=ja`
-              );
-              if (response.ok) {
-                const data = await response.json();
-                if (data.display_name) {
-                  label = normalizePlaceLabel(data.display_name);
-                } else {
-                  const address = data.address || {};
-                  const raw = [
-                    address.prefecture || "",
-                    address.city || address.town || address.village || "",
-                    address.suburb || address.neighbourhood || address.quarter || "",
-                    address.road || ""
-                  ].filter(Boolean).join(" ");
-                  label = normalizePlaceLabel(raw);
-                }
-              }
-            } catch {
-              label = "未取得";
-            }
+            samples.push({
+              latitude,
+              longitude,
+              accuracy,
+            });
 
-            samples.push({ label, accuracy });
+            if (accuracy <= goodEnoughAccuracy) break;
           } catch {
-            samples.push({ label: "未取得", accuracy: 9999 });
+            // 続行
+          }
+
+          if (i < tryCount - 1) {
+            await sleep(180);
           }
         }
 
-        return samples;
-      };
+        if (samples.length === 0) {
+          return {
+            label: "未取得",
+            accuracy: null,
+            latitude: null,
+            longitude: null,
+          };
+        }
 
-      const getBestCurrentPlace = async () => {
-        const candidates = await getLocationCandidates();
-        const sorted = [...candidates].sort((a, b) => (a.accuracy ?? 9999) - (b.accuracy ?? 9999));
-        return sorted[0] || { label: "未取得", accuracy: null };
+        const best = [...samples].sort((a, b) => a.accuracy - b.accuracy)[0];
+        const label = await reverseGeocode(best.latitude, best.longitude);
+
+        return {
+          label: label || "未取得",
+          accuracy: Number.isFinite(best.accuracy) ? Math.round(best.accuracy) : null,
+          latitude: best.latitude,
+          longitude: best.longitude,
+        };
       };
 
       const getDayStart = (dateValue) => {
@@ -745,6 +785,8 @@
         setRideEndAt(null);
         setPickup("");
         setDropoff("");
+        setPickupMeta(null);
+        setDropoffMeta(null);
         setAmount("");
         setSelectedPassengers(null);
         setViaStops([]);
@@ -760,6 +802,8 @@
         setRideEndAt(null);
         setPickup("");
         setDropoff("");
+        setPickupMeta(null);
+        setDropoffMeta(null);
         setAmount("");
         setSelectedPassengers(null);
         setViaStops([]);
@@ -794,6 +838,8 @@
         setIsRiding(true);
         setPickup("取得中…");
         setDropoff("");
+        setPickupMeta(null);
+        setDropoffMeta(null);
         setSelectedPassengers(null);
         setViaStops([]);
         setStandbySheetOffset(0);
@@ -801,6 +847,7 @@
 
         const best = await getBestCurrentPlace();
         setPickup(best.label || "未取得");
+        setPickupMeta(best);
       };
 
       const openNormalDropoff = async () => {
@@ -809,10 +856,12 @@
         setRideEndAt(end);
         setAmount("");
         setDropoff("取得中…");
+        setDropoffMeta(null);
         setScreen("fare");
 
         const best = await getBestCurrentPlace();
         setDropoff(best.label || "未取得");
+        setDropoffMeta(best);
       };
 
       const handleDropOffTap = async () => {
@@ -897,8 +946,12 @@
           領収証: receipt,
           receipt,
           天気: "",
-          乗車位置精度: null,
-          降車位置精度: null,
+          乗車位置精度: pickupMeta?.accuracy ?? null,
+          降車位置精度: dropoffMeta?.accuracy ?? null,
+          乗車緯度: pickupMeta?.latitude ?? null,
+          乗車経度: pickupMeta?.longitude ?? null,
+          降車緯度: dropoffMeta?.latitude ?? null,
+          降車経度: dropoffMeta?.longitude ?? null,
           備考: viaText,
         };
 
@@ -915,6 +968,8 @@
         setRideEndAt(null);
         setPickup("");
         setDropoff("");
+        setPickupMeta(null);
+        setDropoffMeta(null);
         setAmount("");
         setSelectedPassengers(null);
         setViaStops([]);
@@ -1135,10 +1190,10 @@
           : {};
 
         return (
-          <div className="shrink-0" style={translateStyle}>
+          <div className="shrink-0 pointer-events-none" style={translateStyle}>
             {showHandle && (
               <div
-                className="text-center pb-2 select-none"
+                className="text-center pb-2 select-none pointer-events-auto"
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
               >
@@ -1148,7 +1203,7 @@
               </div>
             )}
 
-            <div style={{ height: `${BOTTOM_CARD_HEIGHT}px` }}>
+            <div style={{ height: `${BOTTOM_CARD_HEIGHT}px` }} className="pointer-events-auto">
               <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
                 <button
                   type="button"
@@ -1257,6 +1312,12 @@
 
                   <div className="mt-5 text-[18px] font-bold text-slate-800">
                     この内容で{paymentCountdown}秒後に記録します。
+                  </div>
+
+                  <div className="mt-2 text-sm text-slate-500">
+                    乗車位置精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}
+                    <br />
+                    降車位置精度：{dropoffMeta?.accuracy != null ? `${dropoffMeta.accuracy}m` : "--"}
                   </div>
 
                   <div className="mt-5 flex justify-end">
@@ -1799,7 +1860,7 @@
                   {renderSharedInfoSpacer()}
 
                   <div className="flex-1 min-h-0 relative overflow-hidden">
-                    <div className="absolute inset-x-0 z-0 px-1" style={{ top: `${STANDBY_FINISH_TOP}px` }}>
+                    <div className="absolute inset-x-0 z-30 px-1" style={{ top: `${STANDBY_FINISH_TOP}px` }}>
                       <button
                         type="button"
                         onClick={handleFinishTap}
@@ -1828,6 +1889,10 @@
                       </div>
                       <div className="mt-1 text-[18px] font-bold text-slate-800">
                         {pickup || "未取得"}
+                      </div>
+
+                      <div className="mt-1 text-[11px] text-slate-400">
+                        精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}
                       </div>
 
                       <div className="mt-3 grid grid-cols-3 gap-3">
@@ -1884,6 +1949,9 @@
                         <div className="mt-3 text-[15px] font-semibold text-slate-600 truncate">
                           {pickup || "未取得"}
                         </div>
+                        <div className="mt-1 text-[11px] text-slate-400">
+                          精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}
+                        </div>
                       </div>
 
                       <div className="pt-1 text-[20px] font-bold text-slate-400 shrink-0">
@@ -1896,6 +1964,9 @@
                         </div>
                         <div className="mt-3 text-[15px] font-semibold text-slate-600 truncate">
                           {dropoff || "未取得"}
+                        </div>
+                        <div className="mt-1 text-[11px] text-slate-400">
+                          精度：{dropoffMeta?.accuracy != null ? `${dropoffMeta.accuracy}m` : "--"}
                         </div>
                       </div>
                     </div>
