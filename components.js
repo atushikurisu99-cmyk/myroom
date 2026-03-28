@@ -143,7 +143,9 @@ window.AppComponents = (() => {
     );
   }
 
-  function OtherSheet({ onClose, openHistoryModal }) {
+  function OtherSheet({ show, onClose, openHistoryModal }) {
+    if (!show) return null;
+
     return (
       <div
         className="absolute inset-0 z-30 bg-slate-900/40 flex items-end"
