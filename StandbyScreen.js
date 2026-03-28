@@ -1,21 +1,28 @@
 window.AppScreens = window.AppScreens || {};
-window.AppScreens.RideScreen = (() => {
+window.AppScreens.StandbyScreen = (() => {
   const { BottomCard } = window.AppComponents;
   const C = window.AppConstants;
 
-  return function RideScreen(props) {
+  return function StandbyScreen(props) {
     const {
-      pickup,
-      pickupMeta,
-      rideStartAt,
-      selectedPassengers,
-      elapsedText,
-      viaStops,
-      handleDropOffTap,
+      handleStartRide,
+      renderSharedInfoSpacer,
+      handleFinishTap,
+      isFinishVisible,
       openOtherSheet,
       openHistoryModal,
       previewRecords,
+      standbySheetOffset,
+      beginStandbySheetDrag,
+      toggleStandbySheet,
+      dragging,
+      isStandbySheetOpened,
     } = props;
+
+    const REVEAL_TOP = 92;
+    const REVEAL_PANEL_HEIGHT = 154;
+    const TRIANGLE_CLOSED_BOTTOM = 206;
+    const TRIANGLE_OPENED_BOTTOM = 238;
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
@@ -25,67 +32,84 @@ window.AppScreens.RideScreen = (() => {
         >
           <button
             type="button"
-            onClick={handleDropOffTap}
-            className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#ffe066,#ffb400,#cc7a00)]`}
+            onClick={handleStartRide}
+            className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)]`}
           >
-            <span className={C.bigButtonText}>降車</span>
+            <span className={C.bigButtonText}>実車</span>
           </button>
         </div>
 
-        <div className="pt-4 shrink-0">
+        {renderSharedInfoSpacer()}
+
+        <div className="flex-1 min-h-0 relative overflow-hidden">
           <div
-            className={`${C.cardClass} px-4 py-4`}
-            style={{ minHeight: `${C.SHARED_INFO_SLOT_HEIGHT}px` }}
+            className="absolute inset-x-0 z-50 px-2"
+            style={{
+              top: `${REVEAL_TOP}px`,
+              height: `${REVEAL_PANEL_HEIGHT}px`,
+              pointerEvents: isFinishVisible ? "auto" : "none",
+            }}
           >
-            <div className="text-[14px] font-semibold text-slate-500">乗車地</div>
-            <div className="mt-1 text-[18px] font-bold text-slate-800">
-              {pickup || "未取得"}
+            <div className="h-full rounded-[28px] bg-[#eef3f9] border border-white/80 shadow-[0_8px_16px_rgba(0,0,0,0.08)] px-3 py-3">
+              <button
+                type="button"
+                onClick={handleFinishTap}
+                disabled={!isFinishVisible}
+                className={`${C.endDutyButtonClass} h-full transition-opacity duration-150 ${
+                  isFinishVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+                }`}
+                style={{ width: "100%" }}
+              >
+                乗務終了
+              </button>
             </div>
-            <div className="mt-1 text-[11px] text-slate-400">
-              精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}
-            </div>
-
-            <div className="mt-3 grid grid-cols-3 gap-3">
-              <div>
-                <div className="text-[13px] font-semibold text-slate-500">乗車時刻</div>
-                <div className="mt-1 text-[17px] font-bold text-slate-800">
-                  {window.AppUtils.formatTime(rideStartAt)}
-                </div>
-              </div>
-
-              <div>
-                <div className="text-[13px] font-semibold text-slate-500">人数</div>
-                <div className="mt-1 text-[17px] font-bold text-slate-800">
-                  {selectedPassengers ? `${selectedPassengers}人` : ""}
-                </div>
-              </div>
-
-              <div className="text-right">
-                <div className="text-[13px] font-semibold text-slate-500">経過時間</div>
-                <div className="mt-1 text-[17px] font-bold text-slate-800">
-                  {elapsedText}
-                </div>
-              </div>
-            </div>
-
-            {viaStops.length > 0 && (
-              <div className="mt-3 text-xs font-semibold text-slate-500">
-                経由あり（{viaStops.length}件）
-              </div>
-            )}
           </div>
-        </div>
 
-        <div className="pt-4 flex-1 min-h-0 overflow-y-auto">
-          <BottomCard
-            movable={false}
-            standbySheetOffset={0}
-            dragging={false}
-            isFinishVisible={false}
-            openOtherSheet={openOtherSheet}
-            openHistoryModal={openHistoryModal}
-            previewRecords={previewRecords}
-          />
+          <div className="absolute inset-x-0 top-0 z-20">
+            <BottomCard
+              movable={true}
+              standbySheetOffset={standbySheetOffset}
+              dragging={dragging}
+              isFinishVisible={isFinishVisible}
+              openOtherSheet={openOtherSheet}
+              openHistoryModal={openHistoryModal}
+              previewRecords={previewRecords}
+            />
+          </div>
+
+          {!isFinishVisible && (
+            <div
+              className="absolute inset-x-0 z-40 flex justify-center"
+              style={{ bottom: `${TRIANGLE_CLOSED_BOTTOM}px` }}
+            >
+              <button
+                type="button"
+                onClick={toggleStandbySheet}
+                onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
+                onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
+                className="flex items-center justify-center px-4 py-3 active:opacity-70"
+                aria-label="開く"
+              >
+                <span className="block w-0 h-0 border-l-[12px] border-r-[12px] border-t-[16px] border-l-transparent border-r-transparent border-t-slate-400" />
+              </button>
+            </div>
+          )}
+
+          {isFinishVisible && (
+            <div
+              className="absolute inset-x-0 z-40 flex justify-center"
+              style={{ bottom: `${TRIANGLE_OPENED_BOTTOM}px` }}
+            >
+              <button
+                type="button"
+                onClick={toggleStandbySheet}
+                className="flex items-center justify-center px-4 py-3 active:opacity-70"
+                aria-label="閉じる"
+              >
+                <span className="block w-0 h-0 border-l-[12px] border-r-[12px] border-b-[16px] border-l-transparent border-r-transparent border-b-slate-400" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     );
