@@ -21,6 +21,14 @@ const FareScreen =
 const HistoryModal =
   window.AppScreens?.HistoryModal || window.HistoryModal;
 
+function MissingScreen({ name }) {
+  return (
+    <div className="flex-1 min-h-0 flex items-center justify-center text-slate-500 text-sm px-6 text-center">
+      {name} が読み込めていません
+    </div>
+  );
+}
+
 function TaxiMiniApp() {
   if (!useTaxiAppState) {
     return (
@@ -194,67 +202,83 @@ function TaxiMiniApp() {
             </div>
           )}
 
-          {state.screen === "top" && TopScreen ? (
-            <TopScreen
-              topMainLabel={derived.topMainLabel}
-              topMainButtonDisabled={derived.topMainButtonDisabled}
-              handleTopMain={actions.handleTopMain}
-              renderSharedInfoSpacer={renderSharedInfoSpacer}
-              topScrollRef={refs.topScrollRef}
-              openOtherSheet={() => actions.setShowOtherSheet(true)}
-              openHistoryModal={actions.openHistoryModal}
-              previewRecords={derived.previewRecords}
-            />
+          {state.screen === "top" ? (
+            TopScreen ? (
+              <TopScreen
+                topMainLabel={derived.topMainLabel}
+                topMainButtonDisabled={derived.topMainButtonDisabled}
+                handleTopMain={actions.handleTopMain}
+                renderSharedInfoSpacer={renderSharedInfoSpacer}
+                topScrollRef={refs.topScrollRef}
+                openOtherSheet={() => actions.setShowOtherSheet(true)}
+                openHistoryModal={actions.openHistoryModal}
+                previewRecords={derived.previewRecords}
+              />
+            ) : (
+              <MissingScreen name="TopScreen" />
+            )
           ) : null}
 
-          {state.screen === "standby" && StandbyScreen ? (
-            <StandbyScreen
-              handleStartRide={actions.handleStartRide}
-              renderSharedInfoSpacer={renderSharedInfoSpacer}
-              handleFinishTap={actions.handleFinishTap}
-              isFinishVisible={derived.isFinishVisible}
-              openOtherSheet={() => actions.setShowOtherSheet(true)}
-              openHistoryModal={actions.openHistoryModal}
-              previewRecords={derived.previewRecords}
-              standbySheetOffset={state.standbySheetOffset}
-              beginStandbySheetDrag={actions.beginStandbySheetDrag}
-              toggleStandbySheet={actions.toggleStandbySheet}
-              dragging={refs.sheetDragRef.current.dragging}
-              isStandbySheetOpened={derived.isStandbySheetOpened}
-            />
+          {state.screen === "standby" ? (
+            StandbyScreen ? (
+              <StandbyScreen
+                handleStartRide={actions.handleStartRide}
+                renderSharedInfoSpacer={renderSharedInfoSpacer}
+                handleFinishTap={actions.handleFinishTap}
+                isFinishVisible={derived.isFinishVisible}
+                openOtherSheet={() => actions.setShowOtherSheet(true)}
+                openHistoryModal={actions.openHistoryModal}
+                previewRecords={derived.previewRecords}
+                standbySheetOffset={state.standbySheetOffset}
+                beginStandbySheetDrag={actions.beginStandbySheetDrag}
+                toggleStandbySheet={actions.toggleStandbySheet}
+                dragging={refs.sheetDragRef.current.dragging}
+                isStandbySheetOpened={derived.isStandbySheetOpened}
+              />
+            ) : (
+              <MissingScreen name="StandbyScreen" />
+            )
           ) : null}
 
-          {state.screen === "ride" && RideScreen ? (
-            <RideScreen
-              pickup={state.pickup}
-              pickupMeta={state.pickupMeta}
-              rideStartAt={state.rideStartAt}
-              selectedPassengers={state.selectedPassengers}
-              elapsedText={derived.elapsedText}
-              viaStops={state.viaStops}
-              handleDropOffTap={actions.handleDropOffTap}
-              openOtherSheet={() => actions.setShowOtherSheet(true)}
-              openHistoryModal={actions.openHistoryModal}
-              previewRecords={derived.previewRecords}
-            />
+          {state.screen === "ride" ? (
+            RideScreen ? (
+              <RideScreen
+                pickup={state.pickup}
+                pickupMeta={state.pickupMeta}
+                rideStartAt={state.rideStartAt}
+                selectedPassengers={state.selectedPassengers}
+                elapsedText={derived.elapsedText}
+                viaStops={state.viaStops}
+                handleDropOffTap={actions.handleDropOffTap}
+                openOtherSheet={() => actions.setShowOtherSheet(true)}
+                openHistoryModal={actions.openHistoryModal}
+                previewRecords={derived.previewRecords}
+              />
+            ) : (
+              <MissingScreen name="RideScreen" />
+            )
           ) : null}
 
-          {state.screen === "fare" && FareScreen ? (
-            <FareScreen
-              rideStartAt={state.rideStartAt}
-              pickup={state.pickup}
-              pickupMeta={state.pickupMeta}
-              rideEndAt={state.rideEndAt}
-              dropoff={state.dropoff}
-              dropoffMeta={state.dropoffMeta}
-              amountInputRef={refs.amountInputRef}
-              formattedAmount={derived.formattedAmount}
-              handleAmountChange={actions.handleAmountChange}
-              passengerDisplayCount={derived.passengerDisplayCount}
-              selectedPassengers={state.selectedPassengers}
-              handlePassengerSelect={actions.handlePassengerSelect}
-              openPaymentDialog={actions.openPaymentDialog}
-            />
+          {state.screen === "fare" ? (
+            FareScreen ? (
+              <FareScreen
+                rideStartAt={state.rideStartAt}
+                pickup={state.pickup}
+                pickupMeta={state.pickupMeta}
+                rideEndAt={state.rideEndAt}
+                dropoff={state.dropoff}
+                dropoffMeta={state.dropoffMeta}
+                amountInputRef={refs.amountInputRef}
+                formattedAmount={derived.formattedAmount}
+                handleAmountChange={actions.handleAmountChange}
+                passengerDisplayCount={derived.passengerDisplayCount}
+                selectedPassengers={state.selectedPassengers}
+                handlePassengerSelect={actions.handlePassengerSelect}
+                openPaymentDialog={actions.openPaymentDialog}
+              />
+            ) : (
+              <MissingScreen name="FareScreen" />
+            )
           ) : null}
         </div>
       </div>
