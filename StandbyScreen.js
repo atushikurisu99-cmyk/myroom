@@ -1,4 +1,3 @@
-
 window.AppScreens = window.AppScreens || {};
 window.AppScreens.StandbyScreen = (() => {
   const { BottomCard } = window.AppComponents;
@@ -20,6 +19,10 @@ window.AppScreens.StandbyScreen = (() => {
       isStandbySheetOpened,
     } = props;
 
+    const REVEAL_TOP = 126;
+    const REVEAL_PANEL_HEIGHT = 228;
+    const HANDLE_BOTTOM = 18;
+
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
         <div className="pt-4 shrink-0" style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}>
@@ -37,7 +40,7 @@ window.AppScreens.StandbyScreen = (() => {
         <div className="flex-1 min-h-0 relative overflow-hidden">
           <div
             className="absolute inset-x-0 z-10"
-            style={{ top: `${C.STANDBY_REVEAL_TOP}px`, height: `${C.STANDBY_REVEAL_PANEL_HEIGHT}px` }}
+            style={{ top: `${REVEAL_TOP}px`, height: `${REVEAL_PANEL_HEIGHT}px` }}
           >
             <div className="h-full rounded-[30px] bg-[#eef3f9] border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] px-2 pt-3">
               <div className="w-full h-full rounded-[26px] bg-[linear-gradient(180deg,#edf2f8,#e6edf5)] flex items-center justify-center px-2">
@@ -45,8 +48,8 @@ window.AppScreens.StandbyScreen = (() => {
                   type="button"
                   onClick={handleFinishTap}
                   disabled={!isFinishVisible}
-                  className={`max-w-[100%] ${C.endDutyButtonClass} ${isFinishVisible ? 'opacity-100' : 'opacity-0'}`}
-                  style={{ width: '100%' }}
+                  className={`max-w-[100%] ${C.endDutyButtonClass} ${isFinishVisible ? "opacity-100" : "opacity-0"}`}
+                  style={{ width: "100%" }}
                 >
                   乗務終了
                 </button>
@@ -66,7 +69,10 @@ window.AppScreens.StandbyScreen = (() => {
             />
           </div>
 
-          <div className="absolute inset-x-0 z-40 flex justify-center" style={{ bottom: `${C.STANDBY_HANDLE_BOTTOM}px` }}>
+          <div
+            className="absolute inset-x-0 z-40 flex justify-center"
+            style={{ bottom: `${HANDLE_BOTTOM}px` }}
+          >
             <button
               type="button"
               onClick={toggleStandbySheet}
@@ -76,7 +82,7 @@ window.AppScreens.StandbyScreen = (() => {
             >
               <div className="w-14 h-1.5 rounded-full bg-slate-300 mb-2"></div>
               <div className="text-[13px] font-semibold text-slate-400">
-                {isStandbySheetOpened ? '↑ 隠す' : '↓ 下へ'}
+                {isStandbySheetOpened ? "↑ 隠す" : "↓ 下へ"}
               </div>
             </button>
           </div>
