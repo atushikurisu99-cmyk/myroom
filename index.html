@@ -56,16 +56,23 @@
 <body>
   <div id="root"></div>
 
-  <script type="text/babel" src="./app/constants.js"></script>
-  <script type="text/babel" src="./app/utils.js"></script>
-  <script type="text/babel" src="./app/geo.js"></script>
-  <script type="text/babel" src="./app/components.js"></script>
-  <script type="text/babel" src="./app/hooks/useTaxiAppState.js"></script>
-  <script type="text/babel" src="./app/screens/HistoryModal.js"></script>
-  <script type="text/babel" src="./app/screens/TopScreen.js"></script>
-  <script type="text/babel" src="./app/screens/StandbyScreen.js"></script>
-  <script type="text/babel" src="./app/screens/RideScreen.js"></script>
-  <script type="text/babel" src="./app/screens/FareScreen.js"></script>
-  <script type="text/babel" src="./app/TaxiMiniApp.js"></script>
+  <!-- 共通 -->
+  <script type="text/babel" data-presets="env,react" src="./constants.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./utils.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./geo.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./components.js"></script>
+
+  <!-- state -->
+  <script type="text/babel" data-presets="env,react" src="./useTaxiAppState.js"></script>
+
+  <!-- screens -->
+  <script type="text/babel" data-presets="env,react" src="./トップスクリーン.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./StandbyScreen.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./RideScreen.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./運賃スクリーン.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./HistoryModal.js"></script>
+
+  <!-- 親 -->
+  <script type="text/babel" data-presets="env,react" src="./TaxiMiniApp.js"></script>
 </body>
 </html>
