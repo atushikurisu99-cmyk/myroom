@@ -66,9 +66,11 @@ function TaxiMiniApp() {
   const SHARED_INFO_SLOT_HEIGHT = 116;
   const MAIN_BUTTON_SLOT_HEIGHT = 148;
   const BOTTOM_CARD_HEIGHT = 220;
-  const STANDBY_OTHER_MOVE_RANGE = 184;
-  const STANDBY_FINISH_TOP = 96;
-  const FINISH_ENABLE_OFFSET = 108;
+  const STANDBY_OTHER_MOVE_RANGE = 196;
+  const STANDBY_REVEAL_TOP = 126;
+  const STANDBY_REVEAL_PANEL_HEIGHT = 228;
+  const STANDBY_HANDLE_BOTTOM = 18;
+  const FINISH_ENABLE_OFFSET = 118;
 
   const PASSENGER_ACTIVE = "#e3e548";
   const PASSENGER_INACTIVE = "#cfd6df";
@@ -163,13 +165,13 @@ function TaxiMiniApp() {
     if (!sheetDragRef.current.dragging) return;
     sheetDragRef.current.dragging = false;
     setStandbySheetOffset((prev) =>
-      prev > STANDBY_OTHER_MOVE_RANGE * 0.36 ? STANDBY_OTHER_MOVE_RANGE : 0
+      prev > STANDBY_OTHER_MOVE_RANGE * 0.5 ? STANDBY_OTHER_MOVE_RANGE : 0
     );
   };
 
   const toggleStandbySheet = () => {
     setStandbySheetOffset((prev) =>
-      prev > STANDBY_OTHER_MOVE_RANGE * 0.36 ? 0 : STANDBY_OTHER_MOVE_RANGE
+      prev > STANDBY_OTHER_MOVE_RANGE * 0.5 ? 0 : STANDBY_OTHER_MOVE_RANGE
     );
   };
 
@@ -353,7 +355,7 @@ function TaxiMiniApp() {
   const passengerDisplayCount = 6;
 
   const shadowSub = "shadow-[0_8px_16px_rgba(0,0,0,0.10)]";
-  const cardClass = `rounded-[28px] bg-white/85 backdrop-blur border border-white/60 ${shadowSub}`;
+  const cardClass = `rounded-[28px] bg-white border border-white/70 ${shadowSub}`;
 
   const mainButtonBase =
     "relative overflow-hidden w-full h-full rounded-[28px] text-white active:scale-[0.985] border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.7),inset_0_-3px_8px_rgba(0,0,0,0.30),0_8px_16px_rgba(0,0,0,0.18)]";
@@ -441,8 +443,7 @@ function TaxiMiniApp() {
         });
 
         if (accuracy <= goodEnoughAccuracy) break;
-      } catch {
-      }
+      } catch {}
 
       if (i < tryCount - 1) {
         await sleep(180);
@@ -1121,7 +1122,7 @@ function TaxiMiniApp() {
   const renderPreviewHistoryRows = () => {
     if (previewRecords.length === 0) {
       return (
-        <div className="px-4 py-4 text-sm text-slate-400">
+        <div className="h-full flex items-center justify-center px-4 text-sm text-slate-400">
           まだ履歴はありません
         </div>
       );
@@ -1147,57 +1148,39 @@ function TaxiMiniApp() {
     ));
   };
 
-  const renderBottomCard = ({ movable = false, showHandle = false } = {}) => {
-    const cardOnlyPointer = movable && isFinishVisible ? "none" : "auto";
+  const renderBottomCard = ({ movable = false } = {}) => {
+    const disableCardTouch = movable && isFinishVisible;
 
     return (
-      <div className="shrink-0">
-        {showHandle && (
-          <div
-            style={{
-              transform: `translateY(${standbySheetOffset}px)`,
-              transition: sheetDragRef.current.dragging ? "none" : "transform 180ms ease-out",
-            }}
-            className="pb-2 select-none relative z-30"
+      <div
+        style={{
+          height: `${BOTTOM_CARD_HEIGHT}px`,
+          transform: movable ? `translateY(${standbySheetOffset}px)` : "none",
+          transition:
+            movable && sheetDragRef.current.dragging
+              ? "none"
+              : movable
+              ? "transform 180ms ease-out"
+              : "none",
+          pointerEvents: disableCardTouch ? "none" : "auto",
+        }}
+        className={movable ? "relative z-30" : ""}
+      >
+        <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
+          <button
+            type="button"
+            onClick={() => setShowOtherSheet(true)}
+            className="px-4 pt-3 pb-2 text-left shrink-0 active:bg-slate-50"
           >
-            <button
-              type="button"
-              onClick={toggleStandbySheet}
-              onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
-              onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-              className="w-full flex flex-col items-center justify-center py-2 active:opacity-80"
-            >
-              <div className="w-12 h-1 rounded-full bg-slate-300 mb-2"></div>
-              <div className="text-[13px] font-semibold text-slate-400">
-                {isStandbySheetOpened ? "↑ 戻す" : "↓ 下へ"}
-              </div>
-            </button>
-          </div>
-        )}
+            <div className="text-sm font-medium text-slate-400">その他</div>
+          </button>
 
-        <div
-          style={{
-            height: `${BOTTOM_CARD_HEIGHT}px`,
-            transform: movable ? `translateY(${standbySheetOffset}px)` : "none",
-            transition: movable && sheetDragRef.current.dragging ? "none" : movable ? "transform 180ms ease-out" : "none",
-            pointerEvents: cardOnlyPointer,
-          }}
-          className={movable ? "relative z-20" : ""}
-        >
-          <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
-            <button
-              type="button"
-              onClick={() => setShowOtherSheet(true)}
-              className="px-4 pt-3 pb-2 text-left shrink-0 active:bg-slate-50"
-            >
-              <div className="text-sm font-medium text-slate-400">その他</div>
-            </button>
-
-            <div className="flex-1 min-h-0 overflow-y-auto">
+          <div className="flex-1 min-h-0 overflow-y-auto">
+            <div className="h-full flex flex-col">
               <button
                 type="button"
-                onClick={openHistoryModal}
-                className="w-full text-left active:bg-slate-50"
+                onClick={previewRecords.length > 0 ? openHistoryModal : undefined}
+                className="w-full h-full text-left active:bg-slate-50"
               >
                 {renderPreviewHistoryRows()}
               </button>
@@ -1449,7 +1432,6 @@ function TaxiMiniApp() {
                           className="h-[42px] rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 text-lg font-bold"
                         >
                           →
-
                         </button>
                       </div>
 
@@ -1819,10 +1801,7 @@ function TaxiMiniApp() {
 
               {renderSharedInfoSpacer()}
 
-              <div
-                ref={topScrollRef}
-                className="flex-1 min-h-0 overflow-y-auto"
-              >
+              <div ref={topScrollRef} className="flex-1 min-h-0 overflow-y-auto">
                 {renderBottomCard()}
               </div>
             </div>
@@ -1844,21 +1823,44 @@ function TaxiMiniApp() {
 
               <div className="flex-1 min-h-0 relative overflow-hidden">
                 <div
-                  className="absolute inset-x-0 px-1 z-40"
-                  style={{ top: `${STANDBY_FINISH_TOP}px` }}
+                  className="absolute inset-x-0 z-10"
+                  style={{ top: `${STANDBY_REVEAL_TOP}px`, height: `${STANDBY_REVEAL_PANEL_HEIGHT}px` }}
                 >
-                  <button
-                    type="button"
-                    onClick={handleFinishTap}
-                    disabled={!isFinishVisible}
-                    className={`${endDutyButtonClass} ${isFinishVisible ? "opacity-100" : "opacity-40"}`}
-                  >
-                    乗務終了
-                  </button>
+                  <div className="h-full rounded-[30px] bg-[#eef3f9] border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] px-2 pt-3">
+                    <div className="w-full h-full rounded-[26px] bg-[linear-gradient(180deg,#edf2f8,#e6edf5)] flex items-center justify-center px-2">
+                      <button
+                        type="button"
+                        onClick={handleFinishTap}
+                        disabled={!isFinishVisible}
+                        className={`max-w-[100%] ${endDutyButtonClass} ${isFinishVisible ? "opacity-100" : "opacity-0"}`}
+                        style={{ width: "100%" }}
+                      >
+                        乗務終了
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="absolute inset-x-0 top-0 z-30">
-                  {renderBottomCard({ movable: true, showHandle: true })}
+                  {renderBottomCard({ movable: true })}
+                </div>
+
+                <div
+                  className="absolute inset-x-0 z-40 flex justify-center"
+                  style={{ bottom: `${STANDBY_HANDLE_BOTTOM}px` }}
+                >
+                  <button
+                    type="button"
+                    onClick={toggleStandbySheet}
+                    onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
+                    onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
+                    className="flex flex-col items-center justify-center py-2 px-6 active:opacity-80"
+                  >
+                    <div className="w-14 h-1.5 rounded-full bg-slate-300 mb-2"></div>
+                    <div className="text-[13px] font-semibold text-slate-400">
+                      {isStandbySheetOpened ? "↑ 隠す" : "↓ 下へ"}
+                    </div>
+                  </button>
                 </div>
               </div>
             </div>
@@ -1871,9 +1873,7 @@ function TaxiMiniApp() {
                   className={`${cardClass} px-4 py-4`}
                   style={{ minHeight: `${SHARED_INFO_SLOT_HEIGHT}px` }}
                 >
-                  <div className="text-[14px] font-semibold text-slate-500">
-                    乗車地
-                  </div>
+                  <div className="text-[14px] font-semibold text-slate-500">乗車地</div>
                   <div className="mt-1 text-[18px] font-bold text-slate-800">
                     {pickup || "未取得"}
                   </div>
@@ -1883,27 +1883,21 @@ function TaxiMiniApp() {
 
                   <div className="mt-3 grid grid-cols-3 gap-3">
                     <div>
-                      <div className="text-[13px] font-semibold text-slate-500">
-                        乗車時刻
-                      </div>
+                      <div className="text-[13px] font-semibold text-slate-500">乗車時刻</div>
                       <div className="mt-1 text-[17px] font-bold text-slate-800">
                         {formatTime(rideStartAt)}
                       </div>
                     </div>
 
                     <div>
-                      <div className="text-[13px] font-semibold text-slate-500">
-                        人数
-                      </div>
+                      <div className="text-[13px] font-semibold text-slate-500">人数</div>
                       <div className="mt-1 text-[17px] font-bold text-slate-800">
                         {selectedPassengers ? `${selectedPassengers}人` : ""}
                       </div>
                     </div>
 
                     <div className="text-right">
-                      <div className="text-[13px] font-semibold text-slate-500">
-                        経過時間
-                      </div>
+                      <div className="text-[13px] font-semibold text-slate-500">経過時間</div>
                       <div className="mt-1 text-[17px] font-bold text-slate-800">
                         {elapsedText}
                       </div>
@@ -1940,9 +1934,7 @@ function TaxiMiniApp() {
                     </div>
                   </div>
 
-                  <div className="pt-1 text-[20px] font-bold text-slate-400 shrink-0">
-                    →
-                  </div>
+                  <div className="pt-1 text-[20px] font-bold text-slate-400 shrink-0">→</div>
 
                   <div className="flex-1 min-w-0 text-right">
                     <div className="text-[24px] font-bold text-slate-800 leading-none">
@@ -1970,7 +1962,7 @@ function TaxiMiniApp() {
                     value={formattedAmount}
                     onChange={handleAmountChange}
                     placeholder="0"
-                    className={`w-full rounded-[24px] border border-white/60 bg-white pl-12 pr-4 py-4 text-4xl font-bold text-slate-800 outline-none shadow-[0_8px_16px_rgba(0,0,0,0.10)] focus:border-sky-300`}
+                    className="w-full rounded-[24px] border border-white/60 bg-white pl-12 pr-4 py-4 text-4xl font-bold text-slate-800 outline-none shadow-[0_8px_16px_rgba(0,0,0,0.10)] focus:border-sky-300"
                   />
                 </div>
               </div>
@@ -1983,11 +1975,11 @@ function TaxiMiniApp() {
                       const enabled = count <= 4;
                       const isSelected = selectedPassengers === count;
                       const bg = enabled
-                        ? (selectedPassengers === null
-                            ? PASSENGER_ACTIVE
-                            : isSelected
-                              ? PASSENGER_ACTIVE
-                              : PASSENGER_INACTIVE)
+                        ? selectedPassengers === null
+                          ? PASSENGER_ACTIVE
+                          : isSelected
+                          ? PASSENGER_ACTIVE
+                          : PASSENGER_INACTIVE
                         : "transparent";
 
                       const textColor = enabled ? "text-slate-800" : "text-transparent";
