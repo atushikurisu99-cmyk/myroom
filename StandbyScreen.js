@@ -19,13 +19,17 @@ window.AppScreens.StandbyScreen = (() => {
       isStandbySheetOpened,
     } = props;
 
-    const REVEAL_TOP = 92;
-    const REVEAL_PANEL_HEIGHT = 154;
-    const TRIANGLE_BOTTOM = 152;
+    const REVEAL_TOP = 94;
+    const REVEAL_PANEL_HEIGHT = 150;
+    const TRIANGLE_CLOSED_BOTTOM = 206;
+    const TRIANGLE_OPENED_BOTTOM = 238;
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-        <div className="pt-4 shrink-0" style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}>
+        <div
+          className="pt-4 shrink-0"
+          style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
+        >
           <button
             type="button"
             onClick={handleStartRide}
@@ -76,7 +80,7 @@ window.AppScreens.StandbyScreen = (() => {
           {!isFinishVisible && (
             <div
               className="absolute inset-x-0 z-40 flex justify-center"
-              style={{ bottom: `${TRIANGLE_BOTTOM}px` }}
+              style={{ bottom: `${TRIANGLE_CLOSED_BOTTOM}px` }}
             >
               <button
                 type="button"
@@ -94,7 +98,7 @@ window.AppScreens.StandbyScreen = (() => {
           {isFinishVisible && (
             <div
               className="absolute inset-x-0 z-40 flex justify-center"
-              style={{ bottom: `${TRIANGLE_BOTTOM + 8}px` }}
+              style={{ bottom: `${TRIANGLE_OPENED_BOTTOM}px` }}
             >
               <button
                 type="button"
