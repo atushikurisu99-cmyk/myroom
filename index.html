@@ -51,151 +51,23 @@
       appearance: none;
       -webkit-appearance: none;
     }
-
-    .boot-error {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      text-align: left;
-      color: #334155;
-      background: #eef3f9;
-      font-size: 14px;
-      line-height: 1.6;
-      white-space: pre-wrap;
-    }
   </style>
 </head>
 <body>
   <div id="root"></div>
 
-  <script>
-    window.__bootLog = [];
+  <script type="text/babel" data-presets="env,react" src="./constants.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./utils.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./geo.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./components.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./useTaxiAppState.js"></script>
 
-    function logBoot(msg) {
-      window.__bootLog.push(msg);
-      console.log(msg);
-    }
+  <script type="text/babel" data-presets="env,react" src="./トップスクリーン.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./StandbyScreen.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./RideScreen.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./運賃スクリーン.js"></script>
+  <script type="text/babel" data-presets="env,react" src="./HistoryModal.js"></script>
 
-    function showBootError(title, extra) {
-      const root = document.getElementById("root");
-      root.innerHTML =
-        '<div class="boot-error"><div><strong>' +
-        title +
-        '</strong><br><br>' +
-        (extra || '') +
-        '<br><br>--- boot log ---<br>' +
-        window.__bootLog.join('<br>') +
-        '</div></div>';
-    }
-
-    async function urlExists(url) {
-      try {
-        const res = await fetch(url, { method: "GET", cache: "no-store" });
-        return res.ok;
-      } catch (e) {
-        return false;
-      }
-    }
-
-    async function loadScriptCandidates(candidates) {
-      for (const path of candidates) {
-        logBoot("check: " + path);
-        const ok = await urlExists(path);
-        if (!ok) continue;
-
-        await new Promise((resolve, reject) => {
-          const s = document.createElement("script");
-          s.type = "text/babel";
-          s.setAttribute("data-presets", "env,react");
-          s.src = path + (path.includes("?") ? "&" : "?") + "v=" + Date.now();
-          s.onload = () => {
-            logBoot("loaded: " + path);
-            resolve();
-          };
-          s.onerror = () => reject(new Error("load failed: " + path));
-          document.body.appendChild(s);
-        });
-
-        return path;
-      }
-
-      throw new Error("not found: " + candidates.join(" | "));
-    }
-
-    async function boot() {
-      try {
-        const groups = [
-          [
-            "./constants.js",
-            "./app/constants.js"
-          ],
-          [
-            "./utils.js",
-            "./app/utils.js"
-          ],
-          [
-            "./geo.js",
-            "./app/geo.js"
-          ],
-          [
-            "./components.js",
-            "./app/components.js"
-          ],
-          [
-            "./useTaxiAppState.js",
-            "./hooks/useTaxiAppState.js",
-            "./app/hooks/useTaxiAppState.js"
-          ],
-          [
-            "./TopScreen.js",
-            "./トップスクリーン.js",
-            "./screens/TopScreen.js",
-            "./app/screens/TopScreen.js"
-          ],
-          [
-            "./StandbyScreen.js",
-            "./screens/StandbyScreen.js",
-            "./app/screens/StandbyScreen.js"
-          ],
-          [
-            "./RideScreen.js",
-            "./screens/RideScreen.js",
-            "./app/screens/RideScreen.js"
-          ],
-          [
-            "./FareScreen.js",
-            "./運賃スクリーン.js",
-            "./screens/FareScreen.js",
-            "./app/screens/FareScreen.js"
-          ],
-          [
-            "./HistoryModal.js",
-            "./screens/HistoryModal.js",
-            "./app/screens/HistoryModal.js"
-          ],
-          [
-            "./TaxiMiniApp.js",
-            "./app/TaxiMiniApp.js"
-          ]
-        ];
-
-        for (const group of groups) {
-          await loadScriptCandidates(group);
-        }
-
-        logBoot("boot complete");
-      } catch (e) {
-        console.error(e);
-        showBootError(
-          "読み込みエラー",
-          "どれかの js ファイル名か置き場所が一致していません。"
-        );
-      }
-    }
-
-    boot();
-  </script>
+  <script type="text/babel" data-presets="env,react" src="./TaxiMiniApp.js"></script>
 </body>
 </html>
