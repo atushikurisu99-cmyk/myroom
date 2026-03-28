@@ -19,9 +19,9 @@ window.AppScreens.StandbyScreen = (() => {
       isStandbySheetOpened,
     } = props;
 
-    const REVEAL_TOP = 72;
-    const REVEAL_PANEL_HEIGHT = 126;
-    const HANDLE_BOTTOM = 124;
+    const REVEAL_TOP = 92;
+    const REVEAL_PANEL_HEIGHT = 154;
+    const TRIANGLE_BOTTOM = 152;
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
@@ -39,30 +39,29 @@ window.AppScreens.StandbyScreen = (() => {
 
         <div className="flex-1 min-h-0 relative overflow-hidden">
           <div
-            className="absolute inset-x-0 z-10 px-1"
+            className="absolute inset-x-0 z-50 px-2"
             style={{
               top: `${REVEAL_TOP}px`,
               height: `${REVEAL_PANEL_HEIGHT}px`,
+              pointerEvents: isFinishVisible ? "auto" : "none",
             }}
           >
-            <div className="h-full rounded-[30px] bg-[#eef3f9] border border-white/75 shadow-[inset_0_1px_0_rgba(255,255,255,0.92)] px-2 py-3">
-              <div className="w-full h-full rounded-[26px] bg-[linear-gradient(180deg,#edf2f8,#e6edf5)] flex items-center justify-center px-2">
-                <button
-                  type="button"
-                  onClick={handleFinishTap}
-                  disabled={!isFinishVisible}
-                  className={`${C.endDutyButtonClass} transition-opacity duration-150 ${
-                    isFinishVisible ? "opacity-100" : "opacity-0 pointer-events-none"
-                  }`}
-                  style={{ width: "100%" }}
-                >
-                  乗務終了
-                </button>
-              </div>
+            <div className="h-full rounded-[28px] bg-[#eef3f9] border border-white/80 shadow-[0_8px_16px_rgba(0,0,0,0.08)] px-3 py-3">
+              <button
+                type="button"
+                onClick={handleFinishTap}
+                disabled={!isFinishVisible}
+                className={`${C.endDutyButtonClass} h-full transition-opacity duration-150 ${
+                  isFinishVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+                }`}
+                style={{ width: "100%" }}
+              >
+                乗務終了
+              </button>
             </div>
           </div>
 
-          <div className="absolute inset-x-0 top-0 z-30">
+          <div className="absolute inset-x-0 top-0 z-20">
             <BottomCard
               movable={true}
               standbySheetOffset={standbySheetOffset}
@@ -74,27 +73,39 @@ window.AppScreens.StandbyScreen = (() => {
             />
           </div>
 
-          <div
-            className="absolute inset-x-0 z-40 flex justify-center"
-            style={{ bottom: `${HANDLE_BOTTOM}px` }}
-          >
-            <button
-              type="button"
-              onClick={toggleStandbySheet}
-              onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
-              onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-              className="w-[54px] h-[54px] rounded-full bg-white/80 border border-white/80 shadow-[0_8px_16px_rgba(0,0,0,0.10)] flex items-center justify-center active:scale-[0.96]"
-              aria-label={isStandbySheetOpened ? "閉じる" : "開く"}
+          {!isFinishVisible && (
+            <div
+              className="absolute inset-x-0 z-40 flex justify-center"
+              style={{ bottom: `${TRIANGLE_BOTTOM}px` }}
             >
-              <span
-                className={
-                  isStandbySheetOpened
-                    ? "block w-0 h-0 border-l-[10px] border-r-[10px] border-b-[14px] border-l-transparent border-r-transparent border-b-slate-400"
-                    : "block w-0 h-0 border-l-[10px] border-r-[10px] border-t-[14px] border-l-transparent border-r-transparent border-t-slate-400"
-                }
-              />
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={toggleStandbySheet}
+                onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
+                onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
+                className="flex items-center justify-center px-4 py-3 active:opacity-70"
+                aria-label="開く"
+              >
+                <span className="block w-0 h-0 border-l-[12px] border-r-[12px] border-t-[16px] border-l-transparent border-r-transparent border-t-slate-400" />
+              </button>
+            </div>
+          )}
+
+          {isFinishVisible && (
+            <div
+              className="absolute inset-x-0 z-40 flex justify-center"
+              style={{ bottom: `${TRIANGLE_BOTTOM + 8}px` }}
+            >
+              <button
+                type="button"
+                onClick={toggleStandbySheet}
+                className="flex items-center justify-center px-4 py-3 active:opacity-70"
+                aria-label="閉じる"
+              >
+                <span className="block w-0 h-0 border-l-[12px] border-r-[12px] border-b-[16px] border-l-transparent border-r-transparent border-b-slate-400" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     );
