@@ -19,9 +19,10 @@ window.AppScreens.StandbyScreen = (() => {
       isStandbySheetOpened,
     } = props;
 
-    const REVEAL_TOP = 126;
-    const REVEAL_PANEL_HEIGHT = 228;
-    const HANDLE_BOTTOM = 18;
+    // ここは constants.js に頼らず、この画面内で固定
+    const REVEAL_TOP = 110;
+    const REVEAL_PANEL_HEIGHT = 170;
+    const HANDLE_BOTTOM = 88;
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
@@ -38,17 +39,23 @@ window.AppScreens.StandbyScreen = (() => {
         {renderSharedInfoSpacer()}
 
         <div className="flex-1 min-h-0 relative overflow-hidden">
+          {/* 乗務終了エリア */}
           <div
-            className="absolute inset-x-0 z-10"
-            style={{ top: `${REVEAL_TOP}px`, height: `${REVEAL_PANEL_HEIGHT}px` }}
+            className="absolute inset-x-0 z-10 px-1"
+            style={{
+              top: `${REVEAL_TOP}px`,
+              height: `${REVEAL_PANEL_HEIGHT}px`,
+            }}
           >
-            <div className="h-full rounded-[30px] bg-[#eef3f9] border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] px-2 pt-3">
+            <div className="h-full rounded-[30px] bg-[#eef3f9] border border-white/75 shadow-[inset_0_1px_0_rgba(255,255,255,0.92)] px-2 pt-3 pb-3">
               <div className="w-full h-full rounded-[26px] bg-[linear-gradient(180deg,#edf2f8,#e6edf5)] flex items-center justify-center px-2">
                 <button
                   type="button"
                   onClick={handleFinishTap}
                   disabled={!isFinishVisible}
-                  className={`max-w-[100%] ${C.endDutyButtonClass} ${isFinishVisible ? "opacity-100" : "opacity-0"}`}
+                  className={`${C.endDutyButtonClass} transition-opacity duration-150 ${
+                    isFinishVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+                  }`}
                   style={{ width: "100%" }}
                 >
                   乗務終了
@@ -57,6 +64,7 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           </div>
 
+          {/* その他カード */}
           <div className="absolute inset-x-0 top-0 z-30">
             <BottomCard
               movable={true}
@@ -69,6 +77,7 @@ window.AppScreens.StandbyScreen = (() => {
             />
           </div>
 
+          {/* ハンドルは固定位置 */}
           <div
             className="absolute inset-x-0 z-40 flex justify-center"
             style={{ bottom: `${HANDLE_BOTTOM}px` }}
