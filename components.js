@@ -98,7 +98,6 @@ window.AppComponents = (() => {
       movable = false,
       standbySheetOffset = 0,
       dragging = false,
-      isFinishVisible = false,
       openOtherSheet,
       openHistoryModal,
       previewRecords,
@@ -108,8 +107,6 @@ window.AppComponents = (() => {
       ? {
           transform: `translateY(${standbySheetOffset}px)`,
           transition: dragging ? "none" : "transform 180ms ease-out",
-          pointerEvents: isFinishVisible ? "none" : "auto",
-          visibility: isFinishVisible ? "hidden" : "visible",
         }
       : {};
 
