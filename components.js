@@ -96,30 +96,19 @@ window.AppComponents = (() => {
     openHistoryModal,
     previewRecords,
   }) {
-    const opened = movable && isFinishVisible;
-
     const wrapperStyle = movable
       ? {
           transform: `translateY(${standbySheetOffset}px)`,
           transition: dragging ? "none" : "transform 180ms ease-out",
-          pointerEvents: opened ? "none" : "auto",
-        }
-      : {};
-
-    const cardStyle = movable
-      ? {
-          opacity: opened ? 0 : 1,
-          transition: dragging ? "none" : "opacity 120ms ease-out",
+          pointerEvents: isFinishVisible ? "none" : "auto",
+          visibility: isFinishVisible ? "hidden" : "visible",
         }
       : {};
 
     return (
       <div className="shrink-0" style={wrapperStyle}>
         <div style={{ height: `${BOTTOM_CARD_HEIGHT}px` }}>
-          <div
-            className={`${cardClass} h-full overflow-hidden flex flex-col`}
-            style={cardStyle}
-          >
+          <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
             <button
               type="button"
               onClick={openOtherSheet}
