@@ -82,7 +82,7 @@
 
       const [showPaymentDialog, setShowPaymentDialog] = useState(false);
       const [pendingPaymentType, setPendingPaymentType] = useState(null);
-      const [paymentCountdown, setPaymentCountdown] = useState(2);
+      const [paymentCountdown, setPaymentCountdown] = useState(2.5);
       const [savingDots, setSavingDots] = useState(4);
 
       const [showViaDialog, setShowViaDialog] = useState(false);
@@ -127,6 +127,7 @@
       const BOTTOM_CARD_HEIGHT = 220;
       const STANDBY_OTHER_MOVE_RANGE = 180;
       const STANDBY_FINISH_TOP = 96;
+      const FINISH_ENABLE_OFFSET = 120;
 
       const PASSENGER_ACTIVE = "#e3e548";
       const PASSENGER_INACTIVE = "#cfd6df";
@@ -178,6 +179,8 @@
       }, [screen]);
 
       const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+      const isFinishVisible = standbySheetOffset > FINISH_ENABLE_OFFSET;
 
       const vibrateTap = () => {
         if (navigator.vibrate) navigator.vibrate(18);
@@ -825,6 +828,7 @@
       };
 
       const handleFinishTap = () => {
+        if (!isFinishVisible) return;
         setShowFinishDialog(true);
       };
 
@@ -965,7 +969,7 @@
         setShowPaymentDialog(false);
         setPendingPaymentType(null);
         paymentTypeRef.current = null;
-        setPaymentCountdown(2);
+        setPaymentCountdown(2.5);
         setSavingDots(4);
 
         setRecords((prev) => [newRecord, ...prev]);
@@ -1003,14 +1007,14 @@
 
         setPendingPaymentType(type);
         paymentTypeRef.current = type;
-        setPaymentCountdown(2);
+        setPaymentCountdown(2.5);
         setSavingDots(4);
         setShowPaymentDialog(true);
 
         paymentCountdownRef.current = setInterval(() => {
           setPaymentCountdown((prev) => {
-            if (prev <= 0.5) return 0;
-            return Number((prev - 0.5).toFixed(1));
+            const next = prev - 0.5;
+            return next <= 0 ? 0 : next;
           });
 
           setSavingDots((prev) => {
@@ -1021,7 +1025,7 @@
 
         paymentTimerRef.current = setTimeout(() => {
           confirmPaymentSave(type);
-        }, 2000);
+        }, 2500);
       };
 
       const cancelPaymentDialog = () => {
@@ -1029,7 +1033,7 @@
         clearPaymentCountdown();
         setPendingPaymentType(null);
         paymentTypeRef.current = null;
-        setPaymentCountdown(2);
+        setPaymentCountdown(2.5);
         setSavingDots(4);
       };
 
@@ -1200,14 +1204,15 @@
           ? {
               transform: `translateY(${standbySheetOffset}px)`,
               transition: sheetDragRef.current.dragging ? "none" : "transform 180ms ease-out",
+              pointerEvents: isFinishVisible ? "none" : "auto",
             }
           : {};
 
         return (
-          <div className="shrink-0 pointer-events-none" style={translateStyle}>
+          <div className="shrink-0" style={translateStyle}>
             {showHandle && (
               <div
-                className="text-center pb-2 select-none pointer-events-auto"
+                className="text-center pb-2 select-none"
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
               >
@@ -1217,7 +1222,7 @@
               </div>
             )}
 
-            <div style={{ height: `${BOTTOM_CARD_HEIGHT}px` }} className="pointer-events-auto">
+            <div style={{ height: `${BOTTOM_CARD_HEIGHT}px` }}>
               <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
                 <button
                   type="button"
@@ -1325,7 +1330,9 @@
                   </div>
 
                   <div className="mt-5 text-[18px] font-bold text-slate-800">
-                    {savingDots > 0 ? `自動保存中${"・".repeat(savingDots)}` : "保存中"}
+                    {paymentCountdown > 0.5
+                      ? `自動保存中${"・".repeat(Math.max(0, savingDots))}`
+                      : "保存中"}
                   </div>
 
                   <div className="mt-3 text-sm text-slate-500">
@@ -1874,11 +1881,15 @@
                   {renderSharedInfoSpacer()}
 
                   <div className="flex-1 min-h-0 relative overflow-hidden">
-                    <div className="absolute inset-x-0 z-0 px-1" style={{ top: `${STANDBY_FINISH_TOP}px` }}>
+                    <div
+                      className="absolute inset-x-0 z-10 px-1"
+                      style={{ top: `${STANDBY_FINISH_TOP}px` }}
+                    >
                       <button
                         type="button"
                         onClick={handleFinishTap}
-                        className={endDutyButtonClass}
+                        disabled={!isFinishVisible}
+                        className={`${endDutyButtonClass} ${isFinishVisible ? "" : "opacity-40"}`}
                       >
                         乗務終了
                       </button>
