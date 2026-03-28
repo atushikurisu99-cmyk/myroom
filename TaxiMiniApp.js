@@ -66,9 +66,9 @@ function TaxiMiniApp() {
   const SHARED_INFO_SLOT_HEIGHT = 116;
   const MAIN_BUTTON_SLOT_HEIGHT = 148;
   const BOTTOM_CARD_HEIGHT = 220;
-  const STANDBY_OTHER_MOVE_RANGE = 182;
+  const STANDBY_OTHER_MOVE_RANGE = 184;
   const STANDBY_FINISH_TOP = 96;
-  const FINISH_ENABLE_OFFSET = 110;
+  const FINISH_ENABLE_OFFSET = 108;
 
   const PASSENGER_ACTIVE = "#e3e548";
   const PASSENGER_INACTIVE = "#cfd6df";
@@ -1148,23 +1148,18 @@ function TaxiMiniApp() {
   };
 
   const renderBottomCard = ({ movable = false, showHandle = false } = {}) => {
-    const translateStyle = movable
-      ? {
-          transform: `translateY(${standbySheetOffset}px)`,
-          transition: sheetDragRef.current.dragging ? "none" : "transform 180ms ease-out",
-        }
-      : {};
+    const cardOnlyPointer = movable && isFinishVisible ? "none" : "auto";
 
     return (
-      <div
-        className="shrink-0"
-        style={{
-          ...translateStyle,
-          zIndex: movable && isStandbySheetOpened ? 10 : 20,
-        }}
-      >
+      <div className="shrink-0">
         {showHandle && (
-          <div className="pb-2 select-none">
+          <div
+            style={{
+              transform: `translateY(${standbySheetOffset}px)`,
+              transition: sheetDragRef.current.dragging ? "none" : "transform 180ms ease-out",
+            }}
+            className="pb-2 select-none relative z-30"
+          >
             <button
               type="button"
               onClick={toggleStandbySheet}
@@ -1180,7 +1175,15 @@ function TaxiMiniApp() {
           </div>
         )}
 
-        <div style={{ height: `${BOTTOM_CARD_HEIGHT}px` }}>
+        <div
+          style={{
+            height: `${BOTTOM_CARD_HEIGHT}px`,
+            transform: movable ? `translateY(${standbySheetOffset}px)` : "none",
+            transition: movable && sheetDragRef.current.dragging ? "none" : movable ? "transform 180ms ease-out" : "none",
+            pointerEvents: cardOnlyPointer,
+          }}
+          className={movable ? "relative z-20" : ""}
+        >
           <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
             <button
               type="button"
@@ -1446,6 +1449,7 @@ function TaxiMiniApp() {
                           className="h-[42px] rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 text-lg font-bold"
                         >
                           →
+
                         </button>
                       </div>
 
@@ -1840,7 +1844,7 @@ function TaxiMiniApp() {
 
               <div className="flex-1 min-h-0 relative overflow-hidden">
                 <div
-                  className="absolute inset-x-0 px-1 z-20"
+                  className="absolute inset-x-0 px-1 z-40"
                   style={{ top: `${STANDBY_FINISH_TOP}px` }}
                 >
                   <button
