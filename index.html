@@ -82,7 +82,8 @@
 
       const [showPaymentDialog, setShowPaymentDialog] = useState(false);
       const [pendingPaymentType, setPendingPaymentType] = useState(null);
-      const [paymentCountdown, setPaymentCountdown] = useState(3);
+      const [paymentCountdown, setPaymentCountdown] = useState(2);
+      const [savingDots, setSavingDots] = useState(4);
 
       const [showViaDialog, setShowViaDialog] = useState(false);
       const [pendingViaPlace, setPendingViaPlace] = useState("");
@@ -302,6 +303,12 @@
         return `${d.getMonth() + 1}/${d.getDate()}（${week}）`;
       };
 
+      const formatDutyDate = (dateValue) => {
+        if (!dateValue) return "";
+        const d = new Date(dateValue);
+        return `${d.getMonth() + 1}月${d.getDate()}日`;
+      };
+
       const formatMonthText = (dateValue) => {
         const d = new Date(dateValue);
         return `${d.getFullYear()}/${d.getMonth() + 1}`;
@@ -484,7 +491,6 @@
 
             if (accuracy <= goodEnoughAccuracy) break;
           } catch {
-            // 続行
           }
 
           if (i < tryCount - 1) {
@@ -934,7 +940,7 @@
 
         const newRecord = {
           id: Date.now(),
-          乗務日: workDate || new Date(),
+          乗務日: workDate,
           乗車時刻: rideStartAt,
           降車時刻: rideEndAt,
           乗車地: pickup.trim() || "未取得",
@@ -959,7 +965,8 @@
         setShowPaymentDialog(false);
         setPendingPaymentType(null);
         paymentTypeRef.current = null;
-        setPaymentCountdown(3);
+        setPaymentCountdown(2);
+        setSavingDots(4);
 
         setRecords((prev) => [newRecord, ...prev]);
 
@@ -996,19 +1003,25 @@
 
         setPendingPaymentType(type);
         paymentTypeRef.current = type;
-        setPaymentCountdown(3);
+        setPaymentCountdown(2);
+        setSavingDots(4);
         setShowPaymentDialog(true);
 
         paymentCountdownRef.current = setInterval(() => {
           setPaymentCountdown((prev) => {
-            if (prev <= 1) return 1;
+            if (prev <= 0.5) return 0;
+            return Number((prev - 0.5).toFixed(1));
+          });
+
+          setSavingDots((prev) => {
+            if (prev <= 0) return 0;
             return prev - 1;
           });
-        }, 1000);
+        }, 500);
 
         paymentTimerRef.current = setTimeout(() => {
           confirmPaymentSave(type);
-        }, 3000);
+        }, 2000);
       };
 
       const cancelPaymentDialog = () => {
@@ -1016,7 +1029,8 @@
         clearPaymentCountdown();
         setPendingPaymentType(null);
         paymentTypeRef.current = null;
-        setPaymentCountdown(3);
+        setPaymentCountdown(2);
+        setSavingDots(4);
       };
 
       const recordVia = () => {
@@ -1311,10 +1325,10 @@
                   </div>
 
                   <div className="mt-5 text-[18px] font-bold text-slate-800">
-                    この内容で{paymentCountdown}秒後に記録します。
+                    {savingDots > 0 ? `自動保存中${"・".repeat(savingDots)}` : "保存中"}
                   </div>
 
-                  <div className="mt-2 text-sm text-slate-500">
+                  <div className="mt-3 text-sm text-slate-500">
                     乗車位置精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}
                     <br />
                     降車位置精度：{dropoffMeta?.accuracy != null ? `${dropoffMeta.accuracy}m` : "--"}
@@ -1367,10 +1381,10 @@
               <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
                 <div className="w-full rounded-[28px] bg-white shadow-2xl p-5">
                   <div className="text-[20px] font-bold text-slate-800">
-                    乗務を終了しますか？
+                    {formatDutyDate(workDate)}の乗務を終了しますか？
                   </div>
                   <div className="mt-4 grid gap-2 text-sm text-slate-600">
-                    <div>本日の件数：{recordCount}件</div>
+                    <div>乗車回数：{recordCount}回</div>
                     <div>売上合計：{formatMoney(totalAmount)}</div>
                   </div>
 
@@ -1860,7 +1874,7 @@
                   {renderSharedInfoSpacer()}
 
                   <div className="flex-1 min-h-0 relative overflow-hidden">
-                    <div className="absolute inset-x-0 z-30 px-1" style={{ top: `${STANDBY_FINISH_TOP}px` }}>
+                    <div className="absolute inset-x-0 z-0 px-1" style={{ top: `${STANDBY_FINISH_TOP}px` }}>
                       <button
                         type="button"
                         onClick={handleFinishTap}
@@ -1890,7 +1904,6 @@
                       <div className="mt-1 text-[18px] font-bold text-slate-800">
                         {pickup || "未取得"}
                       </div>
-
                       <div className="mt-1 text-[11px] text-slate-400">
                         精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}
                       </div>
