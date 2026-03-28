@@ -24,6 +24,8 @@ window.AppScreens.StandbyScreen = (() => {
     const TRIANGLE_CLOSED_BOTTOM = 206;
     const TRIANGLE_OPENED_BOTTOM = 238;
 
+    const finishShown = !!isStandbySheetOpened || !!isFinishVisible;
+
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
         <div
@@ -47,16 +49,16 @@ window.AppScreens.StandbyScreen = (() => {
             style={{
               top: `${REVEAL_TOP}px`,
               height: `${REVEAL_PANEL_HEIGHT}px`,
-              pointerEvents: isFinishVisible ? "auto" : "none",
+              pointerEvents: finishShown ? "auto" : "none",
             }}
           >
             <div className="h-full rounded-[28px] bg-[#eef3f9] border border-white/80 shadow-[0_8px_16px_rgba(0,0,0,0.08)] px-3 py-3">
               <button
                 type="button"
                 onClick={handleFinishTap}
-                disabled={!isFinishVisible}
+                disabled={!finishShown}
                 className={`${C.endDutyButtonClass} h-full transition-opacity duration-150 ${
-                  isFinishVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+                  finishShown ? "opacity-100" : "opacity-0 pointer-events-none"
                 }`}
                 style={{ width: "100%" }}
               >
@@ -70,14 +72,14 @@ window.AppScreens.StandbyScreen = (() => {
               movable={true}
               standbySheetOffset={standbySheetOffset}
               dragging={dragging}
-              isFinishVisible={isFinishVisible}
+              isFinishVisible={finishShown}
               openOtherSheet={openOtherSheet}
               openHistoryModal={openHistoryModal}
               previewRecords={previewRecords}
             />
           </div>
 
-          {!isFinishVisible && (
+          {!finishShown && (
             <div
               className="absolute inset-x-0 z-40 flex justify-center"
               style={{ bottom: `${TRIANGLE_CLOSED_BOTTOM}px` }}
@@ -95,7 +97,7 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           )}
 
-          {isFinishVisible && (
+          {finishShown && (
             <div
               className="absolute inset-x-0 z-40 flex justify-center"
               style={{ bottom: `${TRIANGLE_OPENED_BOTTOM}px` }}
@@ -103,6 +105,8 @@ window.AppScreens.StandbyScreen = (() => {
               <button
                 type="button"
                 onClick={toggleStandbySheet}
+                onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
+                onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
                 className="flex items-center justify-center px-4 py-3 active:opacity-70"
                 aria-label="閉じる"
               >
