@@ -20,6 +20,19 @@ window.AppScreens.FareScreen = (() => {
       openPaymentDialog,
     } = props;
 
+    const hasPassengerSelected = selectedPassengers !== null;
+    const paymentButtonHeight = hasPassengerSelected ? "h-[68px]" : "h-[54px]";
+    const paymentButtonText = hasPassengerSelected
+      ? "text-[24px] font-extrabold"
+      : "text-xl font-extrabold";
+
+    const onSelectPassenger = (count) => {
+      handlePassengerSelect(count);
+      try {
+        amountInputRef?.current?.blur?.();
+      } catch (_) {}
+    };
+
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden pt-4">
         <div className={`${C.cardClass} h-[122px] px-4 py-4 shrink-0`}>
@@ -54,9 +67,10 @@ window.AppScreens.FareScreen = (() => {
 
         <div className="pt-4 shrink-0">
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-slate-400">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[34px] font-bold text-slate-400">
               ¥
             </span>
+
             <input
               ref={amountInputRef}
               type="text"
@@ -64,69 +78,83 @@ window.AppScreens.FareScreen = (() => {
               value={formattedAmount}
               onChange={handleAmountChange}
               placeholder="0"
-              className="w-full rounded-[24px] border border-white/60 bg-white pl-12 pr-4 py-4 text-4xl font-bold text-slate-800 outline-none shadow-[0_8px_16px_rgba(0,0,0,0.10)] focus:border-sky-300"
+              className="w-full rounded-[24px] border border-[#7fcbff] bg-white pl-12 pr-[126px] h-[92px] text-[54px] leading-none font-bold text-slate-800 outline-none shadow-[0_8px_16px_rgba(0,0,0,0.10)] focus:border-sky-300"
             />
+
+            {hasPassengerSelected && (
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-end gap-1.5 text-slate-800">
+                <span className="text-[13px] leading-none font-semibold text-slate-500 pb-[6px]">
+                  乗車人員
+                </span>
+                <span className="text-[34px] leading-none font-black tracking-[-0.04em]">
+                  {selectedPassengers}
+                </span>
+                <span className="text-[18px] leading-none font-bold pb-[5px]">
+                  名
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="pt-4 flex-1 min-h-0 overflow-y-auto">
-          <div className="grid gap-3 pb-2">
-            <div className="grid grid-cols-6 gap-2">
-              {Array.from({ length: passengerDisplayCount }).map((_, index) => {
+        {!hasPassengerSelected && (
+          <div className="pt-4 shrink-0">
+            <div className="grid grid-cols-4 gap-4">
+              {Array.from({ length: Math.min(passengerDisplayCount, 4) }).map((_, index) => {
                 const count = index + 1;
-                const enabled = count <= 4;
-                const isSelected = selectedPassengers === count;
-
-                const bg = enabled
-                  ? selectedPassengers === null
-                    ? C.PASSENGER_ACTIVE
-                    : isSelected
-                    ? C.PASSENGER_ACTIVE
-                    : C.PASSENGER_INACTIVE
-                  : "transparent";
-
-                const textColor = enabled ? "text-slate-800" : "text-transparent";
-
                 return (
                   <button
                     key={count}
                     type="button"
-                    onClick={() => enabled && handlePassengerSelect(count)}
-                    className={`h-[46px] rounded-2xl border font-bold text-lg ${textColor}`}
-                    style={{ background: bg, borderColor: enabled ? "#c9ced6" : "transparent" }}
+                    onClick={() => onSelectPassenger(count)}
+                    className="h-[62px] rounded-[20px] border font-extrabold text-[22px] text-slate-800 shadow-[0_6px_12px_rgba(0,0,0,0.10)] active:scale-[0.985]"
+                    style={{
+                      background: C.PASSENGER_ACTIVE,
+                      borderColor: "#c9ced6",
+                    }}
                   >
-                    {enabled ? count : ""}
+                    {count}
                   </button>
                 );
               })}
             </div>
+          </div>
+        )}
 
+        <div className="pt-4 flex-1 min-h-0">
+          <div className="grid gap-3">
             <button
               type="button"
-              disabled={selectedPassengers === null}
+              disabled={!hasPassengerSelected}
               onClick={() => openPaymentDialog("cash")}
-              className={`${C.smallButtonBase} text-slate-900 text-xl font-extrabold disabled:opacity-100`}
-              style={{ background: selectedPassengers === null ? C.PAYMENT_DISABLED : C.PAYMENT_CASH }}
+              className={`${C.smallButtonBase} ${paymentButtonHeight} ${paymentButtonText} text-slate-900 disabled:opacity-100`}
+              style={{
+                background: hasPassengerSelected ? C.PAYMENT_CASH : C.PAYMENT_DISABLED,
+              }}
             >
               <span className="relative z-10">現金</span>
             </button>
 
             <button
               type="button"
-              disabled={selectedPassengers === null}
+              disabled={!hasPassengerSelected}
               onClick={() => openPaymentDialog("cardQr")}
-              className={`${C.smallButtonBase} text-slate-900 text-xl font-extrabold disabled:opacity-100`}
-              style={{ background: selectedPassengers === null ? C.PAYMENT_DISABLED : C.PAYMENT_CARD }}
+              className={`${C.smallButtonBase} ${paymentButtonHeight} ${paymentButtonText} text-slate-900 disabled:opacity-100`}
+              style={{
+                background: hasPassengerSelected ? C.PAYMENT_CARD : C.PAYMENT_DISABLED,
+              }}
             >
               <span className="relative z-10">カード・QR</span>
             </button>
 
             <button
               type="button"
-              disabled={selectedPassengers === null}
+              disabled={!hasPassengerSelected}
               onClick={() => openPaymentDialog("receipt")}
-              className={`${C.smallButtonBase} text-slate-900 text-xl font-extrabold disabled:opacity-100`}
-              style={{ background: selectedPassengers === null ? C.PAYMENT_DISABLED : C.PAYMENT_RECEIPT }}
+              className={`${C.smallButtonBase} ${paymentButtonHeight} ${paymentButtonText} text-slate-900 disabled:opacity-100`}
+              style={{
+                background: hasPassengerSelected ? C.PAYMENT_RECEIPT : C.PAYMENT_DISABLED,
+              }}
             >
               <span className="relative z-10">領収証発行</span>
             </button>
