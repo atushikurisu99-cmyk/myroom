@@ -61,19 +61,8 @@ window.AppHooks = (() => {
     const toastTimerRef = useRef(null);
     const clockTimerRef = useRef(null);
     const topScrollRef = useRef(null);
-    const dropTapRef = useRef({ lastTapAt: 0 });
     const paymentTypeRef = useRef(null);
-    const screenRef = useRef(screen);
-    const ridingRef = useRef(isRiding);
     const sheetDragRef = useRef({ dragging: false, startY: 0, startOffset: 0 });
-
-    useEffect(() => {
-      screenRef.current = screen;
-    }, [screen]);
-
-    useEffect(() => {
-      ridingRef.current = isRiding;
-    }, [isRiding]);
 
     useEffect(() => {
       clockTimerRef.current = setInterval(() => setNow(new Date()), 600);
@@ -522,7 +511,7 @@ window.AppHooks = (() => {
       setPickupMeta(best);
     };
 
-    const openNormalDropoff = async () => {
+    const handleDropOffTap = async () => {
       vibrateTap();
       const end = new Date();
 
@@ -535,27 +524,7 @@ window.AppHooks = (() => {
       const best = await Geo.getBestCurrentPlace();
       setDropoff(best.label || "未取得");
       setDropoffMeta(best);
-
       await applyWeatherFromMeta(best, false);
-    };
-
-    const handleDropOffTap = async () => {
-      const nowTap = Date.now();
-      const diff = nowTap - dropTapRef.current.lastTapAt;
-      dropTapRef.current.lastTapAt = nowTap;
-
-      if (diff > 0 && diff < 320) {
-        vibrateVia();
-        const best = await Geo.getBestCurrentPlace();
-        setPendingViaPlace(best.label || "未取得");
-        setShowViaDialog(true);
-        dropTapRef.current.lastTapAt = 0;
-        return;
-      }
-
-      setTimeout(() => {
-        if (dropTapRef.current.lastTapAt === nowTap) openNormalDropoff();
-      }, 340);
     };
 
     const handleAmountChange = (e) => setAmount(e.target.value.replace(/[^\d]/g, ""));
