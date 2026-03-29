@@ -12,21 +12,60 @@ function TaxiMiniApp() {
 
   const [phase, setPhase] = React.useState("logo");
   const audioRef = React.useRef(null);
+  const audioUnlockedRef = React.useRef(false);
 
   React.useEffect(() => {
     try {
       audioRef.current = new Audio("./goanzen.wav");
-      audioRef.current.volume = 0.65;
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(() => {});
+      audioRef.current.preload = "auto";
+      audioRef.current.volume = 0.75;
     } catch (_) {}
+
+    const tryPlayStartupAudio = () => {
+      if (!audioRef.current || audioUnlockedRef.current) return;
+      try {
+        audioRef.current.currentTime = 0;
+        const playPromise = audioRef.current.play();
+        if (playPromise && typeof playPromise.then === "function") {
+          playPromise
+            .then(() => {
+              audioUnlockedRef.current = true;
+            })
+            .catch(() => {});
+        } else {
+          audioUnlockedRef.current = true;
+        }
+      } catch (_) {}
+    };
+
+    tryPlayStartupAudio();
+
+    const unlockOnFirstGesture = () => {
+      if (!audioRef.current || audioUnlockedRef.current) return;
+      try {
+        audioRef.current.currentTime = 0;
+        const playPromise = audioRef.current.play();
+        if (playPromise && typeof playPromise.then === "function") {
+          playPromise
+            .then(() => {
+              audioUnlockedRef.current = true;
+            })
+            .catch(() => {});
+        } else {
+          audioUnlockedRef.current = true;
+        }
+      } catch (_) {}
+    };
+
+    window.addEventListener("pointerdown", unlockOnFirstGesture, { passive: true });
+    window.addEventListener("touchstart", unlockOnFirstGesture, { passive: true });
 
     const t1 = setTimeout(() => setPhase("logoFade"), 1500);
     const t2 = setTimeout(() => setPhase("blank"), 2000);
     const t3 = setTimeout(() => setPhase("card"), 2500);
-    const t4 = setTimeout(() => setPhase("button"), 2880);
-    const t5 = setTimeout(() => setPhase("other"), 3230);
-    const t6 = setTimeout(() => setPhase("app"), 3580);
+    const t4 = setTimeout(() => setPhase("button"), 3720);
+    const t5 = setTimeout(() => setPhase("other"), 3920);
+    const t6 = setTimeout(() => setPhase("app"), 4820);
 
     return () => {
       clearTimeout(t1);
@@ -35,6 +74,8 @@ function TaxiMiniApp() {
       clearTimeout(t4);
       clearTimeout(t5);
       clearTimeout(t6);
+      window.removeEventListener("pointerdown", unlockOnFirstGesture);
+      window.removeEventListener("touchstart", unlockOnFirstGesture);
     };
   }, []);
 
@@ -107,12 +148,12 @@ function TaxiMiniApp() {
 
       {(phase === "card" || phase === "button" || phase === "other") && (
         <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
-          <div className="h-full flex flex-col overflow-hidden">
+          <div className="h-full flex flex-col overflow-hidden relative">
             <div
-              className={`relative z-30 transition-all duration-[360ms] ease-out ${
+              className={`relative z-30 transition-all duration-[720ms] ease-out ${
                 phase === "card" || phase === "button" || phase === "other"
                   ? "translate-x-0 opacity-100"
-                  : "-translate-x-10 opacity-0"
+                  : "-translate-x-[120px] opacity-0"
               }`}
             >
               {renderClockCard()}
@@ -120,10 +161,10 @@ function TaxiMiniApp() {
 
             {(phase === "button" || phase === "other") && (
               <div
-                className={`pt-4 relative z-20 transition-all duration-[330ms] ease-out ${
+                className={`pt-4 relative z-20 transition-all duration-[600ms] ease-out ${
                   phase === "button" || phase === "other"
                     ? "translate-y-0 opacity-100"
-                    : "translate-y-6 opacity-0"
+                    : "-translate-y-[70px] opacity-0"
                 }`}
               >
                 <button
@@ -136,10 +177,10 @@ function TaxiMiniApp() {
 
             {phase === "other" && (
               <div
-                className={`pt-4 relative z-10 transition-all duration-[330ms] ease-out ${
+                className={`pt-4 relative z-10 transition-all duration-[900ms] ease-out ${
                   phase === "other"
                     ? "translate-y-0 opacity-100"
-                    : "translate-y-10 opacity-0"
+                    : "-translate-y-[110px] opacity-0"
                 }`}
               >
                 {renderSharedInfoSpacer()}
