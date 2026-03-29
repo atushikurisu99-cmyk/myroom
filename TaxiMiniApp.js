@@ -11,9 +11,9 @@ function TaxiMiniApp() {
   const C = window.AppConstants;
 
   const [phase, setPhase] = React.useState("logo");
-  const [cardEntered, setCardEntered] = React.useState(false);
-  const [buttonEntered, setButtonEntered] = React.useState(false);
-  const [otherEntered, setOtherEntered] = React.useState(false);
+  const [startupCardOn, setStartupCardOn] = React.useState(false);
+  const [startupButtonOn, setStartupButtonOn] = React.useState(false);
+  const [startupOtherOn, setStartupOtherOn] = React.useState(false);
 
   const audioRef = React.useRef(null);
   const audioUnlockedRef = React.useRef(false);
@@ -62,53 +62,50 @@ function TaxiMiniApp() {
 
     const t1 = setTimeout(() => setPhase("logoFade"), 1500);
     const t2 = setTimeout(() => setPhase("blank"), 2000);
-    const t3 = setTimeout(() => {
-      setCardEntered(false);
-      setButtonEntered(false);
-      setOtherEntered(false);
-      setPhase("card");
-    }, 2500);
-    const t4 = setTimeout(() => setPhase("button"), 3720);
-    const t5 = setTimeout(() => setPhase("other"), 3920);
-    const t6 = setTimeout(() => setPhase("app"), 4820);
+    const t3 = setTimeout(() => setPhase("startup"), 2500);
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);
-      clearTimeout(t4);
-      clearTimeout(t5);
-      clearTimeout(t6);
       window.removeEventListener("pointerdown", unlockOnFirstGesture);
       window.removeEventListener("touchstart", unlockOnFirstGesture);
     };
   }, []);
 
   React.useEffect(() => {
-    if (phase === "card") {
-      const raf = requestAnimationFrame(() => {
-        setCardEntered(true);
-      });
-      return () => cancelAnimationFrame(raf);
-    }
-  }, [phase]);
+    if (phase !== "startup") return;
 
-  React.useEffect(() => {
-    if (phase === "button") {
-      const raf = requestAnimationFrame(() => {
-        setButtonEntered(true);
-      });
-      return () => cancelAnimationFrame(raf);
-    }
-  }, [phase]);
+    setStartupCardOn(false);
+    setStartupButtonOn(false);
+    setStartupOtherOn(false);
 
-  React.useEffect(() => {
-    if (phase === "other") {
-      const raf = requestAnimationFrame(() => {
-        setOtherEntered(true);
+    const raf1 = requestAnimationFrame(() => {
+      const raf2 = requestAnimationFrame(() => {
+        setStartupCardOn(true);
       });
-      return () => cancelAnimationFrame(raf);
-    }
+      window.__startupRaf2 = raf2;
+    });
+
+    const tButton = setTimeout(() => {
+      setStartupButtonOn(true);
+    }, 1220);
+
+    const tOther = setTimeout(() => {
+      setStartupOtherOn(true);
+    }, 1420);
+
+    const tApp = setTimeout(() => {
+      setPhase("app");
+    }, 2320);
+
+    return () => {
+      cancelAnimationFrame(raf1);
+      if (window.__startupRaf2) cancelAnimationFrame(window.__startupRaf2);
+      clearTimeout(tButton);
+      clearTimeout(tOther);
+      clearTimeout(tApp);
+    };
   }, [phase]);
 
   const renderSharedInfoSpacer = () => (
@@ -159,6 +156,8 @@ function TaxiMiniApp() {
       ? "領収証発行"
       : "";
 
+  const showStartup = phase === "startup";
+
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
       {(phase === "logo" || phase === "logoFade") && (
@@ -178,71 +177,69 @@ function TaxiMiniApp() {
         <div className="fixed inset-0 z-[9998] bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)]" />
       )}
 
-      {(phase === "card" || phase === "button" || phase === "other") && (
+      {showStartup && (
         <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
           <div className="h-full flex flex-col overflow-hidden relative">
             <div
               className="relative z-30"
               style={{
-                transform: cardEntered ? "translateX(0px)" : "translateX(-140px)",
-                opacity: cardEntered ? 1 : 0,
-                transition: "transform 720ms cubic-bezier(0.22, 1, 0.36, 1), opacity 720ms ease-out",
-                willChange: "transform, opacity",
+                transform: startupCardOn ? "translate3d(0,0,0)" : "translate3d(-280px,0,0)",
+                opacity: startupCardOn ? 1 : 1,
+                transition: "transform 720ms cubic-bezier(0.22, 1, 0.36, 1)",
+                willChange: "transform",
               }}
             >
               {renderClockCard()}
             </div>
 
-            {(phase === "button" || phase === "other") && (
-              <div
-                className="pt-4 relative z-20"
-                style={{
-                  transform: buttonEntered ? "translateY(0px)" : "translateY(-78px)",
-                  opacity: buttonEntered ? 1 : 0,
-                  transition: "transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease-out",
-                  willChange: "transform, opacity",
-                }}
+            <div
+              className="pt-4 relative z-20"
+              style={{
+                transform: startupButtonOn ? "translate3d(0,0,0)" : "translate3d(0,-96px,0)",
+                opacity: startupButtonOn ? 1 : 0,
+                transition:
+                  "transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 280ms ease-out",
+                willChange: "transform, opacity",
+              }}
+            >
+              <button
+                className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)]`}
               >
-                <button
-                  className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)]`}
-                >
-                  <span className={C.bigButtonText}>乗務開始</span>
-                </button>
-              </div>
-            )}
+                <span className={C.bigButtonText}>乗務開始</span>
+              </button>
+            </div>
 
-            {phase === "other" && (
-              <div
-                className="pt-4 relative z-10"
-                style={{
-                  transform: otherEntered ? "translateY(0px)" : "translateY(-118px)",
-                  opacity: otherEntered ? 1 : 0,
-                  transition: "transform 900ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms ease-out",
-                  willChange: "transform, opacity",
-                }}
-              >
-                {renderSharedInfoSpacer()}
+            <div
+              className="pt-4 relative z-10"
+              style={{
+                transform: startupOtherOn ? "translate3d(0,0,0)" : "translate3d(0,-130px,0)",
+                opacity: startupOtherOn ? 1 : 0,
+                transition:
+                  "transform 900ms cubic-bezier(0.22, 1, 0.36, 1), opacity 320ms ease-out",
+                willChange: "transform, opacity",
+              }}
+            >
+              {renderSharedInfoSpacer()}
 
-                <div className={`${C.cardClass} h-[220px] bg-white overflow-hidden`}>
-                  <div className="h-full flex flex-col">
-                    <div className="px-4 pt-3 pb-2 shrink-0 bg-white">
-                      <div className="relative flex items-center justify-center h-[22px]">
-                        <div className="w-14 h-1.5 rounded-full bg-slate-200" />
-                      </div>
-
-                      <div className="mt-2 flex items-center justify-between">
-                        <div className="text-sm font-medium text-slate-400">その他</div>
-                        <div className="text-[18px] font-extrabold text-slate-800">売上 ¥0</div>
-                      </div>
+              <div className={`${C.cardClass} h-[220px] bg-white overflow-hidden`}>
+                <div className="h-full flex flex-col">
+                  <div className="px-4 pt-3 pb-2 shrink-0 bg-white">
+                    <div className="relative flex items-center justify-center h-[22px]">
+                      <div className="w-14 h-1.5 rounded-full bg-slate-200" />
                     </div>
 
-                    <div className="flex-1 px-4 py-8 text-sm text-slate-400 bg-white">
-                      まだ履歴はありません
+                    <div className="mt-2 flex items-center justify-between">
+                      <div className="text-sm font-medium text-slate-400">その他</div>
+                      <div className="text-[18px] font-extrabold text-slate-800">売上 ¥0</div>
                     </div>
+                  </div>
+
+                  <div className="flex-1 px-4 py-8 text-sm text-slate-400 bg-white">
+                    まだ履歴はありません
                   </div>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
       )}
