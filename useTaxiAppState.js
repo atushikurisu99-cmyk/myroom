@@ -19,6 +19,7 @@ window.AppHooks = (() => {
 
     const [amount, setAmount] = useState("");
     const [selectedPassengers, setSelectedPassengers] = useState(null);
+    const [maxPassengers, setMaxPassengers] = useState(4);
 
     const [records, setRecords] = useState([]);
     const [showSaved, setShowSaved] = useState(false);
@@ -577,7 +578,6 @@ window.AppHooks = (() => {
 
       const numericAmount = Number(amount);
       if (!numericAmount || numericAmount <= 0) return alert("正しい金額を入力してください");
-
       if (selectedPassengers === null) return alert("人数を選んでください");
 
       const finalPassengers = selectedPassengers;
@@ -696,6 +696,7 @@ window.AppHooks = (() => {
         dropoffMeta,
         amount,
         selectedPassengers,
+        maxPassengers,
         records,
         showSaved,
         showHistoryModal,
@@ -750,6 +751,7 @@ window.AppHooks = (() => {
         setHistoryBaseDate,
         setExpandedMonthDays,
         setCardMode,
+        setMaxPassengers,
         beginStandbySheetDrag,
         endStandbySheetDrag,
         toggleStandbySheet,
