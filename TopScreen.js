@@ -13,6 +13,7 @@ window.AppScreens.TopScreen = (() => {
       openOtherSheet,
       openHistoryModal,
       previewRecords,
+      totalAmount,
     } = props;
 
     return (
@@ -25,8 +26,6 @@ window.AppScreens.TopScreen = (() => {
             className={`${C.mainButtonBase} ${C.mainButtonShine} ${
               topMainButtonDisabled
                 ? "bg-[linear-gradient(180deg,#d5dbe3,#bcc6d2,#97a3b2)] text-white"
-                : topMainLabel === "乗務終了"
-                ? "bg-[linear-gradient(180deg,#ffdf6b,#ffb100,#cc7900)] text-white"
                 : "bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white"
             }`}
           >
@@ -40,11 +39,10 @@ window.AppScreens.TopScreen = (() => {
           <BottomCard
             movable={false}
             standbySheetOffset={0}
-            dragging={false}
-            isFinishVisible={false}
             openOtherSheet={openOtherSheet}
             openHistoryModal={openHistoryModal}
             previewRecords={previewRecords}
+            totalAmount={totalAmount}
           />
         </div>
       </div>
