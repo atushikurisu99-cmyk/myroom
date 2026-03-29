@@ -11,23 +11,15 @@ function TaxiMiniApp() {
   const C = window.AppConstants;
 
   const [showSplash, setShowSplash] = React.useState(true);
-  const [showUI, setShowUI] = React.useState(false);
+  const [uiReady, setUiReady] = React.useState(false);
 
   React.useEffect(() => {
-    // ロゴ表示（1.5秒）
-    const t1 = setTimeout(() => {
-      setShowUI(true);
+    const splashTimer = setTimeout(() => {
+      setShowSplash(false);
+      setUiReady(true);
     }, 1500);
 
-    // 完全に消す
-    const t2 = setTimeout(() => {
-      setShowSplash(false);
-    }, 2000);
-
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
+    return () => clearTimeout(splashTimer);
   }, []);
 
   const renderSharedInfoSpacer = () => (
@@ -40,28 +32,18 @@ function TaxiMiniApp() {
   );
 
   return (
-    <div className="w-full min-h-screen bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
-      
-      {/* スプラッシュ（ロゴ） */}
+    <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
       {showSplash && (
-        <div className="fixed inset-0 z-[9999] bg-white flex items-center justify-center transition-opacity duration-500">
+        <div className="fixed inset-0 z-[9999] bg-white flex items-center justify-center">
           <img
             src="./logo.png"
-            alt="logo"
-            className={`w-[220px] transition-all duration-700 ${
-              showUI ? "opacity-0 scale-110" : "opacity-100 scale-100"
-            }`}
+            alt="PROJECT ARTS"
+            className="w-[220px] max-w-[62vw]"
           />
         </div>
       )}
 
-      {/* メインUI */}
-      <div
-        className={`w-full max-w-sm min-h-screen px-4 pt-4 relative transition-opacity duration-700 ${
-          showUI ? "opacity-100" : "opacity-0"
-        }`}
-        style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
-      >
+      <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
         {state.showSaved && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-5 py-2.5 shadow-lg">
             保存しました
@@ -131,61 +113,170 @@ function TaxiMiniApp() {
           setEditingRecord={actions.setEditingRecord}
         />
 
-        <div className="min-h-screen flex flex-col">
+        <div className="h-full flex flex-col overflow-hidden">
+          {(state.screen === "top" ||
+            state.screen === "standby" ||
+            state.screen === "ride" ||
+            state.screen === "fare") && (
+            <div
+              className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0 overflow-hidden transition-all duration-500 ${
+                uiReady ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+              }`}
+              onClick={actions.handleCardModeNext}
+            >
+              <div className="h-full flex flex-col">
+                <div className="flex items-start justify-between gap-4 shrink-0">
+                  <div className="min-w-0">
+                    <div className="text-[15px] leading-none font-semibold text-slate-700 pt-1">
+                      {derived.stateLabel}
+                    </div>
+                  </div>
+                  <div className="shrink-0 text-right">
+                    <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-800">
+                      <span>{derived.timeParts.hh}</span>
+                      <span
+                        className={`${
+                          derived.timeParts.showColon ? "opacity-100" : "opacity-0"
+                        } transition-opacity duration-150 mx-[-0.08em]`}
+                      >
+                        ：
+                      </span>
+                      <span>{derived.timeParts.mm}</span>
+                    </div>
+                  </div>
+                </div>
 
-          {/* 状態カード */}
-          <div
-            className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0 transition-all duration-500 ${
-              showUI ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
-            }`}
-          >
-            <div className="h-full flex flex-col">
-              <div className="flex items-start justify-between">
-                <div className="text-[15px] font-semibold text-slate-700">
-                  {derived.stateLabel}
-                </div>
-                <div className="text-[58px] font-black text-slate-800">
-                  {derived.timeParts.hh}:{derived.timeParts.mm}
-                </div>
+                {state.cardMode === 1 ? (
+                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
+                    <div className="text-[12px] font-medium text-slate-500">売上合計</div>
+                    <div className="mt-1 flex items-end justify-between gap-3">
+                      <div className="text-[16px] leading-none font-normal text-slate-600">
+                        {window.AppUtils.formatMoney(derived.totalAmount)}
+                      </div>
+                      <div className="text-[12px] leading-none font-normal text-slate-500">
+                        {derived.recordCount}件
+                      </div>
+                    </div>
+                  </div>
+                ) : state.cardMode === 2 ? (
+                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
+                    <div className="text-[12px] font-medium text-slate-500">売上目標達成率</div>
+                    <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
+                      -- %
+                    </div>
+                  </div>
+                ) : state.cardMode === 3 ? (
+                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
+                    <div className="text-[12px] font-medium text-slate-500">今日のペース</div>
+                    <div className="mt-1 text-[16px] leading-none font-normal text-[#00a676]">
+                      良好
+                    </div>
+                  </div>
+                ) : state.cardMode === 4 ? (
+                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
+                    <div className="text-[12px] font-medium text-slate-500">① 売上</div>
+                    <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
+                      {window.AppUtils.formatMoney(derived.amount1)}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
+                    <div className="text-[12px] font-medium text-slate-500">② 売上</div>
+                    <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
+                      {window.AppUtils.formatMoney(derived.amount2)}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
+          )}
 
-          {/* メインボタン */}
-          <div
-            className={`pt-4 transition-all duration-500 delay-100 ${
-              showUI ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
-            }`}
-          >
-            <button
-              type="button"
-              onClick={actions.handleTopMain}
-              className={`${C.mainButtonBase} ${C.mainButtonShine}`}
+          {state.screen === "top" && (
+            <div
+              className={`transition-all duration-500 delay-100 ${
+                uiReady ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+              }`}
             >
-              <span className={C.bigButtonText}>
-                {derived.topMainLabel}
-              </span>
-            </button>
-          </div>
+              <TopScreen
+                topMainLabel={derived.topMainLabel}
+                topMainButtonDisabled={derived.topMainButtonDisabled}
+                handleTopMain={actions.handleTopMain}
+                renderSharedInfoSpacer={renderSharedInfoSpacer}
+                topScrollRef={refs.topScrollRef}
+                openOtherSheet={() => actions.setShowOtherSheet(true)}
+                openHistoryModal={actions.openHistoryModal}
+                previewRecords={derived.previewRecords}
+              />
+            </div>
+          )}
 
-          {/* その他 */}
-          <div
-            className={`pt-4 transition-all duration-500 delay-200 ${
-              showUI ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
-            }`}
-          >
-            <TopScreen
-              topMainLabel={derived.topMainLabel}
-              topMainButtonDisabled={derived.topMainButtonDisabled}
-              handleTopMain={actions.handleTopMain}
-              renderSharedInfoSpacer={renderSharedInfoSpacer}
-              topScrollRef={refs.topScrollRef}
-              openOtherSheet={() => actions.setShowOtherSheet(true)}
-              openHistoryModal={actions.openHistoryModal}
-              previewRecords={derived.previewRecords}
-            />
-          </div>
+          {state.screen === "standby" && (
+            <div
+              className={`transition-all duration-500 delay-100 ${
+                uiReady ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+              }`}
+            >
+              <StandbyScreen
+                handleStartRide={actions.handleStartRide}
+                renderSharedInfoSpacer={renderSharedInfoSpacer}
+                handleFinishTap={actions.handleFinishTap}
+                isFinishVisible={derived.isFinishVisible}
+                openOtherSheet={() => actions.setShowOtherSheet(true)}
+                openHistoryModal={actions.openHistoryModal}
+                previewRecords={derived.previewRecords}
+                standbySheetOffset={state.standbySheetOffset}
+                beginStandbySheetDrag={actions.beginStandbySheetDrag}
+                toggleStandbySheet={actions.toggleStandbySheet}
+                dragging={refs.sheetDragRef.current.dragging}
+                isStandbySheetOpened={derived.isStandbySheetOpened}
+              />
+            </div>
+          )}
 
+          {state.screen === "ride" && (
+            <div
+              className={`transition-all duration-500 delay-100 ${
+                uiReady ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+              }`}
+            >
+              <RideScreen
+                pickup={state.pickup}
+                pickupMeta={state.pickupMeta}
+                rideStartAt={state.rideStartAt}
+                selectedPassengers={state.selectedPassengers}
+                elapsedText={derived.elapsedText}
+                viaStops={state.viaStops}
+                handleDropOffTap={actions.handleDropOffTap}
+                openOtherSheet={() => actions.setShowOtherSheet(true)}
+                openHistoryModal={actions.openHistoryModal}
+                previewRecords={derived.previewRecords}
+              />
+            </div>
+          )}
+
+          {state.screen === "fare" && (
+            <div
+              className={`transition-all duration-500 delay-100 ${
+                uiReady ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+              }`}
+            >
+              <FareScreen
+                rideStartAt={state.rideStartAt}
+                pickup={state.pickup}
+                pickupMeta={state.pickupMeta}
+                rideEndAt={state.rideEndAt}
+                dropoff={state.dropoff}
+                dropoffMeta={state.dropoffMeta}
+                amountInputRef={refs.amountInputRef}
+                formattedAmount={derived.formattedAmount}
+                handleAmountChange={actions.handleAmountChange}
+                passengerDisplayCount={derived.passengerDisplayCount}
+                selectedPassengers={state.selectedPassengers}
+                handlePassengerSelect={actions.handlePassengerSelect}
+                openPaymentDialog={actions.openPaymentDialog}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
