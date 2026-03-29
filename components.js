@@ -78,7 +78,9 @@ window.AppComponents = (() => {
       return (
         <div
           key={record.id}
-          className={`px-4 border-b last:border-b-0 border-slate-100 ${isPeek ? "py-2 h-[30px] overflow-hidden opacity-70" : "py-3"}`}
+          className={`px-4 border-b last:border-b-0 border-slate-100 ${
+            isPeek ? "py-2 h-[30px] overflow-hidden opacity-70" : "py-3"
+          }`}
         >
           <div className="flex items-start justify-between gap-3">
             <div className="text-[15px] font-normal text-slate-700">
@@ -122,6 +124,7 @@ window.AppComponents = (() => {
           inset: 0,
           transform: `translateY(${standbySheetOffset}px)`,
           transition: "transform 180ms ease",
+          zIndex: 10,
         }
       : {};
 
@@ -138,7 +141,7 @@ window.AppComponents = (() => {
     return (
       <div className="shrink-0 pt-3" style={{ paddingBottom: safeBottom, ...panelStyle }}>
         <div
-          className={`${cardClass} overflow-hidden flex flex-col bg-white h-full`}
+          className={`${cardClass} overflow-hidden flex flex-col bg-white h-full relative`}
           style={{ minHeight: `${BOTTOM_CARD_HEIGHT}px` }}
         >
           <div className="px-4 pt-3 pb-2 shrink-0 bg-white">
@@ -152,7 +155,7 @@ window.AppComponents = (() => {
                 <button
                   type="button"
                   onClick={toggleStandbySheet}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-[18px] font-black text-slate-500"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-20 text-[22px] font-black text-slate-500 leading-none px-1"
                   aria-label="開閉"
                 >
                   {standbySheetOffset > 90 ? "▽" : "△"}
