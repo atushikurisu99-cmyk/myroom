@@ -14,23 +14,19 @@ function TaxiMiniApp() {
   const audioRef = React.useRef(null);
 
   React.useEffect(() => {
-    audioRef.current = new Audio("./goanzen.wav");
-    audioRef.current.volume = 0.65;
+    try {
+      audioRef.current = new Audio("./goanzen.wav");
+      audioRef.current.volume = 0.65;
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(() => {});
+    } catch (_) {}
 
-    const t1 = setTimeout(() => setPhase("logoFade"), 2000);
-    const t2 = setTimeout(() => setPhase("white"), 3500);
-
-    const t3 = setTimeout(() => {
-      setPhase("card");
-      try {
-        audioRef.current.currentTime = 0;
-        audioRef.current.play().catch(() => {});
-      } catch (_) {}
-    }, 4000);
-
-    const t4 = setTimeout(() => setPhase("button"), 4500);
-    const t5 = setTimeout(() => setPhase("other"), 5000);
-    const t6 = setTimeout(() => setPhase("app"), 5500);
+    const t1 = setTimeout(() => setPhase("logoFade"), 1500);
+    const t2 = setTimeout(() => setPhase("blank"), 2000);
+    const t3 = setTimeout(() => setPhase("card"), 2500);
+    const t4 = setTimeout(() => setPhase("button"), 2900);
+    const t5 = setTimeout(() => setPhase("other"), 3250);
+    const t6 = setTimeout(() => setPhase("app"), 3600);
 
     return () => {
       clearTimeout(t1);
@@ -96,35 +92,71 @@ function TaxiMiniApp() {
         <div className="fixed inset-0 z-[9999] bg-white flex items-center justify-center">
           <img
             src="./logo.png"
-            className={`w-[220px] transition-all duration-[1500ms] ${
-              phase === "logoFade" ? "opacity-0 scale-[1.05]" : "opacity-100"
+            className={`w-[220px] transition-all duration-[500ms] ease-out ${
+              phase === "logoFade" ? "opacity-0 scale-[1.02]" : "opacity-100 scale-100"
             }`}
           />
         </div>
       )}
 
-      {phase === "white" && (
-        <div className="fixed inset-0 z-[9998] bg-white" />
+      {phase === "blank" && (
+        <div className="fixed inset-0 z-[9998] bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)]" />
       )}
 
       {(phase === "card" || phase === "button" || phase === "other") && (
-        <div className="w-full max-w-sm h-full px-4 pt-4 pb-3">
-          <div className="flex flex-col">
-            {phase !== "white" && renderClockCard()}
+        <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
+          <div className="h-full flex flex-col overflow-hidden">
+            <div
+              className={`relative z-30 transition-all duration-[380ms] ease-out ${
+                phase === "card" || phase === "button" || phase === "other"
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-10 opacity-0"
+              }`}
+            >
+              {renderClockCard()}
+            </div>
 
             {(phase === "button" || phase === "other") && (
-              <div className="pt-4 transition-all duration-500">
-                <button className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)]`}>
+              <div
+                className={`pt-4 relative z-20 transition-all duration-[340ms] ease-out ${
+                  phase === "button" || phase === "other"
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-6 opacity-0"
+                }`}
+              >
+                <button
+                  className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)]`}
+                >
                   <span className={C.bigButtonText}>乗務開始</span>
                 </button>
               </div>
             )}
 
             {phase === "other" && (
-              <div className="pt-4 transition-all duration-500">
+              <div
+                className={`pt-4 relative z-10 transition-all duration-[340ms] ease-out ${
+                  phase === "other" ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                }`}
+              >
                 {renderSharedInfoSpacer()}
-                <div className={`${C.cardClass} h-[220px] flex items-center justify-center text-slate-400`}>
-                  読み込み中…
+                <div
+                  className={`${C.cardClass} h-[220px] bg-white`}
+                >
+                  <div className="h-full flex flex-col">
+                    <div className="px-4 pt-3 pb-2 shrink-0">
+                      <div className="relative flex items-center justify-center h-[22px]">
+                        <div className="w-14 h-1.5 rounded-full bg-slate-200" />
+                      </div>
+                      <div className="mt-2 flex items-center justify-between">
+                        <div className="text-sm font-medium text-slate-400">その他</div>
+                        <div className="text-[18px] font-extrabold text-slate-800">売上 ¥0</div>
+                      </div>
+                    </div>
+
+                    <div className="flex-1 px-4 py-8 text-sm text-slate-400 bg-white">
+                      まだ履歴はありません
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -252,6 +284,7 @@ function TaxiMiniApp() {
                 selectedPassengers={state.selectedPassengers}
                 handlePassengerSelect={actions.handlePassengerSelect}
                 openPaymentDialog={actions.openPaymentDialog}
+                maxPassengers={state.maxPassengers}
               />
             )}
           </div>
