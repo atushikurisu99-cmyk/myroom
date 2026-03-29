@@ -13,6 +13,7 @@ window.AppScreens.RideScreen = (() => {
       openOtherSheet,
       openHistoryModal,
       previewRecords,
+      totalAmount,
     } = props;
 
     return (
@@ -71,11 +72,10 @@ window.AppScreens.RideScreen = (() => {
           <BottomCard
             movable={false}
             standbySheetOffset={0}
-            dragging={false}
-            isFinishVisible={false}
             openOtherSheet={openOtherSheet}
             openHistoryModal={openHistoryModal}
             previewRecords={previewRecords}
+            totalAmount={totalAmount}
           />
         </div>
       </div>
