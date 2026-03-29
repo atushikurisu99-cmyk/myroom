@@ -67,7 +67,7 @@ window.AppComponents = (() => {
   function PreviewHistoryRows({ previewRecords }) {
     if (!previewRecords || previewRecords.length === 0) {
       return (
-        <div className="h-full flex items-center justify-center px-4 text-sm text-slate-400">
+        <div className="px-4 py-6 text-sm text-slate-400">
           まだ履歴はありません
         </div>
       );
@@ -101,30 +101,37 @@ window.AppComponents = (() => {
     } = props;
 
     const safeBottom = "max(12px, env(safe-area-inset-bottom))";
+    const hasPreview = !!(previewRecords && previewRecords.length > 0);
 
     return (
       <div className="shrink-0 pt-3" style={{ paddingBottom: safeBottom }}>
         <div
-          className={`${cardClass} overflow-hidden flex flex-col`}
+          className={`${cardClass} overflow-hidden flex flex-col bg-white`}
           style={{ minHeight: `${BOTTOM_CARD_HEIGHT}px` }}
         >
           <button
             type="button"
             onClick={openOtherSheet}
-            className="px-4 pt-3 pb-2 text-left shrink-0 active:bg-slate-50"
+            className="px-4 pt-3 pb-2 text-left shrink-0 active:bg-slate-50 bg-white"
           >
             <div className="text-sm font-medium text-slate-400">その他</div>
           </button>
 
-          <div className="flex-1 min-h-[120px]">
-            <button
-              type="button"
-              onClick={openHistoryModal}
-              className="w-full h-full text-left active:bg-slate-50"
-            >
-              <PreviewHistoryRows previewRecords={previewRecords} />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={openHistoryModal}
+            className="w-full flex-1 text-left active:bg-slate-50 bg-white"
+          >
+            {hasPreview ? (
+              <div className="bg-white">
+                <PreviewHistoryRows previewRecords={previewRecords} />
+              </div>
+            ) : (
+              <div className="px-4 py-6 text-sm text-slate-400 bg-white">
+                まだ履歴はありません
+              </div>
+            )}
+          </button>
         </div>
       </div>
     );
@@ -135,7 +142,7 @@ window.AppComponents = (() => {
 
     return (
       <div
-        className="fixed inset-0 z-50 bg-slate-900/40 flex items-end justify-center"
+        className="fixed inset-0 z-[9999] bg-slate-900/40 flex items-end justify-center"
         onClick={onClose}
       >
         <div
@@ -147,7 +154,7 @@ window.AppComponents = (() => {
             marginRight: "16px",
           }}
         >
-          <div className="px-4 pt-3 pb-4">
+          <div className="px-4 pt-3 pb-4 bg-white">
             <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
 
             <div className="flex items-center justify-between">
@@ -164,20 +171,20 @@ window.AppComponents = (() => {
             <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white">
               <button
                 type="button"
-                className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50"
+                className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50 bg-white"
               >
                 分析
               </button>
               <button
                 type="button"
-                className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50"
+                className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50 bg-white"
               >
                 設定
               </button>
               <button
                 type="button"
                 onClick={openHistoryModal}
-                className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 active:bg-slate-50"
+                className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 active:bg-slate-50 bg-white"
               >
                 履歴
               </button>
@@ -199,7 +206,7 @@ window.AppComponents = (() => {
     } = props;
 
     return (
-      <div className="fixed inset-0 z-50 bg-slate-900/40 flex items-center justify-center px-4">
+      <div className="fixed inset-0 z-[9999] bg-slate-900/40 flex items-center justify-center px-4">
         <div className="w-full max-w-sm rounded-[28px] bg-white shadow-2xl p-5">
           <div className="text-[34px] font-black text-slate-800 tracking-[-0.04em]">
             {formatMoney(amount)}
@@ -230,7 +237,7 @@ window.AppComponents = (() => {
 
   function ViaDialog({ pendingViaPlace, onCancel, onRecord }) {
     return (
-      <div className="fixed inset-0 z-50 bg-slate-900/40 flex items-center justify-center px-4">
+      <div className="fixed inset-0 z-[9999] bg-slate-900/40 flex items-center justify-center px-4">
         <div className="w-full max-w-sm rounded-[28px] bg-white shadow-2xl p-5">
           <div className="text-[18px] font-bold text-slate-800">
             現在地を経由地として記録します
@@ -269,7 +276,7 @@ window.AppComponents = (() => {
     } = props;
 
     return (
-      <div className="fixed inset-0 z-50 bg-slate-900/40 flex items-center justify-center px-4">
+      <div className="fixed inset-0 z-[9999] bg-slate-900/40 flex items-center justify-center px-4">
         <div className="w-full max-w-sm rounded-[28px] bg-white shadow-2xl p-5">
           <div className="text-[20px] font-bold text-slate-800">
             {formatDutyDate(workDate)}の乗務を終了しますか？
