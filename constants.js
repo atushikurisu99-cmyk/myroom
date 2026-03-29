@@ -16,7 +16,8 @@ window.AppConstants = {
   PAYMENT_RECEIPT: "#ffff19",
 
   shadowSub: "shadow-[0_8px_16px_rgba(0,0,0,0.10)]",
-  cardClass: "rounded-[28px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)]",
+  cardClass:
+    "rounded-[28px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)]",
   mainButtonBase:
     "relative overflow-hidden w-full h-full rounded-[28px] text-white active:scale-[0.985] border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.7),inset_0_-3px_8px_rgba(0,0,0,0.30),0_8px_16px_rgba(0,0,0,0.18)]",
   mainButtonShine:
