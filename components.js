@@ -95,42 +95,35 @@ window.AppComponents = (() => {
 
   function BottomCard(props) {
     const {
-      movable = false,
-      standbySheetOffset = 0,
-      dragging = false,
       openOtherSheet,
       openHistoryModal,
       previewRecords,
     } = props;
 
-    const wrapperStyle = movable
-      ? {
-          transform: `translateY(${standbySheetOffset}px)`,
-          transition: dragging ? "none" : "transform 180ms ease-out",
-        }
-      : {};
+    const safeBottom = "max(12px, env(safe-area-inset-bottom))";
 
     return (
-      <div className="shrink-0" style={wrapperStyle}>
-        <div style={{ height: `${BOTTOM_CARD_HEIGHT}px` }}>
-          <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
+      <div className="shrink-0 pt-3" style={{ paddingBottom: safeBottom }}>
+        <div
+          className={`${cardClass} overflow-hidden flex flex-col`}
+          style={{ minHeight: `${BOTTOM_CARD_HEIGHT}px` }}
+        >
+          <button
+            type="button"
+            onClick={openOtherSheet}
+            className="px-4 pt-3 pb-2 text-left shrink-0 active:bg-slate-50"
+          >
+            <div className="text-sm font-medium text-slate-400">その他</div>
+          </button>
+
+          <div className="flex-1 min-h-[120px]">
             <button
               type="button"
-              onClick={openOtherSheet}
-              className="px-4 pt-3 pb-2 text-left shrink-0 active:bg-slate-50"
+              onClick={openHistoryModal}
+              className="w-full h-full text-left active:bg-slate-50"
             >
-              <div className="text-sm font-medium text-slate-400">その他</div>
+              <PreviewHistoryRows previewRecords={previewRecords} />
             </button>
-
-            <div className="flex-1 min-h-0">
-              <button
-                type="button"
-                onClick={openHistoryModal}
-                className="w-full h-full text-left active:bg-slate-50"
-              >
-                <PreviewHistoryRows previewRecords={previewRecords} />
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -142,12 +135,17 @@ window.AppComponents = (() => {
 
     return (
       <div
-        className="absolute inset-0 z-30 bg-slate-900/40 flex items-end"
+        className="fixed inset-0 z-50 bg-slate-900/40 flex items-end justify-center"
         onClick={onClose}
       >
         <div
-          className="w-full rounded-t-[28px] bg-white shadow-2xl overflow-hidden"
+          className="w-full max-w-sm rounded-t-[28px] bg-white shadow-2xl overflow-hidden"
           onClick={(e) => e.stopPropagation()}
+          style={{
+            paddingBottom: "max(16px, env(safe-area-inset-bottom))",
+            marginLeft: "16px",
+            marginRight: "16px",
+          }}
         >
           <div className="px-4 pt-3 pb-4">
             <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
@@ -201,8 +199,8 @@ window.AppComponents = (() => {
     } = props;
 
     return (
-      <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
-        <div className="w-full rounded-[28px] bg-white shadow-2xl p-5">
+      <div className="fixed inset-0 z-50 bg-slate-900/40 flex items-center justify-center px-4">
+        <div className="w-full max-w-sm rounded-[28px] bg-white shadow-2xl p-5">
           <div className="text-[34px] font-black text-slate-800 tracking-[-0.04em]">
             {formatMoney(amount)}
           </div>
@@ -232,8 +230,8 @@ window.AppComponents = (() => {
 
   function ViaDialog({ pendingViaPlace, onCancel, onRecord }) {
     return (
-      <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
-        <div className="w-full rounded-[28px] bg-white shadow-2xl p-5">
+      <div className="fixed inset-0 z-50 bg-slate-900/40 flex items-center justify-center px-4">
+        <div className="w-full max-w-sm rounded-[28px] bg-white shadow-2xl p-5">
           <div className="text-[18px] font-bold text-slate-800">
             現在地を経由地として記録します
           </div>
@@ -271,8 +269,8 @@ window.AppComponents = (() => {
     } = props;
 
     return (
-      <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
-        <div className="w-full rounded-[28px] bg-white shadow-2xl p-5">
+      <div className="fixed inset-0 z-50 bg-slate-900/40 flex items-center justify-center px-4">
+        <div className="w-full max-w-sm rounded-[28px] bg-white shadow-2xl p-5">
           <div className="text-[20px] font-bold text-slate-800">
             {formatDutyDate(workDate)}の乗務を終了しますか？
           </div>
