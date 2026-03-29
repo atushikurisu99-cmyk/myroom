@@ -45,7 +45,8 @@ window.AppUtils = (() => {
     return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
   };
 
-  const recordType = (record) => (record.payment === "cash" && !record.receipt ? "1" : "2");
+  const recordType = (record) =>
+    record.payment === "cash" && !record.receipt ? "1" : "2";
 
   const normalizePlaceLabel = (raw) => {
     if (!raw) return "未取得";
@@ -79,10 +80,14 @@ window.AppUtils = (() => {
     const parts = text.split(" ").filter(Boolean);
     if (parts.length === 0) return "未取得";
 
-    const chomeLike = parts.find((p) => /[一二三四五六七八九十0-9０-９]+丁目/.test(p));
+    const chomeLike = parts.find((p) =>
+      /[一二三四五六七八九十0-9０-９]+丁目/.test(p)
+    );
     if (chomeLike) return chomeLike;
 
-    const townLike = parts.find((p) => /(町|本町|通|台|丘|浜|野|原|谷|峠|南|北|東|西)$/.test(p));
+    const townLike = parts.find((p) =>
+      /(町|本町|通|台|丘|浜|野|原|谷|峠|南|北|東|西)$/.test(p)
+    );
     if (townLike) return townLike;
 
     if (parts.length >= 2) {
@@ -142,6 +147,29 @@ window.AppUtils = (() => {
   const getHistoryTargetDate = (record) =>
     record.乗務日 ? new Date(record.乗務日) : new Date(record.乗車時刻);
 
+  const weatherCodeToKind = (code) => {
+    if (code === 0) return "clear";
+    if ([1, 2].includes(code)) return "partlyCloudy";
+    if ([3].includes(code)) return "cloudy";
+    if ([45, 48].includes(code)) return "fog";
+    if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(code))
+      return "rain";
+    if ([71, 73, 75, 77, 85, 86].includes(code)) return "snow";
+    if ([95, 96, 99].includes(code)) return "thunder";
+    return "unknown";
+  };
+
+  const getWeatherIcon = (kind) => {
+    if (kind === "clear") return "☀️";
+    if (kind === "partlyCloudy") return "⛅";
+    if (kind === "cloudy") return "☁️";
+    if (kind === "fog") return "🌫️";
+    if (kind === "rain") return "🌧️";
+    if (kind === "snow") return "❄️";
+    if (kind === "thunder") return "⛈️";
+    return "・";
+  };
+
   return {
     clamp,
     sleep,
@@ -162,5 +190,7 @@ window.AppUtils = (() => {
     isSameDay,
     isInRange,
     getHistoryTargetDate,
+    weatherCodeToKind,
+    getWeatherIcon,
   };
 })();
