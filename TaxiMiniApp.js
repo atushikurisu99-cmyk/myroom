@@ -10,16 +10,26 @@ function TaxiMiniApp() {
   const { refs, state, derived, actions } = useTaxiAppState();
   const C = window.AppConstants;
 
-  const [showSplash, setShowSplash] = React.useState(true);
-  const [uiReady, setUiReady] = React.useState(false);
+  const [phase, setPhase] = React.useState("logo");
+
+  const audioRef = React.useRef(null);
 
   React.useEffect(() => {
-    const splashTimer = setTimeout(() => {
-      setShowSplash(false);
-      setUiReady(true);
-    }, 1500);
+    audioRef.current = new Audio("./goanzen.wav");
+    audioRef.current.volume = 0.6;
 
-    return () => clearTimeout(splashTimer);
+    const t1 = setTimeout(() => setPhase("logoFade"), 1500); // ロゴ表示
+    const t2 = setTimeout(() => setPhase("white"), 3000); // ロゴフェード（1.5秒）
+    const t3 = setTimeout(() => {
+      setPhase("card");
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(() => {});
+    }, 3500); // 白→音
+    const t4 = setTimeout(() => setPhase("button"), 3800);
+    const t5 = setTimeout(() => setPhase("other"), 4100);
+    const t6 = setTimeout(() => setPhase("app"), 4400);
+
+    return () => [t1, t2, t3, t4, t5, t6].forEach(clearTimeout);
   }, []);
 
   const renderSharedInfoSpacer = () => (
@@ -32,253 +42,116 @@ function TaxiMiniApp() {
   );
 
   return (
-    <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
-      {showSplash && (
+    <div className="w-full min-h-screen bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
+
+      {/* ロゴ */}
+      {(phase === "logo" || phase === "logoFade") && (
         <div className="fixed inset-0 z-[9999] bg-white flex items-center justify-center">
           <img
             src="./logo.png"
-            alt="PROJECT ARTS"
-            className="w-[220px] max-w-[62vw]"
+            className={`w-[220px] transition-all duration-[1500ms] ${
+              phase === "logoFade" ? "opacity-0 scale-105" : "opacity-100"
+            }`}
           />
         </div>
       )}
 
-      <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
-        {state.showSaved && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-5 py-2.5 shadow-lg">
-            保存しました
-          </div>
-        )}
+      {/* 白画面 */}
+      {phase === "white" && (
+        <div className="fixed inset-0 z-[9998] bg-white" />
+      )}
 
-        {state.toastMessage && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-slate-800 text-white text-sm font-semibold px-4 py-2 shadow-lg">
-            {state.toastMessage}
-          </div>
-        )}
-
-        <OtherSheet
-          show={state.showOtherSheet}
-          onClose={() => actions.setShowOtherSheet(false)}
-          openHistoryModal={actions.openHistoryModal}
-        />
-
-        {state.showPaymentDialog && (
-          <PaymentDialog
-            amount={state.amount}
-            pickupMeta={state.pickupMeta}
-            dropoffMeta={state.dropoffMeta}
-            paymentCountdown={state.paymentCountdown}
-            savingDots={state.savingDots}
-            onCancel={actions.cancelPaymentDialog}
+      {/* メインUI */}
+      {(phase === "card" ||
+        phase === "button" ||
+        phase === "other" ||
+        phase === "app") && (
+        <div
+          className="w-full max-w-sm min-h-screen px-4 pt-4 relative"
+          style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
+        >
+          <OtherSheet
+            show={state.showOtherSheet}
+            onClose={() => actions.setShowOtherSheet(false)}
+            openHistoryModal={actions.openHistoryModal}
           />
-        )}
 
-        {state.showViaDialog && (
-          <ViaDialog
-            pendingViaPlace={state.pendingViaPlace}
-            onCancel={actions.cancelViaDialog}
-            onRecord={actions.recordVia}
+          <HistoryModal
+            show={state.showHistoryModal}
+            editingRecord={state.editingRecord}
+            historyMode={state.historyMode}
+            historyFilter={state.historyFilter}
+            historySummary={derived.historySummary}
+            filteredHistoryRecords={derived.filteredHistoryRecords}
+            groupedHistory={derived.groupedHistory}
+            expandedMonthDays={state.expandedMonthDays}
+            getHistoryPeriodText={derived.getHistoryPeriodText}
+            closeHistoryModal={actions.closeHistoryModal}
+            setHistoryMode={actions.setHistoryMode}
+            setHistoryFilter={actions.setHistoryFilter}
+            moveHistoryPeriod={actions.moveHistoryPeriod}
+            toggleMonthDay={actions.toggleMonthDay}
+            openEditRecord={actions.openEditRecord}
+            closeEditRecord={actions.closeEditRecord}
+            saveEditedRecord={actions.saveEditedRecord}
+            deleteEditedRecord={actions.deleteEditedRecord}
+            setEditingRecord={actions.setEditingRecord}
           />
-        )}
 
-        {state.showFinishDialog && (
-          <FinishDialog
-            workDate={state.workDate}
-            recordCount={derived.recordCount}
-            totalAmount={derived.totalAmount}
-            onCancel={() => actions.setShowFinishDialog(false)}
-            onConfirm={actions.performDutyEnd}
-          />
-        )}
+          <div className="min-h-screen flex flex-col">
 
-        <HistoryModal
-          show={state.showHistoryModal}
-          editingRecord={state.editingRecord}
-          historyMode={state.historyMode}
-          historyFilter={state.historyFilter}
-          historySummary={derived.historySummary}
-          filteredHistoryRecords={derived.filteredHistoryRecords}
-          groupedHistory={derived.groupedHistory}
-          expandedMonthDays={state.expandedMonthDays}
-          getHistoryPeriodText={derived.getHistoryPeriodText}
-          closeHistoryModal={actions.closeHistoryModal}
-          setHistoryMode={actions.setHistoryMode}
-          setHistoryFilter={actions.setHistoryFilter}
-          moveHistoryPeriod={actions.moveHistoryPeriod}
-          toggleMonthDay={actions.toggleMonthDay}
-          openEditRecord={actions.openEditRecord}
-          closeEditRecord={actions.closeEditRecord}
-          saveEditedRecord={actions.saveEditedRecord}
-          deleteEditedRecord={actions.deleteEditedRecord}
-          setEditingRecord={actions.setEditingRecord}
-        />
-
-        <div className="h-full flex flex-col overflow-hidden">
-          {(state.screen === "top" ||
-            state.screen === "standby" ||
-            state.screen === "ride" ||
-            state.screen === "fare") && (
-            <div
-              className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0 overflow-hidden transition-all duration-500 ${
-                uiReady ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-              }`}
-              onClick={actions.handleCardModeNext}
-            >
-              <div className="h-full flex flex-col">
-                <div className="flex items-start justify-between gap-4 shrink-0">
-                  <div className="min-w-0">
-                    <div className="text-[15px] leading-none font-semibold text-slate-700 pt-1">
-                      {derived.stateLabel}
-                    </div>
+            {/* カード */}
+            {(phase !== "white") && (
+              <div
+                className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0 transition-all duration-300 ${
+                  phase === "card" || phase === "button" || phase === "other" || phase === "app"
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-4"
+                }`}
+              >
+                <div className="flex justify-between">
+                  <div className="text-[15px] font-semibold text-slate-700">
+                    {derived.stateLabel}
                   </div>
-                  <div className="shrink-0 text-right">
-                    <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-800">
-                      <span>{derived.timeParts.hh}</span>
-                      <span
-                        className={`${
-                          derived.timeParts.showColon ? "opacity-100" : "opacity-0"
-                        } transition-opacity duration-150 mx-[-0.08em]`}
-                      >
-                        ：
-                      </span>
-                      <span>{derived.timeParts.mm}</span>
-                    </div>
+                  <div className="text-[58px] font-black text-slate-800">
+                    {derived.timeParts.hh}:{derived.timeParts.mm}
                   </div>
                 </div>
-
-                {state.cardMode === 1 ? (
-                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-                    <div className="text-[12px] font-medium text-slate-500">売上合計</div>
-                    <div className="mt-1 flex items-end justify-between gap-3">
-                      <div className="text-[16px] leading-none font-normal text-slate-600">
-                        {window.AppUtils.formatMoney(derived.totalAmount)}
-                      </div>
-                      <div className="text-[12px] leading-none font-normal text-slate-500">
-                        {derived.recordCount}件
-                      </div>
-                    </div>
-                  </div>
-                ) : state.cardMode === 2 ? (
-                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-                    <div className="text-[12px] font-medium text-slate-500">売上目標達成率</div>
-                    <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
-                      -- %
-                    </div>
-                  </div>
-                ) : state.cardMode === 3 ? (
-                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-                    <div className="text-[12px] font-medium text-slate-500">今日のペース</div>
-                    <div className="mt-1 text-[16px] leading-none font-normal text-[#00a676]">
-                      良好
-                    </div>
-                  </div>
-                ) : state.cardMode === 4 ? (
-                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-                    <div className="text-[12px] font-medium text-slate-500">① 売上</div>
-                    <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
-                      {window.AppUtils.formatMoney(derived.amount1)}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-                    <div className="text-[12px] font-medium text-slate-500">② 売上</div>
-                    <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
-                      {window.AppUtils.formatMoney(derived.amount2)}
-                    </div>
-                  </div>
-                )}
               </div>
-            </div>
-          )}
+            )}
 
-          {state.screen === "top" && (
-            <div
-              className={`transition-all duration-500 delay-100 ${
-                uiReady ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-              }`}
-            >
-              <TopScreen
-                topMainLabel={derived.topMainLabel}
-                topMainButtonDisabled={derived.topMainButtonDisabled}
-                handleTopMain={actions.handleTopMain}
-                renderSharedInfoSpacer={renderSharedInfoSpacer}
-                topScrollRef={refs.topScrollRef}
-                openOtherSheet={() => actions.setShowOtherSheet(true)}
-                openHistoryModal={actions.openHistoryModal}
-                previewRecords={derived.previewRecords}
-              />
-            </div>
-          )}
+            {/* メインボタン */}
+            {(phase === "button" || phase === "other" || phase === "app") && (
+              <div className="pt-4 transition-all duration-300">
+                <button
+                  onClick={actions.handleTopMain}
+                  className={`${C.mainButtonBase} ${C.mainButtonShine}`}
+                >
+                  <span className={C.bigButtonText}>
+                    {derived.topMainLabel}
+                  </span>
+                </button>
+              </div>
+            )}
 
-          {state.screen === "standby" && (
-            <div
-              className={`transition-all duration-500 delay-100 ${
-                uiReady ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-              }`}
-            >
-              <StandbyScreen
-                handleStartRide={actions.handleStartRide}
-                renderSharedInfoSpacer={renderSharedInfoSpacer}
-                handleFinishTap={actions.handleFinishTap}
-                isFinishVisible={derived.isFinishVisible}
-                openOtherSheet={() => actions.setShowOtherSheet(true)}
-                openHistoryModal={actions.openHistoryModal}
-                previewRecords={derived.previewRecords}
-                standbySheetOffset={state.standbySheetOffset}
-                beginStandbySheetDrag={actions.beginStandbySheetDrag}
-                toggleStandbySheet={actions.toggleStandbySheet}
-                dragging={refs.sheetDragRef.current.dragging}
-                isStandbySheetOpened={derived.isStandbySheetOpened}
-              />
-            </div>
-          )}
-
-          {state.screen === "ride" && (
-            <div
-              className={`transition-all duration-500 delay-100 ${
-                uiReady ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-              }`}
-            >
-              <RideScreen
-                pickup={state.pickup}
-                pickupMeta={state.pickupMeta}
-                rideStartAt={state.rideStartAt}
-                selectedPassengers={state.selectedPassengers}
-                elapsedText={derived.elapsedText}
-                viaStops={state.viaStops}
-                handleDropOffTap={actions.handleDropOffTap}
-                openOtherSheet={() => actions.setShowOtherSheet(true)}
-                openHistoryModal={actions.openHistoryModal}
-                previewRecords={derived.previewRecords}
-              />
-            </div>
-          )}
-
-          {state.screen === "fare" && (
-            <div
-              className={`transition-all duration-500 delay-100 ${
-                uiReady ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-              }`}
-            >
-              <FareScreen
-                rideStartAt={state.rideStartAt}
-                pickup={state.pickup}
-                pickupMeta={state.pickupMeta}
-                rideEndAt={state.rideEndAt}
-                dropoff={state.dropoff}
-                dropoffMeta={state.dropoffMeta}
-                amountInputRef={refs.amountInputRef}
-                formattedAmount={derived.formattedAmount}
-                handleAmountChange={actions.handleAmountChange}
-                passengerDisplayCount={derived.passengerDisplayCount}
-                selectedPassengers={state.selectedPassengers}
-                handlePassengerSelect={actions.handlePassengerSelect}
-                openPaymentDialog={actions.openPaymentDialog}
-              />
-            </div>
-          )}
+            {/* その他 */}
+            {(phase === "other" || phase === "app") && (
+              <div className="pt-4 transition-all duration-300">
+                <TopScreen
+                  topMainLabel={derived.topMainLabel}
+                  topMainButtonDisabled={derived.topMainButtonDisabled}
+                  handleTopMain={actions.handleTopMain}
+                  renderSharedInfoSpacer={renderSharedInfoSpacer}
+                  topScrollRef={refs.topScrollRef}
+                  openOtherSheet={() => actions.setShowOtherSheet(true)}
+                  openHistoryModal={actions.openHistoryModal}
+                  previewRecords={derived.previewRecords}
+                />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
