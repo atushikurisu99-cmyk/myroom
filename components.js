@@ -67,30 +67,40 @@ window.AppComponents = (() => {
   function PreviewHistoryRows({ previewRecords }) {
     if (!previewRecords || previewRecords.length === 0) {
       return (
-        <div className="px-4 py-6 text-sm text-slate-400">
+        <div className="px-4 py-8 text-sm text-slate-400">
           まだ履歴はありません
         </div>
       );
     }
 
-    return previewRecords.map((record) => (
-      <div
-        key={record.id}
-        className="px-4 py-3 border-b last:border-b-0 border-slate-100"
-      >
-        <div className="flex items-start justify-between gap-3">
-          <div className="text-[15px] font-normal text-slate-700">
-            {formatMoney(record.金額)}
+    return previewRecords.slice(0, 3).map((record, index) => {
+      const isPeek = index === 2;
+      return (
+        <div
+          key={record.id}
+          className={`px-4 border-b last:border-b-0 border-slate-100 ${isPeek ? "py-2 h-[30px] overflow-hidden opacity-70" : "py-3"}`}
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="text-[15px] font-normal text-slate-700">
+              {formatMoney(record.金額)}
+            </div>
+            <div className="text-xs text-slate-500 shrink-0">
+              {recordType(record) === "1" ? "①" : "②"}
+            </div>
           </div>
-          <div className="text-xs text-slate-500 shrink-0">
-            {recordType(record) === "1" ? "①" : "②"}
+
+          <div className="mt-1 text-xs text-slate-500">
+            {formatTime(record.乗車時刻)} → {formatTime(record.降車時刻)}
           </div>
+
+          {!isPeek && (
+            <div className="mt-1 text-[11px] text-slate-400 truncate">
+              {record.乗車地 || "未取得"} → {record.降車地 || "未取得"}
+            </div>
+          )}
         </div>
-        <div className="mt-1 text-xs text-slate-500">
-          {formatTime(record.乗車時刻)} → {formatTime(record.降車時刻)}
-        </div>
-      </div>
-    ));
+      );
+    });
   }
 
   function BottomCard(props) {
@@ -98,40 +108,86 @@ window.AppComponents = (() => {
       openOtherSheet,
       openHistoryModal,
       previewRecords,
+      totalAmount,
+      movable = false,
+      standbySheetOffset = 0,
+      toggleStandbySheet,
+      beginStandbySheetDrag,
     } = props;
 
     const safeBottom = "max(12px, env(safe-area-inset-bottom))";
-    const hasPreview = !!(previewRecords && previewRecords.length > 0);
+    const panelStyle = movable
+      ? {
+          position: "absolute",
+          inset: 0,
+          transform: `translateY(${standbySheetOffset}px)`,
+          transition: "transform 180ms ease",
+        }
+      : {};
+
+    const startMouseDrag = (e) => {
+      if (!movable || !beginStandbySheetDrag) return;
+      beginStandbySheetDrag(e.clientY);
+    };
+
+    const startTouchDrag = (e) => {
+      if (!movable || !beginStandbySheetDrag) return;
+      beginStandbySheetDrag(e.touches[0].clientY);
+    };
 
     return (
-      <div className="shrink-0 pt-3" style={{ paddingBottom: safeBottom }}>
+      <div className="shrink-0 pt-3" style={{ paddingBottom: safeBottom, ...panelStyle }}>
         <div
-          className={`${cardClass} overflow-hidden flex flex-col bg-white`}
+          className={`${cardClass} overflow-hidden flex flex-col bg-white h-full`}
           style={{ minHeight: `${BOTTOM_CARD_HEIGHT}px` }}
         >
-          <button
-            type="button"
-            onClick={openOtherSheet}
-            className="px-4 pt-3 pb-2 text-left shrink-0 active:bg-slate-50 bg-white"
-          >
-            <div className="text-sm font-medium text-slate-400">その他</div>
-          </button>
+          <div className="px-4 pt-3 pb-2 shrink-0 bg-white">
+            <div className="relative flex items-center justify-center h-[22px]">
+              <div
+                className="w-14 h-1.5 rounded-full bg-slate-200"
+                onMouseDown={startMouseDrag}
+                onTouchStart={startTouchDrag}
+              />
+              {movable ? (
+                <button
+                  type="button"
+                  onClick={toggleStandbySheet}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-[18px] font-black text-slate-500"
+                  aria-label="開閉"
+                >
+                  {standbySheetOffset > 90 ? "▽" : "△"}
+                </button>
+              ) : null}
+            </div>
 
-          <button
-            type="button"
+            <div className="mt-2 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={openOtherSheet}
+                className="text-sm font-medium text-slate-400 active:text-slate-600"
+              >
+                その他
+              </button>
+
+              <div className="text-[18px] font-extrabold text-slate-800">
+                売上 {formatMoney(totalAmount)}
+              </div>
+            </div>
+          </div>
+
+          <div
+            role="button"
+            tabIndex={0}
             onClick={openHistoryModal}
-            className="w-full flex-1 text-left active:bg-slate-50 bg-white"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") openHistoryModal();
+            }}
+            className="flex-1 min-h-0 bg-white active:bg-slate-50"
           >
-            {hasPreview ? (
-              <div className="bg-white">
-                <PreviewHistoryRows previewRecords={previewRecords} />
-              </div>
-            ) : (
-              <div className="px-4 py-6 text-sm text-slate-400 bg-white">
-                まだ履歴はありません
-              </div>
-            )}
-          </button>
+            <div className="h-full overflow-y-auto">
+              <PreviewHistoryRows previewRecords={previewRecords} />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -201,7 +257,7 @@ window.AppComponents = (() => {
       pickupMeta,
       dropoffMeta,
       paymentCountdown,
-      savingDots,
+      paymentLabel,
       onCancel,
     } = props;
 
@@ -211,16 +267,21 @@ window.AppComponents = (() => {
           <div className="text-[34px] font-black text-slate-800 tracking-[-0.04em]">
             {formatMoney(amount)}
           </div>
-          <div className="mt-5 text-[18px] font-bold text-slate-800">
-            {paymentCountdown > 0.5
-              ? `自動保存中${"・".repeat(Math.max(0, savingDots))}`
-              : "保存中"}
+
+          <div className="mt-3 text-[17px] font-bold text-slate-700">
+            {paymentLabel}
           </div>
+
+          <div className="mt-5 text-[22px] font-black text-slate-800">
+            保存まで {paymentCountdown}…
+          </div>
+
           <div className="mt-3 text-sm text-slate-500">
             乗車位置精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}
             <br />
             降車位置精度：{dropoffMeta?.accuracy != null ? `${dropoffMeta.accuracy}m` : "--"}
           </div>
+
           <div className="mt-5 flex justify-end">
             <button
               type="button"
