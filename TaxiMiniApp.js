@@ -24,9 +24,9 @@ function TaxiMiniApp() {
     const t1 = setTimeout(() => setPhase("logoFade"), 1500);
     const t2 = setTimeout(() => setPhase("blank"), 2000);
     const t3 = setTimeout(() => setPhase("card"), 2500);
-    const t4 = setTimeout(() => setPhase("button"), 2900);
-    const t5 = setTimeout(() => setPhase("other"), 3250);
-    const t6 = setTimeout(() => setPhase("app"), 3600);
+    const t4 = setTimeout(() => setPhase("button"), 2880);
+    const t5 = setTimeout(() => setPhase("other"), 3230);
+    const t6 = setTimeout(() => setPhase("app"), 3580);
 
     return () => {
       clearTimeout(t1);
@@ -93,7 +93,9 @@ function TaxiMiniApp() {
           <img
             src="./logo.png"
             className={`w-[220px] transition-all duration-[500ms] ease-out ${
-              phase === "logoFade" ? "opacity-0 scale-[1.02]" : "opacity-100 scale-100"
+              phase === "logoFade"
+                ? "opacity-0 scale-[1.02]"
+                : "opacity-100 scale-100"
             }`}
           />
         </div>
@@ -107,7 +109,7 @@ function TaxiMiniApp() {
         <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
           <div className="h-full flex flex-col overflow-hidden">
             <div
-              className={`relative z-30 transition-all duration-[380ms] ease-out ${
+              className={`relative z-30 transition-all duration-[360ms] ease-out ${
                 phase === "card" || phase === "button" || phase === "other"
                   ? "translate-x-0 opacity-100"
                   : "-translate-x-10 opacity-0"
@@ -118,7 +120,7 @@ function TaxiMiniApp() {
 
             {(phase === "button" || phase === "other") && (
               <div
-                className={`pt-4 relative z-20 transition-all duration-[340ms] ease-out ${
+                className={`pt-4 relative z-20 transition-all duration-[330ms] ease-out ${
                   phase === "button" || phase === "other"
                     ? "translate-y-0 opacity-100"
                     : "translate-y-6 opacity-0"
@@ -134,19 +136,21 @@ function TaxiMiniApp() {
 
             {phase === "other" && (
               <div
-                className={`pt-4 relative z-10 transition-all duration-[340ms] ease-out ${
-                  phase === "other" ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                className={`pt-4 relative z-10 transition-all duration-[330ms] ease-out ${
+                  phase === "other"
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-10 opacity-0"
                 }`}
               >
                 {renderSharedInfoSpacer()}
-                <div
-                  className={`${C.cardClass} h-[220px] bg-white`}
-                >
+
+                <div className={`${C.cardClass} h-[220px] bg-white overflow-hidden`}>
                   <div className="h-full flex flex-col">
-                    <div className="px-4 pt-3 pb-2 shrink-0">
+                    <div className="px-4 pt-3 pb-2 shrink-0 bg-white">
                       <div className="relative flex items-center justify-center h-[22px]">
                         <div className="w-14 h-1.5 rounded-full bg-slate-200" />
                       </div>
+
                       <div className="mt-2 flex items-center justify-between">
                         <div className="text-sm font-medium text-slate-400">その他</div>
                         <div className="text-[18px] font-extrabold text-slate-800">売上 ¥0</div>
