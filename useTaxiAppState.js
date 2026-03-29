@@ -1,4 +1,3 @@
-
 window.AppHooks = (() => {
   const { useEffect, useMemo, useRef, useState } = React;
   const Utils = window.AppUtils;
@@ -28,8 +27,7 @@ window.AppHooks = (() => {
 
     const [showPaymentDialog, setShowPaymentDialog] = useState(false);
     const [pendingPaymentType, setPendingPaymentType] = useState(null);
-    const [paymentCountdown, setPaymentCountdown] = useState(2.5);
-    const [savingDots, setSavingDots] = useState(4);
+    const [paymentCountdown, setPaymentCountdown] = useState(3);
 
     const [showViaDialog, setShowViaDialog] = useState(false);
     const [pendingViaPlace, setPendingViaPlace] = useState("");
@@ -50,6 +48,11 @@ window.AppHooks = (() => {
     const [toastMessage, setToastMessage] = useState("");
     const [now, setNow] = useState(new Date());
 
+    const [weatherNowKind, setWeatherNowKind] = useState("unknown");
+    const [weatherTomorrowKind, setWeatherTomorrowKind] = useState("unknown");
+    const [weatherLastUpdatedAt, setWeatherLastUpdatedAt] = useState(null);
+    const [weatherLastDateKey, setWeatherLastDateKey] = useState("");
+
     const amountInputRef = useRef(null);
     const savedTimerRef = useRef(null);
     const paymentTimerRef = useRef(null);
@@ -59,7 +62,17 @@ window.AppHooks = (() => {
     const topScrollRef = useRef(null);
     const dropTapRef = useRef({ lastTapAt: 0 });
     const paymentTypeRef = useRef(null);
+    const screenRef = useRef(screen);
+    const ridingRef = useRef(isRiding);
     const sheetDragRef = useRef({ dragging: false, startY: 0, startOffset: 0 });
+
+    useEffect(() => {
+      screenRef.current = screen;
+    }, [screen]);
+
+    useEffect(() => {
+      ridingRef.current = isRiding;
+    }, [isRiding]);
 
     useEffect(() => {
       clockTimerRef.current = setInterval(() => setNow(new Date()), 600);
@@ -97,7 +110,8 @@ window.AppHooks = (() => {
     }, [screen]);
 
     const isFinishVisible = standbySheetOffset >= Constants.FINISH_ENABLE_OFFSET;
-    const isStandbySheetOpened = standbySheetOffset >= Constants.STANDBY_OTHER_MOVE_RANGE * 0.7;
+    const isStandbySheetOpened =
+      standbySheetOffset >= Constants.STANDBY_OTHER_MOVE_RANGE * 0.7;
 
     const vibrateTap = () => {
       if (navigator.vibrate) navigator.vibrate(18);
@@ -136,13 +150,17 @@ window.AppHooks = (() => {
       if (!sheetDragRef.current.dragging) return;
       sheetDragRef.current.dragging = false;
       setStandbySheetOffset((prev) =>
-        prev > Constants.STANDBY_OTHER_MOVE_RANGE * 0.5 ? Constants.STANDBY_OTHER_MOVE_RANGE : 0
+        prev > Constants.STANDBY_OTHER_MOVE_RANGE * 0.5
+          ? Constants.STANDBY_OTHER_MOVE_RANGE
+          : 0
       );
     };
 
     const toggleStandbySheet = () => {
       setStandbySheetOffset((prev) =>
-        prev > Constants.STANDBY_OTHER_MOVE_RANGE * 0.5 ? 0 : Constants.STANDBY_OTHER_MOVE_RANGE
+        prev > Constants.STANDBY_OTHER_MOVE_RANGE * 0.5
+          ? 0
+          : Constants.STANDBY_OTHER_MOVE_RANGE
       );
     };
 
@@ -161,6 +179,7 @@ window.AppHooks = (() => {
       window.addEventListener("touchmove", handleTouchMove, { passive: false });
       window.addEventListener("touchend", handleTouchEnd);
       window.addEventListener("touchcancel", handleTouchEnd);
+
       return () => {
         window.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("mouseup", handleMouseUp);
@@ -192,37 +211,38 @@ window.AppHooks = (() => {
     const recordCount = useMemo(() => records.length, [records]);
 
     const amount1 = useMemo(
-      () => records
-        .filter((record) => record.payment === "cash" && !record.receipt)
-        .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
+      () =>
+        records
+          .filter((record) => record.payment === "cash" && !record.receipt)
+          .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
       [records]
     );
 
     const amount2 = useMemo(
-      () => records
-        .filter((record) => !(record.payment === "cash" && !record.receipt))
-        .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
+      () =>
+        records
+          .filter((record) => !(record.payment === "cash" && !record.receipt))
+          .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
       [records]
     );
 
     const previewRecords = useMemo(() => records.slice(0, 3), [records]);
 
-    const stateLabel = (() => {
-      if (screen === "standby") return "乗車待機";
-      if (screen === "ride") return "実車中";
-      if (screen === "fare") return "金額入力";
-      if (isRiding) return "実車中";
-      if (dutyStarted) return "乗車待機";
-      return "乗務開始前";
+    const topMainLabel = (() => {
+      if (!dutyStarted) return "乗務開始";
+      if (isRiding) return "実車へ戻る";
+      return "乗車待機へ戻る";
     })();
 
-    const topMainLabel = !dutyStarted ? "乗務開始" : "乗務終了";
-    const topMainButtonDisabled = screen === "top" && isRiding;
-    const formattedAmount = useMemo(() => (amount ? Number(amount).toLocaleString("ja-JP") : ""), [amount]);
-    const passengerDisplayCount = 6;
+    const topMainButtonDisabled = false;
+    const formattedAmount = useMemo(
+      () => (amount ? Number(amount).toLocaleString("ja-JP") : ""),
+      [amount]
+    );
 
     const filteredHistoryRecords = useMemo(() => {
       let list = [...records];
+
       if (historyFilter === "1") {
         list = list.filter((record) => Utils.recordType(record) === "1");
       } else if (historyFilter === "2") {
@@ -230,30 +250,41 @@ window.AppHooks = (() => {
       }
 
       if (historyMode === "day") {
-        list = list.filter((record) => Utils.isSameDay(Utils.getHistoryTargetDate(record), historyBaseDate));
+        list = list.filter((record) =>
+          Utils.isSameDay(Utils.getHistoryTargetDate(record), historyBaseDate)
+        );
       } else if (historyMode === "week") {
         const start = Utils.getWeekStart(historyBaseDate);
         const end = Utils.getWeekEnd(historyBaseDate);
-        list = list.filter((record) => Utils.isInRange(Utils.getHistoryTargetDate(record), start, end));
+        list = list.filter((record) =>
+          Utils.isInRange(Utils.getHistoryTargetDate(record), start, end)
+        );
       } else if (historyMode === "month") {
         const start = Utils.getMonthStart(historyBaseDate);
         const end = Utils.getMonthEnd(historyBaseDate);
-        list = list.filter((record) => Utils.isInRange(Utils.getHistoryTargetDate(record), start, end));
+        list = list.filter((record) =>
+          Utils.isInRange(Utils.getHistoryTargetDate(record), start, end)
+        );
       }
 
       return list.sort((a, b) => new Date(b.乗車時刻) - new Date(a.乗車時刻));
     }, [records, historyFilter, historyMode, historyBaseDate]);
 
     const historySummary = useMemo(() => {
-      const total = filteredHistoryRecords.reduce((sum, record) => sum + Number(record.金額 || 0), 0);
+      const total = filteredHistoryRecords.reduce(
+        (sum, record) => sum + Number(record.金額 || 0),
+        0
+      );
       return { total, count: filteredHistoryRecords.length };
     }, [filteredHistoryRecords]);
 
     const groupedHistory = useMemo(() => {
       const map = new Map();
+
       filteredHistoryRecords.forEach((record) => {
         const keyDate = Utils.getHistoryTargetDate(record);
         const key = `${keyDate.getFullYear()}-${String(keyDate.getMonth() + 1).padStart(2, "0")}-${String(keyDate.getDate()).padStart(2, "0")}`;
+
         if (!map.has(key)) {
           map.set(key, {
             key,
@@ -263,11 +294,13 @@ window.AppHooks = (() => {
             count: 0,
           });
         }
+
         const group = map.get(key);
         group.records.push(record);
         group.total += Number(record.金額 || 0);
         group.count += 1;
       });
+
       return Array.from(map.values()).sort((a, b) => b.date - a.date);
     }, [filteredHistoryRecords]);
 
@@ -340,14 +373,20 @@ window.AppHooks = (() => {
 
     const saveEditedRecord = () => {
       if (!editingRecord) return;
+
       const numericAmount = Number(String(editingRecord.金額入力 || "").replace(/[^\d]/g, ""));
       if (!numericAmount || numericAmount <= 0) return alert("正しい金額を入力してください");
       if (!editingRecord.乗車時刻入力 || !editingRecord.降車時刻入力) return alert("時刻を入力してください");
 
       const nextStartAt = new Date(editingRecord.乗車時刻入力);
       const nextEndAt = new Date(editingRecord.降車時刻入力);
-      if (Number.isNaN(nextStartAt.getTime()) || Number.isNaN(nextEndAt.getTime())) return alert("時刻の形式が正しくありません");
-      if (nextEndAt.getTime() < nextStartAt.getTime()) return alert("降車時刻は乗車時刻より後にしてください");
+
+      if (Number.isNaN(nextStartAt.getTime()) || Number.isNaN(nextEndAt.getTime())) {
+        return alert("時刻の形式が正しくありません");
+      }
+      if (nextEndAt.getTime() < nextStartAt.getTime()) {
+        return alert("降車時刻は乗車時刻より後にしてください");
+      }
 
       const nextPayment = editingRecord.区分入力 === "1" ? "cash" : "cardQr";
       const nextReceipt = false;
@@ -369,7 +408,9 @@ window.AppHooks = (() => {
         備考: (editingRecord.備考入力 || "").trim(),
       };
 
-      setRecords((prev) => prev.map((record) => (record.id === updatedRecord.id ? updatedRecord : record)));
+      setRecords((prev) =>
+        prev.map((record) => (record.id === updatedRecord.id ? updatedRecord : record))
+      );
       setEditingRecord(null);
     };
 
@@ -383,9 +424,21 @@ window.AppHooks = (() => {
 
     const handleCardModeNext = () => setCardMode((prev) => (prev >= 5 ? 1 : prev + 1));
 
-    const handleDutyStart = () => {
+    const applyWeatherFromMeta = async (meta, force = false) => {
+      if (!meta?.latitude || !meta?.longitude) return;
+      if (!force && !Geo.shouldRefreshWeather(weatherLastUpdatedAt, weatherLastDateKey)) return;
+
+      const snapshot = await Geo.fetchWeatherSnapshot(meta.latitude, meta.longitude);
+      setWeatherNowKind(snapshot.nowKind || "unknown");
+      setWeatherTomorrowKind(snapshot.tomorrowKind || "unknown");
+      setWeatherLastUpdatedAt(snapshot.fetchedAt || Date.now());
+      setWeatherLastDateKey(snapshot.dateKey || new Date().toDateString());
+    };
+
+    const handleDutyStart = async () => {
       vibrateTap();
       const startDutyDate = new Date();
+
       setDutyStarted(true);
       setIsRiding(false);
       setRideStartAt(null);
@@ -400,6 +453,9 @@ window.AppHooks = (() => {
       setScreen("standby");
       setWorkDate(startDutyDate);
       setStandbySheetOffset(0);
+
+      const current = await Geo.getBestCurrentPlace();
+      await applyWeatherFromMeta(current, true);
     };
 
     const performDutyEnd = () => {
@@ -431,13 +487,23 @@ window.AppHooks = (() => {
     };
 
     const handleTopMain = () => {
-      if (!dutyStarted) return handleDutyStart();
-      handleFinishTap();
+      if (!dutyStarted) {
+        handleDutyStart();
+        return;
+      }
+
+      if (isRiding) {
+        setScreen("ride");
+        return;
+      }
+
+      setScreen("standby");
     };
 
     const handleStartRide = async () => {
       vibrateTap();
       const start = new Date();
+
       setRideStartAt(start);
       setRideEndAt(null);
       setIsRiding(true);
@@ -458,6 +524,7 @@ window.AppHooks = (() => {
     const openNormalDropoff = async () => {
       vibrateTap();
       const end = new Date();
+
       setRideEndAt(end);
       setAmount("");
       setDropoff("取得中…");
@@ -467,6 +534,8 @@ window.AppHooks = (() => {
       const best = await Geo.getBestCurrentPlace();
       setDropoff(best.label || "未取得");
       setDropoffMeta(best);
+
+      await applyWeatherFromMeta(best, false);
     };
 
     const handleDropOffTap = async () => {
@@ -489,6 +558,7 @@ window.AppHooks = (() => {
     };
 
     const handleAmountChange = (e) => setAmount(e.target.value.replace(/[^\d]/g, ""));
+
     const handlePassengerSelect = (count) => {
       setSelectedPassengers(count);
       amountInputRef.current?.blur();
@@ -508,9 +578,12 @@ window.AppHooks = (() => {
       const numericAmount = Number(amount);
       if (!numericAmount || numericAmount <= 0) return alert("正しい金額を入力してください");
 
-      const finalPassengers = selectedPassengers || 1;
+      if (selectedPassengers === null) return alert("人数を選んでください");
+
+      const finalPassengers = selectedPassengers;
       let payment = "cash";
       let receipt = false;
+
       if (activeType === "cardQr") payment = "cardQr";
       if (activeType === "receipt") {
         payment = "cardQr";
@@ -518,6 +591,7 @@ window.AppHooks = (() => {
       }
 
       const viaText = viaStops.length > 0 ? `経由：${viaStops.join(" → ")}` : "";
+
       const newRecord = {
         id: Date.now(),
         乗務日: workDate,
@@ -531,7 +605,7 @@ window.AppHooks = (() => {
         payment,
         領収証: receipt,
         receipt,
-        天気: "",
+        天気: weatherNowKind,
         乗車位置精度: pickupMeta?.accuracy ?? null,
         降車位置精度: dropoffMeta?.accuracy ?? null,
         乗車緯度: pickupMeta?.latitude ?? null,
@@ -545,8 +619,7 @@ window.AppHooks = (() => {
       setShowPaymentDialog(false);
       setPendingPaymentType(null);
       paymentTypeRef.current = null;
-      setPaymentCountdown(2.5);
-      setSavingDots(4);
+      setPaymentCountdown(3);
       setRecords((prev) => [newRecord, ...prev]);
 
       setIsRiding(false);
@@ -575,19 +648,17 @@ window.AppHooks = (() => {
       clearPaymentCountdown();
       setPendingPaymentType(type);
       paymentTypeRef.current = type;
-      setPaymentCountdown(2.5);
-      setSavingDots(4);
+      setPaymentCountdown(3);
       setShowPaymentDialog(true);
 
       paymentCountdownRef.current = setInterval(() => {
         setPaymentCountdown((prev) => {
-          const next = prev - 0.5;
-          return next <= 0 ? 0 : next;
+          if (prev <= 1) return 1;
+          return prev - 1;
         });
-        setSavingDots((prev) => (prev <= 0 ? 0 : prev - 1));
-      }, 500);
+      }, 1000);
 
-      paymentTimerRef.current = setTimeout(() => confirmPaymentSave(type), 2500);
+      paymentTimerRef.current = setTimeout(() => confirmPaymentSave(type), 3000);
     };
 
     const cancelPaymentDialog = () => {
@@ -595,8 +666,7 @@ window.AppHooks = (() => {
       clearPaymentCountdown();
       setPendingPaymentType(null);
       paymentTypeRef.current = null;
-      setPaymentCountdown(2.5);
-      setSavingDots(4);
+      setPaymentCountdown(3);
     };
 
     const recordVia = () => {
@@ -615,29 +685,95 @@ window.AppHooks = (() => {
     return {
       refs: { amountInputRef, topScrollRef, sheetDragRef },
       state: {
-        screen, dutyStarted, isRiding, rideStartAt, rideEndAt, pickup, dropoff, pickupMeta, dropoffMeta,
-        amount, selectedPassengers, records, showSaved, showHistoryModal, showOtherSheet,
-        showPaymentDialog, pendingPaymentType, paymentCountdown, savingDots,
-        showViaDialog, pendingViaPlace, viaStops, showFinishDialog,
-        historyMode, historyFilter, historyBaseDate, expandedMonthDays, editingRecord,
-        cardMode, workDate, standbySheetOffset, toastMessage, now,
+        screen,
+        dutyStarted,
+        isRiding,
+        rideStartAt,
+        rideEndAt,
+        pickup,
+        dropoff,
+        pickupMeta,
+        dropoffMeta,
+        amount,
+        selectedPassengers,
+        records,
+        showSaved,
+        showHistoryModal,
+        showOtherSheet,
+        showPaymentDialog,
+        pendingPaymentType,
+        paymentCountdown,
+        showViaDialog,
+        pendingViaPlace,
+        viaStops,
+        showFinishDialog,
+        historyMode,
+        historyFilter,
+        historyBaseDate,
+        expandedMonthDays,
+        editingRecord,
+        cardMode,
+        workDate,
+        standbySheetOffset,
+        toastMessage,
+        now,
+        weatherNowKind,
+        weatherTomorrowKind,
       },
       derived: {
-        isFinishVisible, isStandbySheetOpened, timeParts, elapsedText, totalAmount, recordCount,
-        amount1, amount2, previewRecords, stateLabel, topMainLabel, topMainButtonDisabled,
-        formattedAmount, passengerDisplayCount, filteredHistoryRecords, historySummary,
-        groupedHistory, getHistoryPeriodText,
+        isFinishVisible,
+        isStandbySheetOpened,
+        timeParts,
+        elapsedText,
+        totalAmount,
+        recordCount,
+        amount1,
+        amount2,
+        previewRecords,
+        topMainLabel,
+        topMainButtonDisabled,
+        formattedAmount,
+        filteredHistoryRecords,
+        historySummary,
+        groupedHistory,
+        getHistoryPeriodText,
+        weatherNowIcon: Geo.weatherIcon(weatherNowKind),
+        weatherTomorrowIcon: Geo.weatherIcon(weatherTomorrowKind),
       },
       actions: {
-        setShowOtherSheet, setShowFinishDialog, setShowHistoryModal, setEditingRecord,
-        setHistoryMode, setHistoryFilter, setHistoryBaseDate, setExpandedMonthDays,
-        setEditingRecord, setCardMode,
-        beginStandbySheetDrag, endStandbySheetDrag, toggleStandbySheet,
-        handleCardModeNext, handleDutyStart, performDutyEnd, handleFinishTap, handleTopMain,
-        handleStartRide, handleDropOffTap, handleAmountChange, handlePassengerSelect,
-        openPaymentDialog, cancelPaymentDialog, recordVia, cancelViaDialog,
-        openHistoryModal, closeHistoryModal, moveHistoryPeriod, toggleMonthDay,
-        openEditRecord, closeEditRecord, saveEditedRecord, deleteEditedRecord,
+        setShowOtherSheet,
+        setShowFinishDialog,
+        setShowHistoryModal,
+        setEditingRecord,
+        setHistoryMode,
+        setHistoryFilter,
+        setHistoryBaseDate,
+        setExpandedMonthDays,
+        setCardMode,
+        beginStandbySheetDrag,
+        endStandbySheetDrag,
+        toggleStandbySheet,
+        handleCardModeNext,
+        handleDutyStart,
+        performDutyEnd,
+        handleFinishTap,
+        handleTopMain,
+        handleStartRide,
+        handleDropOffTap,
+        handleAmountChange,
+        handlePassengerSelect,
+        openPaymentDialog,
+        cancelPaymentDialog,
+        recordVia,
+        cancelViaDialog,
+        openHistoryModal,
+        closeHistoryModal,
+        moveHistoryPeriod,
+        toggleMonthDay,
+        openEditRecord,
+        closeEditRecord,
+        saveEditedRecord,
+        deleteEditedRecord,
       },
       helpers: { confirmPaymentSave },
     };
