@@ -51,10 +51,47 @@ function TaxiMiniApp() {
     </div>
   );
 
+  const renderClockCard = () => (
+    <div className={`${C.cardClass} h-[172px] px-4 py-4`}>
+      <div className="h-full flex items-center justify-between gap-3">
+        <div className="shrink-0 flex items-center gap-4 pl-1">
+          <div className="w-[42px] text-center">
+            <div className="text-[12px] font-semibold text-slate-500 leading-none">今</div>
+            <div className="mt-2 text-[28px] leading-none">
+              {derived.weatherNowIcon}
+            </div>
+          </div>
+
+          <div className="w-[42px] text-center">
+            <div className="text-[12px] font-semibold text-slate-500 leading-none">翌日</div>
+            <div className="mt-2 text-[28px] leading-none">
+              {derived.weatherTomorrowIcon}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1 flex justify-end items-center min-w-0">
+          <div className="text-[58px] font-black text-slate-800 tracking-[-0.04em] leading-none">
+            {derived.timeParts.hh}
+            <span className={derived.timeParts.showColon ? "opacity-100" : "opacity-20"}>:</span>
+            {derived.timeParts.mm}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const paymentLabel =
+    state.pendingPaymentType === "cash"
+      ? "現金"
+      : state.pendingPaymentType === "cardQr"
+      ? "カード・QR"
+      : state.pendingPaymentType === "receipt"
+      ? "領収証発行"
+      : "";
+
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
-
-      {/* ロゴ */}
       {(phase === "logo" || phase === "logoFade") && (
         <div className="fixed inset-0 z-[9999] bg-white flex items-center justify-center">
           <img
@@ -66,33 +103,19 @@ function TaxiMiniApp() {
         </div>
       )}
 
-      {/* 白 */}
       {phase === "white" && (
         <div className="fixed inset-0 z-[9998] bg-white" />
       )}
 
-      {/* 起動演出 */}
       {(phase === "card" || phase === "button" || phase === "other") && (
         <div className="w-full max-w-sm h-full px-4 pt-4 pb-3">
           <div className="flex flex-col">
-
-            {phase !== "white" && (
-              <div className={`${C.cardClass} h-[172px] px-4 py-4 transition-all duration-500`}>
-                <div className="flex justify-between">
-                  <div className="text-[15px] font-semibold text-slate-700">
-                    {derived.stateLabel}
-                  </div>
-                  <div className="text-[58px] font-black text-slate-800">
-                    {derived.timeParts.hh}:{derived.timeParts.mm}
-                  </div>
-                </div>
-              </div>
-            )}
+            {phase !== "white" && renderClockCard()}
 
             {(phase === "button" || phase === "other") && (
               <div className="pt-4 transition-all duration-500">
-                <button className={`${C.mainButtonBase} ${C.mainButtonShine}`}>
-                  <span className={C.bigButtonText}>{derived.topMainLabel}</span>
+                <button className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)]`}>
+                  <span className={C.bigButtonText}>乗務開始</span>
                 </button>
               </div>
             )}
@@ -109,10 +132,8 @@ function TaxiMiniApp() {
         </div>
       )}
 
-      {/* 通常UI */}
       {phase === "app" && (
         <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
-
           <OtherSheet
             show={state.showOtherSheet}
             onClose={() => actions.setShowOtherSheet(false)}
@@ -141,76 +162,98 @@ function TaxiMiniApp() {
             setEditingRecord={actions.setEditingRecord}
           />
 
-          <div className="h-full flex flex-col overflow-hidden">
+          {state.showPaymentDialog && (
+            <PaymentDialog
+              amount={state.amount}
+              pickupMeta={state.pickupMeta}
+              dropoffMeta={state.dropoffMeta}
+              paymentCountdown={state.paymentCountdown}
+              paymentLabel={paymentLabel}
+              onCancel={actions.cancelPaymentDialog}
+            />
+          )}
 
-            <div className={`${C.cardClass} h-[172px] px-4 py-4`}>
-              <div className="flex justify-between">
-                <div className="text-[15px] font-semibold text-slate-700">
-                  {derived.stateLabel}
-                </div>
-                <div className="text-[58px] font-black text-slate-800">
-                  {derived.timeParts.hh}:{derived.timeParts.mm}
-                </div>
-              </div>
-            </div>
+          {state.showViaDialog && (
+            <ViaDialog
+              pendingViaPlace={state.pendingViaPlace}
+              onCancel={actions.cancelViaDialog}
+              onRecord={actions.recordVia}
+            />
+          )}
+
+          {state.showFinishDialog && (
+            <FinishDialog
+              workDate={state.workDate}
+              recordCount={derived.recordCount}
+              totalAmount={derived.totalAmount}
+              onCancel={() => actions.setShowFinishDialog(false)}
+              onConfirm={actions.performDutyEnd}
+            />
+          )}
+
+          <div className="h-full flex flex-col overflow-hidden">
+            {renderClockCard()}
 
             {state.screen === "top" && (
-              <TopScreen {...{
-                topMainLabel: derived.topMainLabel,
-                topMainButtonDisabled: derived.topMainButtonDisabled,
-                handleTopMain: actions.handleTopMain,
-                renderSharedInfoSpacer,
-                topScrollRef: refs.topScrollRef,
-                openOtherSheet: () => actions.setShowOtherSheet(true),
-                openHistoryModal: actions.openHistoryModal,
-                previewRecords: derived.previewRecords,
-              }} />
+              <TopScreen
+                topMainLabel={derived.topMainLabel}
+                topMainButtonDisabled={derived.topMainButtonDisabled}
+                handleTopMain={actions.handleTopMain}
+                renderSharedInfoSpacer={renderSharedInfoSpacer}
+                topScrollRef={refs.topScrollRef}
+                openOtherSheet={() => actions.setShowOtherSheet(true)}
+                openHistoryModal={actions.openHistoryModal}
+                previewRecords={derived.previewRecords}
+                totalAmount={derived.totalAmount}
+              />
             )}
 
             {state.screen === "standby" && (
-              <StandbyScreen {...{
-                handleStartRide: actions.handleStartRide,
-                renderSharedInfoSpacer,
-                handleFinishTap: actions.handleFinishTap,
-                openOtherSheet: () => actions.setShowOtherSheet(true),
-                openHistoryModal: actions.openHistoryModal,
-                previewRecords: derived.previewRecords,
-                toggleStandbySheet: actions.toggleStandbySheet,
-                isStandbySheetOpened: derived.isStandbySheetOpened,
-              }} />
+              <StandbyScreen
+                handleStartRide={actions.handleStartRide}
+                renderSharedInfoSpacer={renderSharedInfoSpacer}
+                handleFinishTap={actions.handleFinishTap}
+                openOtherSheet={() => actions.setShowOtherSheet(true)}
+                openHistoryModal={actions.openHistoryModal}
+                previewRecords={derived.previewRecords}
+                toggleStandbySheet={actions.toggleStandbySheet}
+                isStandbySheetOpened={derived.isStandbySheetOpened}
+                standbySheetOffset={state.standbySheetOffset}
+                beginStandbySheetDrag={actions.beginStandbySheetDrag}
+                totalAmount={derived.totalAmount}
+              />
             )}
 
             {state.screen === "ride" && (
-              <RideScreen {...{
-                pickup: state.pickup,
-                rideStartAt: state.rideStartAt,
-                elapsedText: derived.elapsedText,
-                viaStops: state.viaStops,
-                handleDropOffTap: actions.handleDropOffTap,
-                openOtherSheet: () => actions.setShowOtherSheet(true),
-                openHistoryModal: actions.openHistoryModal,
-                previewRecords: derived.previewRecords,
-              }} />
+              <RideScreen
+                pickup={state.pickup}
+                rideStartAt={state.rideStartAt}
+                elapsedText={derived.elapsedText}
+                viaStops={state.viaStops}
+                handleDropOffTap={actions.handleDropOffTap}
+                openOtherSheet={() => actions.setShowOtherSheet(true)}
+                openHistoryModal={actions.openHistoryModal}
+                previewRecords={derived.previewRecords}
+                totalAmount={derived.totalAmount}
+              />
             )}
 
             {state.screen === "fare" && (
-              <FareScreen {...{
-                rideStartAt: state.rideStartAt,
-                pickup: state.pickup,
-                pickupMeta: state.pickupMeta,
-                rideEndAt: state.rideEndAt,
-                dropoff: state.dropoff,
-                dropoffMeta: state.dropoffMeta,
-                amountInputRef: refs.amountInputRef,
-                formattedAmount: derived.formattedAmount,
-                handleAmountChange: actions.handleAmountChange,
-                passengerDisplayCount: derived.passengerDisplayCount,
-                selectedPassengers: state.selectedPassengers,
-                handlePassengerSelect: actions.handlePassengerSelect,
-                openPaymentDialog: actions.openPaymentDialog,
-              }} />
+              <FareScreen
+                rideStartAt={state.rideStartAt}
+                pickup={state.pickup}
+                pickupMeta={state.pickupMeta}
+                rideEndAt={state.rideEndAt}
+                dropoff={state.dropoff}
+                dropoffMeta={state.dropoffMeta}
+                amountInputRef={refs.amountInputRef}
+                formattedAmount={derived.formattedAmount}
+                handleAmountChange={actions.handleAmountChange}
+                selectedPassengers={state.selectedPassengers}
+                handlePassengerSelect={actions.handlePassengerSelect}
+                openPaymentDialog={actions.openPaymentDialog}
+              />
             )}
-
           </div>
         </div>
       )}
