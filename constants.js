@@ -16,8 +16,7 @@ window.AppConstants = {
   PAYMENT_RECEIPT: "#ffff19",
 
   shadowSub: "shadow-[0_8px_16px_rgba(0,0,0,0.10)]",
-  cardClass:
-    "rounded-[28px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)]",
+  cardClass: "rounded-[28px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)]",
   mainButtonBase:
     "relative overflow-hidden w-full h-full rounded-[28px] text-white active:scale-[0.985] border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.7),inset_0_-3px_8px_rgba(0,0,0,0.30),0_8px_16px_rgba(0,0,0,0.18)]",
   mainButtonShine:
@@ -26,5 +25,5 @@ window.AppConstants = {
   smallButtonBase:
     "relative overflow-hidden w-full h-[54px] rounded-[20px] border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.20),0_6px_12px_rgba(0,0,0,0.14)] active:scale-[0.985]",
   endDutyButtonClass:
-    "relative overflow-hidden w-full h-[56px] rounded-[20px] border border-[#d8c7c7] text-slate-800 font-bold shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.18),0_6px_12px_rgba(0,0,0,0.12)] active:scale-[0.985] bg-[linear-gradient(180deg,#d8cdcd,#bdaead,#a38f8e)]",
+    "relative overflow-hidden w-full rounded-[28px] border border-[#d8c7c7] text-slate-800 font-bold shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.18),0_6px_12px_rgba(0,0,0,0.12)] active:scale-[0.985] bg-[linear-gradient(180deg,#d8cdcd,#bdaead,#a38f8e)]",
 };
