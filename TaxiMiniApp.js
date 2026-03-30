@@ -333,6 +333,8 @@ function TaxiMiniApp() {
                 standbySheetOffset={state.standbySheetOffset}
                 beginStandbySheetDrag={actions.beginStandbySheetDrag}
                 totalAmount={derived.totalAmount}
+                startupButtonOn={false}
+                startupOtherOn={false}
               />
             )}
 
