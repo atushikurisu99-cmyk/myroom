@@ -138,6 +138,8 @@ window.AppComponents = (() => {
       beginStandbySheetDrag(e.touches[0].clientY);
     };
 
+    const isOpened = standbySheetOffset > 90;
+
     return (
       <div className="shrink-0 pt-3" style={{ paddingBottom: safeBottom, ...panelStyle }}>
         <div
@@ -151,14 +153,15 @@ window.AppComponents = (() => {
                 onMouseDown={startMouseDrag}
                 onTouchStart={startTouchDrag}
               />
+
               {movable ? (
                 <button
                   type="button"
                   onClick={toggleStandbySheet}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 z-20 text-[22px] font-black text-slate-500 leading-none px-1"
-                  aria-label="開閉"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-30 text-[22px] font-black text-slate-500 leading-none px-1"
+                  aria-label={isOpened ? "上へ戻す" : "下へ開く"}
                 >
-                  {standbySheetOffset > 90 ? "▽" : "△"}
+                  {isOpened ? "△" : "▽"}
                 </button>
               ) : null}
             </div>
