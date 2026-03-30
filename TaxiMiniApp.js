@@ -97,7 +97,7 @@ function TaxiMiniApp() {
 
     const tApp = setTimeout(() => {
       setPhase("app");
-    }, 2320);
+    }, 2420);
 
     return () => {
       cancelAnimationFrame(raf1);
@@ -184,7 +184,7 @@ function TaxiMiniApp() {
               className="relative z-30"
               style={{
                 transform: startupCardOn ? "translate3d(0,0,0)" : "translate3d(-280px,0,0)",
-                opacity: startupCardOn ? 1 : 1,
+                opacity: 1,
                 transition: "transform 720ms cubic-bezier(0.22, 1, 0.36, 1)",
                 willChange: "transform",
               }}
@@ -195,10 +195,10 @@ function TaxiMiniApp() {
             <div
               className="pt-4 relative z-20"
               style={{
-                transform: startupButtonOn ? "translate3d(0,0,0)" : "translate3d(0,-96px,0)",
+                transform: startupButtonOn ? "translate3d(0,0,0)" : "translate3d(0,-150px,0)",
                 opacity: startupButtonOn ? 1 : 0,
                 transition:
-                  "transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 280ms ease-out",
+                  "transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms ease-out",
                 willChange: "transform, opacity",
               }}
             >
@@ -212,7 +212,7 @@ function TaxiMiniApp() {
             <div
               className="pt-4 relative z-10"
               style={{
-                transform: startupOtherOn ? "translate3d(0,0,0)" : "translate3d(0,-130px,0)",
+                transform: startupOtherOn ? "translate3d(0,0,0)" : "translate3d(0,-220px,0)",
                 opacity: startupOtherOn ? 1 : 0,
                 transition:
                   "transform 900ms cubic-bezier(0.22, 1, 0.36, 1), opacity 320ms ease-out",
