@@ -75,9 +75,9 @@ window.AppScreens.StandbyScreen = (() => {
             <div
               className="absolute z-40"
               style={{
-                right: "50%",
-                transform: "translateX(50%)",
-                top: `${C.BOTTOM_CARD_HEIGHT - 24}px`,
+                left: "50%",
+                transform: "translateX(-50%)",
+                top: `${C.BOTTOM_CARD_HEIGHT - 10}px`,
               }}
             >
               <button
@@ -85,10 +85,10 @@ window.AppScreens.StandbyScreen = (() => {
                 onClick={toggleStandbySheet}
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="text-[18px] leading-none font-bold text-slate-400"
+                className="flex items-center justify-center w-[32px] h-[24px] active:opacity-80"
                 aria-label="その他を下げる"
               >
-                ▽
+                <span className="text-[18px] leading-none font-bold text-slate-400">▽</span>
               </button>
             </div>
           )}
@@ -97,8 +97,8 @@ window.AppScreens.StandbyScreen = (() => {
             <div
               className="absolute z-40"
               style={{
-                right: "16px",
-                bottom: `${C.STANDBY_HANDLE_BOTTOM + 8}px`,
+                right: "18px",
+                top: `${C.STANDBY_REVEAL_TOP + 92}px`,
               }}
             >
               <button
@@ -106,10 +106,10 @@ window.AppScreens.StandbyScreen = (() => {
                 onClick={toggleStandbySheet}
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="text-[18px] leading-none font-bold text-slate-400"
+                className="flex items-center justify-center w-[32px] h-[24px] active:opacity-80"
                 aria-label="その他を戻す"
               >
-                △
+                <span className="text-[18px] leading-none font-bold text-slate-400">△</span>
               </button>
             </div>
           )}
