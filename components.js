@@ -86,7 +86,6 @@ window.AppComponents = (() => {
           transform: `translateY(${standbySheetOffset}px)`,
           transition: dragging ? "none" : "transform 180ms ease-out",
           willChange: "transform",
-          pointerEvents: isFinishVisible ? "none" : "auto",
         }
       : {};
 
@@ -106,7 +105,8 @@ window.AppComponents = (() => {
               <button
                 type="button"
                 onClick={openHistoryModal}
-                className="w-full min-h-full text-left active:bg-slate-50"
+                disabled={isFinishVisible}
+                className="w-full min-h-full text-left active:bg-slate-50 disabled:pointer-events-none"
               >
                 <PreviewHistoryRows previewRecords={previewRecords} />
               </button>
