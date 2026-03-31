@@ -10,10 +10,7 @@ function TaxiMiniApp() {
   const { refs, state, derived, actions } = useTaxiAppState();
   const C = window.AppConstants;
 
-  const [startupPhase, setStartupPhase] = React.useState("logo"); // logo | logoFade | blank | startup | done
-  const [startupCardOn, setStartupCardOn] = React.useState(false);
-  const [startupButtonOn, setStartupButtonOn] = React.useState(false);
-  const [startupOtherOn, setStartupOtherOn] = React.useState(false);
+  const [startupPhase, setStartupPhase] = React.useState("logo"); // logo | logoFade | blank | done
   const [startupOverlayFadeOut, setStartupOverlayFadeOut] = React.useState(false);
 
   const audioRef = React.useRef(null);
@@ -47,13 +44,11 @@ function TaxiMiniApp() {
     window.addEventListener("touchstart", unlockAudio, { passive: true });
 
     const t1 = setTimeout(() => setStartupPhase("logoFade"), 1200);
-    const t2 = setTimeout(() => setStartupPhase("blank"), 1600);
-    const t3 = setTimeout(() => setStartupPhase("startup"), 2350);
+    const t2 = setTimeout(() => setStartupPhase("blank"), 1600); // ロゴ消え切り＋白画面開始
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
-      clearTimeout(t3);
       window.removeEventListener("pointerdown", unlockAudio);
       window.removeEventListener("touchstart", unlockAudio);
     };
@@ -61,51 +56,23 @@ function TaxiMiniApp() {
 
   React.useEffect(() => {
     if (startupPhase !== "blank") return;
+
     try {
-      if (!audioRef.current) return;
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(() => {});
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play().catch(() => {});
+      }
     } catch (_) {}
-  }, [startupPhase]);
-
-  React.useEffect(() => {
-    if (startupPhase !== "startup") return;
-
-    setStartupCardOn(false);
-    setStartupButtonOn(false);
-    setStartupOtherOn(false);
-    setStartupOverlayFadeOut(false);
-
-    let raf1 = 0;
-    let raf2 = 0;
-
-    raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => {
-        setStartupCardOn(true);
-      });
-    });
-
-    const tButton = setTimeout(() => {
-      setStartupButtonOn(true);
-    }, 1450);
-
-    const tOther = setTimeout(() => {
-      setStartupOtherOn(true);
-    }, 1650);
 
     const tFade = setTimeout(() => {
       setStartupOverlayFadeOut(true);
-    }, 3150);
+    }, 750); // 白画面 約0.75秒
 
     const tDone = setTimeout(() => {
       setStartupPhase("done");
-    }, 3520);
+    }, 1080);
 
     return () => {
-      cancelAnimationFrame(raf1);
-      cancelAnimationFrame(raf2);
-      clearTimeout(tButton);
-      clearTimeout(tOther);
       clearTimeout(tFade);
       clearTimeout(tDone);
     };
@@ -150,29 +117,6 @@ function TaxiMiniApp() {
     </div>
   );
 
-  const renderStartupOtherCard = () => (
-    <div className={`${C.cardClass} h-[220px] bg-white overflow-hidden`}>
-      <div className="h-full flex flex-col overflow-hidden">
-        <div className="px-4 pt-3 pb-2 shrink-0 bg-white">
-          <div className="relative flex items-center justify-center h-[22px]">
-            <div className="w-14 h-1.5 rounded-full bg-slate-200" />
-          </div>
-
-          <div className="mt-2 flex items-center justify-between">
-            <div className="text-sm font-medium text-slate-400">その他</div>
-            <div className="text-[18px] font-extrabold text-slate-800">売上 ¥0</div>
-          </div>
-        </div>
-
-        <div className="flex-1 min-h-0 overflow-hidden bg-white">
-          <div className="h-full px-4 py-8 text-sm text-slate-400 overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
-            まだ履歴はありません
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   const paymentLabel =
     state.pendingPaymentType === "cash"
       ? "現金"
@@ -185,7 +129,6 @@ function TaxiMiniApp() {
   const showStartupOverlay = startupPhase !== "done";
   const showLogoLayer = startupPhase === "logo" || startupPhase === "logoFade";
   const showBlankLayer = startupPhase === "blank";
-  const showStartupLayer = startupPhase === "startup";
 
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
@@ -247,7 +190,13 @@ function TaxiMiniApp() {
           />
         )}
 
-        <div className="h-full flex flex-col overflow-hidden">
+        <div
+          className="h-full flex flex-col overflow-hidden"
+          style={{
+            touchAction: showStartupOverlay ? "none" : "auto",
+            overscrollBehavior: showStartupOverlay ? "none" : "auto",
+          }}
+        >
           {renderClockCard()}
 
           {state.screen === "top" && (
@@ -261,6 +210,7 @@ function TaxiMiniApp() {
               openHistoryModal={actions.openHistoryModal}
               previewRecords={derived.previewRecords}
               totalAmount={derived.totalAmount}
+              startupPhase={startupPhase}
             />
           )}
 
@@ -279,6 +229,7 @@ function TaxiMiniApp() {
               totalAmount={derived.totalAmount}
               startupButtonOn={false}
               startupOtherOn={false}
+              startupPhase={startupPhase}
             />
           )}
 
@@ -293,6 +244,7 @@ function TaxiMiniApp() {
               openHistoryModal={actions.openHistoryModal}
               previewRecords={derived.previewRecords}
               totalAmount={derived.totalAmount}
+              startupPhase={startupPhase}
             />
           )}
 
@@ -311,6 +263,7 @@ function TaxiMiniApp() {
               handlePassengerSelect={actions.handlePassengerSelect}
               openPaymentDialog={actions.openPaymentDialog}
               maxPassengers={state.maxPassengers}
+              startupPhase={startupPhase}
             />
           )}
         </div>
@@ -340,70 +293,8 @@ function TaxiMiniApp() {
             </div>
           )}
 
-          {showBlankLayer && <div className="absolute inset-0 bg-white overflow-hidden" />}
-
-          {showStartupLayer && (
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
-              <div
-                className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden"
-                style={{
-                  touchAction: "none",
-                  overscrollBehavior: "none",
-                }}
-              >
-                <div className="relative h-full overflow-hidden">
-                  <div
-                    className="absolute left-4 right-4 z-30"
-                    style={{
-                      top: "16px",
-                      transform: startupCardOn
-                        ? "translate3d(0,0,0)"
-                        : "translate3d(-110%,0,0)",
-                      transition: "transform 760ms cubic-bezier(0.2,0.8,0.2,1)",
-                      willChange: "transform",
-                    }}
-                  >
-                    {renderClockCard()}
-                  </div>
-
-                  <div
-                    className="absolute left-4 right-4 z-20"
-                    style={{
-                      top: "204px",
-                      transform: startupButtonOn
-                        ? "translate3d(0,0,0)"
-                        : "translate3d(-110%,0,0)",
-                      opacity: startupButtonOn ? 1 : 0,
-                      transition:
-                        "transform 760ms cubic-bezier(0.2,0.8,0.2,1), opacity 180ms linear",
-                      willChange: "transform, opacity",
-                    }}
-                  >
-                    <button
-                      className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)]`}
-                    >
-                      <span className={C.bigButtonText}>乗務開始</span>
-                    </button>
-                  </div>
-
-                  <div
-                    className="absolute left-4 right-4 z-10"
-                    style={{
-                      top: "316px",
-                      transform: startupOtherOn
-                        ? "translate3d(0,0,0)"
-                        : "translate3d(-110%,0,0)",
-                      opacity: startupOtherOn ? 1 : 0,
-                      transition:
-                        "transform 760ms cubic-bezier(0.2,0.8,0.2,1), opacity 180ms linear",
-                      willChange: "transform, opacity",
-                    }}
-                  >
-                    {renderStartupOtherCard()}
-                  </div>
-                </div>
-              </div>
-            </div>
+          {showBlankLayer && (
+            <div className="absolute inset-0 bg-white overflow-hidden" />
           )}
         </div>
       )}
