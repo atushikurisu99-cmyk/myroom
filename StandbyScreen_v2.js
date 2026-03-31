@@ -19,6 +19,7 @@ window.AppScreens.StandbyScreen = (() => {
       isStandbySheetOpened,
     } = props;
 
+    const OTHER_TOP = 16;
     const FINISH_BUTTON_TOP = 34;
 
     return (
@@ -37,9 +38,13 @@ window.AppScreens.StandbyScreen = (() => {
         {renderSharedInfoSpacer()}
 
         <div className="flex-1 min-h-0 relative overflow-hidden">
+          {/* 背面：終了ボタン */}
           <div
-            className="absolute left-0 right-0 top-0 z-10"
-            style={{ height: `${C.BOTTOM_CARD_HEIGHT}px` }}
+            className="absolute left-0 right-0 z-10"
+            style={{
+              top: `${OTHER_TOP}px`,
+              height: `${C.BOTTOM_CARD_HEIGHT}px`,
+            }}
           >
             <div
               className="absolute left-0 right-0"
@@ -64,7 +69,11 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           </div>
 
-          <div className="absolute left-0 right-0 top-0 z-30">
+          {/* 前面：その他カード */}
+          <div
+            className="absolute left-0 right-0 z-30"
+            style={{ top: `${OTHER_TOP}px` }}
+          >
             <BottomCard
               movable={true}
               standbySheetOffset={standbySheetOffset}
@@ -76,11 +85,12 @@ window.AppScreens.StandbyScreen = (() => {
             />
           </div>
 
+          {/* 通常時の▽ */}
           {!isStandbySheetOpened && (
             <div
               className="absolute z-40"
               style={{
-                top: "8px",
+                top: `${OTHER_TOP + 8}px`,
                 right: "18px",
               }}
             >
@@ -97,11 +107,12 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           )}
 
+          {/* 下げた後の△ */}
           {isStandbySheetOpened && (
             <div
               className="absolute z-40"
               style={{
-                top: `${FINISH_BUTTON_TOP + 12}px`,
+                top: `${OTHER_TOP + FINISH_BUTTON_TOP + 12}px`,
                 right: "18px",
               }}
             >
