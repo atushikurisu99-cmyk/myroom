@@ -68,7 +68,7 @@ window.AppScreens.RideScreen = (() => {
           </div>
         </div>
 
-        <div className="pt-4 flex-1 min-h-0 overflow-y-auto">
+        <div className="pt-4 flex-1 min-h-0 overflow-hidden">
           <BottomCard
             movable={false}
             standbySheetOffset={0}
