@@ -44,20 +44,24 @@ window.AppScreens.StandbyScreen = (() => {
                 className={`${C.endDutyButtonClass} w-full`}
                 style={{ height: "96px" }}
               >
-                <span className="text-[24px] font-extrabold tracking-[-0.03em]">乗務終了</span>
+                <span className="text-[24px] font-extrabold tracking-[-0.03em]">
+                  乗務終了
+                </span>
               </button>
             </div>
 
             {isStandbySheetOpened ? (
-              <div className="absolute inset-x-0 top-0 z-20 flex justify-center pointer-events-none">
-                <button
-                  type="button"
-                  onClick={toggleStandbySheet}
-                  className="pointer-events-auto h-[28px] min-w-[44px] rounded-full bg-white/92 border border-slate-200 text-[18px] font-black leading-none text-slate-500 shadow-[0_4px_10px_rgba(0,0,0,0.10)]"
-                  aria-label="その他を戻す"
-                >
-                  △
-                </button>
+              <div className="absolute inset-x-0 top-0 z-20 pointer-events-none">
+                <div className="px-4 relative h-[30px]">
+                  <button
+                    type="button"
+                    onClick={toggleStandbySheet}
+                    className="pointer-events-auto absolute right-0 top-0 h-[28px] min-w-[44px] rounded-full bg-white/92 border border-slate-200 text-[18px] font-black leading-none text-slate-500 shadow-[0_4px_10px_rgba(0,0,0,0.10)]"
+                    aria-label="その他を戻す"
+                  >
+                    △
+                  </button>
+                </div>
               </div>
             ) : null}
 
