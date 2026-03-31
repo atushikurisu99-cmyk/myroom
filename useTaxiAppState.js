@@ -160,6 +160,7 @@ window.AppHooks = (() => {
       window.addEventListener("touchmove", handleTouchMove, { passive: false });
       window.addEventListener("touchend", handleTouchEnd);
       window.addEventListener("touchcancel", handleTouchEnd);
+
       return () => {
         window.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("mouseup", handleMouseUp);
@@ -357,12 +358,8 @@ window.AppHooks = (() => {
       const nextStartAt = new Date(editingRecord.乗車時刻入力);
       const nextEndAt = new Date(editingRecord.降車時刻入力);
 
-      if (Number.isNaN(nextStartAt.getTime()) || Number.isNaN(nextEndAt.getTime())) {
-        return alert("時刻の形式が正しくありません");
-      }
-      if (nextEndAt.getTime() < nextStartAt.getTime()) {
-        return alert("降車時刻は乗車時刻より後にしてください");
-      }
+      if (Number.isNaN(nextStartAt.getTime()) || Number.isNaN(nextEndAt.getTime())) return alert("時刻の形式が正しくありません");
+      if (nextEndAt.getTime() < nextStartAt.getTime()) return alert("降車時刻は乗車時刻より後にしてください");
 
       const nextPayment = editingRecord.区分入力 === "1" ? "cash" : "cardQr";
       const nextReceipt = false;
@@ -452,6 +449,8 @@ window.AppHooks = (() => {
     };
 
     const handleStartRide = async () => {
+      if (isFinishVisible) return;
+
       vibrateTap();
       const start = new Date();
 
