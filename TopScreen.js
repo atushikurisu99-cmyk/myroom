@@ -35,7 +35,7 @@ window.AppScreens.TopScreen = (() => {
 
         {renderSharedInfoSpacer()}
 
-        <div ref={topScrollRef} className="flex-1 min-h-0 overflow-y-auto">
+        <div ref={topScrollRef} className="flex-1 min-h-0 overflow-hidden">
           <BottomCard
             movable={false}
             standbySheetOffset={0}
