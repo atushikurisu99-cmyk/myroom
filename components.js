@@ -93,16 +93,22 @@ window.AppComponents = (() => {
       <div className="shrink-0" style={translateStyle}>
         <div style={{ height: `${BOTTOM_CARD_HEIGHT}px` }}>
           <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
-            <button type="button" onClick={openOtherSheet} className="px-4 pt-3 pb-2 text-left shrink-0 active:bg-slate-50">
+            <button
+              type="button"
+              onClick={openOtherSheet}
+              className="px-4 pt-3 pb-2 text-left shrink-0 active:bg-slate-50"
+            >
               <div className="text-sm font-medium text-slate-400">その他</div>
             </button>
 
             <div className="flex-1 min-h-0 overflow-y-auto">
-              <div className="h-full flex flex-col">
-                <button type="button" onClick={openHistoryModal} className="w-full h-full text-left active:bg-slate-50">
-                  <PreviewHistoryRows previewRecords={previewRecords} />
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={openHistoryModal}
+                className="w-full h-full text-left active:bg-slate-50"
+              >
+                <PreviewHistoryRows previewRecords={previewRecords} />
+              </button>
             </div>
           </div>
         </div>
@@ -173,9 +179,7 @@ window.AppComponents = (() => {
     return (
       <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
         <div className="w-full rounded-[28px] bg-white shadow-2xl p-5">
-          <div className="text-[20px] font-bold text-slate-800">
-            {window.AppUtils.formatDutyDate(workDate)}の乗務を終了しますか？
-          </div>
+          <div className="text-[20px] font-bold text-slate-800">{window.AppUtils.formatDutyDate(workDate)}の乗務を終了しますか？</div>
           <div className="mt-4 grid gap-2 text-sm text-slate-600">
             <div>乗車回数：{recordCount}回</div>
             <div>売上合計：{formatMoney(totalAmount)}</div>
