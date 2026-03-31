@@ -73,12 +73,25 @@ window.AppComponents = (() => {
   }
 
   function BottomCard({
+    movable = false,
+    standbySheetOffset = 0,
+    dragging = false,
+    isFinishVisible = false,
     openOtherSheet,
     openHistoryModal,
     previewRecords,
   }) {
+    const translateStyle = movable
+      ? {
+          transform: `translateY(${standbySheetOffset}px)`,
+          transition: dragging ? "none" : "transform 180ms ease-out",
+          willChange: "transform",
+          pointerEvents: isFinishVisible ? "none" : "auto",
+        }
+      : {};
+
     return (
-      <div className="shrink-0">
+      <div className="shrink-0" style={translateStyle}>
         <div style={{ height: `${BOTTOM_CARD_HEIGHT}px` }}>
           <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
             <button
