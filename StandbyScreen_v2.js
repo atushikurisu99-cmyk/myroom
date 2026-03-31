@@ -36,7 +36,7 @@ window.AppScreens.StandbyScreen = (() => {
 
         {renderSharedInfoSpacer()}
 
-        <div className="pt-4 flex-1 min-h-0 relative overflow-hidden">
+        <div className="flex-1 min-h-0 relative overflow-hidden">
           <div
             className="absolute left-0 right-0 top-0 z-10"
             style={{ height: `${C.BOTTOM_CARD_HEIGHT}px` }}
