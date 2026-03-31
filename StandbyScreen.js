@@ -6,6 +6,7 @@ window.AppScreens.StandbyScreen = (() => {
   return function StandbyScreen(props) {
     const {
       handleStartRide,
+      renderSharedInfoSpacer,
       handleFinishTap,
       isFinishVisible,
       openOtherSheet,
@@ -18,7 +19,9 @@ window.AppScreens.StandbyScreen = (() => {
       isStandbySheetOpened,
     } = props;
 
-    const finishTop = 92;
+    const OTHER_TOP = 16;
+    const FINISH_AREA_HEIGHT = 118;
+    const FINISH_BUTTON_TOP = 34;
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
@@ -33,24 +36,49 @@ window.AppScreens.StandbyScreen = (() => {
           </button>
         </div>
 
+        {renderSharedInfoSpacer()}
+
         <div className="pt-4 flex-1 min-h-0 relative overflow-hidden">
+          {/* 背面エリア */}
           <div
-            className="absolute inset-x-0 z-10 px-3"
-            style={{ top: `${finishTop}px` }}
+            className="absolute inset-x-0 z-10"
+            style={{
+              top: `${OTHER_TOP}px`,
+              height: `${C.BOTTOM_CARD_HEIGHT}px`,
+            }}
           >
-            <button
-              type="button"
-              onClick={handleFinishTap}
-              disabled={!isFinishVisible}
-              className={`${C.endDutyButtonClass} w-full transition-opacity duration-150 ${
-                isFinishVisible ? "opacity-100" : "opacity-0"
-              }`}
+            <div
+              className="absolute inset-x-0"
+              style={{
+                top: `${FINISH_BUTTON_TOP}px`,
+              }}
             >
-              本日の乗務を終了
-            </button>
+              <div className="px-6">
+                <button
+                  type="button"
+                  onClick={handleFinishTap}
+                  disabled={!isFinishVisible}
+                  className={`${C.endDutyButtonClass} w-full transition-opacity duration-150 ${
+                    isFinishVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+                  }`}
+                  style={{
+                    height: "48px",
+                    borderRadius: "9999px",
+                  }}
+                >
+                  本日の乗務を終了
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div className="relative z-20">
+          {/* 前面：その他カード */}
+          <div
+            className="absolute inset-x-0 z-30"
+            style={{
+              top: `${OTHER_TOP}px`,
+            }}
+          >
             <BottomCard
               movable={true}
               standbySheetOffset={standbySheetOffset}
@@ -62,13 +90,13 @@ window.AppScreens.StandbyScreen = (() => {
             />
           </div>
 
+          {/* 通常時の▽：その他カード上辺ライン基準、右寄り */}
           {!isStandbySheetOpened && (
             <div
-              className="absolute z-30"
+              className="absolute z-40"
               style={{
-                left: "50%",
-                transform: "translateX(-50%)",
-                top: `${C.BOTTOM_CARD_HEIGHT - 12}px`,
+                top: `${OTHER_TOP + 8}px`,
+                right: "18px",
               }}
             >
               <button
@@ -79,17 +107,18 @@ window.AppScreens.StandbyScreen = (() => {
                 className="flex items-center justify-center w-[28px] h-[24px] active:opacity-80"
                 aria-label="その他を下げる"
               >
-                <span className="text-[18px] leading-none font-bold text-slate-400">▽</span>
+                <span className="text-[18px] leading-none font-bold text-slate-300">▽</span>
               </button>
             </div>
           )}
 
+          {/* 下げた後の△：終了ボタン高さ帯の中央右 */}
           {isStandbySheetOpened && (
             <div
-              className="absolute z-30"
+              className="absolute z-40"
               style={{
+                top: `${OTHER_TOP + FINISH_BUTTON_TOP + 12}px`,
                 right: "18px",
-                top: `${finishTop + 46}px`,
               }}
             >
               <button
