@@ -21,7 +21,6 @@ window.AppScreens.StandbyScreen = (() => {
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-        {/* 実車ボタン */}
         <div className="pt-4 shrink-0" style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}>
           <button
             type="button"
@@ -36,7 +35,6 @@ window.AppScreens.StandbyScreen = (() => {
         {renderSharedInfoSpacer()}
 
         <div className="flex-1 min-h-0 relative overflow-hidden">
-          {/* ▼ 背面：乗務終了 */}
           <div
             className="absolute inset-x-0 z-10"
             style={{
@@ -61,7 +59,6 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           </div>
 
-          {/* ▼ その他カード（常時表示・動く本体） */}
           <div className="absolute inset-x-0 top-0 z-30">
             <BottomCard
               movable={true}
@@ -74,7 +71,6 @@ window.AppScreens.StandbyScreen = (() => {
             />
           </div>
 
-          {/* ▼▽ 左モック位置（通常時） */}
           {!isStandbySheetOpened && (
             <div
               className="absolute z-40"
@@ -89,14 +85,14 @@ window.AppScreens.StandbyScreen = (() => {
                 onClick={toggleStandbySheet}
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="text-[18px] font-bold text-slate-400"
+                className="text-[18px] leading-none font-bold text-slate-400"
+                aria-label="その他を下げる"
               >
                 ▽
               </button>
             </div>
           )}
 
-          {/* ▲ 右モック位置（下げた後） */}
           {isStandbySheetOpened && (
             <div
               className="absolute z-40"
@@ -110,7 +106,8 @@ window.AppScreens.StandbyScreen = (() => {
                 onClick={toggleStandbySheet}
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="text-[18px] font-bold text-slate-400"
+                className="text-[18px] leading-none font-bold text-slate-400"
+                aria-label="その他を戻す"
               >
                 △
               </button>
