@@ -37,7 +37,7 @@ window.AppScreens.StandbyScreen = (() => {
         <div className="pt-4 flex-1 min-h-0 relative">
           <div
             className="absolute inset-x-0 top-0 z-10"
-            style={{ height: `${C.BOTTOM_CARD_HEIGHT + 84}px` }}
+            style={{ height: `${C.BOTTOM_CARD_HEIGHT + 64}px` }}
           >
             <div className="h-full rounded-[30px] bg-[#eef3f9] border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] px-2 pt-3">
               <div className="w-full h-full rounded-[26px] bg-[linear-gradient(180deg,#edf2f8,#e6edf5)] flex items-center justify-center px-2">
@@ -69,21 +69,24 @@ window.AppScreens.StandbyScreen = (() => {
               openHistoryModal={openHistoryModal}
               previewRecords={previewRecords}
             />
+          </div>
 
-            <div className="flex justify-center pt-2">
-              <button
-                type="button"
-                onClick={toggleStandbySheet}
-                onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
-                onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="flex flex-col items-center justify-center py-1 px-4 active:opacity-80"
-                aria-label={isStandbySheetOpened ? "その他を下げる" : "その他を戻す"}
-              >
-                <div className="text-[18px] leading-none font-bold text-slate-400">
-                  {isStandbySheetOpened ? "▽" : "△"}
-                </div>
-              </button>
-            </div>
+          <div
+            className="absolute inset-x-0 z-40 flex justify-center"
+            style={{ top: `${C.BOTTOM_CARD_HEIGHT - 6}px` }}
+          >
+            <button
+              type="button"
+              onClick={toggleStandbySheet}
+              onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
+              onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
+              className="flex items-center justify-center py-1 px-3 active:opacity-80"
+              aria-label={isStandbySheetOpened ? "その他を下げる" : "その他を戻す"}
+            >
+              <span className="text-[18px] leading-none font-bold text-slate-400">
+                {isStandbySheetOpened ? "▽" : "△"}
+              </span>
+            </button>
           </div>
         </div>
       </div>
