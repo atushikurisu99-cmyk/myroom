@@ -19,7 +19,7 @@ window.AppScreens.StandbyScreen = (() => {
       isStandbySheetOpened,
     } = props;
 
-    const OTHER_TOP = 16;
+   const OTHER_TOP = C.MAIN_BUTTON_SLOT_HEIGHT + C.SHARED_INFO_SLOT_HEIGHT + 32;
     const FINISH_AREA_HEIGHT = 118;
     const FINISH_BUTTON_TOP = 34;
 
