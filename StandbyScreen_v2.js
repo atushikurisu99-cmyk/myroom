@@ -19,8 +19,6 @@ window.AppScreens.StandbyScreen = (() => {
       isStandbySheetOpened,
     } = props;
 
-   const OTHER_TOP = C.MAIN_BUTTON_SLOT_HEIGHT + C.SHARED_INFO_SLOT_HEIGHT + 32;
-    const FINISH_AREA_HEIGHT = 118;
     const FINISH_BUTTON_TOP = 34;
 
     return (
@@ -39,19 +37,13 @@ window.AppScreens.StandbyScreen = (() => {
         {renderSharedInfoSpacer()}
 
         <div className="pt-4 flex-1 min-h-0 relative overflow-hidden">
-          {/* 背面エリア */}
           <div
-            className="absolute inset-x-0 z-10"
-            style={{
-              top: `${OTHER_TOP}px`,
-              height: `${C.BOTTOM_CARD_HEIGHT}px`,
-            }}
+            className="absolute left-0 right-0 top-0 z-10"
+            style={{ height: `${C.BOTTOM_CARD_HEIGHT}px` }}
           >
             <div
-              className="absolute inset-x-0"
-              style={{
-                top: `${FINISH_BUTTON_TOP}px`,
-              }}
+              className="absolute left-0 right-0"
+              style={{ top: `${FINISH_BUTTON_TOP}px` }}
             >
               <div className="px-6">
                 <button
@@ -72,13 +64,7 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           </div>
 
-          {/* 前面：その他カード */}
-          <div
-            className="absolute left-0 right-0 z-30"
-            style={{
-              top: `${OTHER_TOP}px`,
-            }}
-          >
+          <div className="absolute left-0 right-0 top-0 z-30">
             <BottomCard
               movable={true}
               standbySheetOffset={standbySheetOffset}
@@ -90,12 +76,11 @@ window.AppScreens.StandbyScreen = (() => {
             />
           </div>
 
-          {/* 通常時の▽：その他カード上辺ライン基準、右寄り */}
           {!isStandbySheetOpened && (
             <div
               className="absolute z-40"
               style={{
-                top: `${OTHER_TOP + 8}px`,
+                top: "8px",
                 right: "18px",
               }}
             >
@@ -112,12 +97,11 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           )}
 
-          {/* 下げた後の△：終了ボタン高さ帯の中央右 */}
           {isStandbySheetOpened && (
             <div
               className="absolute z-40"
               style={{
-                top: `${OTHER_TOP + FINISH_BUTTON_TOP + 12}px`,
+                top: `${FINISH_BUTTON_TOP + 12}px`,
                 right: "18px",
               }}
             >
