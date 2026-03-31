@@ -25,8 +25,8 @@ window.AppScreens.StandbyScreen = (() => {
           <button
             type="button"
             onClick={handleStartRide}
-            className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)]`}
             disabled={isFinishVisible}
+            className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)] disabled:opacity-60`}
           >
             <span className={C.bigButtonText}>実車</span>
           </button>
@@ -45,8 +45,10 @@ window.AppScreens.StandbyScreen = (() => {
                   type="button"
                   onClick={handleFinishTap}
                   disabled={!isFinishVisible}
-                  className={`max-w-[100%] ${C.endDutyButtonClass} ${isFinishVisible ? 'opacity-100' : 'opacity-0'}`}
-                  style={{ width: '100%' }}
+                  className={`max-w-[100%] ${C.endDutyButtonClass} transition-opacity duration-150 ${
+                    isFinishVisible ? "opacity-100" : "opacity-0"
+                  }`}
+                  style={{ width: "100%" }}
                 >
                   本日の乗務を終了
                 </button>
@@ -66,17 +68,20 @@ window.AppScreens.StandbyScreen = (() => {
             />
           </div>
 
-          <div className="absolute inset-x-0 z-40 flex justify-center" style={{ bottom: `${C.STANDBY_HANDLE_BOTTOM}px` }}>
+          <div
+            className="absolute inset-x-0 z-40 flex justify-center"
+            style={{ bottom: `${C.STANDBY_HANDLE_BOTTOM}px` }}
+          >
             <button
               type="button"
               onClick={toggleStandbySheet}
               onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
               onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-              className="flex flex-col items-center justify-center py-2 px-6 active:opacity-80"
+              className="flex flex-col items-center justify-center py-1 px-4 active:opacity-80"
+              aria-label={isStandbySheetOpened ? "その他を下げる" : "その他を戻す"}
             >
-              <div className="w-14 h-1.5 rounded-full bg-slate-300 mb-2"></div>
-              <div className="text-[13px] font-semibold text-slate-400">
-                {isStandbySheetOpened ? '↑ 隠す' : '↓ 下へ'}
+              <div className="text-[18px] leading-none font-bold text-slate-400">
+                {isStandbySheetOpened ? "▽" : "△"}
               </div>
             </button>
           </div>
