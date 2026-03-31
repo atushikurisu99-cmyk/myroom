@@ -18,7 +18,7 @@ window.AppScreens.StandbyScreen = (() => {
       isStandbySheetOpened,
     } = props;
 
-    const finishTop = 94;
+    const finishTop = 92;
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
@@ -34,7 +34,6 @@ window.AppScreens.StandbyScreen = (() => {
         </div>
 
         <div className="pt-4 flex-1 min-h-0 relative overflow-hidden">
-          {/* 終了ボタン：最初からここに置く */}
           <div
             className="absolute inset-x-0 z-10 px-3"
             style={{ top: `${finishTop}px` }}
@@ -42,29 +41,27 @@ window.AppScreens.StandbyScreen = (() => {
             <button
               type="button"
               onClick={handleFinishTap}
-              className={`${C.endDutyButtonClass} w-full`}
+              disabled={!isFinishVisible}
+              className={`${C.endDutyButtonClass} w-full transition-opacity duration-150 ${
+                isFinishVisible ? "opacity-100" : "opacity-0"
+              }`}
             >
               本日の乗務を終了
             </button>
           </div>
 
-          {/* その他カード：上からかぶせる */}
-          <div
-            className="absolute inset-x-0 top-0 z-20"
-            style={{
-              transform: `translateY(${standbySheetOffset}px)`,
-              transition: dragging ? "none" : "transform 180ms ease-out",
-              willChange: "transform",
-            }}
-          >
+          <div className="relative z-20">
             <BottomCard
+              movable={true}
+              standbySheetOffset={standbySheetOffset}
+              dragging={dragging}
+              isFinishVisible={isFinishVisible}
               openOtherSheet={openOtherSheet}
               openHistoryModal={openHistoryModal}
               previewRecords={previewRecords}
             />
           </div>
 
-          {/* その他が出ている時：▽ 左モック位置 */}
           {!isStandbySheetOpened && (
             <div
               className="absolute z-30"
@@ -87,13 +84,12 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           )}
 
-          {/* 下げた後：△ 右モック位置 */}
           {isStandbySheetOpened && (
             <div
               className="absolute z-30"
               style={{
                 right: "18px",
-                top: `${finishTop + 48}px`,
+                top: `${finishTop + 46}px`,
               }}
             >
               <button
