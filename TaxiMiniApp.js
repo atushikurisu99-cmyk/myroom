@@ -99,6 +99,22 @@ function TaxiMiniApp() {
     </div>
   );
 
+  const getWeatherDateColor = (date) => {
+    const day = date.getDay();
+    if (day === 6) return "#2563eb";
+    if (day === 0) return "#ef4444";
+    return "#1a1a1a";
+  };
+
+  const formatWeatherDate = (date) => `${date.getMonth() + 1}/${date.getDate()}`;
+
+  const todayDate = state.now;
+  const tomorrowDate = new Date(
+    todayDate.getFullYear(),
+    todayDate.getMonth(),
+    todayDate.getDate() + 1
+  );
+
   const cardRevealStyle =
     startupPhase === "revealing"
       ? {
@@ -122,9 +138,27 @@ function TaxiMiniApp() {
     >
       <div className="h-full flex flex-col">
         <div className="flex items-start justify-between gap-4 shrink-0">
-          <div className="min-w-0">
-            <div className="text-[15px] leading-none font-semibold text-slate-700 pt-1">
-              {derived.stateLabel}
+          <div className="min-w-0 pt-1">
+            <div className="flex items-start gap-4">
+              <div className="min-w-[48px]">
+                <div
+                  className="text-[13px] leading-none font-medium"
+                  style={{ color: getWeatherDateColor(todayDate) }}
+                >
+                  {formatWeatherDate(todayDate)}
+                </div>
+                <div className="mt-2 text-[24px] leading-none font-normal text-slate-500">・</div>
+              </div>
+
+              <div className="min-w-[48px]">
+                <div
+                  className="text-[13px] leading-none font-medium"
+                  style={{ color: getWeatherDateColor(tomorrowDate) }}
+                >
+                  {formatWeatherDate(tomorrowDate)}
+                </div>
+                <div className="mt-2 text-[24px] leading-none font-normal text-slate-500">・</div>
+              </div>
             </div>
           </div>
 
