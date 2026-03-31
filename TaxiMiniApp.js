@@ -19,6 +19,28 @@ function TaxiMiniApp() {
     </div>
   );
 
+  const renderWeatherPlaceholders = () => {
+    const base = state.now ? new Date(state.now) : new Date();
+    const next = new Date(base);
+    next.setDate(base.getDate() + 1);
+
+    const baseLabel = `${base.getMonth() + 1}/${base.getDate()}`;
+    const nextLabel = `${next.getMonth() + 1}/${next.getDate()}`;
+
+    return (
+      <div className="flex items-start gap-8">
+        {[baseLabel, nextLabel].map((label) => (
+          <div key={label} className="w-[44px] shrink-0">
+            <div className="text-[11px] leading-none font-semibold text-slate-800">{label}</div>
+            <div className="mt-4 flex justify-center">
+              <div className="w-[8px] h-[8px] rounded-full bg-slate-400/70" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
       <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
@@ -102,11 +124,10 @@ function TaxiMiniApp() {
             >
               <div className="h-full flex flex-col">
                 <div className="flex items-start justify-between gap-4 shrink-0">
-                  <div className="min-w-0">
-                    <div className="text-[15px] leading-none font-semibold text-slate-700 pt-1">
-                      {derived.stateLabel}
-                    </div>
+                  <div className="min-w-0 pt-1">
+                    {renderWeatherPlaceholders()}
                   </div>
+
                   <div className="shrink-0 text-right">
                     <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-800">
                       <span>{derived.timeParts.hh}</span>
@@ -188,8 +209,8 @@ function TaxiMiniApp() {
               standbySheetOffset={state.standbySheetOffset}
               beginStandbySheetDrag={actions.beginStandbySheetDrag}
               toggleStandbySheet={actions.toggleStandbySheet}
-              dragging={refs.sheetDragRef.current.dragging}
-              isStandbySheetOpened={derived.isStandbySheetOpened}
+              dragging={refs.sheetDragRef?.current?.dragging || false}
+              isStandbySheetOpened={derived?.isStandbySheetOpened || false}
             />
           )}
 
