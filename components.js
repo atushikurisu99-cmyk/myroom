@@ -73,24 +73,12 @@ window.AppComponents = (() => {
   }
 
   function BottomCard({
-    movable = false,
-    standbySheetOffset = 0,
-    dragging = false,
-    isFinishVisible = false,
     openOtherSheet,
     openHistoryModal,
     previewRecords,
   }) {
-    const translateStyle = movable
-      ? {
-          transform: `translateY(${standbySheetOffset}px)`,
-          transition: dragging ? "none" : "transform 180ms ease-out",
-          pointerEvents: isFinishVisible ? "none" : "auto",
-        }
-      : {};
-
     return (
-      <div className="shrink-0" style={translateStyle}>
+      <div className="shrink-0">
         <div style={{ height: `${BOTTOM_CARD_HEIGHT}px` }}>
           <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
             <button
@@ -105,7 +93,7 @@ window.AppComponents = (() => {
               <button
                 type="button"
                 onClick={openHistoryModal}
-                className="w-full h-full text-left active:bg-slate-50"
+                className="w-full min-h-full text-left active:bg-slate-50"
               >
                 <PreviewHistoryRows previewRecords={previewRecords} />
               </button>
@@ -121,12 +109,21 @@ window.AppComponents = (() => {
 
     return (
       <div className="absolute inset-0 z-30 bg-slate-900/40 flex items-end" onClick={onClose}>
-        <div className="w-full rounded-t-[28px] bg-white shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="w-full rounded-t-[28px] bg-white shadow-2xl overflow-hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
           <div className="px-4 pt-3 pb-4">
             <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
             <div className="flex items-center justify-between">
               <div className="text-base font-bold text-slate-800">その他</div>
-              <button type="button" onClick={onClose} className="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold">閉じる</button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold"
+              >
+                閉じる
+              </button>
             </div>
             <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white">
               <button type="button" className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50">分析</button>
