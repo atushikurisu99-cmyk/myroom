@@ -74,7 +74,7 @@ window.AppScreens.StandbyScreen = (() => {
 
           {/* 前面：その他カード */}
           <div
-            className="absolute inset-x-0 z-30"
+            className="absolute left-0 right-0 z-30"
             style={{
               top: `${OTHER_TOP}px`,
             }}
