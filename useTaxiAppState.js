@@ -96,7 +96,7 @@ window.AppHooks = (() => {
     }, [screen]);
 
     const isFinishVisible = standbySheetOffset >= Constants.FINISH_ENABLE_OFFSET;
-    const isStandbySheetOpened = standbySheetOffset >= Constants.STANDBY_OTHER_MOVE_RANGE * 0.7;
+    const isStandbySheetOpened = standbySheetOffset < Constants.STANDBY_OTHER_MOVE_RANGE * 0.5;
 
     const vibrateTap = () => {
       if (navigator.vibrate) navigator.vibrate(18);
@@ -135,13 +135,17 @@ window.AppHooks = (() => {
       if (!sheetDragRef.current.dragging) return;
       sheetDragRef.current.dragging = false;
       setStandbySheetOffset((prev) =>
-        prev > Constants.STANDBY_OTHER_MOVE_RANGE * 0.5 ? Constants.STANDBY_OTHER_MOVE_RANGE : 0
+        prev > Constants.STANDBY_OTHER_MOVE_RANGE * 0.5
+          ? Constants.STANDBY_OTHER_MOVE_RANGE
+          : 0
       );
     };
 
     const toggleStandbySheet = () => {
       setStandbySheetOffset((prev) =>
-        prev > Constants.STANDBY_OTHER_MOVE_RANGE * 0.5 ? 0 : Constants.STANDBY_OTHER_MOVE_RANGE
+        prev > Constants.STANDBY_OTHER_MOVE_RANGE * 0.5
+          ? 0
+          : Constants.STANDBY_OTHER_MOVE_RANGE
       );
     };
 
@@ -219,7 +223,10 @@ window.AppHooks = (() => {
 
     const topMainLabel = !dutyStarted ? "乗務開始" : "乗務終了";
     const topMainButtonDisabled = screen === "top" && isRiding;
-    const formattedAmount = useMemo(() => (amount ? Number(amount).toLocaleString("ja-JP") : ""), [amount]);
+    const formattedAmount = useMemo(
+      () => (amount ? Number(amount).toLocaleString("ja-JP") : ""),
+      [amount]
+    );
     const passengerDisplayCount = 6;
 
     const filteredHistoryRecords = useMemo(() => {
@@ -231,15 +238,21 @@ window.AppHooks = (() => {
       }
 
       if (historyMode === "day") {
-        list = list.filter((record) => Utils.isSameDay(Utils.getHistoryTargetDate(record), historyBaseDate));
+        list = list.filter((record) =>
+          Utils.isSameDay(Utils.getHistoryTargetDate(record), historyBaseDate)
+        );
       } else if (historyMode === "week") {
         const start = Utils.getWeekStart(historyBaseDate);
         const end = Utils.getWeekEnd(historyBaseDate);
-        list = list.filter((record) => Utils.isInRange(Utils.getHistoryTargetDate(record), start, end));
+        list = list.filter((record) =>
+          Utils.isInRange(Utils.getHistoryTargetDate(record), start, end)
+        );
       } else if (historyMode === "month") {
         const start = Utils.getMonthStart(historyBaseDate);
         const end = Utils.getMonthEnd(historyBaseDate);
-        list = list.filter((record) => Utils.isInRange(Utils.getHistoryTargetDate(record), start, end));
+        list = list.filter((record) =>
+          Utils.isInRange(Utils.getHistoryTargetDate(record), start, end)
+        );
       }
 
       return list.sort((a, b) => new Date(b.乗車時刻) - new Date(a.乗車時刻));
@@ -437,7 +450,7 @@ window.AppHooks = (() => {
     };
 
     const handleStartRide = async () => {
-      if (screen === "standby" && standbySheetOffset >= Constants.FINISH_ENABLE_OFFSET) return;
+      if (screen === "standby" && isFinishVisible) return;
 
       vibrateTap();
       const start = new Date();
