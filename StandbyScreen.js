@@ -20,6 +20,7 @@ window.AppScreens.StandbyScreen = (() => {
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+        {/* 実車ボタン */}
         <div
           className="pt-4 shrink-0"
           style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
@@ -35,29 +36,51 @@ window.AppScreens.StandbyScreen = (() => {
 
         {renderSharedInfoSpacer()}
 
-        <div className="pt-4 flex-1 min-h-0 overflow-hidden">
-          <div className="relative h-full overflow-hidden">
-            <div className="absolute inset-x-0 top-3 z-0">
+        {/* 下段 */}
+        <div className="pt-4 flex-1 min-h-0 flex flex-col gap-3">
+          
+          {/* 乗務終了ボタン */}
+          {isStandbySheetOpened && (
+            <div className="px-2">
               <button
                 type="button"
                 onClick={handleFinishTap}
-                className={`${C.endDutyButtonClass} h-[132px] w-full`}
+                className={`${C.endDutyButtonClass} w-full`}
+                style={{ height: "96px" }}
               >
-                <span className="text-[30px] font-extrabold tracking-[-0.03em]">乗務終了</span>
+                <span className="text-[24px] font-extrabold tracking-[-0.03em]">
+                  乗務終了
+                </span>
               </button>
             </div>
+          )}
 
+          {/* その他 */}
+          <div className="flex-1 min-h-0 overflow-hidden relative">
             <BottomCard
               movable={true}
               standbySheetOffset={standbySheetOffset}
               toggleStandbySheet={toggleStandbySheet}
               beginStandbySheetDrag={beginStandbySheetDrag}
-              isFinishVisible={!!isStandbySheetOpened}
+              isOpened={!!isStandbySheetOpened}
               openOtherSheet={openOtherSheet}
               openHistoryModal={openHistoryModal}
               previewRecords={previewRecords}
               totalAmount={totalAmount}
             />
+
+            {/* △ */}
+            {isStandbySheetOpened && (
+              <div className="absolute right-4 top-2">
+                <button
+                  type="button"
+                  onClick={toggleStandbySheet}
+                  className="h-[28px] min-w-[44px] rounded-full bg-white border border-slate-200 text-[18px] font-black text-slate-500"
+                >
+                  △
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
