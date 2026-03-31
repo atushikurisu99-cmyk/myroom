@@ -30,7 +30,7 @@ window.AppScreens.StandbyScreen = (() => {
             onClick={handleStartRide}
             className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)]`}
           >
-            <span className={C.bigButtonText}>実車</span>
+            <span className={C.bigButtonText}>実車AAA</span>
           </button>
         </div>
 
