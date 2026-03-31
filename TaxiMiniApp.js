@@ -11,6 +11,7 @@ function TaxiMiniApp() {
   const C = window.AppConstants;
 
   const [startupPhase, setStartupPhase] = React.useState("logo");
+  // logo | prompt | animating | done
   const [startupCardOn, setStartupCardOn] = React.useState(false);
   const [startupButtonOn, setStartupButtonOn] = React.useState(false);
   const [startupOtherOn, setStartupOtherOn] = React.useState(false);
@@ -30,9 +31,10 @@ function TaxiMiniApp() {
       audioRef.current.volume = 0.75;
     } catch (_) {}
 
+    // ロゴ＋ゆっくりフェード
     const t = setTimeout(() => {
       setStartupPhase("prompt");
-    }, 2500);
+    }, 3800);
 
     startupTimersRef.current.push(t);
 
@@ -41,11 +43,56 @@ function TaxiMiniApp() {
     };
   }, []);
 
+  const renderSharedInfoSpacer = () => (
+    <div className="pt-4 shrink-0">
+      <div
+        className="rounded-[28px] opacity-0 pointer-events-none"
+        style={{ height: `${C.SHARED_INFO_SLOT_HEIGHT}px` }}
+      />
+    </div>
+  );
+
+  const renderClockCard = (clickable = true) => (
+    <div
+      className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0 overflow-hidden`}
+      onClick={clickable ? actions.handleCardModeNext : undefined}
+    >
+      <div className="h-full flex flex-col">
+        <div className="flex items-start justify-between gap-4 shrink-0">
+          <div className="min-w-0">
+            <div className="text-[15px] leading-none font-semibold text-slate-700 pt-1">
+              {derived.stateLabel}
+            </div>
+          </div>
+
+          <div className="shrink-0 text-right">
+            <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-800">
+              <span>{derived.timeParts.hh}</span>
+              <span
+                className={`${
+                  derived.timeParts.showColon ? "opacity-100" : "opacity-0"
+                } transition-opacity duration-150 mx-[-0.08em]`}
+              >
+                ：
+              </span>
+              <span>{derived.timeParts.mm}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
+          <div className="text-[12px] font-medium text-slate-500">今日のペース</div>
+          <div className="mt-1 text-[16px] leading-none font-normal text-[#00a676]">良好</div>
+        </div>
+      </div>
+    </div>
+  );
+
   const handleStartupBegin = () => {
     if (startupPhase !== "prompt") return;
 
     clearStartupTimers();
-    setStartupPhase("revealing");
+    setStartupPhase("animating");
 
     const tAudio = setTimeout(() => {
       try {
@@ -59,73 +106,49 @@ function TaxiMiniApp() {
     const tCard = setTimeout(() => setStartupCardOn(true), 750);
     const tButton = setTimeout(() => setStartupButtonOn(true), 1250);
     const tOther = setTimeout(() => setStartupOtherOn(true), 1750);
-    const tDone = setTimeout(() => setStartupPhase("done"), 2400);
+    const tDone = setTimeout(() => setStartupPhase("done"), 2550);
 
     startupTimersRef.current.push(tAudio, tCard, tButton, tOther, tDone);
   };
 
-  const startupOverlayVisible = startupPhase === "logo" || startupPhase === "prompt";
-  const startupRevealing = startupPhase === "revealing";
-  const startupLock = startupOverlayVisible || startupRevealing;
-
-  const baseAnim = (on) => ({
-    transform: on ? "translate3d(0,0,0)" : "translate3d(-112%,0,0)",
-    opacity: on ? 1 : 0,
-    transition: "transform 600ms cubic-bezier(0.22,0.78,0.18,1), opacity 160ms linear",
-  });
-
-  const renderSharedInfoSpacer = () => (
-    <div className="pt-4 shrink-0">
-      <div className="rounded-[28px] opacity-0 pointer-events-none" style={{ height: `${C.SHARED_INFO_SLOT_HEIGHT}px` }} />
-    </div>
-  );
-
-  const renderClockCard = (styleOverride = null) => (
-    <div
-      className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0`}
-      style={styleOverride || undefined}
-    >
-      <div className="flex justify-end text-[58px] font-black">
-        {derived.timeParts.hh}：{derived.timeParts.mm}
-      </div>
-    </div>
-  );
+  const showStartupOverlay = startupPhase !== "done";
 
   return (
-    <div className="w-full h-full bg-[#eef3f9] flex justify-center">
+    <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
       <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
 
-        {!startupLock && (
-          <>
-            <OtherSheet show={state.showOtherSheet} onClose={() => actions.setShowOtherSheet(false)} openHistoryModal={actions.openHistoryModal} />
-            {state.showPaymentDialog && <PaymentDialog amount={state.amount} pickupMeta={state.pickupMeta} dropoffMeta={state.dropoffMeta} paymentCountdown={state.paymentCountdown} savingDots={state.savingDots} onCancel={actions.cancelPaymentDialog} />}
-          </>
+        {!showStartupOverlay && (
+          <div className="h-full flex flex-col overflow-hidden">
+            {renderClockCard(true)}
+
+            {state.screen === "top" && (
+              <TopScreen
+                {...{...derived, ...actions, ...state, refs}}
+                renderSharedInfoSpacer={renderSharedInfoSpacer}
+              />
+            )}
+          </div>
         )}
 
-        <div
-          className="h-full flex flex-col"
-          style={{
-            visibility: startupOverlayVisible ? "hidden" : "visible",
-          }}
-        >
-          {renderClockCard(startupRevealing ? baseAnim(startupCardOn) : null)}
-
-          {state.screen === 'top' && (
-            <TopScreen
-              {...{...derived, ...actions, ...state, refs}}
-              renderSharedInfoSpacer={renderSharedInfoSpacer}
-              startupMainStyle={startupRevealing ? baseAnim(startupButtonOn) : null}
-              startupOtherStyle={startupRevealing ? baseAnim(startupOtherOn) : null}
-              startupLock={startupLock}
-            />
-          )}
-        </div>
-
-        {/* 起動UI */}
-        {startupOverlayVisible && (
-          <div className="absolute inset-0 bg-white flex items-center justify-center">
+        {/* 起動 */}
+        {showStartupOverlay && (
+          <div className="fixed inset-0 z-[9999] bg-white flex items-center justify-center">
+            
             {startupPhase === "logo" && (
-              <img src="./logo.png" className="w-[230px]" />
+              <>
+                <img
+                  src="./logo.png"
+                  className="w-[230px] select-none pointer-events-none"
+                />
+
+                {/* ゆっくりフェード */}
+                <div
+                  className="absolute inset-0 bg-white"
+                  style={{
+                    animation: "startupWhiteFadeIn 3800ms ease-in-out forwards",
+                  }}
+                />
+              </>
             )}
 
             {startupPhase === "prompt" && (
@@ -133,17 +156,24 @@ function TaxiMiniApp() {
                 onClick={handleStartupBegin}
                 className="text-[11px] text-[#1a1a1a] tracking-[0.08em] font-medium select-none"
                 style={{
-                  animation: "pulse 2.2s infinite",
+                  animation: "startupPromptPulse 2200ms ease-in-out infinite",
                 }}
               >
                 タップして開始
               </button>
             )}
+
           </div>
         )}
 
         <style>{`
-          @keyframes pulse {
+          @keyframes startupWhiteFadeIn {
+            0% { opacity: 0; }
+            40% { opacity: 0; }
+            100% { opacity: 1; }
+          }
+
+          @keyframes startupPromptPulse {
             0% { opacity: 0.2; }
             50% { opacity: 0.6; }
             100% { opacity: 0.2; }
@@ -155,4 +185,4 @@ function TaxiMiniApp() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<TaxiMiniApp />);
+ReactDOM.createRoot(document.getElementById("root")).render(<TaxiMiniApp />);
