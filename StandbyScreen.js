@@ -48,7 +48,9 @@ window.AppScreens.StandbyScreen = (() => {
                   type="button"
                   onClick={handleFinishTap}
                   disabled={!isFinishVisible}
-                  className={`max-w-[100%] ${C.endDutyButtonClass} transition-opacity duration-150 ${isFinishVisible ? "opacity-100" : "opacity-0"}`}
+                  className={`max-w-[100%] ${C.endDutyButtonClass} transition-opacity duration-150 ${
+                    isFinishVisible ? "opacity-100" : "opacity-0"
+                  }`}
                   style={{ width: "100%" }}
                 >
                   乗務終了
