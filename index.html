@@ -6,66 +6,36 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
   />
-  <title>Taxi Mini App</title>
+  <title>Taxi App</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: #eef3f9;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overflow: hidden;
-      overscroll-behavior: none;
-      -webkit-text-size-adjust: 100%;
-    }
-
-    body {
-      touch-action: manipulation;
-    }
-
-    #root {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    button, input {
-      font: inherit;
-    }
-
-    input[type="text"],
-    input[type="time"],
-    input[type="datetime-local"] {
-      appearance: none;
-      -webkit-appearance: none;
-    }
-  </style>
 </head>
-<body>
+<body class="bg-slate-100">
   <div id="root"></div>
 
-  <script type="text/babel" data-presets="env,react" src="./constants.js?v=20260330a"></script>
-  <script type="text/babel" data-presets="env,react" src="./utils.js?v=20260330a"></script>
-  <script type="text/babel" data-presets="env,react" src="./geo.js?v=20260330a"></script>
-  <script type="text/babel" data-presets="env,react" src="./components.js?v=20260330a"></script>
-  <script type="text/babel" data-presets="env,react" src="./useTaxiAppState.js?v=20260330a"></script>
-  <script type="text/babel" data-presets="env,react" src="./TopScreen.js?v=20260330a"></script>
-  <script type="text/babel" data-presets="env,react" src="./StandbyScreen.js?v=20260330a"></script>
-  <script type="text/babel" data-presets="env,react" src="./RideScreen.js?v=20260330a"></script>
-  <script type="text/babel" data-presets="env,react" src="./FareScreen.js?v=20260330a"></script>
-  <script type="text/babel" data-presets="env,react" src="./HistoryModal.js?v=20260330a"></script>
-  <script type="text/babel" data-presets="env,react" src="./TaxiMiniApp.js?v=20260330a"></script>
+  <!-- 共通 -->
+  <script type="text/babel" data-presets="env,react" src="./constants.js?v=20260331b"></script>
+  <script type="text/babel" data-presets="env,react" src="./utils.js?v=20260331b"></script>
+  <script type="text/babel" data-presets="env,react" src="./geo.js?v=20260331b"></script>
+
+  <!-- コンポーネント -->
+  <script type="text/babel" data-presets="env,react" src="./components.js?v=20260331b"></script>
+
+  <!-- フック -->
+  <script type="text/babel" data-presets="env,react" src="./useTaxiAppState.js?v=20260331b"></script>
+
+  <!-- 画面 -->
+  <script type="text/babel" data-presets="env,react" src="./TopScreen.js?v=20260331b"></script>
+  <script type="text/babel" data-presets="env,react" src="./StandbyScreen.js?v=20260331b"></script>
+  <script type="text/babel" data-presets="env,react" src="./RideScreen.js?v=20260331b"></script>
+  <script type="text/babel" data-presets="env,react" src="./FareScreen.js?v=20260331b"></script>
+  <script type="text/babel" data-presets="env,react" src="./HistoryModal.js?v=20260331b"></script>
+
+  <!-- メイン -->
+  <script type="text/babel" data-presets="env,react" src="./TaxiMiniApp.js?v=20260331b"></script>
 </body>
 </html>
