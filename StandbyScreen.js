@@ -21,10 +21,7 @@ window.AppScreens.StandbyScreen = (() => {
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-        <div
-          className="pt-4 shrink-0"
-          style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
-        >
+        <div className="pt-4 shrink-0" style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}>
           <button
             type="button"
             onClick={handleStartRide}
@@ -39,10 +36,7 @@ window.AppScreens.StandbyScreen = (() => {
         <div className="flex-1 min-h-0 relative overflow-hidden">
           <div
             className="absolute inset-x-0 z-10"
-            style={{
-              top: `${C.STANDBY_REVEAL_TOP}px`,
-              height: `${C.STANDBY_REVEAL_PANEL_HEIGHT}px`,
-            }}
+            style={{ top: `${C.STANDBY_REVEAL_TOP}px`, height: `${C.STANDBY_REVEAL_PANEL_HEIGHT}px` }}
           >
             <div className="h-full rounded-[30px] bg-[#eef3f9] border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] px-2 pt-3">
               <div className="w-full h-full rounded-[26px] bg-[linear-gradient(180deg,#edf2f8,#e6edf5)] flex items-center justify-center px-2">
@@ -50,10 +44,8 @@ window.AppScreens.StandbyScreen = (() => {
                   type="button"
                   onClick={handleFinishTap}
                   disabled={!isFinishVisible}
-                  className={`max-w-[100%] ${C.endDutyButtonClass} ${
-                    isFinishVisible ? "opacity-100" : "opacity-0"
-                  }`}
-                  style={{ width: "100%" }}
+                  className={`max-w-[100%] ${C.endDutyButtonClass} ${isFinishVisible ? 'opacity-100' : 'opacity-0'}`}
+                  style={{ width: '100%' }}
                 >
                   乗務終了
                 </button>
@@ -73,21 +65,17 @@ window.AppScreens.StandbyScreen = (() => {
             />
           </div>
 
-          <div
-            className="absolute inset-x-0 z-40 flex justify-center"
-            style={{ bottom: `${C.STANDBY_HANDLE_BOTTOM}px` }}
-          >
+          <div className="absolute inset-x-0 z-40 flex justify-center" style={{ bottom: `${C.STANDBY_HANDLE_BOTTOM}px` }}>
             <button
               type="button"
               onClick={toggleStandbySheet}
               onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
               onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
               className="flex flex-col items-center justify-center py-2 px-6 active:opacity-80"
-              aria-label={isStandbySheetOpened ? "その他を戻す" : "その他を下げる"}
             >
               <div className="w-14 h-1.5 rounded-full bg-slate-300 mb-2"></div>
               <div className="text-[13px] font-semibold text-slate-400">
-                {isStandbySheetOpened ? "↑ 隠す" : "↓ 下へ"}
+                {isStandbySheetOpened ? '↑ 隠す' : '↓ 下へ'}
               </div>
             </button>
           </div>
