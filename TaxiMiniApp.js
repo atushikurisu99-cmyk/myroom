@@ -17,7 +17,7 @@ function TaxiMiniApp() {
   const [startupOverlayFadeOut, setStartupOverlayFadeOut] = React.useState(false);
 
   const audioRef = React.useRef(null);
-  const audioUnlockTriedRef = React.useRef(false);
+  const audioUnlockedRef = React.useRef(false);
 
   React.useEffect(() => {
     try {
@@ -27,8 +27,7 @@ function TaxiMiniApp() {
     } catch (_) {}
 
     const unlockAudio = () => {
-      if (!audioRef.current || audioUnlockTriedRef.current) return;
-      audioUnlockTriedRef.current = true;
+      if (!audioRef.current || audioUnlockedRef.current) return;
       try {
         audioRef.current.currentTime = 0;
         const p = audioRef.current.play();
@@ -37,22 +36,19 @@ function TaxiMiniApp() {
             try {
               audioRef.current.pause();
               audioRef.current.currentTime = 0;
+              audioUnlockedRef.current = true;
             } catch (_) {}
-          }).catch(() => {
-            audioUnlockTriedRef.current = false;
-          });
+          }).catch(() => {});
         }
-      } catch (_) {
-        audioUnlockTriedRef.current = false;
-      }
+      } catch (_) {}
     };
 
     window.addEventListener("pointerdown", unlockAudio, { passive: true });
     window.addEventListener("touchstart", unlockAudio, { passive: true });
 
     const t1 = setTimeout(() => setStartupPhase("logoFade"), 1200);
-    const t2 = setTimeout(() => setStartupPhase("blank"), 1600);   // ロゴ消え切り
-    const t3 = setTimeout(() => setStartupPhase("startup"), 2350); // 白画面 約0.75秒
+    const t2 = setTimeout(() => setStartupPhase("blank"), 1600);
+    const t3 = setTimeout(() => setStartupPhase("startup"), 2350);
 
     return () => {
       clearTimeout(t1);
@@ -89,24 +85,21 @@ function TaxiMiniApp() {
       });
     });
 
-    // カードが収まってから少し置いて主ボタン
     const tButton = setTimeout(() => {
       setStartupButtonOn(true);
     }, 1450);
 
-    // 主ボタンの少し後にその他
     const tOther = setTimeout(() => {
       setStartupOtherOn(true);
     }, 1650);
 
-    // 起動演出オーバーレイを消す
     const tFade = setTimeout(() => {
       setStartupOverlayFadeOut(true);
-    }, 3200);
+    }, 3150);
 
     const tDone = setTimeout(() => {
       setStartupPhase("done");
-    }, 3560);
+    }, 3520);
 
     return () => {
       cancelAnimationFrame(raf1);
@@ -157,6 +150,29 @@ function TaxiMiniApp() {
     </div>
   );
 
+  const renderStartupOtherCard = () => (
+    <div className={`${C.cardClass} h-[220px] bg-white overflow-hidden`}>
+      <div className="h-full flex flex-col overflow-hidden">
+        <div className="px-4 pt-3 pb-2 shrink-0 bg-white">
+          <div className="relative flex items-center justify-center h-[22px]">
+            <div className="w-14 h-1.5 rounded-full bg-slate-200" />
+          </div>
+
+          <div className="mt-2 flex items-center justify-between">
+            <div className="text-sm font-medium text-slate-400">その他</div>
+            <div className="text-[18px] font-extrabold text-slate-800">売上 ¥0</div>
+          </div>
+        </div>
+
+        <div className="flex-1 min-h-0 overflow-hidden bg-white">
+          <div className="h-full px-4 py-8 text-sm text-slate-400 overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
+            まだ履歴はありません
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   const paymentLabel =
     state.pendingPaymentType === "cash"
       ? "現金"
@@ -173,7 +189,6 @@ function TaxiMiniApp() {
 
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
-      {/* 本画面は最初から描画しておく */}
       <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
         <OtherSheet
           show={state.showOtherSheet}
@@ -301,15 +316,18 @@ function TaxiMiniApp() {
         </div>
       </div>
 
-      {/* 起動演出オーバーレイ */}
       {showStartupOverlay && (
         <div
           className={`fixed inset-0 z-[9999] transition-opacity duration-[320ms] ${
             startupOverlayFadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
+          style={{
+            touchAction: "none",
+            overscrollBehavior: "none",
+          }}
         >
           {showLogoLayer && (
-            <div className="absolute inset-0 bg-white flex items-center justify-center">
+            <div className="absolute inset-0 bg-white flex items-center justify-center overflow-hidden">
               <img
                 src="./logo.png"
                 className={`w-[220px] transition-all duration-[400ms] ease-out ${
@@ -317,41 +335,44 @@ function TaxiMiniApp() {
                     ? "opacity-0 scale-[1.02]"
                     : "opacity-100 scale-100"
                 }`}
+                alt=""
               />
             </div>
           )}
 
-          {showBlankLayer && (
-            <div className="absolute inset-0 bg-white" />
-          )}
+          {showBlankLayer && <div className="absolute inset-0 bg-white overflow-hidden" />}
 
           {showStartupLayer && (
             <div className="absolute inset-0 bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
-              <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
-                <div className="relative h-full">
-                  {/* カード */}
+              <div
+                className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden"
+                style={{
+                  touchAction: "none",
+                  overscrollBehavior: "none",
+                }}
+              >
+                <div className="relative h-full overflow-hidden">
                   <div
                     className="absolute left-4 right-4 z-30"
                     style={{
                       top: "16px",
                       transform: startupCardOn
                         ? "translate3d(0,0,0)"
-                        : "translate3d(-280px,0,0)",
-                      transition: "transform 700ms cubic-bezier(0.2,0.8,0.2,1)",
+                        : "translate3d(-110%,0,0)",
+                      transition: "transform 760ms cubic-bezier(0.2,0.8,0.2,1)",
                       willChange: "transform",
                     }}
                   >
                     {renderClockCard()}
                   </div>
 
-                  {/* 主ボタン */}
                   <div
                     className="absolute left-4 right-4 z-20"
                     style={{
                       top: "204px",
                       transform: startupButtonOn
                         ? "translate3d(0,0,0)"
-                        : "translate3d(0,-145px,0)",
+                        : "translate3d(-110%,0,0)",
                       opacity: startupButtonOn ? 1 : 0,
                       transition:
                         "transform 760ms cubic-bezier(0.2,0.8,0.2,1), opacity 180ms linear",
@@ -365,40 +386,20 @@ function TaxiMiniApp() {
                     </button>
                   </div>
 
-                  {/* その他 */}
                   <div
                     className="absolute left-4 right-4 z-10"
                     style={{
                       top: "316px",
                       transform: startupOtherOn
                         ? "translate3d(0,0,0)"
-                        : "translate3d(0,-220px,0)",
+                        : "translate3d(-110%,0,0)",
                       opacity: startupOtherOn ? 1 : 0,
                       transition:
-                        "transform 860ms cubic-bezier(0.2,0.8,0.2,1), opacity 220ms linear",
+                        "transform 760ms cubic-bezier(0.2,0.8,0.2,1), opacity 180ms linear",
                       willChange: "transform, opacity",
                     }}
                   >
-                    <div className={`${C.cardClass} h-[220px] bg-white overflow-hidden`}>
-                      <div className="h-full flex flex-col">
-                        <div className="px-4 pt-3 pb-2 shrink-0 bg-white">
-                          <div className="relative flex items-center justify-center h-[22px]">
-                            <div className="w-14 h-1.5 rounded-full bg-slate-200" />
-                          </div>
-
-                          <div className="mt-2 flex items-center justify-between">
-                            <div className="text-sm font-medium text-slate-400">その他</div>
-                            <div className="text-[18px] font-extrabold text-slate-800">
-                              売上 ¥0
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex-1 px-4 py-8 text-sm text-slate-400 bg-white">
-                          まだ履歴はありません
-                        </div>
-                      </div>
-                    </div>
+                    {renderStartupOtherCard()}
                   </div>
                 </div>
               </div>
