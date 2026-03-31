@@ -115,9 +115,12 @@ window.AppComponents = (() => {
       standbySheetOffset = 0,
       toggleStandbySheet,
       beginStandbySheetDrag,
+      isOpened = false,
     } = props;
 
     const safeBottom = "max(12px, env(safe-area-inset-bottom))";
+    const hasPreviewRecords = !!(previewRecords && previewRecords.length > 0);
+
     const panelStyle = movable
       ? {
           position: "absolute",
@@ -138,8 +141,6 @@ window.AppComponents = (() => {
       beginStandbySheetDrag(e.touches[0].clientY);
     };
 
-    const isOpened = standbySheetOffset > 90;
-
     return (
       <div className="shrink-0 pt-3" style={{ paddingBottom: safeBottom, ...panelStyle }}>
         <div
@@ -154,14 +155,14 @@ window.AppComponents = (() => {
                 onTouchStart={startTouchDrag}
               />
 
-              {movable ? (
+              {movable && !isOpened ? (
                 <button
                   type="button"
                   onClick={toggleStandbySheet}
                   className="absolute right-0 top-1/2 -translate-y-1/2 z-30 text-[22px] font-black text-slate-500 leading-none px-1"
-                  aria-label={isOpened ? "上へ戻す" : "下へ開く"}
+                  aria-label="下へ開く"
                 >
-                  {isOpened ? "△" : "▽"}
+                  ▽
                 </button>
               ) : null}
             </div>
@@ -188,9 +189,15 @@ window.AppComponents = (() => {
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") openHistoryModal();
             }}
-            className="flex-1 min-h-0 bg-white active:bg-slate-50"
+            className="flex-1 min-h-0 bg-white active:bg-slate-50 overflow-hidden"
           >
-            <div className="h-full overflow-y-auto">
+            <div
+              className={
+                hasPreviewRecords
+                  ? "h-full overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]"
+                  : "h-full overflow-hidden"
+              }
+            >
               <PreviewHistoryRows previewRecords={previewRecords} />
             </div>
           </div>
