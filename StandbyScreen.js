@@ -8,19 +8,19 @@ window.AppScreens.StandbyScreen = (() => {
       handleStartRide,
       renderSharedInfoSpacer,
       handleFinishTap,
+      isFinishVisible,
       openOtherSheet,
       openHistoryModal,
       previewRecords,
-      toggleStandbySheet,
-      isStandbySheetOpened,
       standbySheetOffset,
       beginStandbySheetDrag,
-      totalAmount,
+      toggleStandbySheet,
+      dragging,
+      isStandbySheetOpened,
     } = props;
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-        {/* 実車ボタン */}
         <div
           className="pt-4 shrink-0"
           style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
@@ -30,57 +30,66 @@ window.AppScreens.StandbyScreen = (() => {
             onClick={handleStartRide}
             className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)]`}
           >
-            <span className={C.bigButtonText}>実車AAA</span>
+            <span className={C.bigButtonText}>実車</span>
           </button>
         </div>
 
         {renderSharedInfoSpacer()}
 
-        {/* 下段 */}
-        <div className="pt-4 flex-1 min-h-0 flex flex-col gap-3">
-          
-          {/* 乗務終了ボタン */}
-          {isStandbySheetOpened && (
-            <div className="px-2">
-              <button
-                type="button"
-                onClick={handleFinishTap}
-                className={`${C.endDutyButtonClass} w-full`}
-                style={{ height: "96px" }}
-              >
-                <span className="text-[24px] font-extrabold tracking-[-0.03em]">
+        <div className="flex-1 min-h-0 relative overflow-hidden">
+          <div
+            className="absolute inset-x-0 z-10"
+            style={{
+              top: `${C.STANDBY_REVEAL_TOP}px`,
+              height: `${C.STANDBY_REVEAL_PANEL_HEIGHT}px`,
+            }}
+          >
+            <div className="h-full rounded-[30px] bg-[#eef3f9] border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] px-2 pt-3">
+              <div className="w-full h-full rounded-[26px] bg-[linear-gradient(180deg,#edf2f8,#e6edf5)] flex items-center justify-center px-2">
+                <button
+                  type="button"
+                  onClick={handleFinishTap}
+                  disabled={!isFinishVisible}
+                  className={`max-w-[100%] ${C.endDutyButtonClass} ${
+                    isFinishVisible ? "opacity-100" : "opacity-0"
+                  }`}
+                  style={{ width: "100%" }}
+                >
                   乗務終了
-                </span>
-              </button>
+                </button>
+              </div>
             </div>
-          )}
+          </div>
 
-          {/* その他 */}
-          <div className="flex-1 min-h-0 overflow-hidden relative">
+          <div className="absolute inset-x-0 top-0 z-30">
             <BottomCard
               movable={true}
               standbySheetOffset={standbySheetOffset}
-              toggleStandbySheet={toggleStandbySheet}
-              beginStandbySheetDrag={beginStandbySheetDrag}
-              isOpened={!!isStandbySheetOpened}
+              dragging={dragging}
+              isFinishVisible={isFinishVisible}
               openOtherSheet={openOtherSheet}
               openHistoryModal={openHistoryModal}
               previewRecords={previewRecords}
-              totalAmount={totalAmount}
             />
+          </div>
 
-            {/* △ */}
-            {isStandbySheetOpened && (
-              <div className="absolute right-4 top-2">
-                <button
-                  type="button"
-                  onClick={toggleStandbySheet}
-                  className="h-[28px] min-w-[44px] rounded-full bg-white border border-slate-200 text-[18px] font-black text-slate-500"
-                >
-                  △
-                </button>
+          <div
+            className="absolute inset-x-0 z-40 flex justify-center"
+            style={{ bottom: `${C.STANDBY_HANDLE_BOTTOM}px` }}
+          >
+            <button
+              type="button"
+              onClick={toggleStandbySheet}
+              onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
+              onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
+              className="flex flex-col items-center justify-center py-2 px-6 active:opacity-80"
+              aria-label={isStandbySheetOpened ? "その他を戻す" : "その他を下げる"}
+            >
+              <div className="w-14 h-1.5 rounded-full bg-slate-300 mb-2"></div>
+              <div className="text-[13px] font-semibold text-slate-400">
+                {isStandbySheetOpened ? "↑ 隠す" : "↓ 下へ"}
               </div>
-            )}
+            </button>
           </div>
         </div>
       </div>
