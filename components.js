@@ -73,12 +73,24 @@ window.AppComponents = (() => {
   }
 
   function BottomCard({
+    movable = false,
+    standbySheetOffset = 0,
+    dragging = false,
+    isFinishVisible = false,
     openOtherSheet,
     openHistoryModal,
     previewRecords,
   }) {
+    const translateStyle = movable
+      ? {
+          transform: `translateY(${standbySheetOffset}px)`,
+          transition: dragging ? "none" : "transform 180ms ease-out",
+          pointerEvents: isFinishVisible ? "none" : "auto",
+        }
+      : {};
+
     return (
-      <div className="shrink-0">
+      <div className="shrink-0" style={translateStyle}>
         <div style={{ height: `${BOTTOM_CARD_HEIGHT}px` }}>
           <div className={`${cardClass} h-full overflow-hidden flex flex-col`}>
             <button
@@ -126,9 +138,25 @@ window.AppComponents = (() => {
               </button>
             </div>
             <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white">
-              <button type="button" className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50">分析</button>
-              <button type="button" className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50">設定</button>
-              <button type="button" onClick={openHistoryModal} className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 active:bg-slate-50">履歴</button>
+              <button
+                type="button"
+                className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50"
+              >
+                分析
+              </button>
+              <button
+                type="button"
+                className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50"
+              >
+                設定
+              </button>
+              <button
+                type="button"
+                onClick={openHistoryModal}
+                className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 active:bg-slate-50"
+              >
+                履歴
+              </button>
             </div>
           </div>
         </div>
@@ -150,7 +178,13 @@ window.AppComponents = (() => {
             降車位置精度：{dropoffMeta?.accuracy != null ? `${dropoffMeta.accuracy}m` : "--"}
           </div>
           <div className="mt-5 flex justify-end">
-            <button type="button" onClick={onCancel} className="min-w-[92px] h-[44px] rounded-2xl bg-slate-100 text-slate-700 text-sm font-bold">戻る</button>
+            <button
+              type="button"
+              onClick={onCancel}
+              className="min-w-[92px] h-[44px] rounded-2xl bg-slate-100 text-slate-700 text-sm font-bold"
+            >
+              戻る
+            </button>
           </div>
         </div>
       </div>
@@ -164,8 +198,20 @@ window.AppComponents = (() => {
           <div className="text-[18px] font-bold text-slate-800">現在地を経由地として記録します</div>
           <div className="mt-3 text-sm text-slate-500 truncate">{pendingViaPlace || "未取得"}</div>
           <div className="mt-5 grid grid-cols-2 gap-3">
-            <button type="button" onClick={onCancel} className="h-[48px] rounded-2xl bg-slate-100 text-slate-700 font-bold">戻る</button>
-            <button type="button" onClick={onRecord} className="h-[48px] rounded-2xl bg-slate-800 text-white font-bold">記録</button>
+            <button
+              type="button"
+              onClick={onCancel}
+              className="h-[48px] rounded-2xl bg-slate-100 text-slate-700 font-bold"
+            >
+              戻る
+            </button>
+            <button
+              type="button"
+              onClick={onRecord}
+              className="h-[48px] rounded-2xl bg-slate-800 text-white font-bold"
+            >
+              記録
+            </button>
           </div>
         </div>
       </div>
@@ -176,14 +222,28 @@ window.AppComponents = (() => {
     return (
       <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
         <div className="w-full rounded-[28px] bg-white shadow-2xl p-5">
-          <div className="text-[20px] font-bold text-slate-800">{window.AppUtils.formatDutyDate(workDate)}の乗務を終了しますか？</div>
+          <div className="text-[20px] font-bold text-slate-800">
+            {window.AppUtils.formatDutyDate(workDate)}の乗務を終了しますか？
+          </div>
           <div className="mt-4 grid gap-2 text-sm text-slate-600">
             <div>乗車回数：{recordCount}回</div>
             <div>売上合計：{formatMoney(totalAmount)}</div>
           </div>
           <div className="mt-5 grid grid-cols-2 gap-3">
-            <button type="button" onClick={onCancel} className="h-[48px] rounded-2xl bg-slate-100 text-slate-700 font-bold">戻る</button>
-            <button type="button" onClick={onConfirm} className="h-[48px] rounded-2xl bg-slate-800 text-white font-bold">本日の乗務を終了</button>
+            <button
+              type="button"
+              onClick={onCancel}
+              className="h-[48px] rounded-2xl bg-slate-100 text-slate-700 font-bold"
+            >
+              戻る
+            </button>
+            <button
+              type="button"
+              onClick={onConfirm}
+              className="h-[48px] rounded-2xl bg-slate-800 text-white font-bold"
+            >
+              本日の乗務を終了
+            </button>
           </div>
         </div>
       </div>
