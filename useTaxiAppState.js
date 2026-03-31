@@ -191,16 +191,18 @@ window.AppHooks = (() => {
     const recordCount = useMemo(() => records.length, [records]);
 
     const amount1 = useMemo(
-      () => records
-        .filter((record) => record.payment === "cash" && !record.receipt)
-        .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
+      () =>
+        records
+          .filter((record) => record.payment === "cash" && !record.receipt)
+          .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
       [records]
     );
 
     const amount2 = useMemo(
-      () => records
-        .filter((record) => !(record.payment === "cash" && !record.receipt))
-        .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
+      () =>
+        records
+          .filter((record) => !(record.payment === "cash" && !record.receipt))
+          .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
       [records]
     );
 
@@ -217,7 +219,10 @@ window.AppHooks = (() => {
 
     const topMainLabel = !dutyStarted ? "乗務開始" : "乗務終了";
     const topMainButtonDisabled = screen === "top" && isRiding;
-    const formattedAmount = useMemo(() => (amount ? Number(amount).toLocaleString("ja-JP") : ""), [amount]);
+    const formattedAmount = useMemo(
+      () => (amount ? Number(amount).toLocaleString("ja-JP") : ""),
+      [amount]
+    );
     const passengerDisplayCount = 6;
 
     const filteredHistoryRecords = useMemo(() => {
@@ -229,15 +234,21 @@ window.AppHooks = (() => {
       }
 
       if (historyMode === "day") {
-        list = list.filter((record) => Utils.isSameDay(Utils.getHistoryTargetDate(record), historyBaseDate));
+        list = list.filter((record) =>
+          Utils.isSameDay(Utils.getHistoryTargetDate(record), historyBaseDate)
+        );
       } else if (historyMode === "week") {
         const start = Utils.getWeekStart(historyBaseDate);
         const end = Utils.getWeekEnd(historyBaseDate);
-        list = list.filter((record) => Utils.isInRange(Utils.getHistoryTargetDate(record), start, end));
+        list = list.filter((record) =>
+          Utils.isInRange(Utils.getHistoryTargetDate(record), start, end)
+        );
       } else if (historyMode === "month") {
         const start = Utils.getMonthStart(historyBaseDate);
         const end = Utils.getMonthEnd(historyBaseDate);
-        list = list.filter((record) => Utils.isInRange(Utils.getHistoryTargetDate(record), start, end));
+        list = list.filter((record) =>
+          Utils.isInRange(Utils.getHistoryTargetDate(record), start, end)
+        );
       }
 
       return list.sort((a, b) => new Date(b.乗車時刻) - new Date(a.乗車時刻));
@@ -341,12 +352,18 @@ window.AppHooks = (() => {
       if (!editingRecord) return;
       const numericAmount = Number(String(editingRecord.金額入力 || "").replace(/[^\d]/g, ""));
       if (!numericAmount || numericAmount <= 0) return alert("正しい金額を入力してください");
-      if (!editingRecord.乗車時刻入力 || !editingRecord.降車時刻入力) return alert("時刻を入力してください");
+      if (!editingRecord.乗車時刻入力 || !editingRecord.降車時刻入力) {
+        return alert("時刻を入力してください");
+      }
 
       const nextStartAt = new Date(editingRecord.乗車時刻入力);
       const nextEndAt = new Date(editingRecord.降車時刻入力);
-      if (Number.isNaN(nextStartAt.getTime()) || Number.isNaN(nextEndAt.getTime())) return alert("時刻の形式が正しくありません");
-      if (nextEndAt.getTime() < nextStartAt.getTime()) return alert("降車時刻は乗車時刻より後にしてください");
+      if (Number.isNaN(nextStartAt.getTime()) || Number.isNaN(nextEndAt.getTime())) {
+        return alert("時刻の形式が正しくありません");
+      }
+      if (nextEndAt.getTime() < nextStartAt.getTime()) {
+        return alert("降車時刻は乗車時刻より後にしてください");
+      }
 
       const nextPayment = editingRecord.区分入力 === "1" ? "cash" : "cardQr";
       const nextReceipt = false;
