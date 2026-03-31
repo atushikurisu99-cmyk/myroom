@@ -6,7 +6,6 @@ window.AppScreens.StandbyScreen = (() => {
   return function StandbyScreen(props) {
     const {
       handleStartRide,
-      renderSharedInfoSpacer,
       handleFinishTap,
       isFinishVisible,
       openOtherSheet,
@@ -21,6 +20,7 @@ window.AppScreens.StandbyScreen = (() => {
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+        {/* 実車ボタン */}
         <div className="pt-4 shrink-0" style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}>
           <button
             type="button"
@@ -32,15 +32,12 @@ window.AppScreens.StandbyScreen = (() => {
           </button>
         </div>
 
-        {renderSharedInfoSpacer()}
-
-        <div className="flex-1 min-h-0 relative overflow-hidden">
+        {/* 待機画面下部エリア */}
+        <div className="pt-4 flex-1 min-h-0 relative overflow-hidden">
+          {/* 背面：乗務終了 */}
           <div
-            className="absolute inset-x-0 z-10"
-            style={{
-              top: `${C.STANDBY_REVEAL_TOP}px`,
-              height: `${C.STANDBY_REVEAL_PANEL_HEIGHT}px`,
-            }}
+            className="absolute inset-x-0 top-0 z-10"
+            style={{ height: `${C.BOTTOM_CARD_HEIGHT + 84}px` }}
           >
             <div className="h-full rounded-[30px] bg-[#eef3f9] border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] px-2 pt-3">
               <div className="w-full h-full rounded-[26px] bg-[linear-gradient(180deg,#edf2f8,#e6edf5)] flex items-center justify-center px-2">
@@ -59,25 +56,31 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           </div>
 
-          <div className="absolute inset-x-0 top-0 z-30">
+          {/* その他カード本体 */}
+          <div
+            className="absolute inset-x-0 top-0 z-30"
+            style={{
+              transform: `translateY(${standbySheetOffset}px)`,
+              transition: dragging ? "none" : "transform 180ms ease-out",
+              willChange: "transform",
+              pointerEvents: isFinishVisible ? "none" : "auto",
+            }}
+          >
             <BottomCard
-              movable={true}
-              standbySheetOffset={standbySheetOffset}
-              dragging={dragging}
-              isFinishVisible={isFinishVisible}
               openOtherSheet={openOtherSheet}
               openHistoryModal={openHistoryModal}
               previewRecords={previewRecords}
             />
           </div>
 
+          {/* ▽ 左モック位置 */}
           {!isStandbySheetOpened && (
             <div
               className="absolute z-40"
               style={{
                 left: "50%",
                 transform: "translateX(-50%)",
-                top: `${C.BOTTOM_CARD_HEIGHT - 10}px`,
+                top: `${C.BOTTOM_CARD_HEIGHT - 8}px`,
               }}
             >
               <button
@@ -85,7 +88,7 @@ window.AppScreens.StandbyScreen = (() => {
                 onClick={toggleStandbySheet}
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="flex items-center justify-center w-[32px] h-[24px] active:opacity-80"
+                className="flex items-center justify-center w-[28px] h-[24px] active:opacity-80"
                 aria-label="その他を下げる"
               >
                 <span className="text-[18px] leading-none font-bold text-slate-400">▽</span>
@@ -93,12 +96,13 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           )}
 
+          {/* △ 右モック位置 */}
           {isStandbySheetOpened && (
             <div
               className="absolute z-40"
               style={{
                 right: "18px",
-                top: `${C.STANDBY_REVEAL_TOP + 92}px`,
+                top: `${C.BOTTOM_CARD_HEIGHT + 92}px`,
               }}
             >
               <button
@@ -106,7 +110,7 @@ window.AppScreens.StandbyScreen = (() => {
                 onClick={toggleStandbySheet}
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="flex items-center justify-center w-[32px] h-[24px] active:opacity-80"
+                className="flex items-center justify-center w-[28px] h-[24px] active:opacity-80"
                 aria-label="その他を戻す"
               >
                 <span className="text-[18px] leading-none font-bold text-slate-400">△</span>
