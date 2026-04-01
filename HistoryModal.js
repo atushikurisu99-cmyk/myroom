@@ -283,7 +283,9 @@ window.AppScreens.HistoryModal = (() => {
                         <button
                           key={count}
                           type="button"
-                          onClick={() => setEditingRecord((prev) => ({ ...prev, 人数入力: count }))}
+                          onClick={() =>
+                            setEditingRecord((prev) => ({ ...prev, 人数入力: count }))
+                          }
                           className={`h-[46px] rounded-2xl text-lg font-bold border ${
                             Number(editingRecord.人数入力) === count
                               ? "bg-sky-500 text-white border-sky-500"
@@ -301,7 +303,10 @@ window.AppScreens.HistoryModal = (() => {
                     ["降車地", "降車地入力"],
                     ["備考", "備考入力"],
                   ].map(([label, key]) => (
-                    <div key={key} className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
+                    <div
+                      key={key}
+                      className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}
+                    >
                       <div className="text-sm font-semibold text-slate-600">{label}</div>
                       <input
                         type="text"
@@ -321,7 +326,10 @@ window.AppScreens.HistoryModal = (() => {
                     ["乗車時刻", "乗車時刻入力"],
                     ["降車時刻", "降車時刻入力"],
                   ].map(([label, key]) => (
-                    <div key={key} className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
+                    <div
+                      key={key}
+                      className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}
+                    >
                       <div className="text-sm font-semibold text-slate-600">{label}</div>
                       <input
                         type="datetime-local"
