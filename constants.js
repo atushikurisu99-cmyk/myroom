@@ -3,8 +3,8 @@ window.AppConstants = {
   SHARED_INFO_SLOT_HEIGHT: 116,
   BOTTOM_CARD_HEIGHT: 220,
 
-  STANDBY_OTHER_MOVE_RANGE: 104,
-  FINISH_ENABLE_OFFSET: 72,
+  STANDBY_OTHER_MOVE_RANGE: 252,
+  FINISH_ENABLE_OFFSET: 120,
 
   PASSENGER_ACTIVE: "#e3e548",
   PASSENGER_INACTIVE: "#cfd6df",
@@ -24,7 +24,7 @@ window.AppConstants = {
   smallButtonBase:
     "relative overflow-hidden w-full rounded-[20px] border border-white/60 shadow-[inset_0_2px_0_rgba(255,255,255,0.65),inset_0_-2px_6px_rgba(0,0,0,0.20),0_6px_12px_rgba(0,0,0,0.14)] active:scale-[0.985]",
   endDutyButtonClass:
-    "relative overflow-hidden w-full rounded-[18px] border border-[#d8c7c7] text-white font-bold shadow-[inset_0_2px_0_rgba(255,255,255,0.30),inset_0_-2px_6px_rgba(0,0,0,0.15),0_6px_12px_rgba(0,0,0,0.12)] active:scale-[0.985] bg-[linear-gradient(180deg,#8f8787,#7f7777,#706868)]",
+    "relative overflow-hidden rounded-[18px] border border-[#d8c7c7] text-white font-bold shadow-[inset_0_2px_0_rgba(255,255,255,0.30),inset_0_-2px_6px_rgba(0,0,0,0.15),0_6px_12px_rgba(0,0,0,0.12)] active:scale-[0.985] bg-[linear-gradient(180deg,#8f8787,#7f7777,#706868)]",
 
   previewHeaderHeight: 32,
   previewViewportHeight: 156,
