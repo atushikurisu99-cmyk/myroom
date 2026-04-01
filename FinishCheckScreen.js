@@ -3,87 +3,145 @@ window.AppScreens.FinishCheckScreen = (() => {
   const { formatMoney } = window.AppUtils;
   const C = window.AppConstants;
 
-  function CellLabel({ children }) {
+  function RowShell({ children, className = "" }) {
     return (
-      <div className="text-[11px] font-semibold tracking-[0.02em] text-slate-400">
+      <div className={`border border-slate-200 bg-white ${className}`}>
         {children}
       </div>
     );
   }
 
-  function ReadCell({ label, value, valueClassName = "" }) {
+  function LabelText({ children, subtle = false }) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white px-3 py-3">
-        <CellLabel>{label}</CellLabel>
-        <div className={`mt-1 text-[18px] leading-tight text-slate-800 ${valueClassName}`}>
-          {value}
-        </div>
+      <div
+        className={`text-[14px] font-semibold leading-none ${
+          subtle ? "text-slate-400" : "text-slate-600"
+        }`}
+      >
+        {children}
       </div>
     );
   }
 
-  function LinkCell({ label, value, onClick, accent = "sky" }) {
-    const activeClass =
+  function ValueText({ children, className = "" }) {
+    return (
+      <div className={`text-[20px] font-bold leading-none text-slate-800 ${className}`}>
+        {children}
+      </div>
+    );
+  }
+
+  function EditRow({ label, value, onClick, accent = "sky" }) {
+    const accentClass =
       accent === "emerald"
-        ? "border-emerald-200 bg-emerald-50 active:bg-emerald-100"
-        : "border-sky-200 bg-sky-50 active:bg-sky-100";
+        ? "active:bg-emerald-50"
+        : "active:bg-sky-50";
 
     return (
       <button
         type="button"
         onClick={onClick}
-        className={`w-full rounded-2xl border px-3 py-3 text-left ${activeClass}`}
+        className={`w-full text-left ${accentClass}`}
       >
-        <CellLabel>{label}</CellLabel>
-        <div className="mt-1 flex items-center justify-between gap-2">
-          <div className="text-[18px] leading-tight text-slate-800">{value}</div>
-          <div className="text-[11px] font-bold text-slate-400">修正</div>
-        </div>
+        <RowShell className="px-4 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0">
+              <LabelText>{label}</LabelText>
+            </div>
+
+            <div className="shrink-0 flex items-center gap-3">
+              <ValueText>{value}</ValueText>
+              <div className="text-[12px] font-bold text-slate-400">修正</div>
+            </div>
+          </div>
+        </RowShell>
       </button>
     );
   }
 
-  function InputCell({
+  function InputRow({
     label,
     value,
     onChange,
     placeholder = "",
-    inputMode = "numeric",
+    suffix = "",
     multiline = false,
   }) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white px-3 py-3">
-        <CellLabel>{label}</CellLabel>
+      <RowShell className="px-4 py-3">
+        {!multiline ? (
+          <div className="grid grid-cols-[96px_1fr_auto] items-center gap-3">
+            <div>
+              <LabelText>{label}</LabelText>
+            </div>
 
-        {multiline ? (
-          <textarea
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            rows={4}
-            className="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-[16px] text-slate-800 outline-none focus:border-slate-300"
-          />
+            <input
+              type="text"
+              inputMode="numeric"
+              value={value}
+              onChange={onChange}
+              placeholder={placeholder}
+              className="w-full border border-slate-300 bg-white px-3 py-2 text-[18px] font-bold text-slate-800 outline-none focus:border-slate-500"
+            />
+
+            <div className="min-w-[28px] text-right text-[16px] font-semibold text-slate-500">
+              {suffix}
+            </div>
+          </div>
         ) : (
-          <input
-            type="text"
-            inputMode={inputMode}
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-[18px] text-slate-800 outline-none focus:border-slate-300"
-          />
+          <div className="grid gap-3">
+            <div>
+              <LabelText>{label}</LabelText>
+            </div>
+
+            <textarea
+              value={value}
+              onChange={onChange}
+              rows={4}
+              placeholder={placeholder}
+              className="w-full resize-none border border-slate-300 bg-white px-3 py-3 text-[16px] text-slate-800 outline-none focus:border-slate-500"
+            />
+          </div>
         )}
+      </RowShell>
+    );
+  }
+
+  function SummaryLine({ label, value, suffix = "" }) {
+    return (
+      <div className="grid grid-cols-[96px_1fr_auto] items-center gap-3 px-4 py-3 border-t border-slate-200 first:border-t-0">
+        <div>
+          <LabelText>{label}</LabelText>
+        </div>
+
+        <div className="text-right">
+          <ValueText className="text-[18px]">{value}</ValueText>
+        </div>
+
+        <div className="min-w-[28px] text-right text-[15px] font-semibold text-slate-500">
+          {suffix}
+        </div>
       </div>
     );
   }
 
-  function BusinessKmCell({ km }) {
+  function SalesAndBusinessRow({ totalAmount, businessKm }) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white px-3 py-3">
-        <CellLabel>営走</CellLabel>
-        <div className="mt-1 flex items-end gap-1 leading-none">
-          <span className="text-[14px] font-semibold text-slate-400">＝営走：</span>
-          <span className="text-[20px] font-bold text-slate-800">{km}km</span>
+      <div className="grid grid-cols-[1fr_auto_1fr_auto] items-center gap-3 px-4 py-3 border-t border-slate-200">
+        <div>
+          <LabelText>売上金額</LabelText>
+        </div>
+
+        <div className="text-right">
+          <ValueText className="text-[18px]">{formatMoney(totalAmount).replace("¥", "")}</ValueText>
+        </div>
+
+        <div className="pl-3">
+          <LabelText subtle={true}>＝営走</LabelText>
+        </div>
+
+        <div className="text-right">
+          <ValueText className="text-[18px]">{businessKm}</ValueText>
         </div>
       </div>
     );
@@ -101,107 +159,81 @@ window.AppScreens.FinishCheckScreen = (() => {
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden pt-4">
-        <div className={`${C.cardClass} flex-1 min-h-0 overflow-hidden flex flex-col px-4 py-4`}>
-          <div className="shrink-0 flex items-center justify-between gap-3">
-            <button
-              type="button"
-              onClick={onBack}
-              className="h-[44px] min-w-[84px] rounded-2xl bg-slate-100 text-slate-700 text-sm font-bold active:bg-slate-200"
-            >
-              戻る
-            </button>
+        <div className="flex items-center justify-between gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={onBack}
+            className="h-[42px] min-w-[82px] border border-slate-300 bg-white text-slate-700 text-sm font-bold active:bg-slate-100"
+          >
+            戻る
+          </button>
 
-            <div className="min-w-0 text-center">
-              <div className="text-[18px] font-bold tracking-[-0.02em] text-slate-800">
-                終了前チェック
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={onConfirm}
-              className="h-[44px] min-w-[96px] rounded-2xl bg-slate-800 text-white text-sm font-bold active:opacity-90"
-            >
-              確定
-            </button>
+          <div className="text-[18px] font-bold tracking-[-0.02em] text-slate-800">
+            終了前チェック
           </div>
 
-          <div className="mt-4 flex-1 min-h-0 overflow-y-auto pr-[2px]">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="grid gap-3">
-                <LinkCell
-                  label="①"
-                  value={formatMoney(finishSummary.amount1)}
-                  onClick={() => openHistoryModalWithFilter("1")}
-                  accent="sky"
-                />
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="h-[42px] min-w-[92px] bg-slate-800 text-white text-sm font-bold active:opacity-90"
+          >
+            確定
+          </button>
+        </div>
 
-                <LinkCell
-                  label="②"
-                  value={formatMoney(finishSummary.amount2)}
-                  onClick={() => openHistoryModalWithFilter("2")}
-                  accent="emerald"
-                />
+        <div className="mt-4 flex-1 min-h-0 overflow-y-auto">
+          <div className="mx-auto w-full max-w-[340px] grid gap-4 pb-2">
+            <div className="grid gap-0">
+              <EditRow
+                label="①"
+                value={formatMoney(finishSummary.amount1)}
+                onClick={() => openHistoryModalWithFilter("1")}
+                accent="sky"
+              />
 
-                <InputCell
-                  label="燃料"
-                  value={finishForm.fuel}
-                  onChange={(e) =>
-                    setFinishFormField("fuel", e.target.value.replace(/[^\d]/g, ""))
-                  }
-                  placeholder="0"
-                />
+              <EditRow
+                label="②"
+                value={formatMoney(finishSummary.amount2)}
+                onClick={() => openHistoryModalWithFilter("2")}
+                accent="emerald"
+              />
 
-                <InputCell
-                  label="雑収入"
-                  value={finishForm.otherIncome}
-                  onChange={(e) =>
-                    setFinishFormField("otherIncome", e.target.value.replace(/[^\d]/g, ""))
-                  }
-                  placeholder="0"
-                />
-
-                <InputCell
-                  label="備考"
-                  value={finishForm.note}
-                  onChange={(e) => setFinishFormField("note", e.target.value)}
-                  placeholder=""
-                  inputMode="text"
-                  multiline={true}
-                />
-              </div>
-
-              <div className="grid gap-3">
-                <ReadCell
-                  label="売上合計"
-                  value={formatMoney(finishSummary.totalAmount)}
-                  valueClassName="font-bold"
-                />
-
-                <ReadCell
-                  label="件数"
-                  value={`${finishSummary.recordCount}件`}
-                  valueClassName="font-bold"
-                />
-
-                <ReadCell
-                  label="人数"
-                  value={`${finishSummary.passengerCount}名`}
-                  valueClassName="font-bold"
-                />
-
-                <BusinessKmCell km={finishSummary.businessKm} />
-
-                <InputCell
-                  label="全走行"
-                  value={finishForm.totalDistance}
-                  onChange={(e) =>
-                    setFinishFormField("totalDistance", e.target.value.replace(/[^\d]/g, ""))
-                  }
-                  placeholder="0"
-                />
-              </div>
+              <InputRow
+                label="全走行"
+                value={finishForm.totalDistance}
+                onChange={(e) =>
+                  setFinishFormField("totalDistance", e.target.value.replace(/[^\d]/g, ""))
+                }
+                placeholder="0"
+                suffix="km"
+              />
             </div>
+
+            <RowShell>
+              <SalesAndBusinessRow
+                totalAmount={finishSummary.totalAmount}
+                businessKm={finishSummary.businessKm}
+              />
+
+              <SummaryLine
+                label="件数"
+                value={finishSummary.recordCount}
+                suffix="件"
+              />
+
+              <SummaryLine
+                label="人数"
+                value={finishSummary.passengerCount}
+                suffix="人"
+              />
+            </RowShell>
+
+            <InputRow
+              label="備考"
+              value={finishForm.note}
+              onChange={(e) => setFinishFormField("note", e.target.value)}
+              multiline={true}
+            />
           </div>
         </div>
       </div>
