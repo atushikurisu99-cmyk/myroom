@@ -1,4 +1,4 @@
-const { useEffect, useMemo, useState } = React;
+const { useEffect, useMemo, useRef, useState } = React;
 
 const { useTaxiAppState } = window.AppHooks;
 const {
@@ -18,7 +18,11 @@ function TaxiMiniApp() {
   const { refs, state, derived, actions } = useTaxiAppState();
   const C = window.AppConstants;
 
+  const startupAudioRef = useRef(null);
+
+  // logo -> logoFade -> tap -> running -> done
   const [startupPhase, setStartupPhase] = useState("logo");
+  // 0:none 1:header 2:main 3:other
   const [startupStage, setStartupStage] = useState(0);
 
   useEffect(() => {
@@ -37,49 +41,56 @@ function TaxiMiniApp() {
     setStartupPhase("running");
 
     setTimeout(() => {
-      const audio = new Audio("./goanzen.wav");
-      audio.volume = 0.75;
-      audio.play().catch(() => {});
+      try {
+        if (!startupAudioRef.current) {
+          startupAudioRef.current = new Audio("./goanzen.wav");
+          startupAudioRef.current.preload = "auto";
+          startupAudioRef.current.volume = 0.75;
+        }
+        startupAudioRef.current.currentTime = 0;
+        startupAudioRef.current.play().catch(() => {});
+      } catch (_) {}
+
       setStartupStage(1);
     }, 500);
 
     setTimeout(() => setStartupStage(2), 1000);
     setTimeout(() => setStartupStage(3), 1500);
-    setTimeout(() => setStartupPhase("done"), 1900);
+    setTimeout(() => setStartupPhase("done"), 1950);
   };
 
   const startupLock = startupPhase !== "done";
 
   const headerStyle = useMemo(() => {
     if (startupPhase === "done") return {};
-
     return {
       transform: startupStage >= 1 ? "translateX(0)" : "translateX(-120%)",
       opacity: startupStage >= 1 ? 1 : 0,
-      transition: "all 0.45s cubic-bezier(0.22,1,0.36,1)",
+      transition: "transform 450ms cubic-bezier(0.22,1,0.36,1), opacity 450ms ease-out",
+      willChange: "transform, opacity",
     };
   }, [startupPhase, startupStage]);
 
   const mainStyle = useMemo(() => {
     if (startupPhase === "done") return {};
-
     return {
       transform:
         startupStage >= 2
           ? "translateX(0) scale(1)"
-          : "translateX(-40px) scale(0.96)",
+          : "translateX(-42px) scale(0.96)",
       opacity: startupStage >= 2 ? 1 : 0,
-      transition: "all 0.45s cubic-bezier(0.22,1,0.36,1)",
+      transition: "transform 450ms cubic-bezier(0.22,1,0.36,1), opacity 450ms ease-out",
+      willChange: "transform, opacity",
     };
   }, [startupPhase, startupStage]);
 
   const otherStyle = useMemo(() => {
     if (startupPhase === "done") return {};
-
     return {
       transform: startupStage >= 3 ? "translateX(0)" : "translateX(-56px)",
       opacity: startupStage >= 3 ? 1 : 0,
-      transition: "all 0.4s cubic-bezier(0.22,1,0.36,1)",
+      transition: "transform 420ms cubic-bezier(0.22,1,0.36,1), opacity 420ms ease-out",
+      willChange: "transform, opacity",
     };
   }, [startupPhase, startupStage]);
 
@@ -94,14 +105,21 @@ function TaxiMiniApp() {
 
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
+      <audio
+        ref={startupAudioRef}
+        src="./goanzen.wav"
+        preload="auto"
+        style={{ display: "none" }}
+      />
+
       <div className="w-full max-w-sm h-full px-4 pt-4 pb-3 relative overflow-hidden">
-        {state.showSaved && (
+        {state.showSaved && startupPhase === "done" && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-5 py-2.5 shadow-lg">
             保存しました
           </div>
         )}
 
-        {state.toastMessage && (
+        {state.toastMessage && startupPhase === "done" && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-slate-800 text-white text-sm font-semibold px-4 py-2 shadow-lg">
             {state.toastMessage}
           </div>
@@ -250,21 +268,29 @@ function TaxiMiniApp() {
                   transition: "opacity 0.75s ease",
                 }}
               >
-                <div className="text-center">
-                  <div className="text-[18px] tracking-[0.3em] text-slate-500">
-                    PROJECT
-                  </div>
-                  <div className="text-[56px] font-black text-slate-800 mt-2">
-                    ARTS
-                  </div>
-                </div>
+                <img
+                  src="./logo.png"
+                  alt="logo"
+                  className="block max-w-none"
+                  style={{
+                    width: "250px",
+                    height: "auto",
+                    objectFit: "contain",
+                    userSelect: "none",
+                    pointerEvents: "none",
+                  }}
+                />
               </div>
             )}
 
             {startupPhase === "tap" && (
-              <button type="button" onClick={startApp}>
+              <button
+                type="button"
+                onClick={startApp}
+                className="bg-transparent border-none outline-none"
+              >
                 <span
-                  className="text-[20px] text-slate-500"
+                  className="text-[20px] text-slate-500 font-medium tracking-[0.08em]"
                   style={{ animation: "blink 1.2s infinite" }}
                 >
                   タップして開始
