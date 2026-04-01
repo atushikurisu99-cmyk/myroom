@@ -1,6 +1,6 @@
 window.AppScreens = window.AppScreens || {};
 window.AppScreens.RideScreen = (() => {
-  const { BottomCard } = window.AppComponents;
+  const { BottomCard, RideInfoCard } = window.AppComponents;
   const C = window.AppConstants;
 
   return function RideScreen(props) {
@@ -13,7 +13,6 @@ window.AppScreens.RideScreen = (() => {
       openOtherSheet,
       openHistoryModal,
       previewRecords,
-      totalAmount,
     } = props;
 
     return (
@@ -31,51 +30,21 @@ window.AppScreens.RideScreen = (() => {
           </button>
         </div>
 
-        <div className="pt-4 shrink-0">
-          <div
-            className={`${C.cardClass} px-4 py-4`}
-            style={{ minHeight: `${C.SHARED_INFO_SLOT_HEIGHT}px` }}
-          >
-            <div className="text-[18px] font-bold text-slate-800 truncate leading-tight">
-              {pickup || "未取得"}
-            </div>
-
-            <div className="mt-4 grid grid-cols-2 gap-4">
-              <div>
-                <div className="text-[13px] font-semibold text-slate-500">
-                  乗車時刻
-                </div>
-                <div className="mt-1 text-[17px] font-bold text-slate-800 leading-none">
-                  {window.AppUtils.formatTime(rideStartAt)}
-                </div>
-              </div>
-
-              <div className="text-right">
-                <div className="text-[13px] font-semibold text-slate-500">
-                  経過時間
-                </div>
-                <div className="mt-1 text-[17px] font-bold text-slate-800 leading-none">
-                  {elapsedText}
-                </div>
-              </div>
-            </div>
-
-            {viaStops.length > 0 && (
-              <div className="mt-3 text-[11px] font-semibold text-slate-500 truncate leading-none">
-                経由あり（{viaStops.length}件）
-              </div>
-            )}
-          </div>
+        <div className="pt-4 shrink-0" style={{ height: `${C.SHARED_INFO_SLOT_HEIGHT}px` }}>
+          <RideInfoCard
+            pickup={pickup}
+            rideStartAt={rideStartAt}
+            elapsedText={elapsedText}
+            viaStops={viaStops}
+          />
         </div>
 
-        <div className="pt-4 flex-1 min-h-0 overflow-hidden">
+        <div className="pt-4 shrink-0">
           <BottomCard
             movable={false}
-            standbySheetOffset={0}
             openOtherSheet={openOtherSheet}
             openHistoryModal={openHistoryModal}
             previewRecords={previewRecords}
-            totalAmount={totalAmount}
           />
         </div>
       </div>
