@@ -66,7 +66,8 @@ function TaxiMiniApp() {
     return {
       transform: startupStage >= 1 ? "translateX(0)" : "translateX(-120%)",
       opacity: startupStage >= 1 ? 1 : 0,
-      transition: "transform 450ms cubic-bezier(0.22,1,0.36,1), opacity 450ms ease-out",
+      transition:
+        "transform 450ms cubic-bezier(0.22,1,0.36,1), opacity 450ms ease-out",
       willChange: "transform, opacity",
     };
   }, [startupPhase, startupStage]);
@@ -79,7 +80,8 @@ function TaxiMiniApp() {
           ? "translateX(0) scale(1)"
           : "translateX(-42px) scale(0.96)",
       opacity: startupStage >= 2 ? 1 : 0,
-      transition: "transform 450ms cubic-bezier(0.22,1,0.36,1), opacity 450ms ease-out",
+      transition:
+        "transform 450ms cubic-bezier(0.22,1,0.36,1), opacity 450ms ease-out",
       willChange: "transform, opacity",
     };
   }, [startupPhase, startupStage]);
@@ -89,7 +91,8 @@ function TaxiMiniApp() {
     return {
       transform: startupStage >= 3 ? "translateX(0)" : "translateX(-56px)",
       opacity: startupStage >= 3 ? 1 : 0,
-      transition: "transform 420ms cubic-bezier(0.22,1,0.36,1), opacity 420ms ease-out",
+      transition:
+        "transform 420ms cubic-bezier(0.22,1,0.36,1), opacity 420ms ease-out",
       willChange: "transform, opacity",
     };
   }, [startupPhase, startupStage]);
