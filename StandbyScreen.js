@@ -41,7 +41,6 @@ window.AppScreens.StandbyScreen = (() => {
         {renderSharedInfoSpacer()}
 
         <div className="pt-4 flex-1 min-h-0 relative overflow-hidden">
-          {/* 背面：終了ボタン */}
           <div
             className="absolute left-0 right-0 z-10"
             style={{
@@ -72,8 +71,6 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           </div>
 
-          {/* 前面：その他カード
-              開いた後は完全に消して、終了ボタンを確実に押せるようにする */}
           {!isStandbySheetOpened && (
             <div
               className="absolute left-0 right-0 z-20"
@@ -96,7 +93,6 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           )}
 
-          {/* 通常時の▼ */}
           {!isStandbySheetOpened && (
             <div
               className="absolute z-30"
@@ -110,15 +106,14 @@ window.AppScreens.StandbyScreen = (() => {
                 onClick={toggleStandbySheet}
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="flex items-center justify-center w-[32px] h-[28px] active:opacity-80"
+                className="flex items-center justify-center w-[34px] h-[30px] active:opacity-80"
                 aria-label="その他を下げる"
               >
-                <span className="text-[24px] leading-none font-bold text-slate-300">▼</span>
+                <span className="text-[26px] leading-none font-bold text-slate-300">▼</span>
               </button>
             </div>
           )}
 
-          {/* 開いた後の▲ */}
           {isStandbySheetOpened && (
             <div
               className="absolute z-30"
@@ -132,10 +127,10 @@ window.AppScreens.StandbyScreen = (() => {
                 onClick={toggleStandbySheet}
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="flex items-center justify-center w-[34px] h-[30px] active:opacity-80"
+                className="flex items-center justify-center w-[36px] h-[32px] active:opacity-80"
                 aria-label="その他を戻す"
               >
-                <span className="text-[26px] leading-none font-bold text-slate-300">▲</span>
+                <span className="text-[28px] leading-none font-bold text-slate-300">▲</span>
               </button>
             </div>
           )}
