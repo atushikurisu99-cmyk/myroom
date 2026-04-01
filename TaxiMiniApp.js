@@ -6,7 +6,6 @@ const {
   OtherSheet,
   PaymentDialog,
   ViaDialog,
-  FinishDialog,
 } = window.AppComponents;
 const TopScreen = window.AppScreens.TopScreen;
 const StandbyScreen = window.AppScreens.StandbyScreen;
@@ -202,16 +201,6 @@ function TaxiMiniApp() {
           />
         )}
 
-        {state.showFinishDialog && (
-          <FinishDialog
-            workDate={state.workDate}
-            recordCount={derived.recordCount}
-            totalAmount={derived.totalAmount}
-            onCancel={() => actions.setShowFinishDialog(false)}
-            onConfirm={actions.performDutyEnd}
-          />
-        )}
-
         <HistoryModal
           show={state.showHistoryModal}
           editingRecord={state.editingRecord}
@@ -232,6 +221,12 @@ function TaxiMiniApp() {
           saveEditedRecord={actions.saveEditedRecord}
           deleteEditedRecord={actions.deleteEditedRecord}
           setEditingRecord={actions.setEditingRecord}
+          historySelectionMode={state.historySelectionMode}
+          selectedHistoryIds={state.selectedHistoryIds}
+          enterHistorySelectionMode={actions.enterHistorySelectionMode}
+          toggleHistorySelection={actions.toggleHistorySelection}
+          deleteSelectedHistoryRecords={actions.deleteSelectedHistoryRecords}
+          clearHistorySelection={actions.clearHistorySelection}
         />
 
         <div className="h-full flex flex-col overflow-hidden">
