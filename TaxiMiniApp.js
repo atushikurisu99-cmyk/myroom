@@ -19,19 +19,24 @@ function TaxiMiniApp() {
   const C = window.AppConstants;
 
   const startupAudioRef = useRef(null);
+  const startupTimersRef = useRef([]);
 
-  // logo -> logoFade -> tap -> running -> done
+  // splash phases: logo -> logoFade -> tap -> running -> done
   const [startupPhase, setStartupPhase] = useState("logo");
   // 0:none 1:header 2:main 3:other
   const [startupStage, setStartupStage] = useState(0);
 
   useEffect(() => {
+    const timers = startupTimersRef.current;
+
     const t1 = setTimeout(() => setStartupPhase("logoFade"), 1500);
     const t2 = setTimeout(() => setStartupPhase("tap"), 2250);
 
+    timers.push(t1, t2);
+
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
+      timers.forEach((id) => clearTimeout(id));
+      startupTimersRef.current = [];
     };
   }, []);
 
@@ -40,7 +45,9 @@ function TaxiMiniApp() {
 
     setStartupPhase("running");
 
-    setTimeout(() => {
+    const timers = startupTimersRef.current;
+
+    const s1 = setTimeout(() => {
       try {
         if (!startupAudioRef.current) {
           startupAudioRef.current = new Audio("./goanzen.wav");
@@ -54,26 +61,38 @@ function TaxiMiniApp() {
       setStartupStage(1);
     }, 500);
 
-    setTimeout(() => setStartupStage(2), 1000);
-    setTimeout(() => setStartupStage(3), 1500);
-    setTimeout(() => setStartupPhase("done"), 1950);
+    const s2 = setTimeout(() => {
+      setStartupStage(2);
+    }, 1000);
+
+    const s3 = setTimeout(() => {
+      setStartupStage(3);
+    }, 1500);
+
+    const s4 = setTimeout(() => {
+      setStartupPhase("done");
+    }, 2000);
+
+    timers.push(s1, s2, s3, s4);
   };
 
   const startupLock = startupPhase !== "done";
 
   const headerStyle = useMemo(() => {
     if (startupPhase === "done") return {};
+
     return {
       transform: startupStage >= 1 ? "translateX(0)" : "translateX(-120%)",
       opacity: startupStage >= 1 ? 1 : 0,
       transition:
-        "transform 450ms cubic-bezier(0.22,1,0.36,1), opacity 450ms ease-out",
+        "transform 460ms cubic-bezier(0.22,1,0.36,1), opacity 460ms ease-out",
       willChange: "transform, opacity",
     };
   }, [startupPhase, startupStage]);
 
   const mainStyle = useMemo(() => {
     if (startupPhase === "done") return {};
+
     return {
       transform:
         startupStage >= 2
@@ -81,18 +100,19 @@ function TaxiMiniApp() {
           : "translateX(-42px) scale(0.96)",
       opacity: startupStage >= 2 ? 1 : 0,
       transition:
-        "transform 450ms cubic-bezier(0.22,1,0.36,1), opacity 450ms ease-out",
+        "transform 460ms cubic-bezier(0.22,1,0.36,1), opacity 460ms ease-out",
       willChange: "transform, opacity",
     };
   }, [startupPhase, startupStage]);
 
   const otherStyle = useMemo(() => {
     if (startupPhase === "done") return {};
+
     return {
       transform: startupStage >= 3 ? "translateX(0)" : "translateX(-56px)",
       opacity: startupStage >= 3 ? 1 : 0,
       transition:
-        "transform 420ms cubic-bezier(0.22,1,0.36,1), opacity 420ms ease-out",
+        "transform 460ms cubic-bezier(0.22,1,0.36,1), opacity 460ms ease-out",
       willChange: "transform, opacity",
     };
   }, [startupPhase, startupStage]);
@@ -105,6 +125,8 @@ function TaxiMiniApp() {
       <div className="h-full rounded-[28px] opacity-0 pointer-events-none" />
     </div>
   );
+
+  const showSplash = state.screen === "top" && startupPhase !== "done";
 
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
@@ -262,22 +284,22 @@ function TaxiMiniApp() {
           )}
         </div>
 
-        {startupPhase !== "done" && (
+        {showSplash && (
           <div className="absolute inset-0 z-[999] bg-white flex items-center justify-center">
             {(startupPhase === "logo" || startupPhase === "logoFade") && (
               <div
                 style={{
                   opacity: startupPhase === "logoFade" ? 0 : 1,
-                  transition: "opacity 0.75s ease",
+                  transition: "opacity 750ms ease",
                 }}
               >
                 <img
                   src="./logo.png"
                   alt="logo"
-                  className="block max-w-none"
                   style={{
                     width: "250px",
                     height: "auto",
+                    display: "block",
                     objectFit: "contain",
                     userSelect: "none",
                     pointerEvents: "none",
