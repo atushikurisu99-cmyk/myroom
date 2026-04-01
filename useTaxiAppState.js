@@ -59,8 +59,6 @@ window.AppHooks = (() => {
 
     const [finishForm, setFinishForm] = useState({
       totalDistance: "",
-      fuel: "",
-      otherIncome: "",
       note: "",
     });
 
@@ -534,8 +532,6 @@ window.AppHooks = (() => {
     const resetFinishForm = () => {
       setFinishForm({
         totalDistance: "",
-        fuel: "",
-        otherIncome: "",
         note: "",
       });
     };
