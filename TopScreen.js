@@ -12,13 +12,18 @@ window.AppScreens.TopScreen = (() => {
       openOtherSheet,
       openHistoryModal,
       previewRecords,
+      startupMainStyle,
+      startupOtherStyle,
     } = props;
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
         <div
           className="pt-4 shrink-0"
-          style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
+          style={{
+            height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px`,
+            ...(startupMainStyle || {}),
+          }}
         >
           <button
             type="button"
@@ -36,7 +41,10 @@ window.AppScreens.TopScreen = (() => {
 
         {renderSharedInfoSpacer()}
 
-        <div className="pt-4 shrink-0">
+        <div
+          className="pt-4 shrink-0"
+          style={startupOtherStyle || undefined}
+        >
           <BottomCard
             movable={false}
             openOtherSheet={openOtherSheet}
