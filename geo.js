@@ -191,38 +191,138 @@ window.AppGeo = (() => {
     };
   };
 
+  const pickLaterHourIndex = (times) => {
+    if (!Array.isArray(times) || times.length === 0) return -1;
+
+    const now = Date.now();
+    const oneHour = 60 * 60 * 1000;
+    const threeHours = 3 * oneHour;
+
+    let fallbackIndex = -1;
+    let bestIndex = -1;
+
+    for (let i = 0; i < times.length; i += 1) {
+      const ts = new Date(times[i]).getTime();
+      if (!Number.isFinite(ts)) continue;
+
+      if (ts > now && fallbackIndex === -1) {
+        fallbackIndex = i;
+      }
+
+      const diff = ts - now;
+      if (diff >= oneHour && diff <= threeHours) {
+        bestIndex = i;
+        break;
+      }
+    }
+
+    if (bestIndex >= 0) return bestIndex;
+    return fallbackIndex;
+  };
+
+  const getRepresentativeCode = (codes) => {
+    if (!Array.isArray(codes) || codes.length === 0) return -1;
+
+    const counts = new Map();
+
+    codes.forEach((code) => {
+      const key = Number(code);
+      if (!Number.isFinite(key)) return;
+      counts.set(key, (counts.get(key) || 0) + 1);
+    });
+
+    if (counts.size === 0) return -1;
+
+    let bestCode = -1;
+    let bestCount = -1;
+
+    counts.forEach((count, code) => {
+      if (count > bestCount) {
+        bestCount = count;
+        bestCode = code;
+      }
+    });
+
+    return bestCode;
+  };
+
+  const extractTomorrowWindowCodes = (times, codes) => {
+    if (!Array.isArray(times) || !Array.isArray(codes)) return [];
+
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+
+    const y = tomorrow.getFullYear();
+    const m = tomorrow.getMonth();
+    const d = tomorrow.getDate();
+
+    const start = new Date(y, m, d, 6, 0, 0, 0).getTime();
+    const end = new Date(y, m, d, 21, 0, 0, 0).getTime();
+
+    const picked = [];
+
+    for (let i = 0; i < times.length; i += 1) {
+      const ts = new Date(times[i]).getTime();
+      if (!Number.isFinite(ts)) continue;
+      if (ts >= start && ts <= end) {
+        picked.push(Number(codes[i]));
+      }
+    }
+
+    return picked;
+  };
+
   const fetchWeatherSnapshot = async (latitude, longitude) => {
+    const fallback = {
+      nowKind: "unknown",
+      tomorrowKind: "unknown",
+      fetchedAt: Date.now(),
+      dateKey: new Date().toDateString(),
+    };
+
     try {
       const response = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&timezone=Asia%2FTokyo&current=weather_code&daily=weather_code&forecast_days=2`
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&timezone=Asia%2FTokyo&hourly=weather_code&daily=weather_code&forecast_days=3`
       );
 
       if (!response.ok) {
-        return {
-          nowKind: "unknown",
-          tomorrowKind: "unknown",
-          fetchedAt: Date.now(),
-          dateKey: new Date().toDateString(),
-        };
+        return fallback;
       }
 
       const data = await response.json();
-      const nowCode = Number(data?.current?.weather_code ?? -1);
-      const tomorrowCode = Number(data?.daily?.weather_code?.[1] ?? nowCode);
+
+      const hourlyTimes = data?.hourly?.time || [];
+      const hourlyCodes = data?.hourly?.weather_code || [];
+      const dailyCodes = data?.daily?.weather_code || [];
+
+      const laterIndex = pickLaterHourIndex(hourlyTimes);
+      const laterCode =
+        laterIndex >= 0 ? Number(hourlyCodes[laterIndex] ?? -1) : -1;
+
+      const tomorrowWindowCodes = extractTomorrowWindowCodes(hourlyTimes, hourlyCodes);
+      const tomorrowRepresentativeCode = getRepresentativeCode(tomorrowWindowCodes);
+
+      const tomorrowDailyCode = Number(dailyCodes?.[1] ?? -1);
+
+      const nextNowCode =
+        Number.isFinite(laterCode) && laterCode >= 0
+          ? laterCode
+          : Number(dailyCodes?.[0] ?? -1);
+
+      const nextTomorrowCode =
+        Number.isFinite(tomorrowRepresentativeCode) && tomorrowRepresentativeCode >= 0
+          ? tomorrowRepresentativeCode
+          : tomorrowDailyCode;
 
       return {
-        nowKind: window.AppUtils.weatherCodeToKind(nowCode),
-        tomorrowKind: window.AppUtils.weatherCodeToKind(tomorrowCode),
+        nowKind: window.AppUtils.weatherCodeToKind(nextNowCode),
+        tomorrowKind: window.AppUtils.weatherCodeToKind(nextTomorrowCode),
         fetchedAt: Date.now(),
         dateKey: new Date().toDateString(),
       };
     } catch {
-      return {
-        nowKind: "unknown",
-        tomorrowKind: "unknown",
-        fetchedAt: Date.now(),
-        dateKey: new Date().toDateString(),
-      };
+      return fallback;
     }
   };
 
