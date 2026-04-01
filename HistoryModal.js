@@ -8,6 +8,74 @@ window.AppScreens.HistoryModal = (() => {
   } = window.AppUtils;
   const shadowSub = window.AppConstants.shadowSub;
 
+  function SelectableHistoryCard({
+    record,
+    checked,
+    onToggle,
+  }) {
+    const type = window.AppUtils.recordType(record);
+
+    return (
+      <button
+        type="button"
+        onClick={() => onToggle(record.id)}
+        className={`w-full text-left rounded-2xl border p-4 active:bg-slate-50 ${
+          checked
+            ? "border-sky-300 bg-sky-50"
+            : "border-slate-200 bg-white"
+        } ${shadowSub}`}
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-3">
+              <div
+                className={`w-6 h-6 rounded-md border-2 flex items-center justify-center text-[14px] font-black ${
+                  checked
+                    ? "border-sky-500 bg-sky-500 text-white"
+                    : "border-slate-300 bg-white text-transparent"
+                }`}
+              >
+                ✓
+              </div>
+
+              <div>
+                <div className="text-xl font-bold text-slate-800">
+                  {formatMoney(record.金額)}
+                </div>
+                <div className="mt-1 text-xs text-slate-500">
+                  {formatTime(record.乗車時刻)} → {formatTime(record.降車時刻)}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="shrink-0 text-right">
+            <div
+              className={`inline-flex min-w-[34px] justify-center rounded-full px-2.5 py-1 text-xs font-bold ${
+                type === "1"
+                  ? "bg-sky-100 text-sky-700"
+                  : "bg-emerald-100 text-emerald-700"
+              }`}
+            >
+              {type === "1" ? "①" : "②"}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-3 grid gap-1 text-sm text-slate-600">
+          <div className="truncate">乗車地：{record.乗車地 || "未取得"}</div>
+          <div className="truncate">降車地：{record.降車地 || "未取得"}</div>
+          {record.備考 ? (
+            <div className="truncate text-xs text-slate-500">備考：{record.備考}</div>
+          ) : null}
+          <div className="truncate text-xs text-slate-400">
+            乗務日：{formatFullDate(record.乗務日 || record.乗車時刻)}
+          </div>
+        </div>
+      </button>
+    );
+  }
+
   function HistoryModal(props) {
     const {
       show,
@@ -29,9 +97,24 @@ window.AppScreens.HistoryModal = (() => {
       saveEditedRecord,
       deleteEditedRecord,
       setEditingRecord,
+      historySelectionMode,
+      selectedHistoryIds,
+      enterHistorySelectionMode,
+      toggleHistorySelection,
+      deleteSelectedHistoryRecords,
+      clearHistorySelection,
     } = props;
 
     if (!show) return null;
+
+    const selectedCount = selectedHistoryIds.length;
+    const selectionButtonLabel = selectedCount > 0 ? "削除" : "選択";
+    const selectionButtonClass =
+      selectedCount > 0
+        ? "bg-red-500 text-white border-red-500"
+        : historySelectionMode
+        ? "bg-sky-500 text-white border-sky-500"
+        : "bg-white text-slate-700 border-slate-200";
 
     return (
       <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-end">
@@ -90,7 +173,7 @@ window.AppScreens.HistoryModal = (() => {
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-4 gap-2">
                     {["all", "1", "2"].map((value, idx) => (
                       <button
                         key={value}
@@ -105,14 +188,43 @@ window.AppScreens.HistoryModal = (() => {
                         {["すべて", "①", "②"][idx]}
                       </button>
                     ))}
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (selectedCount > 0) {
+                          deleteSelectedHistoryRecords();
+                          return;
+                        }
+                        enterHistorySelectionMode();
+                      }}
+                      className={`h-[40px] rounded-2xl text-sm font-bold border ${selectionButtonClass}`}
+                    >
+                      {selectionButtonLabel}
+                    </button>
                   </div>
 
                   <div className="rounded-2xl bg-slate-50 border border-slate-200 px-4 py-3 flex items-center justify-between">
-                    <div className="text-sm text-slate-600">件数 {historySummary.count}件</div>
+                    <div className="text-sm text-slate-600">
+                      件数 {historySummary.count}件
+                      {historySelectionMode ? ` / 選択 ${selectedCount}件` : ""}
+                    </div>
                     <div className="text-base font-bold text-slate-800">
                       {formatMoney(historySummary.total)}
                     </div>
                   </div>
+
+                  {historySelectionMode && (
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        onClick={clearHistorySelection}
+                        className="text-xs font-bold text-slate-500 px-2 py-1"
+                      >
+                        選択解除
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -154,13 +266,22 @@ window.AppScreens.HistoryModal = (() => {
 
                           {opened && (
                             <div className="pl-3 grid gap-2">
-                              {group.records.map((record) => (
-                                <HistoryRecordCard
-                                  key={record.id}
-                                  record={record}
-                                  onClick={openEditRecord}
-                                />
-                              ))}
+                              {group.records.map((record) =>
+                                historySelectionMode ? (
+                                  <SelectableHistoryCard
+                                    key={record.id}
+                                    record={record}
+                                    checked={selectedHistoryIds.includes(record.id)}
+                                    onToggle={toggleHistorySelection}
+                                  />
+                                ) : (
+                                  <HistoryRecordCard
+                                    key={record.id}
+                                    record={record}
+                                    onClick={openEditRecord}
+                                  />
+                                )
+                              )}
                             </div>
                           )}
                         </div>
@@ -180,13 +301,22 @@ window.AppScreens.HistoryModal = (() => {
                           </div>
                         </div>
                         <div className="grid gap-2">
-                          {group.records.map((record) => (
-                            <HistoryRecordCard
-                              key={record.id}
-                              record={record}
-                              onClick={openEditRecord}
-                            />
-                          ))}
+                          {group.records.map((record) =>
+                            historySelectionMode ? (
+                              <SelectableHistoryCard
+                                key={record.id}
+                                record={record}
+                                checked={selectedHistoryIds.includes(record.id)}
+                                onToggle={toggleHistorySelection}
+                              />
+                            ) : (
+                              <HistoryRecordCard
+                                key={record.id}
+                                record={record}
+                                onClick={openEditRecord}
+                              />
+                            )
+                          )}
                         </div>
                       </div>
                     ))}
@@ -254,25 +384,30 @@ window.AppScreens.HistoryModal = (() => {
                   <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
                     <div className="text-sm font-semibold text-slate-600">区分</div>
                     <div className="mt-3 grid grid-cols-2 gap-2">
-                      {["1", "2"].map((v, idx) => (
-                        <button
-                          key={v}
-                          type="button"
-                          onClick={() => setEditingRecord((prev) => ({ ...prev, 区分入力: v }))}
-                          className={`h-[52px] rounded-2xl text-lg font-bold border ${
-                            editingRecord.区分入力 === v
-                              ? v === "1"
-                                ? "bg-sky-500 text-white border-sky-500"
-                                : "bg-emerald-500 text-white border-emerald-500"
-                              : "bg-slate-50 text-slate-700 border-slate-200"
-                          }`}
-                        >
-                          {["①", "②"][idx]}
-                        </button>
-                      ))}
-                    </div>
-                    <div className="mt-2 text-xs text-slate-500">
-                      ①＝現金・領収証なし　②＝カード/QR・領収証あり含む
+                      {["1", "2"].map((v, idx) => {
+                        const isActive = editingRecord.区分入力 === v;
+                        return (
+                          <button
+                            key={v}
+                            type="button"
+                            onClick={() =>
+                              setEditingRecord((prev) => ({
+                                ...prev,
+                                区分入力: prev.区分入力 === v ? "" : v,
+                              }))
+                            }
+                            className={`h-[52px] rounded-2xl text-lg font-bold border ${
+                              isActive
+                                ? v === "1"
+                                  ? "bg-sky-500 text-white border-sky-500"
+                                  : "bg-emerald-500 text-white border-emerald-500"
+                                : "bg-slate-50 text-slate-700 border-slate-200"
+                            }`}
+                          >
+                            {["①", "②"][idx]}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 
@@ -284,7 +419,10 @@ window.AppScreens.HistoryModal = (() => {
                           key={count}
                           type="button"
                           onClick={() =>
-                            setEditingRecord((prev) => ({ ...prev, 人数入力: count }))
+                            setEditingRecord((prev) => ({
+                              ...prev,
+                              人数入力: Number(prev.人数入力) === count ? "" : count,
+                            }))
                           }
                           className={`h-[46px] rounded-2xl text-lg font-bold border ${
                             Number(editingRecord.人数入力) === count
