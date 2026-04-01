@@ -1,5 +1,11 @@
 const { useTaxiAppState } = window.AppHooks;
-const { OtherSheet, PaymentDialog, ViaDialog, FinishDialog } = window.AppComponents;
+const {
+  HeaderCard,
+  OtherSheet,
+  PaymentDialog,
+  ViaDialog,
+  FinishDialog,
+} = window.AppComponents;
 const TopScreen = window.AppScreens.TopScreen;
 const StandbyScreen = window.AppScreens.StandbyScreen;
 const RideScreen = window.AppScreens.RideScreen;
@@ -11,35 +17,13 @@ function TaxiMiniApp() {
   const C = window.AppConstants;
 
   const renderSharedInfoSpacer = () => (
-    <div className="pt-4 shrink-0">
-      <div
-        className="rounded-[28px] opacity-0 pointer-events-none"
-        style={{ height: `${C.SHARED_INFO_SLOT_HEIGHT}px` }}
-      />
+    <div
+      className="pt-4 shrink-0"
+      style={{ height: `${C.SHARED_INFO_SLOT_HEIGHT}px` }}
+    >
+      <div className="h-full rounded-[28px] opacity-0 pointer-events-none" />
     </div>
   );
-
-  const renderWeatherPlaceholders = () => {
-    const base = state.now ? new Date(state.now) : new Date();
-    const next = new Date(base);
-    next.setDate(base.getDate() + 1);
-
-    const baseLabel = `${base.getMonth() + 1}/${base.getDate()}`;
-    const nextLabel = `${next.getMonth() + 1}/${next.getDate()}`;
-
-    return (
-      <div className="flex items-start gap-8">
-        {[baseLabel, nextLabel].map((label) => (
-          <div key={label} className="w-[44px] shrink-0">
-            <div className="text-[11px] leading-none font-semibold text-slate-800">{label}</div>
-            <div className="mt-4 flex justify-center">
-              <div className="w-[8px] h-[8px] rounded-full bg-slate-400/70" />
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
 
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
@@ -114,73 +98,17 @@ function TaxiMiniApp() {
         />
 
         <div className="h-full flex flex-col overflow-hidden">
-          {(state.screen === "top" ||
-            state.screen === "standby" ||
-            state.screen === "ride" ||
-            state.screen === "fare") && (
-            <div
-              className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0 overflow-hidden`}
-              onClick={actions.handleCardModeNext}
-            >
-              <div className="h-full flex flex-col">
-                <div className="flex items-start justify-between gap-4 shrink-0">
-                  <div className="min-w-0 pt-1">
-                    {renderWeatherPlaceholders()}
-                  </div>
-
-                  <div className="shrink-0 text-right">
-                    <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-800">
-                      <span>{derived.timeParts.hh}</span>
-                      <span
-                        className={`${
-                          derived.timeParts.showColon ? "opacity-100" : "opacity-0"
-                        } transition-opacity duration-150 mx-[-0.08em]`}
-                      >
-                        ：
-                      </span>
-                      <span>{derived.timeParts.mm}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {state.cardMode === 1 ? (
-                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-                    <div className="text-[12px] font-medium text-slate-500">売上合計</div>
-                    <div className="mt-1 flex items-end justify-between gap-3">
-                      <div className="text-[16px] leading-none font-normal text-slate-600">
-                        {window.AppUtils.formatMoney(derived.totalAmount)}
-                      </div>
-                      <div className="text-[12px] leading-none font-normal text-slate-500">
-                        {derived.recordCount}件
-                      </div>
-                    </div>
-                  </div>
-                ) : state.cardMode === 2 ? (
-                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-                    <div className="text-[12px] font-medium text-slate-500">売上目標達成率</div>
-                    <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">-- %</div>
-                  </div>
-                ) : state.cardMode === 3 ? (
-                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-                    <div className="text-[12px] font-medium text-slate-500">今日のペース</div>
-                    <div className="mt-1 text-[16px] leading-none font-normal text-[#00a676]">良好</div>
-                  </div>
-                ) : state.cardMode === 4 ? (
-                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-                    <div className="text-[12px] font-medium text-slate-500">① 売上</div>
-                    <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
-                      {window.AppUtils.formatMoney(derived.amount1)}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
-                    <div className="text-[12px] font-medium text-slate-500">② 売上</div>
-                    <div className="mt-1 text-[16px] leading-none font-normal text-slate-600">
-                      {window.AppUtils.formatMoney(derived.amount2)}
-                    </div>
-                  </div>
-                )}
-              </div>
+          {state.screen !== "fare" && (
+            <div onClick={actions.handleCardModeNext}>
+              <HeaderCard
+                timeParts={derived.timeParts}
+                cardMode={state.cardMode}
+                weather={state.weather}
+                totalAmount={derived.totalAmount}
+                recordCount={derived.recordCount}
+                amount1={derived.amount1}
+                amount2={derived.amount2}
+              />
             </div>
           )}
 
@@ -190,7 +118,6 @@ function TaxiMiniApp() {
               topMainButtonDisabled={derived.topMainButtonDisabled}
               handleTopMain={actions.handleTopMain}
               renderSharedInfoSpacer={renderSharedInfoSpacer}
-              topScrollRef={refs.topScrollRef}
               openOtherSheet={() => actions.setShowOtherSheet(true)}
               openHistoryModal={actions.openHistoryModal}
               previewRecords={derived.previewRecords}
@@ -210,16 +137,14 @@ function TaxiMiniApp() {
               beginStandbySheetDrag={actions.beginStandbySheetDrag}
               toggleStandbySheet={actions.toggleStandbySheet}
               dragging={refs.sheetDragRef?.current?.dragging || false}
-              isStandbySheetOpened={derived?.isStandbySheetOpened || false}
+              isStandbySheetOpened={derived.isStandbySheetOpened}
             />
           )}
 
           {state.screen === "ride" && (
             <RideScreen
               pickup={state.pickup}
-              pickupMeta={state.pickupMeta}
               rideStartAt={state.rideStartAt}
-              selectedPassengers={state.selectedPassengers}
               elapsedText={derived.elapsedText}
               viaStops={state.viaStops}
               handleDropOffTap={actions.handleDropOffTap}
@@ -240,7 +165,6 @@ function TaxiMiniApp() {
               amountInputRef={refs.amountInputRef}
               formattedAmount={derived.formattedAmount}
               handleAmountChange={actions.handleAmountChange}
-              passengerDisplayCount={derived.passengerDisplayCount}
               selectedPassengers={state.selectedPassengers}
               handlePassengerSelect={actions.handlePassengerSelect}
               openPaymentDialog={actions.openPaymentDialog}
