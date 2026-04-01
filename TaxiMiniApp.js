@@ -12,6 +12,7 @@ const TopScreen = window.AppScreens.TopScreen;
 const StandbyScreen = window.AppScreens.StandbyScreen;
 const RideScreen = window.AppScreens.RideScreen;
 const FareScreen = window.AppScreens.FareScreen;
+const FinishCheckScreen = window.AppScreens.FinishCheckScreen;
 const HistoryModal = window.AppScreens.HistoryModal;
 
 function TaxiMiniApp() {
@@ -21,9 +22,7 @@ function TaxiMiniApp() {
   const startupAudioRef = useRef(null);
   const startupTimersRef = useRef([]);
 
-  // logo -> logoFade -> tap -> tapFade -> running -> done
   const [startupPhase, setStartupPhase] = useState("logo");
-  // 0:none 1:header 2:main 3:other
   const [startupStage, setStartupStage] = useState(0);
 
   useEffect(() => {
@@ -53,12 +52,10 @@ function TaxiMiniApp() {
 
     const timers = [];
 
-    // 白レイヤーを先に消す
     const t0 = setTimeout(() => {
       setStartupPhase("running");
     }, 180);
 
-    // タップから0.5秒後に 音 + 状態カード
     const t1 = setTimeout(() => {
       try {
         if (!startupAudioRef.current) {
@@ -73,17 +70,14 @@ function TaxiMiniApp() {
       setStartupStage(1);
     }, 500);
 
-    // さらに0.5秒後に主ボタン
     const t2 = setTimeout(() => {
       setStartupStage(2);
     }, 1000);
 
-    // さらに0.5秒後にその他
     const t3 = setTimeout(() => {
       setStartupStage(3);
     }, 1500);
 
-    // 全体終了
     const t4 = setTimeout(() => {
       setStartupPhase("done");
     }, 2050);
@@ -313,6 +307,17 @@ function TaxiMiniApp() {
               selectedPassengers={state.selectedPassengers}
               handlePassengerSelect={actions.handlePassengerSelect}
               openPaymentDialog={actions.openPaymentDialog}
+            />
+          )}
+
+          {state.screen === "finishCheck" && (
+            <FinishCheckScreen
+              finishSummary={derived.finishSummary}
+              finishForm={state.finishForm}
+              setFinishFormField={actions.setFinishFormField}
+              openHistoryModalWithFilter={actions.openHistoryModalWithFilter}
+              onBack={actions.backToStandbyFromFinishCheck}
+              onConfirm={actions.performDutyEnd}
             />
           )}
         </div>
