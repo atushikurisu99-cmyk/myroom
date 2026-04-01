@@ -81,17 +81,6 @@ window.AppGeo = (() => {
     };
   };
 
-  const getWeatherKindFromCode = (code) => {
-    if (code === 0) return "clear";
-    if ([1, 2].includes(code)) return "partlyCloudy";
-    if ([3].includes(code)) return "cloudy";
-    if ([45, 48].includes(code)) return "fog";
-    if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "rain";
-    if ([71, 73, 75, 77, 85, 86].includes(code)) return "snow";
-    if ([95, 96, 99].includes(code)) return "thunder";
-    return "unknown";
-  };
-
   const fetchWeatherSnapshot = async (latitude, longitude) => {
     try {
       const response = await fetch(
@@ -111,8 +100,8 @@ window.AppGeo = (() => {
       const tomorrowCode = Number(data?.daily?.weather_code?.[1] ?? nowCode);
 
       return {
-        nowKind: getWeatherKindFromCode(nowCode),
-        tomorrowKind: getWeatherKindFromCode(tomorrowCode),
+        nowKind: window.AppUtils.weatherCodeToKind(nowCode),
+        tomorrowKind: window.AppUtils.weatherCodeToKind(tomorrowCode),
         fetchedAt: Date.now(),
         dateKey: new Date().toDateString(),
       };
@@ -124,17 +113,6 @@ window.AppGeo = (() => {
         dateKey: new Date().toDateString(),
       };
     }
-  };
-
-  const weatherIcon = (kind) => {
-    if (kind === "clear") return "☀️";
-    if (kind === "partlyCloudy") return "⛅";
-    if (kind === "cloudy") return "☁️";
-    if (kind === "fog") return "🌫️";
-    if (kind === "rain") return "🌧️";
-    if (kind === "snow") return "❄️";
-    if (kind === "thunder") return "⛈️";
-    return "・";
   };
 
   const shouldRefreshWeather = (lastWeatherAt, lastWeatherDateKey) => {
@@ -156,7 +134,6 @@ window.AppGeo = (() => {
     getSinglePosition,
     getBestCurrentPlace,
     fetchWeatherSnapshot,
-    weatherIcon,
     shouldRefreshWeather,
   };
 })();
