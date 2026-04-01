@@ -87,9 +87,7 @@ window.AppScreens.FareScreen = (() => {
                 <span className="text-[26px] font-black leading-none">
                   {selectedPassengers}
                 </span>
-                <span className="text-[13px] font-bold pb-[3px]">
-                  名
-                </span>
+                <span className="text-[13px] font-bold pb-[3px]">名</span>
               </div>
             )}
           </div>
