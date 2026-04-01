@@ -34,13 +34,14 @@ window.AppHooks = (() => {
     const [pendingViaPlace, setPendingViaPlace] = useState("");
     const [viaStops, setViaStops] = useState([]);
 
-    const [showFinishDialog, setShowFinishDialog] = useState(false);
-
-    const [historyMode, setHistoryMode] = useState("day");
-    const [historyFilter, setHistoryFilter] = useState("all");
+    const [historyMode, setHistoryModeState] = useState("day");
+    const [historyFilter, setHistoryFilterState] = useState("all");
     const [historyBaseDate, setHistoryBaseDate] = useState(new Date());
     const [expandedMonthDays, setExpandedMonthDays] = useState({});
     const [editingRecord, setEditingRecord] = useState(null);
+
+    const [historySelectionMode, setHistorySelectionMode] = useState(false);
+    const [selectedHistoryIds, setSelectedHistoryIds] = useState([]);
 
     const [cardMode, setCardMode] = useState(3);
     const [workDate, setWorkDate] = useState(null);
@@ -138,6 +139,11 @@ window.AppHooks = (() => {
       setToastMessage(text);
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
       toastTimerRef.current = setTimeout(() => setToastMessage(""), 900);
+    };
+
+    const clearHistorySelection = () => {
+      setHistorySelectionMode(false);
+      setSelectedHistoryIds([]);
     };
 
     const beginStandbySheetDrag = (clientY) => {
@@ -248,9 +254,7 @@ window.AppHooks = (() => {
       [records]
     );
 
-    const businessKm = useMemo(() => {
-      return Math.round(amount2 * 0.0022);
-    }, [amount2]);
+    const businessKm = useMemo(() => Math.round(amount2 * 0.0022), [amount2]);
 
     const finishSummary = useMemo(
       () => ({
@@ -302,6 +306,12 @@ window.AppHooks = (() => {
 
       return list.sort((a, b) => new Date(b.乗車時刻) - new Date(a.乗車時刻));
     }, [records, historyFilter, historyMode, historyBaseDate]);
+
+    useEffect(() => {
+      if (!historySelectionMode) return;
+      const visibleIds = new Set(filteredHistoryRecords.map((record) => record.id));
+      setSelectedHistoryIds((prev) => prev.filter((id) => visibleIds.has(id)));
+    }, [filteredHistoryRecords, historySelectionMode]);
 
     const historySummary = useMemo(() => {
       const total = filteredHistoryRecords.reduce(
@@ -362,10 +372,22 @@ window.AppHooks = (() => {
     };
 
     const resetHistoryView = () => {
-      setHistoryMode("day");
-      setHistoryFilter("all");
+      setHistoryModeState("day");
+      setHistoryFilterState("all");
       setHistoryBaseDate(workDate ? new Date(workDate) : new Date());
       setExpandedMonthDays({});
+      clearHistorySelection();
+    };
+
+    const setHistoryMode = (mode) => {
+      setHistoryModeState(mode);
+      setExpandedMonthDays({});
+      clearHistorySelection();
+    };
+
+    const setHistoryFilter = (filter) => {
+      setHistoryFilterState(filter);
+      clearHistorySelection();
     };
 
     const openHistoryModal = () => {
@@ -378,15 +400,17 @@ window.AppHooks = (() => {
     const openHistoryModalWithFilter = (filter) => {
       setShowOtherSheet(false);
       setEditingRecord(null);
-      setHistoryMode("day");
-      setHistoryFilter(filter);
+      setHistoryModeState("day");
+      setHistoryFilterState(filter);
       setHistoryBaseDate(workDate ? new Date(workDate) : new Date());
       setExpandedMonthDays({});
+      clearHistorySelection();
       setShowHistoryModal(true);
     };
 
     const closeHistoryModal = () => {
       setEditingRecord(null);
+      clearHistorySelection();
       setShowHistoryModal(false);
     };
 
@@ -396,13 +420,39 @@ window.AppHooks = (() => {
       else if (historyMode === "week") next.setDate(next.getDate() + diff * 7);
       else next.setMonth(next.getMonth() + diff);
       setHistoryBaseDate(next);
+      clearHistorySelection();
     };
 
     const toggleMonthDay = (key) => {
       setExpandedMonthDays((prev) => ({ ...prev, [key]: !prev[key] }));
     };
 
+    const enterHistorySelectionMode = () => {
+      setHistorySelectionMode(true);
+      setSelectedHistoryIds(filteredHistoryRecords.map((record) => record.id));
+    };
+
+    const toggleHistorySelection = (id) => {
+      setHistorySelectionMode(true);
+      setSelectedHistoryIds((prev) =>
+        prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+      );
+    };
+
+    const deleteSelectedHistoryRecords = () => {
+      if (selectedHistoryIds.length === 0) return;
+      const ok = window.confirm(
+        `選択した${selectedHistoryIds.length}件を削除しますか？\n削除すると元に戻せません。`
+      );
+      if (!ok) return;
+
+      const idSet = new Set(selectedHistoryIds);
+      setRecords((prev) => prev.filter((record) => !idSet.has(record.id)));
+      clearHistorySelection();
+    };
+
     const openEditRecord = (record) => {
+      clearHistorySelection();
       setEditingRecord({
         ...record,
         金額入力: String(record.金額 ?? ""),
@@ -437,8 +487,16 @@ window.AppHooks = (() => {
         return alert("降車時刻は乗車時刻より後にしてください");
       }
 
-      const nextPayment = editingRecord.区分入力 === "1" ? "cash" : "cardQr";
-      const nextReceipt = editingRecord.区分入力 === "1" ? false : true;
+      let nextPayment = editingRecord.payment || editingRecord.決済方法 || "cash";
+      let nextReceipt = Boolean(editingRecord.receipt || editingRecord.領収証);
+
+      if (editingRecord.区分入力 === "1") {
+        nextPayment = "cash";
+        nextReceipt = false;
+      } else if (editingRecord.区分入力 === "2") {
+        if (!nextPayment) nextPayment = "cash";
+        nextReceipt = true;
+      }
 
       const updatedRecord = {
         ...editingRecord,
@@ -523,12 +581,12 @@ window.AppHooks = (() => {
       setViaStops([]);
       setShowHistoryModal(false);
       setShowOtherSheet(false);
-      setShowFinishDialog(false);
       setEditingRecord(null);
+      setCardMode(3);
       setShowSaved(false);
       setWorkDate(null);
-      setCardMode(3);
       setStandbySheetOffset(0);
+      clearHistorySelection();
       resetFinishForm();
       setScreen("top");
     };
@@ -540,7 +598,6 @@ window.AppHooks = (() => {
     const handleFinishTap = () => {
       if (!isFinishVisible) return;
       setShowOtherSheet(false);
-      setShowFinishDialog(false);
       setScreen("finishCheck");
     };
 
@@ -767,12 +824,13 @@ window.AppHooks = (() => {
         showViaDialog,
         pendingViaPlace,
         viaStops,
-        showFinishDialog,
         historyMode,
         historyFilter,
         historyBaseDate,
         expandedMonthDays,
         editingRecord,
+        historySelectionMode,
+        selectedHistoryIds,
         cardMode,
         workDate,
         standbySheetOffset,
@@ -804,7 +862,6 @@ window.AppHooks = (() => {
       },
       actions: {
         setShowOtherSheet,
-        setShowFinishDialog,
         setShowHistoryModal,
         setEditingRecord,
         setHistoryMode,
@@ -813,6 +870,10 @@ window.AppHooks = (() => {
         setExpandedMonthDays,
         setCardMode,
         setFinishFormField,
+        clearHistorySelection,
+        enterHistorySelectionMode,
+        toggleHistorySelection,
+        deleteSelectedHistoryRecords,
         beginStandbySheetDrag,
         endStandbySheetDrag,
         toggleStandbySheet,
