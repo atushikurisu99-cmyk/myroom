@@ -25,13 +25,13 @@ window.AppComponents = (() => {
     ];
 
     return (
-      <div className="flex items-start gap-5">
+      <div className="flex items-start gap-5 pt-[6px]">
         {items.map((item) => (
           <div key={item.label} className="w-[34px] shrink-0">
             <div className="text-[10px] leading-none font-semibold text-slate-500">
               {item.label}
             </div>
-            <div className="mt-2 text-[18px] leading-none">{item.icon}</div>
+            <div className="mt-[5px] text-[18px] leading-none">{item.icon}</div>
           </div>
         ))}
       </div>
@@ -42,12 +42,12 @@ window.AppComponents = (() => {
     return (
       <div className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0 overflow-hidden`}>
         <div className="h-full flex flex-col">
-          <div className="flex items-start justify-between gap-4 shrink-0">
-            <div className="min-w-0 pt-1">
+          <div className="flex items-start justify-between gap-4 shrink-0 pt-[4px]">
+            <div className="min-w-0">
               <WeatherMiniPair weather={weather} />
             </div>
 
-            <div className="shrink-0 text-right">
+            <div className="shrink-0 text-right pt-[4px]">
               <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-800">
                 <span>{timeParts.hh}</span>
                 <span
@@ -111,24 +111,24 @@ window.AppComponents = (() => {
           {pickup || "未取得"}
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-4">
+        <div className="mt-[12px] grid grid-cols-2 gap-4">
           <div>
             <div className="text-[13px] font-semibold text-slate-500">乗車時刻</div>
-            <div className="mt-1 text-[17px] font-bold text-slate-800 leading-none">
+            <div className="mt-[2px] text-[17px] font-bold text-slate-800 leading-none">
               {formatTime(rideStartAt)}
             </div>
           </div>
 
           <div className="text-right">
             <div className="text-[13px] font-semibold text-slate-500">経過時間</div>
-            <div className="mt-1 text-[17px] font-bold text-slate-800 leading-none">
+            <div className="mt-[2px] text-[17px] font-bold text-slate-800 leading-none">
               {elapsedText}
             </div>
           </div>
         </div>
 
         {viaStops.length > 0 && (
-          <div className="mt-3 text-[11px] font-semibold text-slate-500 truncate leading-none">
+          <div className="mt-[8px] text-[11px] font-semibold text-slate-500 truncate leading-none">
             経由あり（{viaStops.length}件）
           </div>
         )}
