@@ -255,13 +255,17 @@ window.AppComponents = (() => {
             <button
               type="button"
               onClick={openOtherSheet}
-              className="px-4 text-left shrink-0 active:bg-slate-50"
-              style={{ height: `${C.previewHeaderHeight}px` }}
+              className="text-left shrink-0 active:bg-slate-50"
+              style={{
+                height: `${C.previewHeaderHeight}px`,
+                paddingLeft: "18px",
+                paddingTop: "10px",
+              }}
             >
-              <div className="text-sm font-medium text-slate-400 leading-none">その他</div>
+              <div className="text-[15px] font-medium leading-none text-slate-400">
+                その他
+              </div>
             </button>
-
-            <div className="shrink-0 border-t border-slate-200 mx-4"></div>
 
             <button
               type="button"
