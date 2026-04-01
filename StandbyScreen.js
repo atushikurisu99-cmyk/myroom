@@ -57,49 +57,51 @@ window.AppScreens.StandbyScreen = (() => {
                 type="button"
                 onClick={handleFinishTap}
                 disabled={!isFinishVisible}
-                className={`${C.endDutyButtonClass} transition-opacity duration-150 ${
+                className={`${C.endDutyButtonClass} ${
                   isFinishVisible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
                 }`}
                 style={{
-                  width: "244px",
-                  height: "40px",
+                  width: "268px",
+                  height: "44px",
                 }}
               >
-                <span className="text-[15px] font-bold tracking-[-0.02em]">
+                <span className="text-[17px] font-bold tracking-[-0.02em]">
                   本日の乗務を終了
                 </span>
               </button>
             </div>
           </div>
 
-          {/* 前面：その他カード */}
-          <div
-            className="absolute left-0 right-0 z-20"
-            style={{ top: `${revealAreaTop}px` }}
-          >
+          {/* 前面：その他カード
+              開いた後は完全に消して、終了ボタンを確実に押せるようにする */}
+          {!isStandbySheetOpened && (
             <div
-              style={{
-                transform: `translateY(${standbySheetOffset}px)`,
-                transition: dragging ? "none" : "transform 180ms ease-out",
-                willChange: "transform",
-                pointerEvents: isStandbySheetOpened ? "none" : "auto",
-              }}
+              className="absolute left-0 right-0 z-20"
+              style={{ top: `${revealAreaTop}px` }}
             >
-              <BottomCard
-                movable={false}
-                openOtherSheet={openOtherSheet}
-                openHistoryModal={openHistoryModal}
-                previewRecords={previewRecords}
-              />
+              <div
+                style={{
+                  transform: `translateY(${standbySheetOffset}px)`,
+                  transition: dragging ? "none" : "transform 180ms ease-out",
+                  willChange: "transform",
+                }}
+              >
+                <BottomCard
+                  movable={false}
+                  openOtherSheet={openOtherSheet}
+                  openHistoryModal={openHistoryModal}
+                  previewRecords={previewRecords}
+                />
+              </div>
             </div>
-          </div>
+          )}
 
           {/* 通常時の▼ */}
           {!isStandbySheetOpened && (
             <div
               className="absolute z-30"
               style={{
-                top: `${revealAreaTop + 6}px`,
+                top: `${revealAreaTop + 5}px`,
                 right: "18px",
               }}
             >
@@ -108,15 +110,15 @@ window.AppScreens.StandbyScreen = (() => {
                 onClick={toggleStandbySheet}
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="flex items-center justify-center w-[30px] h-[26px] active:opacity-80"
+                className="flex items-center justify-center w-[32px] h-[28px] active:opacity-80"
                 aria-label="その他を下げる"
               >
-                <span className="text-[22px] leading-none font-bold text-slate-300">▼</span>
+                <span className="text-[24px] leading-none font-bold text-slate-300">▼</span>
               </button>
             </div>
           )}
 
-          {/* 下げた後の▲ */}
+          {/* 開いた後の▲ */}
           {isStandbySheetOpened && (
             <div
               className="absolute z-30"
@@ -130,10 +132,10 @@ window.AppScreens.StandbyScreen = (() => {
                 onClick={toggleStandbySheet}
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="flex items-center justify-center w-[32px] h-[28px] active:opacity-80"
+                className="flex items-center justify-center w-[34px] h-[30px] active:opacity-80"
                 aria-label="その他を戻す"
               >
-                <span className="text-[24px] leading-none font-bold text-slate-300">▲</span>
+                <span className="text-[26px] leading-none font-bold text-slate-300">▲</span>
               </button>
             </div>
           )}
