@@ -202,18 +202,6 @@ window.AppScreens.FinishCheckScreen = (() => {
                 />
               </div>
             </div>
-
-            <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-              <div className="text-[11px] font-semibold text-slate-400">確認用</div>
-              <div className="mt-2 grid gap-1 text-[13px] text-slate-600">
-                <div>①：{formatMoney(finishSummary.amount1)}</div>
-                <div>②：{formatMoney(finishSummary.amount2)}</div>
-                <div>営走：{finishSummary.businessKm}km</div>
-                <div>全走行：{finishForm.totalDistance ? `${finishForm.totalDistance}km` : "--"}</div>
-                <div>燃料：{finishForm.fuel ? formatMoney(Number(finishForm.fuel)) : "¥0"}</div>
-                <div>雑収入：{finishForm.otherIncome ? formatMoney(Number(finishForm.otherIncome)) : "¥0"}</div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
