@@ -21,7 +21,7 @@ function TaxiMiniApp() {
   const startupAudioRef = useRef(null);
   const startupTimersRef = useRef([]);
 
-  // splash: logo -> logoFade -> tap -> running -> done
+  // logo -> logoFade -> tap -> tapFade -> running -> done
   const [startupPhase, setStartupPhase] = useState("logo");
   // 0:none 1:header 2:main 3:other
   const [startupStage, setStartupStage] = useState(0);
@@ -44,16 +44,22 @@ function TaxiMiniApp() {
   const startApp = () => {
     if (startupPhase !== "tap") return;
 
-    const clearAll = startupTimersRef.current || [];
-    clearAll.forEach((id) => clearTimeout(id));
+    const oldTimers = startupTimersRef.current || [];
+    oldTimers.forEach((id) => clearTimeout(id));
     startupTimersRef.current = [];
 
-    setStartupPhase("running");
     setStartupStage(0);
+    setStartupPhase("tapFade");
 
     const timers = [];
 
-    const s0 = setTimeout(() => {
+    // 白レイヤーを先に消す
+    const t0 = setTimeout(() => {
+      setStartupPhase("running");
+    }, 180);
+
+    // タップから0.5秒後に 音 + 状態カード
+    const t1 = setTimeout(() => {
       try {
         if (!startupAudioRef.current) {
           startupAudioRef.current = new Audio("./goanzen.wav");
@@ -67,19 +73,22 @@ function TaxiMiniApp() {
       setStartupStage(1);
     }, 500);
 
-    const s1 = setTimeout(() => {
+    // さらに0.5秒後に主ボタン
+    const t2 = setTimeout(() => {
       setStartupStage(2);
     }, 1000);
 
-    const s2 = setTimeout(() => {
+    // さらに0.5秒後にその他
+    const t3 = setTimeout(() => {
       setStartupStage(3);
     }, 1500);
 
-    const s3 = setTimeout(() => {
+    // 全体終了
+    const t4 = setTimeout(() => {
       setStartupPhase("done");
     }, 2050);
 
-    timers.push(s0, s1, s2, s3);
+    timers.push(t0, t1, t2, t3, t4);
     startupTimersRef.current = timers;
   };
 
@@ -133,7 +142,24 @@ function TaxiMiniApp() {
     </div>
   );
 
-  const showSplash = state.screen === "top" && startupPhase !== "done";
+  const showSplash =
+    state.screen === "top" &&
+    ["logo", "logoFade", "tap", "tapFade"].includes(startupPhase);
+
+  const splashStyle = useMemo(() => {
+    if (startupPhase === "tapFade") {
+      return {
+        opacity: 0,
+        transition: "opacity 180ms ease-out",
+        pointerEvents: "none",
+      };
+    }
+    return {
+      opacity: 1,
+      transition: "opacity 180ms ease-out",
+      pointerEvents: "auto",
+    };
+  }, [startupPhase]);
 
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
@@ -292,7 +318,10 @@ function TaxiMiniApp() {
         </div>
 
         {showSplash && (
-          <div className="absolute inset-0 z-[999] bg-white flex items-center justify-center">
+          <div
+            className="absolute inset-0 z-[999] bg-white flex items-center justify-center"
+            style={splashStyle}
+          >
             {(startupPhase === "logo" || startupPhase === "logoFade") && (
               <div
                 style={{
