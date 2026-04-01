@@ -56,6 +56,13 @@ window.AppHooks = (() => {
       dateKey: null,
     });
 
+    const [finishForm, setFinishForm] = useState({
+      totalDistance: "",
+      fuel: "",
+      otherIncome: "",
+      note: "",
+    });
+
     const amountInputRef = useRef(null);
     const savedTimerRef = useRef(null);
     const paymentTimerRef = useRef(null);
@@ -91,7 +98,6 @@ window.AppHooks = (() => {
       };
     }, []);
 
-    // 起動時にも天気を取得
     useEffect(() => {
       ensureWeatherFresh();
     }, []);
@@ -233,6 +239,31 @@ window.AppHooks = (() => {
       [records]
     );
 
+    const passengerCount = useMemo(
+      () =>
+        records.reduce((sum, record) => {
+          const count = Number(record.人数 || 0);
+          return sum + (Number.isFinite(count) ? count : 0);
+        }, 0),
+      [records]
+    );
+
+    const businessKm = useMemo(() => {
+      return Math.round(amount2 * 0.0022);
+    }, [amount2]);
+
+    const finishSummary = useMemo(
+      () => ({
+        totalAmount,
+        recordCount,
+        passengerCount,
+        amount1,
+        amount2,
+        businessKm,
+      }),
+      [totalAmount, recordCount, passengerCount, amount1, amount2, businessKm]
+    );
+
     const previewRecords = useMemo(() => records.slice(0, 6), [records]);
 
     const topMainLabel = !dutyStarted ? "乗務開始" : "乗務終了";
@@ -344,6 +375,16 @@ window.AppHooks = (() => {
       setShowHistoryModal(true);
     };
 
+    const openHistoryModalWithFilter = (filter) => {
+      setShowOtherSheet(false);
+      setEditingRecord(null);
+      setHistoryMode("day");
+      setHistoryFilter(filter);
+      setHistoryBaseDate(workDate ? new Date(workDate) : new Date());
+      setExpandedMonthDays({});
+      setShowHistoryModal(true);
+    };
+
     const closeHistoryModal = () => {
       setEditingRecord(null);
       setShowHistoryModal(false);
@@ -397,7 +438,7 @@ window.AppHooks = (() => {
       }
 
       const nextPayment = editingRecord.区分入力 === "1" ? "cash" : "cardQr";
-      const nextReceipt = false;
+      const nextReceipt = editingRecord.区分入力 === "1" ? false : true;
 
       const updatedRecord = {
         ...editingRecord,
@@ -432,6 +473,19 @@ window.AppHooks = (() => {
 
     const handleCardModeNext = () => setCardMode((prev) => (prev >= 5 ? 1 : prev + 1));
 
+    const resetFinishForm = () => {
+      setFinishForm({
+        totalDistance: "",
+        fuel: "",
+        otherIncome: "",
+        note: "",
+      });
+    };
+
+    const setFinishFormField = (key, value) => {
+      setFinishForm((prev) => ({ ...prev, [key]: value }));
+    };
+
     const handleDutyStart = async () => {
       vibrateTap();
       const startDutyDate = new Date();
@@ -450,6 +504,7 @@ window.AppHooks = (() => {
       setScreen("standby");
       setWorkDate(startDutyDate);
       setStandbySheetOffset(0);
+      resetFinishForm();
 
       ensureWeatherFresh();
     };
@@ -474,12 +529,19 @@ window.AppHooks = (() => {
       setWorkDate(null);
       setCardMode(3);
       setStandbySheetOffset(0);
+      resetFinishForm();
       setScreen("top");
+    };
+
+    const backToStandbyFromFinishCheck = () => {
+      setScreen("standby");
     };
 
     const handleFinishTap = () => {
       if (!isFinishVisible) return;
-      setShowFinishDialog(true);
+      setShowOtherSheet(false);
+      setShowFinishDialog(false);
+      setScreen("finishCheck");
     };
 
     const handleTopMain = () => {
@@ -717,6 +779,7 @@ window.AppHooks = (() => {
         toastMessage,
         now,
         weather,
+        finishForm,
       },
       derived: {
         isFinishVisible,
@@ -727,6 +790,9 @@ window.AppHooks = (() => {
         recordCount,
         amount1,
         amount2,
+        passengerCount,
+        businessKm,
+        finishSummary,
         previewRecords,
         topMainLabel,
         topMainButtonDisabled,
@@ -746,6 +812,7 @@ window.AppHooks = (() => {
         setHistoryBaseDate,
         setExpandedMonthDays,
         setCardMode,
+        setFinishFormField,
         beginStandbySheetDrag,
         endStandbySheetDrag,
         toggleStandbySheet,
@@ -763,6 +830,7 @@ window.AppHooks = (() => {
         recordVia,
         cancelViaDialog,
         openHistoryModal,
+        openHistoryModalWithFilter,
         closeHistoryModal,
         moveHistoryPeriod,
         toggleMonthDay,
@@ -770,6 +838,7 @@ window.AppHooks = (() => {
         closeEditRecord,
         saveEditedRecord,
         deleteEditedRecord,
+        backToStandbyFromFinishCheck,
       },
       helpers: {
         confirmPaymentSave,
