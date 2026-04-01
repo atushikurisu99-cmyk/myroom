@@ -19,17 +19,20 @@ window.AppScreens.StandbyScreen = (() => {
       isStandbySheetOpened,
     } = props;
 
-    const OTHER_TOP = 16;
-    const FINISH_BUTTON_TOP = 34;
+    const revealAreaTop = 16;
+    const revealButtonTop = 44;
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-        <div className="pt-4 shrink-0" style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}>
+        <div
+          className="pt-4 shrink-0"
+          style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
+        >
           <button
             type="button"
             onClick={handleStartRide}
             disabled={isFinishVisible}
-            className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)] disabled:opacity-60`}
+            className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)]`}
           >
             <span className={C.bigButtonText}>実車</span>
           </button>
@@ -37,61 +40,52 @@ window.AppScreens.StandbyScreen = (() => {
 
         {renderSharedInfoSpacer()}
 
-        <div className="flex-1 min-h-0 relative overflow-hidden">
-          {/* 背面：終了ボタン */}
+        <div className="pt-4 flex-1 min-h-0 relative overflow-hidden">
           <div
             className="absolute left-0 right-0 z-10"
             style={{
-              top: `${OTHER_TOP}px`,
+              top: `${revealAreaTop}px`,
               height: `${C.BOTTOM_CARD_HEIGHT}px`,
             }}
           >
             <div
               className="absolute left-0 right-0"
-              style={{ top: `${FINISH_BUTTON_TOP}px` }}
+              style={{ top: `${revealButtonTop}px` }}
             >
-              <div className="px-6">
+              <div className="px-[54px]">
                 <button
                   type="button"
                   onClick={handleFinishTap}
                   disabled={!isFinishVisible}
-                  className={`${C.endDutyButtonClass} w-full transition-opacity duration-150 ${
+                  className={`${C.endDutyButtonClass} h-[40px] transition-opacity duration-150 ${
                     isFinishVisible ? "opacity-100" : "opacity-0 pointer-events-none"
                   }`}
-                  style={{
-                    height: "48px",
-                    borderRadius: "9999px",
-                  }}
                 >
-                  本日の乗務を終了
+                  <span className="text-[15px] font-bold tracking-[-0.02em]">
+                    本日の乗務を終了
+                  </span>
                 </button>
               </div>
             </div>
           </div>
 
-          {/* 前面：その他カード */}
-          <div
-            className="absolute left-0 right-0 z-30"
-            style={{ top: `${OTHER_TOP}px` }}
-          >
+          <div className="absolute left-0 right-0 z-30" style={{ top: `${revealAreaTop}px` }}>
             <BottomCard
               movable={true}
               standbySheetOffset={standbySheetOffset}
               dragging={dragging}
-              isFinishVisible={isFinishVisible}
               openOtherSheet={openOtherSheet}
               openHistoryModal={openHistoryModal}
               previewRecords={previewRecords}
             />
           </div>
 
-          {/* 通常時の▽ */}
           {!isStandbySheetOpened && (
             <div
               className="absolute z-40"
               style={{
-                top: `${OTHER_TOP + 8}px`,
-                right: "18px",
+                top: `${revealAreaTop + 6}px`,
+                right: "14px",
               }}
             >
               <button
@@ -99,7 +93,7 @@ window.AppScreens.StandbyScreen = (() => {
                 onClick={toggleStandbySheet}
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="flex items-center justify-center w-[28px] h-[24px] active:opacity-80"
+                className="flex items-center justify-center w-[26px] h-[22px] active:opacity-80"
                 aria-label="その他を下げる"
               >
                 <span className="text-[18px] leading-none font-bold text-slate-300">▽</span>
@@ -107,12 +101,11 @@ window.AppScreens.StandbyScreen = (() => {
             </div>
           )}
 
-          {/* 下げた後の△ */}
           {isStandbySheetOpened && (
             <div
               className="absolute z-40"
               style={{
-                top: `${OTHER_TOP + FINISH_BUTTON_TOP + 12}px`,
+                top: `${revealAreaTop + 128}px`,
                 right: "18px",
               }}
             >
@@ -121,10 +114,10 @@ window.AppScreens.StandbyScreen = (() => {
                 onClick={toggleStandbySheet}
                 onMouseDown={(e) => beginStandbySheetDrag(e.clientY)}
                 onTouchStart={(e) => beginStandbySheetDrag(e.touches[0].clientY)}
-                className="flex items-center justify-center w-[28px] h-[24px] active:opacity-80"
+                className="flex items-center justify-center w-[26px] h-[22px] active:opacity-80"
                 aria-label="その他を戻す"
               >
-                <span className="text-[18px] leading-none font-bold text-slate-400">△</span>
+                <span className="text-[18px] leading-none font-bold text-slate-300">△</span>
               </button>
             </div>
           )}
