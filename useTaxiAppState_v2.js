@@ -49,13 +49,19 @@ window.AppHooks = (() => {
     const [toastMessage, setToastMessage] = useState("");
     const [now, setNow] = useState(new Date());
 
+    const [weather, setWeather] = useState({
+      nowKind: "unknown",
+      tomorrowKind: "unknown",
+      fetchedAt: null,
+      dateKey: null,
+    });
+
     const amountInputRef = useRef(null);
     const savedTimerRef = useRef(null);
     const paymentTimerRef = useRef(null);
     const paymentCountdownRef = useRef(null);
     const toastTimerRef = useRef(null);
     const clockTimerRef = useRef(null);
-    const topScrollRef = useRef(null);
     const dropTapRef = useRef({ lastTapAt: 0 });
     const paymentTypeRef = useRef(null);
     const sheetDragRef = useRef({ dragging: false, startY: 0, startOffset: 0 });
@@ -84,19 +90,11 @@ window.AppHooks = (() => {
     }, []);
 
     useEffect(() => {
-      if (screen === "top") {
-        requestAnimationFrame(() => {
-          if (topScrollRef.current) topScrollRef.current.scrollTop = 0;
-        });
-      }
-    }, [screen]);
-
-    useEffect(() => {
       if (screen !== "standby") setStandbySheetOffset(0);
     }, [screen]);
 
     const isFinishVisible = standbySheetOffset >= Constants.FINISH_ENABLE_OFFSET;
-    const isStandbySheetOpened = standbySheetOffset >= Constants.STANDBY_OTHER_MOVE_RANGE * 0.7;
+    const isStandbySheetOpened = standbySheetOffset >= Constants.STANDBY_OTHER_MOVE_RANGE * 0.65;
 
     const vibrateTap = () => {
       if (navigator.vibrate) navigator.vibrate(18);
@@ -135,13 +133,17 @@ window.AppHooks = (() => {
       if (!sheetDragRef.current.dragging) return;
       sheetDragRef.current.dragging = false;
       setStandbySheetOffset((prev) =>
-        prev > Constants.STANDBY_OTHER_MOVE_RANGE * 0.5 ? Constants.STANDBY_OTHER_MOVE_RANGE : 0
+        prev > Constants.STANDBY_OTHER_MOVE_RANGE * 0.5
+          ? Constants.STANDBY_OTHER_MOVE_RANGE
+          : 0
       );
     };
 
     const toggleStandbySheet = () => {
       setStandbySheetOffset((prev) =>
-        prev > Constants.STANDBY_OTHER_MOVE_RANGE * 0.5 ? 0 : Constants.STANDBY_OTHER_MOVE_RANGE
+        prev > Constants.STANDBY_OTHER_MOVE_RANGE * 0.5
+          ? 0
+          : Constants.STANDBY_OTHER_MOVE_RANGE
       );
     };
 
@@ -169,6 +171,24 @@ window.AppHooks = (() => {
         window.removeEventListener("touchcancel", handleTouchEnd);
       };
     }, [standbySheetOffset]);
+
+    const ensureWeatherFresh = async (coords = null) => {
+      if (!Geo.shouldRefreshWeather(weather.fetchedAt, weather.dateKey)) return;
+
+      let latitude = coords?.latitude ?? null;
+      let longitude = coords?.longitude ?? null;
+
+      if (latitude == null || longitude == null) {
+        const best = await Geo.getBestCurrentPlace();
+        latitude = best.latitude;
+        longitude = best.longitude;
+      }
+
+      if (latitude == null || longitude == null) return;
+
+      const nextWeather = await Geo.fetchWeatherSnapshot(latitude, longitude);
+      setWeather(nextWeather);
+    };
 
     const timeParts = useMemo(() => {
       const hh = String(now.getHours()).padStart(2, "0");
@@ -207,21 +227,14 @@ window.AppHooks = (() => {
       [records]
     );
 
-    const previewRecords = useMemo(() => records.slice(0, 3), [records]);
-
-    const stateLabel = (() => {
-      if (screen === "standby") return "乗車待機";
-      if (screen === "ride") return "実車中";
-      if (screen === "fare") return "金額入力";
-      if (isRiding) return "実車中";
-      if (dutyStarted) return "乗車待機";
-      return "乗務開始前";
-    })();
+    const previewRecords = useMemo(() => records.slice(0, 6), [records]);
 
     const topMainLabel = !dutyStarted ? "乗務開始" : "乗務終了";
     const topMainButtonDisabled = screen === "top" && isRiding;
-    const formattedAmount = useMemo(() => (amount ? Number(amount).toLocaleString("ja-JP") : ""), [amount]);
-    const passengerDisplayCount = 6;
+    const formattedAmount = useMemo(
+      () => (amount ? Number(amount).toLocaleString("ja-JP") : ""),
+      [amount]
+    );
 
     const filteredHistoryRecords = useMemo(() => {
       let list = [...records];
@@ -233,22 +246,31 @@ window.AppHooks = (() => {
       }
 
       if (historyMode === "day") {
-        list = list.filter((record) => Utils.isSameDay(Utils.getHistoryTargetDate(record), historyBaseDate));
+        list = list.filter((record) =>
+          Utils.isSameDay(Utils.getHistoryTargetDate(record), historyBaseDate)
+        );
       } else if (historyMode === "week") {
         const start = Utils.getWeekStart(historyBaseDate);
         const end = Utils.getWeekEnd(historyBaseDate);
-        list = list.filter((record) => Utils.isInRange(Utils.getHistoryTargetDate(record), start, end));
+        list = list.filter((record) =>
+          Utils.isInRange(Utils.getHistoryTargetDate(record), start, end)
+        );
       } else if (historyMode === "month") {
         const start = Utils.getMonthStart(historyBaseDate);
         const end = Utils.getMonthEnd(historyBaseDate);
-        list = list.filter((record) => Utils.isInRange(Utils.getHistoryTargetDate(record), start, end));
+        list = list.filter((record) =>
+          Utils.isInRange(Utils.getHistoryTargetDate(record), start, end)
+        );
       }
 
       return list.sort((a, b) => new Date(b.乗車時刻) - new Date(a.乗車時刻));
     }, [records, historyFilter, historyMode, historyBaseDate]);
 
     const historySummary = useMemo(() => {
-      const total = filteredHistoryRecords.reduce((sum, record) => sum + Number(record.金額 || 0), 0);
+      const total = filteredHistoryRecords.reduce(
+        (sum, record) => sum + Number(record.金額 || 0),
+        0
+      );
       return { total, count: filteredHistoryRecords.length };
     }, [filteredHistoryRecords]);
 
@@ -257,9 +279,10 @@ window.AppHooks = (() => {
 
       filteredHistoryRecords.forEach((record) => {
         const keyDate = Utils.getHistoryTargetDate(record);
-        const key = `${keyDate.getFullYear()}-${String(keyDate.getMonth() + 1).padStart(2, "0")}-${String(
-          keyDate.getDate()
-        ).padStart(2, "0")}`;
+        const key = `${keyDate.getFullYear()}-${String(keyDate.getMonth() + 1).padStart(
+          2,
+          "0"
+        )}-${String(keyDate.getDate()).padStart(2, "0")}`;
 
         if (!map.has(key)) {
           map.set(key, {
@@ -353,7 +376,9 @@ window.AppHooks = (() => {
 
       const numericAmount = Number(String(editingRecord.金額入力 || "").replace(/[^\d]/g, ""));
       if (!numericAmount || numericAmount <= 0) return alert("正しい金額を入力してください");
-      if (!editingRecord.乗車時刻入力 || !editingRecord.降車時刻入力) return alert("時刻を入力してください");
+      if (!editingRecord.乗車時刻入力 || !editingRecord.降車時刻入力) {
+        return alert("時刻を入力してください");
+      }
 
       const nextStartAt = new Date(editingRecord.乗車時刻入力);
       const nextEndAt = new Date(editingRecord.降車時刻入力);
@@ -385,7 +410,9 @@ window.AppHooks = (() => {
         備考: (editingRecord.備考入力 || "").trim(),
       };
 
-      setRecords((prev) => prev.map((record) => (record.id === updatedRecord.id ? updatedRecord : record)));
+      setRecords((prev) =>
+        prev.map((record) => (record.id === updatedRecord.id ? updatedRecord : record))
+      );
       setEditingRecord(null);
     };
 
@@ -399,7 +426,7 @@ window.AppHooks = (() => {
 
     const handleCardModeNext = () => setCardMode((prev) => (prev >= 5 ? 1 : prev + 1));
 
-    const handleDutyStart = () => {
+    const handleDutyStart = async () => {
       vibrateTap();
       const startDutyDate = new Date();
 
@@ -417,6 +444,8 @@ window.AppHooks = (() => {
       setScreen("standby");
       setWorkDate(startDutyDate);
       setStandbySheetOffset(0);
+
+      ensureWeatherFresh();
     };
 
     const performDutyEnd = () => {
@@ -448,7 +477,10 @@ window.AppHooks = (() => {
     };
 
     const handleTopMain = () => {
-      if (!dutyStarted) return handleDutyStart();
+      if (!dutyStarted) {
+        handleDutyStart();
+        return;
+      }
       handleFinishTap();
     };
 
@@ -473,6 +505,7 @@ window.AppHooks = (() => {
       const best = await Geo.getBestCurrentPlace();
       setPickup(best.label || "未取得");
       setPickupMeta(best);
+      ensureWeatherFresh(best);
     };
 
     const openNormalDropoff = async () => {
@@ -523,7 +556,7 @@ window.AppHooks = (() => {
       paymentCountdownRef.current = null;
     };
 
-    const confirmPaymentSave = (forcedType = null) => {
+    const confirmPaymentSave = async (forcedType = null) => {
       const activeType = forcedType || paymentTypeRef.current || pendingPaymentType;
       if (!rideStartAt || !rideEndAt || !activeType) return;
 
@@ -554,7 +587,7 @@ window.AppHooks = (() => {
         payment,
         領収証: receipt,
         receipt,
-        天気: "",
+        天気: weather.nowKind || "",
         乗車位置精度: pickupMeta?.accuracy ?? null,
         降車位置精度: dropoffMeta?.accuracy ?? null,
         乗車緯度: pickupMeta?.latitude ?? null,
@@ -588,6 +621,8 @@ window.AppHooks = (() => {
       setShowSaved(true);
       if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
       savedTimerRef.current = setTimeout(() => setShowSaved(false), 2200);
+
+      ensureWeatherFresh(dropoffMeta);
     };
 
     const openPaymentDialog = (type) => {
@@ -637,7 +672,10 @@ window.AppHooks = (() => {
     };
 
     return {
-      refs: { amountInputRef, topScrollRef, sheetDragRef },
+      refs: {
+        amountInputRef,
+        sheetDragRef,
+      },
       state: {
         screen,
         dutyStarted,
@@ -672,6 +710,7 @@ window.AppHooks = (() => {
         standbySheetOffset,
         toastMessage,
         now,
+        weather,
       },
       derived: {
         isFinishVisible,
@@ -683,11 +722,9 @@ window.AppHooks = (() => {
         amount1,
         amount2,
         previewRecords,
-        stateLabel,
         topMainLabel,
         topMainButtonDisabled,
         formattedAmount,
-        passengerDisplayCount,
         filteredHistoryRecords,
         historySummary,
         groupedHistory,
@@ -728,7 +765,10 @@ window.AppHooks = (() => {
         saveEditedRecord,
         deleteEditedRecord,
       },
-      helpers: { confirmPaymentSave },
+      helpers: {
+        confirmPaymentSave,
+        ensureWeatherFresh,
+      },
     };
   }
 
