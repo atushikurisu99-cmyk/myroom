@@ -9,34 +9,25 @@ window.AppScreens.TopScreen = (() => {
       topMainButtonDisabled,
       handleTopMain,
       renderSharedInfoSpacer,
-      topScrollRef,
       openOtherSheet,
       openHistoryModal,
       previewRecords,
-      startupMainStyle,
-      startupOtherStyle,
-      startupLock,
     } = props;
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
         <div
           className="pt-4 shrink-0"
-          style={{
-            height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px`,
-            ...(startupMainStyle || {}),
-          }}
+          style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
         >
           <button
             type="button"
             onClick={handleTopMain}
-            disabled={topMainButtonDisabled || startupLock}
+            disabled={topMainButtonDisabled}
             className={`${C.mainButtonBase} ${C.mainButtonShine} ${
-              topMainButtonDisabled
-                ? 'bg-[linear-gradient(180deg,#d5dbe3,#bcc6d2,#97a3b2)] text-white'
-                : topMainLabel === '乗務終了'
-                ? 'bg-[linear-gradient(180deg,#ffdf6b,#ffb100,#cc7900)] text-white'
-                : 'bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white'
+              topMainLabel === "乗務終了"
+                ? "bg-[linear-gradient(180deg,#ffdf6b,#ffb100,#cc7900)] text-white"
+                : "bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white"
             }`}
           >
             <span className={C.bigButtonText}>{topMainLabel}</span>
@@ -45,10 +36,9 @@ window.AppScreens.TopScreen = (() => {
 
         {renderSharedInfoSpacer()}
 
-        <div ref={topScrollRef} className="flex-1 min-h-0 overflow-y-auto">
+        <div className="pt-4 shrink-0">
           <BottomCard
-            outerClassName="pt-4 shrink-0"
-            outerStyle={startupOtherStyle || undefined}
+            movable={false}
             openOtherSheet={openOtherSheet}
             openHistoryModal={openHistoryModal}
             previewRecords={previewRecords}
