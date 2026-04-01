@@ -1,7 +1,11 @@
 window.AppScreens = window.AppScreens || {};
 window.AppScreens.FinishCheckScreen = (() => {
-  const { formatMoney } = window.AppUtils;
   const C = window.AppConstants;
+
+  function formatYen(value) {
+    const num = Number(value || 0);
+    return `${num.toLocaleString("ja-JP")}円`;
+  }
 
   function RowShell({ children, className = "" }) {
     return (
@@ -51,7 +55,7 @@ window.AppScreens.FinishCheckScreen = (() => {
 
             <div className="shrink-0 flex items-center gap-3">
               <ValueText>{value}</ValueText>
-              <div className="text-[12px] font-bold text-slate-400">修正</div>
+              <div className="text-[11px] font-bold text-slate-400">修正</div>
             </div>
           </div>
         </RowShell>
@@ -133,7 +137,7 @@ window.AppScreens.FinishCheckScreen = (() => {
         </div>
 
         <div className="text-right">
-          <ValueText className="text-[18px]">{formatMoney(totalAmount).replace("¥", "")}</ValueText>
+          <ValueText className="text-[18px]">{formatYen(totalAmount)}</ValueText>
         </div>
 
         <div className="pl-3">
@@ -141,7 +145,7 @@ window.AppScreens.FinishCheckScreen = (() => {
         </div>
 
         <div className="text-right">
-          <ValueText className="text-[18px]">{businessKm}</ValueText>
+          <ValueText className="text-[18px]">{businessKm}km</ValueText>
         </div>
       </div>
     );
@@ -186,14 +190,14 @@ window.AppScreens.FinishCheckScreen = (() => {
             <div className="grid gap-0">
               <EditRow
                 label="①"
-                value={formatMoney(finishSummary.amount1)}
+                value={formatYen(finishSummary.amount1)}
                 onClick={() => openHistoryModalWithFilter("1")}
                 accent="sky"
               />
 
               <EditRow
                 label="②"
-                value={formatMoney(finishSummary.amount2)}
+                value={formatYen(finishSummary.amount2)}
                 onClick={() => openHistoryModalWithFilter("2")}
                 accent="emerald"
               />
