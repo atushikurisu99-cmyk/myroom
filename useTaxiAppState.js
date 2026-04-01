@@ -252,7 +252,10 @@ window.AppHooks = (() => {
       [records]
     );
 
-    const businessKm = useMemo(() => Math.round(amount2 * 0.0022), [amount2]);
+    const businessKm = useMemo(() => {
+      const km = totalAmount * 0.0024;
+      return km.toFixed(1);
+    }, [totalAmount]);
 
     const finishSummary = useMemo(
       () => ({
