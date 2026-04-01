@@ -21,18 +21,19 @@ function TaxiMiniApp() {
   const startupAudioRef = useRef(null);
   const startupTimersRef = useRef([]);
 
-  // splash phases: logo -> logoFade -> tap -> running -> done
+  // splash: logo -> logoFade -> tap -> running -> done
   const [startupPhase, setStartupPhase] = useState("logo");
   // 0:none 1:header 2:main 3:other
   const [startupStage, setStartupStage] = useState(0);
 
   useEffect(() => {
-    const timers = startupTimersRef.current;
+    const timers = [];
 
     const t1 = setTimeout(() => setStartupPhase("logoFade"), 1500);
     const t2 = setTimeout(() => setStartupPhase("tap"), 2250);
 
     timers.push(t1, t2);
+    startupTimersRef.current = timers;
 
     return () => {
       timers.forEach((id) => clearTimeout(id));
@@ -43,11 +44,16 @@ function TaxiMiniApp() {
   const startApp = () => {
     if (startupPhase !== "tap") return;
 
+    const clearAll = startupTimersRef.current || [];
+    clearAll.forEach((id) => clearTimeout(id));
+    startupTimersRef.current = [];
+
     setStartupPhase("running");
+    setStartupStage(0);
 
-    const timers = startupTimersRef.current;
+    const timers = [];
 
-    const s1 = setTimeout(() => {
+    const s0 = setTimeout(() => {
       try {
         if (!startupAudioRef.current) {
           startupAudioRef.current = new Audio("./goanzen.wav");
@@ -61,61 +67,62 @@ function TaxiMiniApp() {
       setStartupStage(1);
     }, 500);
 
-    const s2 = setTimeout(() => {
+    const s1 = setTimeout(() => {
       setStartupStage(2);
     }, 1000);
 
-    const s3 = setTimeout(() => {
+    const s2 = setTimeout(() => {
       setStartupStage(3);
     }, 1500);
 
-    const s4 = setTimeout(() => {
+    const s3 = setTimeout(() => {
       setStartupPhase("done");
-    }, 2000);
+    }, 2050);
 
-    timers.push(s1, s2, s3, s4);
+    timers.push(s0, s1, s2, s3);
+    startupTimersRef.current = timers;
   };
 
-  const startupLock = startupPhase !== "done";
+  const startupLock = state.screen === "top" && startupPhase !== "done";
 
   const headerStyle = useMemo(() => {
-    if (startupPhase === "done") return {};
+    if (state.screen !== "top" || startupPhase === "done") return {};
 
     return {
-      transform: startupStage >= 1 ? "translateX(0)" : "translateX(-120%)",
+      transform: startupStage >= 1 ? "translateX(0)" : "translateX(-140%)",
       opacity: startupStage >= 1 ? 1 : 0,
       transition:
         "transform 460ms cubic-bezier(0.22,1,0.36,1), opacity 460ms ease-out",
       willChange: "transform, opacity",
     };
-  }, [startupPhase, startupStage]);
+  }, [state.screen, startupPhase, startupStage]);
 
   const mainStyle = useMemo(() => {
-    if (startupPhase === "done") return {};
+    if (state.screen !== "top" || startupPhase === "done") return {};
 
     return {
       transform:
         startupStage >= 2
           ? "translateX(0) scale(1)"
-          : "translateX(-42px) scale(0.96)",
+          : "translateX(-64px) scale(0.97)",
       opacity: startupStage >= 2 ? 1 : 0,
       transition:
         "transform 460ms cubic-bezier(0.22,1,0.36,1), opacity 460ms ease-out",
       willChange: "transform, opacity",
     };
-  }, [startupPhase, startupStage]);
+  }, [state.screen, startupPhase, startupStage]);
 
   const otherStyle = useMemo(() => {
-    if (startupPhase === "done") return {};
+    if (state.screen !== "top" || startupPhase === "done") return {};
 
     return {
-      transform: startupStage >= 3 ? "translateX(0)" : "translateX(-56px)",
+      transform: startupStage >= 3 ? "translateX(0)" : "translateX(-72px)",
       opacity: startupStage >= 3 ? 1 : 0,
       transition:
         "transform 460ms cubic-bezier(0.22,1,0.36,1), opacity 460ms ease-out",
       willChange: "transform, opacity",
     };
-  }, [startupPhase, startupStage]);
+  }, [state.screen, startupPhase, startupStage]);
 
   const renderSharedInfoSpacer = () => (
     <div
