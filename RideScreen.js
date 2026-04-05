@@ -1,42 +1,60 @@
+window.AppScreens = window.AppScreens || {};
 window.AppScreens.RideScreen = (() => {
-  const { HeaderCard, BottomNav } = window.AppComponents;
+  const { RideInfoCard, BottomNav } = window.AppComponents;
+  const C = window.AppConstants;
 
   return function RideScreen(props) {
     const {
-      timeParts,
-      weather,
-      totalAmount,
-      recordCount,
-      drop,
+      pickup,
+      rideStartAt,
+      elapsedText,
+      viaStops,
+      handleDropOffTap,
+      goHome,
+      openHistoryModal,
+      openOtherSheet,
     } = props;
 
     return (
-      <div style={{ height: "100%", position: "relative" }}>
-        <HeaderCard
-          timeParts={timeParts}
-          weather={weather}
-          totalAmount={totalAmount}
-          recordCount={recordCount}
-        />
-
-        <div style={{ padding: "16px" }}>
+      <div className="flex-1 min-h-0 flex flex-col overflow-hidden relative pb-[94px]">
+        <div
+          className="pt-4 shrink-0"
+          style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
+        >
           <button
-            onClick={drop}
+            type="button"
+            onClick={handleDropOffTap}
+            className={`${C.mainButtonBase} ${C.mainButtonShine}`}
             style={{
-              width: "100%",
-              height: "120px",
-              borderRadius: "24px",
-              background: "#ffaa00",
-              color: "#fff",
-              fontSize: "28px",
-              fontWeight: "bold",
+              background: "linear-gradient(180deg,#ffe066,#ffb400,#cc7a00)",
             }}
           >
-            降車
+            <span className={C.bigButtonText}>降車</span>
           </button>
         </div>
 
-        <BottomNav isHome={false} />
+        <div
+          className="pt-4 shrink-0"
+          style={{ height: `${C.SHARED_INFO_SLOT_HEIGHT}px` }}
+        >
+          <RideInfoCard
+            pickup={pickup}
+            rideStartAt={rideStartAt}
+            elapsedText={elapsedText}
+            viaStops={viaStops}
+          />
+        </div>
+
+        <div className="pt-4 flex-1 min-h-0">
+          <div className="h-full rounded-[28px] bg-[#f7f7f7]" />
+        </div>
+
+        <BottomNav
+          centerLabel="履歴"
+          onHome={goHome}
+          onCenter={openHistoryModal}
+          onMenu={openOtherSheet}
+        />
       </div>
     );
   };
