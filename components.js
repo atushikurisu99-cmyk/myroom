@@ -10,7 +10,6 @@ window.AppComponents = (() => {
   const C = window.AppConstants;
 
   const GREEN_MAIN = "#9ED36A";
-  const GREEN_SOFT = "#7FC84E";
   const GREEN_CIRCLE = "#92CD4C";
 
   function formatPlainYen(value) {
@@ -130,7 +129,7 @@ window.AppComponents = (() => {
           </div>
 
           <div className="mt-[12px] flex items-center justify-between gap-3">
-            <div className="min-w-0 flex-1 text-[34px] leading-none font-normal tracking-[-0.02em] text-white whitespace-nowrap">
+            <div className="min-w-0 flex-1 text-[34px] leading-none font-normal tracking-[-0.02em] text-white whitespace-nowrap overflow-hidden text-ellipsis">
               {isHomeAmountVisible ? formatPlainYen(homeDisplayAmount) : "ーーー"}
             </div>
 
