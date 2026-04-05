@@ -9,9 +9,9 @@ window.AppComponents = (() => {
   } = window.AppUtils;
   const C = window.AppConstants;
 
-  const NAV_BASE = "#9ED36A";
-  const NAV_SURFACE = "#8FCC4C";
-  const SOFT_GREEN = "#7FC84E";
+  const GREEN_MAIN = "#9ED36A";
+  const GREEN_SOFT = "#7FC84E";
+  const GREEN_CIRCLE = "#92CD4C";
 
   function formatPlainYen(value) {
     return `${Number(value || 0).toLocaleString("ja-JP")}円`;
@@ -33,7 +33,7 @@ window.AppComponents = (() => {
       <svg viewBox="0 0 64 64" className={className} aria-hidden="true">
         {[14, 32, 50].map((cx) =>
           [14, 32, 50].map((cy) => (
-            <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={5.4} fill="currentColor" />
+            <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={5.3} fill="currentColor" />
           ))
         )}
       </svg>
@@ -91,13 +91,62 @@ window.AppComponents = (() => {
     return (
       <div className="flex items-start gap-5 pt-[6px]">
         {items.map((item) => (
-          <div key={item.label} className="w-[36px] shrink-0">
+          <div key={item.label} className="w-[38px] shrink-0">
             <div className="text-[10px] leading-none font-semibold text-slate-500">
               {item.label}
             </div>
-            <div className="mt-[5px] text-[21px] leading-none">{item.icon}</div>
+            <div className="mt-[5px] text-[22px] leading-none">{item.icon}</div>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  function HomeTopHeader({
+    timeParts,
+    homeDisplayAmount,
+    isHomeAmountVisible,
+    toggleHomeAmountVisible,
+  }) {
+    return (
+      <div className="h-full w-full flex flex-col justify-between px-[18px] pt-[14px] pb-[16px]">
+        <div className="flex items-start justify-end">
+          <div className="flex items-center justify-end text-[60px] leading-[0.88] font-black tracking-[-0.05em] text-black">
+            <span>{timeParts?.hh || "00"}</span>
+            <span
+              className={`${
+                timeParts?.showColon ? "opacity-100" : "opacity-0"
+              } transition-opacity duration-150 mx-[-0.08em]`}
+            >
+              ：
+            </span>
+            <span>{timeParts?.mm || "00"}</span>
+          </div>
+        </div>
+
+        <div className="min-h-0">
+          <div className="text-[12px] leading-none font-semibold text-white/95">
+            累計＋乗務分
+          </div>
+
+          <div className="mt-[12px] flex items-center justify-between gap-3">
+            <div className="min-w-0 flex-1 text-[34px] leading-none font-normal tracking-[-0.02em] text-white whitespace-nowrap">
+              {isHomeAmountVisible ? formatPlainYen(homeDisplayAmount) : "ーーー"}
+            </div>
+
+            <button
+              type="button"
+              onClick={toggleHomeAmountVisible}
+              className="shrink-0 w-[34px] h-[34px] flex items-center justify-center text-white/95 active:opacity-80"
+              aria-label={isHomeAmountVisible ? "金額を非表示" : "金額を表示"}
+            >
+              <EyeToggleIcon
+                hidden={!isHomeAmountVisible}
+                className="w-[28px] h-[28px]"
+              />
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -180,70 +229,36 @@ window.AppComponents = (() => {
     );
   }
 
-  function HeaderCard({
-    screen,
-    timeParts,
-    cardMode,
-    weather,
-    totalAmount,
-    recordCount,
-    amount1,
-    amount2,
-    homeDisplayAmount,
-    isHomeAmountVisible,
-    toggleHomeAmountVisible,
-  }) {
+  function HeaderCard(props) {
+    const {
+      screen,
+      timeParts,
+      cardMode,
+      weather,
+      totalAmount,
+      recordCount,
+      amount1,
+      amount2,
+      homeDisplayAmount,
+      isHomeAmountVisible = true,
+      toggleHomeAmountVisible = () => {},
+    } = props;
+
     if (screen === "top") {
       return (
-        <div
-          className="h-[172px] rounded-[30px] px-4 py-4 shrink-0 overflow-hidden"
-          style={{ background: NAV_BASE }}
-        >
-          <div className="h-full flex flex-col">
-            <div className="flex items-start justify-end shrink-0 pt-[2px]">
-              <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-black">
-                <span>{timeParts.hh}</span>
-                <span
-                  className={`${
-                    timeParts.showColon ? "opacity-100" : "opacity-0"
-                  } transition-opacity duration-150 mx-[-0.08em]`}
-                >
-                  ：
-                </span>
-                <span>{timeParts.mm}</span>
-              </div>
-            </div>
-
-            <div className="mt-2 flex-1 min-h-0 flex flex-col justify-end">
-              <div className="text-[12px] leading-none font-semibold text-white/95">
-                累計＋乗務分
-              </div>
-
-              <div className="mt-3 flex items-center gap-3">
-                <div className="min-w-0 text-[34px] leading-none font-normal tracking-[-0.02em] text-white truncate">
-                  {isHomeAmountVisible ? formatPlainYen(homeDisplayAmount) : "ーーー"}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={toggleHomeAmountVisible}
-                  className="shrink-0 w-[34px] h-[34px] flex items-center justify-center text-white/95 active:opacity-80"
-                  aria-label={isHomeAmountVisible ? "金額を非表示" : "金額を表示"}
-                >
-                  <EyeToggleIcon hidden={!isHomeAmountVisible} className="w-[28px] h-[28px]" />
-                </button>
-              </div>
-            </div>
-          </div>
+        <div className="h-full w-full">
+          <HomeTopHeader
+            timeParts={timeParts}
+            homeDisplayAmount={homeDisplayAmount}
+            isHomeAmountVisible={isHomeAmountVisible}
+            toggleHomeAmountVisible={toggleHomeAmountVisible}
+          />
         </div>
       );
     }
 
     return (
-      <div
-        className="h-[172px] rounded-[30px] px-[14px] py-[12px] shrink-0 overflow-hidden"
-        style={{ background: NAV_BASE }}
-      >
+      <div className="h-full w-full px-[14px] pt-[14px] pb-[14px]">
         <WhiteStatusHeader
           timeParts={timeParts}
           cardMode={cardMode}
@@ -352,10 +367,10 @@ window.AppComponents = (() => {
           <button
             key={card.title}
             type="button"
-            className="rounded-[24px] border border-white/40 bg-white/12 active:bg-white/18 text-left px-4 py-4 overflow-hidden"
+            className="rounded-[22px] border border-slate-200 bg-slate-100/70 active:bg-slate-200/70 text-left px-4 py-4 overflow-hidden"
           >
-            <div className="text-[16px] font-bold text-white/95">{card.title}</div>
-            <div className="mt-1 text-[12px] font-semibold text-white/70">{card.sub}</div>
+            <div className="text-[16px] font-bold text-slate-600">{card.title}</div>
+            <div className="mt-1 text-[12px] font-semibold text-slate-400">{card.sub}</div>
           </button>
         ))}
       </div>
@@ -369,32 +384,37 @@ window.AppComponents = (() => {
     onMenu,
     activeArea = "home",
   }) {
-    const bubblePosition =
-      activeArea === "home" ? "left-[8px]" : activeArea === "menu" ? "right-[8px]" : "left-1/2 -translate-x-1/2";
+    const homeStrong = activeArea === "home";
+    const menuStrong = activeArea === "menu";
+    const centerStrong = activeArea === "center";
 
     return (
       <div className="h-full relative overflow-visible">
         <div
-          className="absolute inset-x-0 bottom-0 h-full rounded-t-[28px] overflow-hidden"
-          style={{ background: NAV_BASE }}
-        >
-          <div
-            className={`absolute top-[-12px] w-[116px] h-[116px] rounded-full transition-all duration-250 ease-out ${bubblePosition}`}
-            style={{
-              background: NAV_SURFACE,
-              boxShadow: "0 8px 18px rgba(0,0,0,0.12)",
-            }}
-          />
-        </div>
+          className="absolute inset-x-0 bottom-0 h-[58px] rounded-t-[24px]"
+          style={{ background: GREEN_MAIN }}
+        />
 
-        <div className="absolute inset-0 grid grid-cols-3 h-full">
+        <div
+          className="absolute left-1/2 -translate-x-1/2 top-[-28px] w-[98px] h-[98px] rounded-full z-10"
+          style={{
+            background: GREEN_CIRCLE,
+            boxShadow: "0 8px 16px rgba(0,0,0,0.10)",
+          }}
+        />
+
+        <div className="absolute inset-0 grid grid-cols-3 h-full z-20">
           <button
             type="button"
             onClick={onHome}
-            className="relative h-full flex flex-col items-center justify-center text-white active:opacity-85"
+            className="h-full flex flex-col items-center justify-end pb-[8px] text-white active:opacity-85"
           >
             <HomeFilledIcon className="w-[34px] h-[34px]" />
-            <div className={`mt-[6px] text-[12px] leading-none ${activeArea === "home" ? "font-bold" : "font-semibold"}`}>
+            <div
+              className={`mt-[5px] text-[12px] leading-none ${
+                homeStrong ? "font-bold" : "font-semibold"
+              }`}
+            >
               ホーム
             </div>
           </button>
@@ -402,11 +422,11 @@ window.AppComponents = (() => {
           <button
             type="button"
             onClick={onCenter}
-            className="relative h-full flex items-center justify-center text-white active:opacity-85"
+            className="h-full flex items-center justify-center pb-[2px] text-white active:opacity-85"
           >
             <div
-              className={`text-[16px] tracking-[0.06em] leading-none ${
-                activeArea === "center" ? "font-bold text-[18px]" : "font-semibold"
+              className={`text-[17px] tracking-[0.06em] leading-none ${
+                centerStrong ? "font-bold" : "font-semibold"
               }`}
             >
               {centerLabel}
@@ -416,10 +436,14 @@ window.AppComponents = (() => {
           <button
             type="button"
             onClick={onMenu}
-            className="relative h-full flex flex-col items-center justify-center text-white active:opacity-85"
+            className="h-full flex flex-col items-center justify-end pb-[8px] text-white active:opacity-85"
           >
             <MenuDotsFilledIcon className="w-[30px] h-[30px]" />
-            <div className={`mt-[6px] text-[12px] leading-none ${activeArea === "menu" ? "font-bold" : "font-semibold"}`}>
+            <div
+              className={`mt-[5px] text-[12px] leading-none ${
+                menuStrong ? "font-bold" : "font-semibold"
+              }`}
+            >
               メニュー
             </div>
           </button>
@@ -436,32 +460,25 @@ window.AppComponents = (() => {
     return (
       <div className="relative h-full w-full overflow-hidden">
         <div
-          className="absolute inset-0 rounded-[28px] border border-white/20"
-          style={{ background: SOFT_GREEN }}
-        />
-
-        <div
-          className="absolute inset-x-0 bottom-0 px-4 pb-4 pt-5"
+          className="absolute inset-x-0 bottom-0"
           style={{
             transform: `translateY(${open ? 0 : 88}px)`,
-            transition: "transform 250ms cubic-bezier(0.22,1,0.36,1)",
+            transition: "transform 240ms cubic-bezier(0.22,1,0.36,1)",
             willChange: "transform",
           }}
         >
-          <div className="w-full rounded-[26px] bg-white/10 backdrop-blur-[1px] px-4 py-4 flex items-center justify-center">
-            <button
-              type="button"
-              onClick={onFinishTap}
-              disabled={!dutyStarted}
-              className={`${C.endDutyButtonClass} ${
-                dutyStarted ? "opacity-100" : "opacity-45"
-              } w-full h-[54px]`}
-            >
-              <span className="text-[18px] font-bold tracking-[-0.02em]">
-                本日の乗務を終了
-              </span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={onFinishTap}
+            disabled={!dutyStarted}
+            className={`${C.endDutyButtonClass} ${
+              dutyStarted ? "opacity-100" : "opacity-45"
+            } w-full h-[52px]`}
+          >
+            <span className="text-[17px] font-bold tracking-[-0.02em]">
+              本日の乗務を終了
+            </span>
+          </button>
         </div>
       </div>
     );
