@@ -1,57 +1,42 @@
 window.AppScreens = window.AppScreens || {};
 window.AppScreens.TopScreen = (() => {
-  const { BottomCard } = window.AppComponents;
+  const { BottomCard, FloatingToggle } = window.AppComponents;
   const C = window.AppConstants;
 
-  return function TopScreen(props) {
-    const {
-      topMainLabel,
-      topMainButtonDisabled,
-      handleTopMain,
-      renderSharedInfoSpacer,
-      openOtherSheet,
-      openHistoryModal,
-      previewRecords,
-      startupMainStyle,
-      startupOtherStyle,
-    } = props;
-
+  return function TopScreen({
+    handleTopMain,
+    showBottom,
+    setShowBottom,
+    handleFinishTap,
+  }) {
     return (
-      <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-        <div
-          className="pt-4 shrink-0"
-          style={{
-            height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px`,
-            ...(startupMainStyle || {}),
-          }}
-        >
+      <div className="flex-1 relative">
+        <div className="pt-4">
           <button
-            type="button"
-            onClick={handleTopMain}
-            disabled={topMainButtonDisabled}
-            className={`${C.mainButtonBase} ${C.mainButtonShine} ${
-              topMainLabel === "乗務終了"
-                ? "bg-[linear-gradient(180deg,#ffdf6b,#ffb100,#cc7900)] text-white"
-                : "bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white"
-            }`}
+            onClick={() => {
+              setShowBottom(false);
+              handleTopMain();
+            }}
+            className={`${C.mainButtonBase}`}
+            style={{
+              height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px`,
+              background: "linear-gradient(180deg,#5dffcf,#008a6a)",
+            }}
           >
-            <span className={C.bigButtonText}>{topMainLabel}</span>
+            乗務開始
           </button>
         </div>
 
-        {renderSharedInfoSpacer()}
+        <FloatingToggle
+          open={showBottom}
+          toggle={() => setShowBottom(!showBottom)}
+        />
 
-        <div
-          className="pt-4 shrink-0"
-          style={startupOtherStyle || undefined}
-        >
-          <BottomCard
-            movable={false}
-            openOtherSheet={openOtherSheet}
-            openHistoryModal={openHistoryModal}
-            previewRecords={previewRecords}
-          />
-        </div>
+        <BottomCard
+          open={showBottom}
+          onClose={() => setShowBottom(false)}
+          onFinish={handleFinishTap}
+        />
       </div>
     );
   };
