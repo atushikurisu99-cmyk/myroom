@@ -37,18 +37,18 @@ window.AppScreens.TopScreen = (() => {
           </div>
 
           <div
-            className="shrink-0 px-0 pb-0"
+            className="shrink-0 px-3 pb-4"
             style={{
               height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px`,
               ...(mainButtonStyle || {}),
             }}
           >
-            <div className="h-full px-0 pt-0">
+            <div className="h-full pt-1">
               <button
                 type="button"
                 onClick={handleTopMain}
                 disabled={topMainButtonDisabled}
-                className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white rounded-none border-0 shadow-[inset_0_2px_0_rgba(255,255,255,0.55),inset_0_-3px_8px_rgba(0,0,0,0.24),0_8px_16px_rgba(0,0,0,0.14)]`}
+                className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white rounded-[28px] border border-white/60`}
               >
                 <span className={C.bigButtonText}>{topMainLabel}</span>
               </button>
@@ -57,12 +57,14 @@ window.AppScreens.TopScreen = (() => {
         </div>
 
         <div className="pt-3 flex-1 min-h-0 overflow-hidden" style={contentStyle || undefined}>
-          <div className="h-[150px] shrink-0">
-            <HomeGraphCards />
-          </div>
+          {!homeEndSheetOpen ? (
+            <div className="h-[150px] shrink-0">
+              <HomeGraphCards />
+            </div>
+          ) : null}
 
-          <div className="pt-4 flex-1 min-h-0 relative">
-            <div className="absolute inset-x-0 bottom-0 h-[122px]">
+          <div className={`${homeEndSheetOpen ? "pt-0" : "pt-4"} flex-1 min-h-0 relative`}>
+            <div className="absolute inset-x-0 top-0 h-[122px]">
               <HomeEndDutySheet
                 open={homeEndSheetOpen}
                 dutyStarted={dutyStarted}
@@ -74,7 +76,7 @@ window.AppScreens.TopScreen = (() => {
               className="absolute z-20"
               style={{
                 right: "8px",
-                bottom: "14px",
+                top: "8px",
               }}
             >
               <button
