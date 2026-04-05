@@ -1,64 +1,87 @@
+window.AppScreens = window.AppScreens || {};
+
 window.AppScreens.TopScreen = (() => {
   const { BottomCard, GraphEntryGrid, BottomNav } = window.AppComponents;
+  const C = window.AppConstants;
 
   return function TopScreen(props) {
     const {
+      topMainLabel,
+      topMainButtonDisabled,
+      handleTopMain,
+      showHomeBottomCard,
+      toggleHomeBottomCard,
+      handleFinishTap,
+      openOtherSheet,
+      openExpenseModal,
+      startupMainStyle,
       dutyStarted,
-      isRiding,
-      startDuty,
-      startRide,
-      drop,
-      showBottom,
-      setShowBottom,
-      finish,
     } = props;
 
-    let label = "乗務開始";
-    if (dutyStarted && !isRiding) label = "実車";
-    if (isRiding) label = "降車";
+    const mainGradient =
+      topMainLabel === "降車"
+        ? "linear-gradient(180deg,#ffe066,#ffb400,#cc7a00)"
+        : topMainLabel === "実車"
+        ? "linear-gradient(180deg,#78bbff,#4f97f5,#2e6fd6)"
+        : "linear-gradient(180deg,#5ee05e,#32cd32,#24a924)";
 
     return (
-      <div className="h-full relative pb-[90px]">
-
-        {/* 主ボタン */}
-        <div className="p-4">
+      <div className="flex-1 min-h-0 flex flex-col overflow-hidden relative pb-[94px]">
+        <div
+          className="pt-4 shrink-0"
+          style={{
+            height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px`,
+            ...(startupMainStyle || {}),
+          }}
+        >
           <button
-            onClick={() => {
-              if (!dutyStarted) return startDuty();
-              if (!isRiding) return startRide();
-              return drop();
-            }}
-            className="w-full h-[120px] bg-[#32cd32] text-white text-2xl rounded-2xl"
+            type="button"
+            onClick={handleTopMain}
+            disabled={topMainButtonDisabled}
+            className={`${C.mainButtonBase} ${C.mainButtonShine}`}
+            style={{ background: mainGradient }}
           >
-            {label}
+            <span className={C.bigButtonText}>{topMainLabel}</span>
           </button>
         </div>
 
-        {/* グラフ入口 */}
-        <GraphEntryGrid />
+        <div className="pt-4 flex-1 min-h-0 overflow-hidden">
+          <div className="h-full rounded-[28px] bg-[#f7f7f7]">
+            <GraphEntryGrid />
+          </div>
+        </div>
 
-        {/* ▲ */}
         {dutyStarted && (
-          <button
-            onClick={() => setShowBottom(!showBottom)}
-            style={{
-              position: "absolute",
-              right: 16,
-              bottom: 110,
-              fontSize: 24,
-            }}
-          >
-            ▲
-          </button>
+          <>
+            <button
+              type="button"
+              onClick={toggleHomeBottomCard}
+              className="absolute z-30 flex items-center justify-center active:opacity-80"
+              style={{
+                right: "16px",
+                bottom: "92px",
+                width: "40px",
+                height: "38px",
+              }}
+              aria-label="乗務終了を開閉"
+            >
+              <span className="text-[28px] leading-none font-bold text-slate-400">
+                {showHomeBottomCard ? "▼" : "▲"}
+              </span>
+            </button>
+
+            <BottomCard
+              show={showHomeBottomCard}
+              onFinish={handleFinishTap}
+            />
+          </>
         )}
 
-        <BottomCard show={showBottom} onFinish={finish} />
-
         <BottomNav
-          isHome={true}
+          centerLabel="経費"
           onHome={() => {}}
-          onCenter={() => {}}
-          onMenu={() => {}}
+          onCenter={openExpenseModal}
+          onMenu={openOtherSheet}
         />
       </div>
     );
