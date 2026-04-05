@@ -2,7 +2,6 @@ const { useEffect, useMemo, useRef, useState } = React;
 
 const { useTaxiAppState } = window.AppHooks;
 const {
-  HeaderCard,
   BottomNav,
   OtherSheet,
   PaymentDialog,
@@ -88,21 +87,7 @@ function TaxiMiniApp() {
 
   const startupLock = state.screen === "top" && startupPhase !== "done";
 
-  const headerStyle = useMemo(() => {
-    if (!["top", "standby", "ride"].includes(state.screen) || startupPhase === "done") {
-      return {};
-    }
-
-    return {
-      transform: startupStage >= 1 ? "translateX(0)" : "translateX(-140%)",
-      opacity: startupStage >= 1 ? 1 : 0,
-      transition:
-        "transform 460ms cubic-bezier(0.22,1,0.36,1), opacity 460ms ease-out",
-      willChange: "transform, opacity",
-    };
-  }, [state.screen, startupPhase, startupStage]);
-
-  const mainStyle = useMemo(() => {
+  const topMainStyle = useMemo(() => {
     if (state.screen !== "top" || startupPhase === "done") return {};
 
     return {
@@ -117,7 +102,7 @@ function TaxiMiniApp() {
     };
   }, [state.screen, startupPhase, startupStage]);
 
-  const otherStyle = useMemo(() => {
+  const topContentStyle = useMemo(() => {
     if (state.screen !== "top" || startupPhase === "done") return {};
 
     return {
@@ -156,16 +141,9 @@ function TaxiMiniApp() {
   const navCenterLabel = state.screen === "top" ? "経費" : "履歴";
   const activeNavArea = state.showOtherSheet
     ? "menu"
-    : state.screen === "top"
-    ? "home"
     : state.screen === "standby" || state.screen === "ride"
     ? "center"
     : "home";
-
-  const showHeader =
-    state.screen === "top" ||
-    state.screen === "standby" ||
-    state.screen === "ride";
 
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
@@ -176,7 +154,7 @@ function TaxiMiniApp() {
         style={{ display: "none" }}
       />
 
-      <div className="w-full max-w-sm h-full px-4 pt-4 pb-0 relative overflow-hidden">
+      <div className="w-full max-w-sm h-full px-4 pt-0 pb-0 relative overflow-hidden">
         {state.showSaved && startupPhase === "done" && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-5 py-2.5 shadow-lg">
             保存しました
@@ -239,36 +217,25 @@ function TaxiMiniApp() {
         />
 
         <div
-          className="h-full flex flex-col overflow-hidden relative"
+          className="h-full flex flex-col overflow-hidden relative pt-0"
           style={{
-            paddingBottom: showBottomNav ? `${C.BOTTOM_NAV_HEIGHT + 8}px` : 0,
+            paddingBottom: showBottomNav ? `${C.BOTTOM_NAV_HEIGHT + 12}px` : 0,
           }}
         >
-          {showHeader && (
-            <div style={headerStyle} className="shrink-0">
-              <HeaderCard
-                screen={state.screen}
-                timeParts={derived.timeParts}
-                cardMode={state.cardMode}
-                weather={state.weather}
-                totalAmount={derived.totalAmount}
-                recordCount={derived.recordCount}
-                amount1={derived.amount1}
-                amount2={derived.amount2}
-                homeDisplayAmount={derived.homeDisplayAmount}
-                isHomeAmountVisible={state.isHomeAmountVisible}
-                toggleHomeAmountVisible={actions.toggleHomeAmountVisible}
-              />
-            </div>
-          )}
-
           {state.screen === "top" && (
             <TopScreen
+              screen={state.screen}
+              timeParts={derived.timeParts}
+              homeDisplayAmount={derived.homeDisplayAmount ?? derived.totalAmount}
+              isHomeAmountVisible={state.isHomeAmountVisible ?? true}
+              toggleHomeAmountVisible={
+                actions.toggleHomeAmountVisible || (() => {})
+              }
               topMainLabel={derived.topMainLabel}
               topMainButtonDisabled={derived.topMainButtonDisabled || startupLock}
               handleTopMain={actions.handleTopMain}
-              startupMainStyle={mainStyle}
-              startupOtherStyle={otherStyle}
+              contentStyle={topContentStyle}
+              mainButtonStyle={topMainStyle}
               homeEndSheetOpen={state.homeEndSheetOpen}
               toggleHomeEndSheet={actions.toggleHomeEndSheet}
               handleFinishTap={actions.handleFinishTap}
@@ -277,11 +244,29 @@ function TaxiMiniApp() {
           )}
 
           {state.screen === "standby" && (
-            <StandbyScreen handleStartRide={actions.handleStartRide} />
+            <StandbyScreen
+              screen={state.screen}
+              timeParts={derived.timeParts}
+              cardMode={state.cardMode}
+              weather={state.weather}
+              totalAmount={derived.totalAmount}
+              recordCount={derived.recordCount}
+              amount1={derived.amount1}
+              amount2={derived.amount2}
+              handleStartRide={actions.handleStartRide}
+            />
           )}
 
           {state.screen === "ride" && (
             <RideScreen
+              screen={state.screen}
+              timeParts={derived.timeParts}
+              cardMode={state.cardMode}
+              weather={state.weather}
+              totalAmount={derived.totalAmount}
+              recordCount={derived.recordCount}
+              amount1={derived.amount1}
+              amount2={derived.amount2}
               pickup={state.pickup}
               rideStartAt={state.rideStartAt}
               elapsedText={derived.elapsedText}
