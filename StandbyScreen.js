@@ -1,24 +1,43 @@
-window.AppScreens.StandbyScreen=(()=>{
+window.AppScreens.StandbyScreen = (() => {
+  const { HeaderCard, BottomNav } = window.AppComponents;
 
-const{HeaderArea,MainButton,BottomNav}=window.AppComponents;
+  return function StandbyScreen(props) {
+    const {
+      timeParts,
+      weather,
+      totalAmount,
+      recordCount,
+      startRide,
+    } = props;
 
-return function StandbyScreen({actions}){
+    return (
+      <div style={{ height: "100%", position: "relative" }}>
+        <HeaderCard
+          timeParts={timeParts}
+          weather={weather}
+          totalAmount={totalAmount}
+          recordCount={recordCount}
+        />
 
-return(
-<div style={{height:"100%"}}>
+        <div style={{ padding: "16px" }}>
+          <button
+            onClick={startRide}
+            style={{
+              width: "100%",
+              height: "120px",
+              borderRadius: "24px",
+              background: "#0072d9",
+              color: "#fff",
+              fontSize: "28px",
+              fontWeight: "bold",
+            }}
+          >
+            実車
+          </button>
+        </div>
 
-<HeaderArea>
-<div style={{color:"#fff",fontSize:"40px"}}>12:00</div>
-</HeaderArea>
-
-<div style={{padding:"16px"}}>
-<MainButton label="実車" onClick={actions.startRide} color="#0072d9"/>
-</div>
-
-<BottomNav mode="ride" onHome={()=>{}} onCenter={()=>{}} onMenu={()=>{}}/>
-
-</div>
-);
-};
-
+        <BottomNav isHome={false} />
+      </div>
+    );
+  };
 })();
