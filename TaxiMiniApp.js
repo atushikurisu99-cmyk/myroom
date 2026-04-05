@@ -89,7 +89,9 @@ function TaxiMiniApp() {
   const startupLock = state.screen === "top" && startupPhase !== "done";
 
   const headerStyle = useMemo(() => {
-    if (state.screen !== "top" || startupPhase === "done") return {};
+    if (!["top", "standby", "ride"].includes(state.screen) || startupPhase === "done") {
+      return {};
+    }
 
     return {
       transform: startupStage >= 1 ? "translateX(0)" : "translateX(-140%)",
@@ -152,6 +154,14 @@ function TaxiMiniApp() {
     state.screen === "ride";
 
   const navCenterLabel = state.screen === "top" ? "経費" : "履歴";
+  const activeNavArea = state.showOtherSheet
+    ? "menu"
+    : state.screen === "top"
+    ? "home"
+    : state.screen === "standby" || state.screen === "ride"
+    ? "center"
+    : "home";
+
   const showHeader =
     state.screen === "top" ||
     state.screen === "standby" ||
@@ -235,8 +245,9 @@ function TaxiMiniApp() {
           }}
         >
           {showHeader && (
-            <div style={headerStyle}>
+            <div style={headerStyle} className="shrink-0">
               <HeaderCard
+                screen={state.screen}
                 timeParts={derived.timeParts}
                 cardMode={state.cardMode}
                 weather={state.weather}
@@ -244,6 +255,9 @@ function TaxiMiniApp() {
                 recordCount={derived.recordCount}
                 amount1={derived.amount1}
                 amount2={derived.amount2}
+                homeDisplayAmount={derived.homeDisplayAmount}
+                isHomeAmountVisible={state.isHomeAmountVisible}
+                toggleHomeAmountVisible={actions.toggleHomeAmountVisible}
               />
             </div>
           )}
@@ -263,9 +277,7 @@ function TaxiMiniApp() {
           )}
 
           {state.screen === "standby" && (
-            <StandbyScreen
-              handleStartRide={actions.handleStartRide}
-            />
+            <StandbyScreen handleStartRide={actions.handleStartRide} />
           )}
 
           {state.screen === "ride" && (
@@ -321,7 +333,7 @@ function TaxiMiniApp() {
                   : actions.openHistorySimple
               }
               onMenu={actions.openMenu}
-              active={state.screen === "top" ? "home" : ""}
+              activeArea={activeNavArea}
             />
           </div>
         )}
