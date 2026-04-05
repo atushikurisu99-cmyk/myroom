@@ -1,46 +1,22 @@
-window.AppScreens = window.AppScreens || {};
+import React from "react";
 
-window.AppScreens.StandbyScreen = (() => {
-  const { BottomNav } = window.AppComponents;
-  const C = window.AppConstants;
+export default function StandbyScreen(props) {
+  return (
+    <div className="w-full h-full relative">
 
-  return function StandbyScreen(props) {
-    const {
-      handleStartRide,
-      goHome,
-      openHistoryModal,
-      openOtherSheet,
-    } = props;
+      <button
+        className="w-40 h-40 bg-blue-500 text-white text-xl rounded-full mx-auto mt-40"
+        onClick={() => props.setScreen("ride")}
+      >
+        実車
+      </button>
 
-    return (
-      <div className="flex-1 min-h-0 flex flex-col overflow-hidden relative pb-[94px]">
-        <div
-          className="pt-4 shrink-0"
-          style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
-        >
-          <button
-            type="button"
-            onClick={handleStartRide}
-            className={`${C.mainButtonBase} ${C.mainButtonShine}`}
-            style={{
-              background: "linear-gradient(180deg,#78bbff,#4f97f5,#2e6fd6)",
-            }}
-          >
-            <span className={C.bigButtonText}>実車</span>
-          </button>
-        </div>
-
-        <div className="pt-4 flex-1 min-h-0">
-          <div className="h-full rounded-[28px] bg-[#f7f7f7]" />
-        </div>
-
-        <BottomNav
-          centerLabel="履歴"
-          onHome={goHome}
-          onCenter={openHistoryModal}
-          onMenu={openOtherSheet}
-        />
+      {/* 下ナビ */}
+      <div className="absolute bottom-0 w-full flex justify-around p-4 border-t bg-white">
+        <button onClick={() => props.setScreen("top")}>ホーム</button>
+        <button onClick={props.openHistorySimple}>履歴</button>
+        <button onClick={props.openHistoryFull}>メニュー</button>
       </div>
-    );
-  };
-})();
+    </div>
+  );
+}
