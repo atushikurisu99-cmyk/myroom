@@ -451,6 +451,38 @@ window.AppComponents = (() => {
     );
   }
 
+  function EndDutyButton({ onClick, disabled }) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        disabled={disabled}
+        className={`w-full flex items-center rounded-full overflow-hidden border-[6px] border-white shadow-[0_8px_18px_rgba(0,0,0,0.16)] ${
+          disabled ? "opacity-45" : "opacity-100 active:scale-[0.99]"
+        }`}
+        style={{
+          height: "74px",
+          background: "#375f1d",
+        }}
+      >
+        <div className="w-[82px] shrink-0 flex items-center justify-center">
+          <div className="w-[58px] h-[58px] rounded-full bg-white flex items-center justify-center">
+            <svg viewBox="0 0 64 64" className="w-[40px] h-[40px]" aria-hidden="true">
+              <path
+                fill="#375f1d"
+                d="M8 28h24V14l24 18-24 18V36H8z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div className="flex-1 pr-6 text-center text-white text-[21px] font-bold tracking-[-0.02em]">
+          本日の乗務を終了
+        </div>
+      </button>
+    );
+  }
+
   function HomeEndDutySheet({
     open,
     dutyStarted,
@@ -459,25 +491,14 @@ window.AppComponents = (() => {
     return (
       <div className="relative h-full w-full overflow-hidden">
         <div
-          className="absolute inset-x-0 bottom-0"
+          className="absolute inset-x-0 top-0"
           style={{
-            transform: `translateY(${open ? 0 : 88}px)`,
+            transform: `translateY(${open ? 0 : 92}px)`,
             transition: "transform 240ms cubic-bezier(0.22,1,0.36,1)",
             willChange: "transform",
           }}
         >
-          <button
-            type="button"
-            onClick={onFinishTap}
-            disabled={!dutyStarted}
-            className={`${C.endDutyButtonClass} ${
-              dutyStarted ? "opacity-100" : "opacity-45"
-            } w-full h-[52px]`}
-          >
-            <span className="text-[17px] font-bold tracking-[-0.02em]">
-              本日の乗務を終了
-            </span>
-          </button>
+          <EndDutyButton onClick={onFinishTap} disabled={!dutyStarted} />
         </div>
       </div>
     );
