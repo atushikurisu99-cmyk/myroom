@@ -57,17 +57,17 @@ window.AppScreens.TopScreen = (() => {
           <div
             className="absolute z-20"
             style={{
-              right: "18px",
-              bottom: "8px",
+              right: "16px",
+              bottom: "92px",
             }}
           >
             <button
               type="button"
               onClick={toggleHomeEndSheet}
-              className="flex items-center justify-center w-[40px] h-[36px] active:opacity-80"
+              className="flex items-center justify-center w-[48px] h-[42px] active:opacity-80"
               aria-label={homeEndSheetOpen ? "終了ボタンを閉じる" : "終了ボタンを開く"}
             >
-              <span className="text-[31px] leading-none font-bold text-slate-300">
+              <span className="text-[33px] leading-none font-bold text-slate-300">
                 {homeEndSheetOpen ? "▼" : "▲"}
               </span>
             </button>
