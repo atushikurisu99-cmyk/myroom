@@ -48,16 +48,16 @@ window.AppHooks = (() => {
     const [toastMessage, setToastMessage] = useState("");
     const [now, setNow] = useState(new Date());
 
+    const [finishForm, setFinishForm] = useState({
+      totalDistance: "",
+      note: "",
+    });
+
     const [weather, setWeather] = useState({
       nowKind: "unknown",
       tomorrowKind: "unknown",
       fetchedAt: null,
       dateKey: null,
-    });
-
-    const [finishForm, setFinishForm] = useState({
-      totalDistance: "",
-      note: "",
     });
 
     const amountInputRef = useRef(null);
@@ -115,9 +115,7 @@ window.AppHooks = (() => {
     }, []);
 
     useEffect(() => {
-      if (screen !== "top") {
-        setHomeEndSheetOpen(false);
-      }
+      if (screen !== "top") setHomeEndSheetOpen(false);
     }, [screen]);
 
     const vibrateTap = () => {
@@ -163,7 +161,10 @@ window.AppHooks = (() => {
       () =>
         records
           .filter((record) => record.payment === "cash" && !record.receipt)
-          .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
+          .reduce(
+            (sum, record) => sum + Number(record.amount || record.金額 || 0),
+            0
+          ),
       [records]
     );
 
@@ -171,33 +172,37 @@ window.AppHooks = (() => {
       () =>
         records
           .filter((record) => !(record.payment === "cash" && !record.receipt))
-          .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
+          .reduce(
+            (sum, record) => sum + Number(record.amount || record.金額 || 0),
+            0
+          ),
       [records]
     );
 
-    const totalPassengers = useMemo(
+    const passengerCount = useMemo(
       () =>
-        records.reduce((sum, record) => {
-          const value = Number(record.人数 || 0);
-          return sum + (Number.isFinite(value) ? value : 0);
-        }, 0),
+        records.reduce(
+          (sum, record) => sum + Number(record.人数 || 0),
+          0
+        ),
       [records]
     );
 
     const businessKm = useMemo(() => {
-      return 0;
-    }, [totalAmount]);
+      const raw = String(finishForm.totalDistance || "").replace(/[^\d]/g, "");
+      return raw ? Number(raw) : 0;
+    }, [finishForm.totalDistance]);
 
     const finishSummary = useMemo(
       () => ({
         amount1,
         amount2,
         totalAmount,
-        recordCount,
-        passengerCount: totalPassengers,
         businessKm,
+        recordCount,
+        passengerCount,
       }),
-      [amount1, amount2, totalAmount, recordCount, totalPassengers, businessKm]
+      [amount1, amount2, totalAmount, businessKm, recordCount, passengerCount]
     );
 
     const topMainLabel = !dutyStarted ? "乗務開始" : isRiding ? "降車" : "実車";
@@ -251,15 +256,18 @@ window.AppHooks = (() => {
 
       filteredHistoryRecords.forEach((record) => {
         const keyDate = Utils.getHistoryTargetDate(record);
-        const key = `${keyDate.getFullYear()}-${String(keyDate.getMonth() + 1).padStart(
-          2,
-          "0"
-        )}-${String(keyDate.getDate()).padStart(2, "0")}`;
+        const key = `${keyDate.getFullYear()}-${String(
+          keyDate.getMonth() + 1
+        ).padStart(2, "0")}-${String(keyDate.getDate()).padStart(2, "0")}`;
 
         if (!map.has(key)) {
           map.set(key, {
             key,
-            date: new Date(keyDate.getFullYear(), keyDate.getMonth(), keyDate.getDate()),
+            date: new Date(
+              keyDate.getFullYear(),
+              keyDate.getMonth(),
+              keyDate.getDate()
+            ),
             records: [],
             total: 0,
             count: 0,
@@ -276,14 +284,18 @@ window.AppHooks = (() => {
     }, [filteredHistoryRecords]);
 
     useEffect(() => {
-      if (!showHistoryModal || historyMode !== "month" || historyUiMode !== "full") return;
+      if (!showHistoryModal || historyMode !== "month" || historyUiMode !== "full") {
+        return;
+      }
 
-      const nextExpanded = {};
-      groupedHistory.forEach((group, index) => {
-        if (expandedMonthDays[group.key] === true) nextExpanded[group.key] = true;
-        else if (index === 0) nextExpanded[group.key] = true;
+      setExpandedMonthDays((prev) => {
+        const nextExpanded = {};
+        groupedHistory.forEach((group, index) => {
+          if (prev[group.key] === true) nextExpanded[group.key] = true;
+          else if (index === 0) nextExpanded[group.key] = true;
+        });
+        return nextExpanded;
       });
-      setExpandedMonthDays(nextExpanded);
     }, [showHistoryModal, historyMode, groupedHistory, historyUiMode]);
 
     const getHistoryPeriodText = () => {
@@ -318,14 +330,11 @@ window.AppHooks = (() => {
       setShowHistoryModal(true);
     };
 
-    const openHistoryModalWithFilter = (filter) => {
+    const openHistoryModalWithFilter = (filterValue = "all") => {
       setShowOtherSheet(false);
+      resetHistoryView("simple");
+      setHistoryFilter(filterValue);
       setEditingRecord(null);
-      setHistoryUiMode("simple");
-      setHistoryMode("day");
-      setHistoryFilter(filter || "all");
-      setHistoryBaseDate(workDate ? new Date(workDate) : new Date());
-      setExpandedMonthDays({});
       setShowHistoryModal(true);
     };
 
@@ -368,7 +377,9 @@ window.AppHooks = (() => {
       const numericAmount = Number(
         String(editingRecord.金額入力 || "").replace(/[^\d]/g, "")
       );
-      if (!numericAmount || numericAmount <= 0) return alert("正しい金額を入力してください");
+      if (!numericAmount || numericAmount <= 0) {
+        return alert("正しい金額を入力してください");
+      }
       if (!editingRecord.乗車時刻入力 || !editingRecord.降車時刻入力) {
         return alert("時刻を入力してください");
       }
@@ -417,9 +428,7 @@ window.AppHooks = (() => {
       setEditingRecord(null);
     };
 
-    const handleCardModeNext = () => {
-      setCardMode((prev) => (prev >= 5 ? 1 : prev + 1));
-    };
+    const handleCardModeNext = () => setCardMode((prev) => (prev >= 5 ? 1 : prev + 1));
 
     const handleDutyStart = async () => {
       vibrateTap();
@@ -440,8 +449,12 @@ window.AppHooks = (() => {
         totalDistance: "",
         note: "",
       });
+      setShowHistoryModal(false);
+      setShowOtherSheet(false);
+      setEditingRecord(null);
       setScreen("standby");
       setWorkDate(startDutyDate);
+      setHomeEndSheetOpen(false);
 
       ensureWeatherFresh();
     };
@@ -474,11 +487,15 @@ window.AppHooks = (() => {
 
     const handleFinishTap = () => {
       if (!dutyStarted) return;
+      if (isRiding) return;
+      setShowOtherSheet(false);
+      setShowHistoryModal(false);
+      setEditingRecord(null);
       setHomeEndSheetOpen(false);
       setScreen("finishCheck");
     };
 
-    const backFromFinishCheck = () => {
+    const closeFinishCheck = () => {
       setScreen("top");
     };
 
@@ -556,9 +573,7 @@ window.AppHooks = (() => {
       }, 340);
     };
 
-    const handleAmountChange = (e) => {
-      setAmount(e.target.value.replace(/[^\d]/g, ""));
-    };
+    const handleAmountChange = (e) => setAmount(e.target.value.replace(/[^\d]/g, ""));
 
     const handlePassengerSelect = (count) => {
       setSelectedPassengers(count);
@@ -567,4 +582,268 @@ window.AppHooks = (() => {
 
     const clearPaymentCountdown = () => {
       if (paymentTimerRef.current) clearTimeout(paymentTimerRef.current);
-      if (paymentCountdownRef.current) clearInterval(paymentCountdownRef
+      if (paymentCountdownRef.current) clearInterval(paymentCountdownRef.current);
+      paymentTimerRef.current = null;
+      paymentCountdownRef.current = null;
+    };
+
+    const confirmPaymentSave = async (forcedType = null) => {
+      const activeType = forcedType || paymentTypeRef.current || pendingPaymentType;
+      if (!rideStartAt || !rideEndAt || !activeType) return;
+
+      const numericAmount = Number(amount);
+      if (!numericAmount || numericAmount <= 0) {
+        return alert("正しい金額を入力してください");
+      }
+
+      const finalPassengers = selectedPassengers || 1;
+      let payment = "cash";
+      let receipt = false;
+
+      if (activeType === "cardQr") payment = "cardQr";
+      if (activeType === "receipt") {
+        payment = "cardQr";
+        receipt = true;
+      }
+
+      const viaText = viaStops.length > 0 ? `経由：${viaStops.join(" → ")}` : "";
+      const newRecord = {
+        id: Date.now(),
+        乗務日: workDate,
+        乗車時刻: rideStartAt,
+        降車時刻: rideEndAt,
+        乗車地: pickup.trim() || "未取得",
+        降車地: dropoff.trim() || "未取得",
+        人数: finalPassengers,
+        金額: numericAmount,
+        決済方法: payment,
+        payment,
+        領収証: receipt,
+        receipt,
+        天気: weather.nowKind || "",
+        乗車位置精度: pickupMeta?.accuracy ?? null,
+        降車位置精度: dropoffMeta?.accuracy ?? null,
+        乗車緯度: pickupMeta?.latitude ?? null,
+        乗車経度: pickupMeta?.longitude ?? null,
+        降車緯度: dropoffMeta?.latitude ?? null,
+        降車経度: dropoffMeta?.longitude ?? null,
+        備考: viaText,
+      };
+
+      clearPaymentCountdown();
+      setShowPaymentDialog(false);
+      setPendingPaymentType(null);
+      paymentTypeRef.current = null;
+      setPaymentCountdown(2.5);
+      setSavingDots(4);
+      setRecords((prev) => [newRecord, ...prev]);
+
+      setIsRiding(false);
+      setRideStartAt(null);
+      setRideEndAt(null);
+      setPickup("");
+      setDropoff("");
+      setPickupMeta(null);
+      setDropoffMeta(null);
+      setAmount("");
+      setSelectedPassengers(null);
+      setViaStops([]);
+      setScreen("standby");
+
+      setShowSaved(true);
+      if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+      savedTimerRef.current = setTimeout(() => setShowSaved(false), 2200);
+
+      ensureWeatherFresh(dropoffMeta);
+    };
+
+    const openPaymentDialog = (type) => {
+      if (selectedPassengers === null) return;
+
+      const numericAmount = Number(amount);
+      if (!numericAmount || numericAmount <= 0) {
+        return alert("正しい金額を入力してください");
+      }
+
+      clearPaymentCountdown();
+      setPendingPaymentType(type);
+      paymentTypeRef.current = type;
+      setPaymentCountdown(2.5);
+      setSavingDots(4);
+      setShowPaymentDialog(true);
+
+      paymentCountdownRef.current = setInterval(() => {
+        setPaymentCountdown((prev) => {
+          const next = prev - 0.5;
+          return next <= 0 ? 0 : next;
+        });
+        setSavingDots((prev) => (prev <= 0 ? 0 : prev - 1));
+      }, 500);
+
+      paymentTimerRef.current = setTimeout(() => confirmPaymentSave(type), 2500);
+    };
+
+    const cancelPaymentDialog = () => {
+      setShowPaymentDialog(false);
+      clearPaymentCountdown();
+      setPendingPaymentType(null);
+      paymentTypeRef.current = null;
+      setPaymentCountdown(2.5);
+      setSavingDots(4);
+    };
+
+    const recordVia = () => {
+      setViaStops((prev) => [...prev, pendingViaPlace || "未取得"]);
+      setShowViaDialog(false);
+      setPendingViaPlace("");
+      showToast("記録しました");
+    };
+
+    const cancelViaDialog = () => {
+      setShowViaDialog(false);
+      setPendingViaPlace("");
+      showToast("キャンセルします");
+    };
+
+    const toggleHomeEndSheet = () => {
+      setHomeEndSheetOpen((prev) => !prev);
+    };
+
+    const openExpenseSoon = () => {
+      showToast("経費は準備中です");
+    };
+
+    const openMenu = () => {
+      setShowOtherSheet(true);
+    };
+
+    const closeOtherSheet = () => {
+      setShowOtherSheet(false);
+    };
+
+    const openHistoryFullFromMenu = () => {
+      setShowOtherSheet(false);
+      openHistoryFull();
+    };
+
+    const showSoonToast = () => {
+      setShowOtherSheet(false);
+      showToast("準備中です");
+    };
+
+    const setFinishFormField = (key, value) => {
+      setFinishForm((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+    };
+
+    return {
+      refs: {
+        amountInputRef,
+      },
+      state: {
+        screen,
+        dutyStarted,
+        isRiding,
+        rideStartAt,
+        rideEndAt,
+        pickup,
+        dropoff,
+        pickupMeta,
+        dropoffMeta,
+        amount,
+        selectedPassengers,
+        records,
+        showSaved,
+        showHistoryModal,
+        showOtherSheet,
+        showPaymentDialog,
+        pendingPaymentType,
+        paymentCountdown,
+        savingDots,
+        showViaDialog,
+        pendingViaPlace,
+        viaStops,
+        historyMode,
+        historyFilter,
+        historyBaseDate,
+        expandedMonthDays,
+        editingRecord,
+        cardMode,
+        workDate,
+        toastMessage,
+        now,
+        weather,
+        historyUiMode,
+        homeEndSheetOpen,
+        finishForm,
+      },
+      derived: {
+        timeParts,
+        elapsedText,
+        totalAmount,
+        recordCount,
+        amount1,
+        amount2,
+        passengerCount,
+        finishSummary,
+        topMainLabel,
+        topMainButtonDisabled,
+        formattedAmount,
+        filteredHistoryRecords,
+        historySummary,
+        groupedHistory,
+        getHistoryPeriodText,
+      },
+      actions: {
+        setShowOtherSheet,
+        setShowHistoryModal,
+        setEditingRecord,
+        setHistoryMode,
+        setHistoryFilter,
+        setHistoryBaseDate,
+        setExpandedMonthDays,
+        setCardMode,
+        handleCardModeNext,
+        handleDutyStart,
+        performDutyEnd,
+        handleFinishTap,
+        closeFinishCheck,
+        handleTopMain,
+        handleStartRide,
+        handleDropOffTap,
+        handleAmountChange,
+        handlePassengerSelect,
+        openPaymentDialog,
+        cancelPaymentDialog,
+        recordVia,
+        cancelViaDialog,
+        openHistorySimple,
+        openHistoryFull,
+        openHistoryModalWithFilter,
+        closeHistoryModal,
+        moveHistoryPeriod,
+        toggleMonthDay,
+        openEditRecord,
+        closeEditRecord,
+        saveEditedRecord,
+        deleteEditedRecord,
+        goHome,
+        toggleHomeEndSheet,
+        openExpenseSoon,
+        openMenu,
+        closeOtherSheet,
+        openHistoryFullFromMenu,
+        showSoonToast,
+        setFinishFormField,
+      },
+      helpers: {
+        confirmPaymentSave,
+        ensureWeatherFresh,
+      },
+    };
+  }
+
+  return { useTaxiAppState };
+})();
