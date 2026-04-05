@@ -64,19 +64,21 @@ window.AppScreens.TopScreen = (() => {
           ) : null}
 
           <div className={`${homeEndSheetOpen ? "pt-0" : "pt-4"} flex-1 min-h-0 relative`}>
-            <div className="absolute inset-x-0 top-0 h-[122px]">
-              <HomeEndDutySheet
-                open={homeEndSheetOpen}
-                dutyStarted={dutyStarted}
-                onFinishTap={handleFinishTap}
-              />
-            </div>
+            {homeEndSheetOpen ? (
+              <div className="absolute inset-x-0 top-0 h-[92px]">
+                <HomeEndDutySheet
+                  open={homeEndSheetOpen}
+                  dutyStarted={dutyStarted}
+                  onFinishTap={handleFinishTap}
+                />
+              </div>
+            ) : null}
 
             <div
               className="absolute z-20"
               style={{
                 right: "8px",
-                top: "8px",
+                top: homeEndSheetOpen ? "8px" : "6px",
               }}
             >
               <button
