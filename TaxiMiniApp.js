@@ -1,35 +1,34 @@
-const{useTaxiAppState}=window.AppHooks;
-const TopScreen=window.AppScreens.TopScreen;
-const StandbyScreen=window.AppScreens.StandbyScreen;
-const RideScreen=window.AppScreens.RideScreen;
+const { useTaxiAppState } = window.AppHooks;
+const TopScreen = window.AppScreens.TopScreen;
+const StandbyScreen = window.AppScreens.StandbyScreen;
+const RideScreen = window.AppScreens.RideScreen;
 
-function App(){
+function TaxiMiniApp() {
+  const { state, actions } = useTaxiAppState();
 
-const{state,actions}=useTaxiAppState();
+  return (
+    <div className="h-full bg-slate-100">
 
-return(
-<div className="h-full">
+      {state.screen === "top" && (
+        <TopScreen
+          mainLabel="乗務開始"
+          handleMain={actions.handleMain}
+          showBottom={state.showBottom}
+          setShowBottom={actions.setShowBottom}
+          handleFinish={actions.handleFinish}
+        />
+      )}
 
-{state.screen==="top"&&(
-<TopScreen
-mainLabel="乗務開始"
-onMain={actions.handleMain}
-showBottom={state.showBottom}
-setShowBottom={actions.setShowBottom}
-onFinish={actions.handleFinish}
-/>
-)}
+      {state.screen === "standby" && (
+        <StandbyScreen handleStartRide={actions.handleMain} />
+      )}
 
-{state.screen==="standby"&&(
-<StandbyScreen onStart={actions.handleMain}/>
-)}
+      {state.screen === "ride" && (
+        <RideScreen handleDropOffTap={actions.handleMain} />
+      )}
 
-{state.screen==="ride"&&(
-<RideScreen onDrop={actions.handleMain}/>
-)}
-
-</div>
-);
+    </div>
+  );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+ReactDOM.createRoot(document.getElementById("root")).render(<TaxiMiniApp />);
