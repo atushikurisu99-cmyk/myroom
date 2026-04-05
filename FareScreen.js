@@ -2,7 +2,16 @@ window.AppScreens = window.AppScreens || {};
 
 window.AppScreens.FareScreen = (() => {
   const C = window.AppConstants;
-  const { formatTime } = window.AppUtils;
+
+  const safeFormatTime =
+    window.AppUtils?.formatTime ||
+    ((dateValue) => {
+      if (!dateValue) return "";
+      return new Date(dateValue).toLocaleTimeString("ja-JP", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    });
 
   return function FareScreen(props) {
     const {
@@ -38,7 +47,7 @@ window.AppScreens.FareScreen = (() => {
           <div className="flex items-start justify-center gap-4">
             <div className="flex-1 min-w-0 text-left">
               <div className="text-[24px] font-bold text-slate-800 leading-none">
-                {formatTime(rideStartAt)}
+                {safeFormatTime(rideStartAt)}
               </div>
               <div className="mt-3 text-[15px] font-semibold text-slate-600 truncate">
                 {pickup || "未取得"}
@@ -52,7 +61,7 @@ window.AppScreens.FareScreen = (() => {
 
             <div className="flex-1 min-w-0 text-right">
               <div className="text-[24px] font-bold text-slate-800 leading-none">
-                {formatTime(rideEndAt)}
+                {safeFormatTime(rideEndAt)}
               </div>
               <div className="mt-3 text-[15px] font-semibold text-slate-600 truncate">
                 {dropoff || "未取得"}
