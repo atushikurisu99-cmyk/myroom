@@ -1,22 +1,34 @@
-import React from "react";
+window.AppScreens = window.AppScreens || {};
+window.AppScreens.StandbyScreen = (() => {
+  const C = window.AppConstants;
 
-export default function StandbyScreen(props) {
-  return (
-    <div className="w-full h-full relative">
+  return function StandbyScreen(props) {
+    const { handleStartRide } = props;
 
-      <button
-        className="w-40 h-40 bg-blue-500 text-white text-xl rounded-full mx-auto mt-40"
-        onClick={() => props.setScreen("ride")}
-      >
-        実車
-      </button>
+    return (
+      <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+        <div
+          className="pt-4 shrink-0"
+          style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
+        >
+          <button
+            type="button"
+            onClick={handleStartRide}
+            className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)]`}
+          >
+            <span className={C.bigButtonText}>実車</span>
+          </button>
+        </div>
 
-      {/* 下ナビ */}
-      <div className="absolute bottom-0 w-full flex justify-around p-4 border-t bg-white">
-        <button onClick={() => props.setScreen("top")}>ホーム</button>
-        <button onClick={props.openHistorySimple}>履歴</button>
-        <button onClick={props.openHistoryFull}>メニュー</button>
+        <div
+          className="pt-4 shrink-0"
+          style={{ height: `${C.SHARED_INFO_SLOT_HEIGHT}px` }}
+        >
+          <div className="h-full rounded-[28px] opacity-0 pointer-events-none" />
+        </div>
+
+        <div className="pt-4 flex-1 min-h-0"></div>
       </div>
-    </div>
-  );
-}
+    );
+  };
+})();
