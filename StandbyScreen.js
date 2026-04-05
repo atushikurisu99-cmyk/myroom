@@ -35,16 +35,18 @@ window.AppScreens.StandbyScreen = (() => {
           </div>
 
           <div
-            className="shrink-0"
+            className="shrink-0 px-3 pb-4"
             style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
           >
-            <button
-              type="button"
-              onClick={handleStartRide}
-              className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)] text-white rounded-none border-0 shadow-[inset_0_2px_0_rgba(255,255,255,0.55),inset_0_-3px_8px_rgba(0,0,0,0.24),0_8px_16px_rgba(0,0,0,0.14)]`}
-            >
-              <span className={C.bigButtonText}>実車</span>
-            </button>
+            <div className="h-full pt-1">
+              <button
+                type="button"
+                onClick={handleStartRide}
+                className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)] text-white rounded-[28px] border border-white/60`}
+              >
+                <span className={C.bigButtonText}>実車</span>
+              </button>
+            </div>
           </div>
         </div>
 
