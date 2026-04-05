@@ -1,59 +1,66 @@
-window.AppScreens=window.AppScreens||{};
-window.AppScreens.TopScreen=(()=>{
+window.AppScreens = window.AppScreens || {};
+window.AppScreens.TopScreen = (() => {
+  const { HeaderCard, BottomCard, ToggleButton, GraphEntry, BottomNav } =
+    window.AppComponents;
 
-const{HeaderArea,MainButton,BottomNav,BottomCard,GraphEntry}=window.AppComponents;
+  return function TopScreen(props) {
+    const {
+      timeParts,
+      weather,
+      totalAmount,
+      recordCount,
+      isRiding,
+      bottomOpen,
+      setBottomOpen,
+      startDuty,
+      startRide,
+      drop,
+      finishDuty,
+    } = props;
 
-return function TopScreen({state,actions}){
+    const label = isRiding ? "降車" : "実車";
 
-const label=state.isRiding?"降車":"実車";
+    return (
+      <div style={{ height: "100%", position: "relative" }}>
+        <HeaderCard
+          timeParts={timeParts}
+          weather={weather}
+          totalAmount={totalAmount}
+          recordCount={recordCount}
+        />
 
-return(
-<div style={{height:"100%",position:"relative"}}>
+        <div style={{ padding: "16px" }}>
+          <button
+            onClick={() => {
+              if (!startDuty) return;
+              if (!isRiding && startDuty) startDuty();
+            }}
+            style={{
+              width: "100%",
+              height: "120px",
+              borderRadius: "24px",
+              background: "#32cd32",
+              color: "#fff",
+              fontSize: "28px",
+              fontWeight: "bold",
+            }}
+          >
+            乗務開始
+          </button>
+        </div>
 
-<HeaderArea>
-<div style={{color:"#fff",fontSize:"40px"}}>12:00</div>
-</HeaderArea>
+        <GraphEntry />
 
-<div style={{padding:"16px"}}>
-<MainButton
-label={state.screen==="home"?"乗務開始":label}
-onClick={()=>{
-if(state.screen==="home")actions.startDuty();
-else if(!state.isRiding)actions.startRide();
-else actions.drop();
-}}
-color="#32cd32"
-/>
-</div>
+        <ToggleButton onClick={() => setBottomOpen(!bottomOpen)} />
 
-<GraphEntry/>
+        <BottomCard
+          show={bottomOpen}
+          onClose={() => setBottomOpen(false)}
+          onFinish={finishDuty}
+        />
 
-<button
-onClick={()=>actions.setBottomOpen(!state.bottomOpen)}
-style={{
-position:"absolute",
-right:"20px",
-bottom:"120px"
-}}
->
-▲
-</button>
-
-<BottomCard
-show={state.bottomOpen}
-onClose={()=>actions.setBottomOpen(false)}
-onFinish={actions.finish}
-/>
-
-<BottomNav
-mode="home"
-onHome={()=>{}}
-onCenter={()=>{}}
-onMenu={()=>{}}
-/>
-
-</div>
-);
-};
-
+        <BottomNav isHome={true} />
+      </div>
+    );
+  };
 })();
