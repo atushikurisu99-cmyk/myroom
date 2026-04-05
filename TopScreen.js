@@ -1,89 +1,36 @@
-window.AppScreens = window.AppScreens || {};
+import React, { useState } from "react";
 
-window.AppScreens.TopScreen = (() => {
-  const { BottomCard, GraphEntryGrid, BottomNav } = window.AppComponents;
-  const C = window.AppConstants;
+export default function TopScreen(props) {
+  const [open, setOpen] = useState(false);
 
-  return function TopScreen(props) {
-    const {
-      topMainLabel,
-      topMainButtonDisabled,
-      handleTopMain,
-      showHomeBottomCard,
-      toggleHomeBottomCard,
-      handleFinishTap,
-      openOtherSheet,
-      openExpenseModal,
-      startupMainStyle,
-      dutyStarted,
-    } = props;
+  return (
+    <div className="w-full h-full relative">
 
-    const mainGradient =
-      topMainLabel === "降車"
-        ? "linear-gradient(180deg,#ffe066,#ffb400,#cc7a00)"
-        : topMainLabel === "実車"
-        ? "linear-gradient(180deg,#78bbff,#4f97f5,#2e6fd6)"
-        : "linear-gradient(180deg,#5ee05e,#32cd32,#24a924)";
-
-    return (
-      <div className="flex-1 min-h-0 flex flex-col overflow-hidden relative pb-[94px]">
-        <div
-          className="pt-4 shrink-0"
-          style={{
-            height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px`,
-            ...(startupMainStyle || {}),
-          }}
-        >
-          <button
-            type="button"
-            onClick={handleTopMain}
-            disabled={topMainButtonDisabled}
-            className={`${C.mainButtonBase} ${C.mainButtonShine}`}
-            style={{ background: mainGradient }}
-          >
-            <span className={C.bigButtonText}>{topMainLabel}</span>
-          </button>
-        </div>
-
-        <div className="pt-4 flex-1 min-h-0 overflow-hidden">
-          <div className="h-full rounded-[28px] bg-[#f7f7f7]">
-            <GraphEntryGrid />
-          </div>
-        </div>
-
-        {dutyStarted && (
-          <>
-            <button
-              type="button"
-              onClick={toggleHomeBottomCard}
-              className="absolute z-30 flex items-center justify-center active:opacity-80"
-              style={{
-                right: "16px",
-                bottom: "92px",
-                width: "40px",
-                height: "38px",
-              }}
-              aria-label="乗務終了を開閉"
-            >
-              <span className="text-[28px] leading-none font-bold text-slate-400">
-                {showHomeBottomCard ? "▼" : "▲"}
-              </span>
-            </button>
-
-            <BottomCard
-              show={showHomeBottomCard}
-              onFinish={handleFinishTap}
-            />
-          </>
-        )}
-
-        <BottomNav
-          centerLabel="経費"
-          onHome={() => {}}
-          onCenter={openExpenseModal}
-          onMenu={openOtherSheet}
-        />
+      {/* ▲ボタン */}
+      <div
+        className="absolute right-6 bottom-20 text-2xl"
+        onClick={() => setOpen(!open)}
+      >
+        {open ? "▼" : "▲"}
       </div>
-    );
-  };
-})();
+
+      {/* BottomCard */}
+      <div
+        className={`absolute left-0 right-0 bg-white shadow-lg transition-all duration-300
+        ${open ? "bottom-0" : "-bottom-40"}`}
+        style={{ height: 220 }}
+      >
+        <button className="w-full h-full text-lg">
+          本日の乗務を終了
+        </button>
+      </div>
+
+      {/* 下ナビ */}
+      <div className="absolute bottom-0 w-full flex justify-around p-4 border-t bg-white">
+        <button>ホーム</button>
+        <button>経費</button>
+        <button onClick={props.openHistoryFull}>メニュー</button>
+      </div>
+    </div>
+  );
+}
