@@ -1,56 +1,24 @@
-window.AppScreens = window.AppScreens || {};
-window.AppScreens.RideScreen = (() => {
-  const { BottomNav, RideInfoCard } = window.AppComponents;
-  const C = window.AppConstants;
+window.AppScreens.RideScreen=(()=>{
 
-  return function RideScreen(props) {
-    const {
-      pickup,
-      rideStartAt,
-      elapsedText,
-      viaStops,
-      handleDropOffTap,
-      goHome,
-      openSimpleHistory,
-      openOtherSheet,
-    } = props;
+const{HeaderArea,MainButton,BottomNav}=window.AppComponents;
 
-    return (
-      <div className="flex-1 min-h-0 flex flex-col overflow-hidden relative pb-[92px]">
-        <div
-          className="pt-4 shrink-0"
-          style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
-        >
-          <button
-            type="button"
-            onClick={handleDropOffTap}
-            className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#ffe066,#ffb400,#cc7a00)]`}
-          >
-            <span className={C.bigButtonText}>降車</span>
-          </button>
-        </div>
+return function RideScreen({actions}){
 
-        <div
-          className="pt-4 shrink-0"
-          style={{ height: `${C.SHARED_INFO_SLOT_HEIGHT}px` }}
-        >
-          <RideInfoCard
-            pickup={pickup}
-            rideStartAt={rideStartAt}
-            elapsedText={elapsedText}
-            viaStops={viaStops}
-          />
-        </div>
+return(
+<div style={{height:"100%"}}>
 
-        <div className="flex-1 min-h-0" />
+<HeaderArea>
+<div style={{color:"#fff",fontSize:"40px"}}>12:00</div>
+</HeaderArea>
 
-        <BottomNav
-          mode="ride"
-          onHome={goHome}
-          onCenter={openSimpleHistory}
-          onMenu={openOtherSheet}
-        />
-      </div>
-    );
-  };
+<div style={{padding:"16px"}}>
+<MainButton label="降車" onClick={actions.drop} color="#ffaa00"/>
+</div>
+
+<BottomNav mode="ride" onHome={()=>{}} onCenter={()=>{}} onMenu={()=>{}}/>
+
+</div>
+);
+};
+
 })();
