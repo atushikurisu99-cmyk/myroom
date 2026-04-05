@@ -60,6 +60,8 @@ window.AppHooks = (() => {
       dateKey: null,
     });
 
+    const [isHomeAmountVisible, setIsHomeAmountVisible] = useState(true);
+
     const amountInputRef = useRef(null);
     const savedTimerRef = useRef(null);
     const paymentTimerRef = useRef(null);
@@ -68,6 +70,23 @@ window.AppHooks = (() => {
     const clockTimerRef = useRef(null);
     const dropTapRef = useRef({ lastTapAt: 0 });
     const paymentTypeRef = useRef(null);
+
+    useEffect(() => {
+      try {
+        const raw = window.localStorage.getItem("taxi_home_amount_visible");
+        if (raw === "0") setIsHomeAmountVisible(false);
+        if (raw === "1") setIsHomeAmountVisible(true);
+      } catch (_) {}
+    }, []);
+
+    useEffect(() => {
+      try {
+        window.localStorage.setItem(
+          "taxi_home_amount_visible",
+          isHomeAmountVisible ? "1" : "0"
+        );
+      } catch (_) {}
+    }, [isHomeAmountVisible]);
 
     const ensureWeatherFresh = async (coords = null) => {
       if (!Geo.shouldRefreshWeather(weather.fetchedAt, weather.dateKey)) return;
@@ -180,11 +199,7 @@ window.AppHooks = (() => {
     );
 
     const passengerCount = useMemo(
-      () =>
-        records.reduce(
-          (sum, record) => sum + Number(record.人数 || 0),
-          0
-        ),
+      () => records.reduce((sum, record) => sum + Number(record.人数 || 0), 0),
       [records]
     );
 
@@ -204,6 +219,38 @@ window.AppHooks = (() => {
       }),
       [amount1, amount2, totalAmount, businessKm, recordCount, passengerCount]
     );
+
+    const homeDisplayAmount = useMemo(() => {
+      if (!workDate) return totalAmount;
+
+      const base = new Date(workDate);
+      const workYear = base.getFullYear();
+      const workMonth = base.getMonth();
+      const workDay = base.getDate();
+
+      let cumulative = 0;
+      let dutyPart = 0;
+
+      records.forEach((record) => {
+        const target = Utils.getHistoryTargetDate(record);
+        if (
+          target.getFullYear() !== workYear ||
+          target.getMonth() !== workMonth
+        ) {
+          return;
+        }
+
+        const amountValue = Number(record.金額 || record.amount || 0);
+
+        if (target.getDate() < workDay) {
+          cumulative += amountValue;
+        } else if (target.getDate() === workDay) {
+          dutyPart += amountValue;
+        }
+      });
+
+      return cumulative + dutyPart;
+    }, [records, workDate, totalAmount]);
 
     const topMainLabel = !dutyStarted ? "乗務開始" : isRiding ? "降車" : "実車";
     const topMainButtonDisabled = false;
@@ -738,6 +785,10 @@ window.AppHooks = (() => {
       }));
     };
 
+    const toggleHomeAmountVisible = () => {
+      setIsHomeAmountVisible((prev) => !prev);
+    };
+
     return {
       refs: {
         amountInputRef,
@@ -778,6 +829,7 @@ window.AppHooks = (() => {
         historyUiMode,
         homeEndSheetOpen,
         finishForm,
+        isHomeAmountVisible,
       },
       derived: {
         timeParts,
@@ -795,6 +847,7 @@ window.AppHooks = (() => {
         historySummary,
         groupedHistory,
         getHistoryPeriodText,
+        homeDisplayAmount,
       },
       actions: {
         setShowOtherSheet,
@@ -837,6 +890,7 @@ window.AppHooks = (() => {
         openHistoryFullFromMenu,
         showSoonToast,
         setFinishFormField,
+        toggleHomeAmountVisible,
       },
       helpers: {
         confirmPaymentSave,
