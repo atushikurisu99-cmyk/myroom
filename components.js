@@ -11,9 +11,10 @@ window.AppComponents = (() => {
 
   const GREEN_MAIN = "#9ED36A";
   const GREEN_CIRCLE = "#92CD4C";
+  const END_GREEN = "#375f1d";
 
-  function formatPlainYen(value) {
-    return `${Number(value || 0).toLocaleString("ja-JP")}円`;
+  function formatPlainNumber(value) {
+    return `${Number(value || 0).toLocaleString("ja-JP")}`;
   }
 
   function HomeFilledIcon({ className = "" }) {
@@ -101,6 +102,47 @@ window.AppComponents = (() => {
     );
   }
 
+  function HomeAmountRow({
+    homeDisplayAmount,
+    isHomeAmountVisible,
+    toggleHomeAmountVisible,
+  }) {
+    const numberText = formatPlainNumber(homeDisplayAmount);
+
+    return (
+      <div className="mt-[12px] flex items-center justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          {isHomeAmountVisible ? (
+            <div className="w-[252px] max-w-full flex items-end text-white">
+              <div className="flex-1 min-w-0 text-[34px] leading-none font-normal tracking-[-0.02em] whitespace-nowrap overflow-hidden">
+                {numberText}
+              </div>
+              <div className="w-[30px] shrink-0 text-[34px] leading-none font-normal text-right">
+                円
+              </div>
+            </div>
+          ) : (
+            <div className="w-[252px] max-w-full text-[34px] leading-none font-normal tracking-[-0.02em] text-white whitespace-nowrap overflow-hidden">
+              ーーー
+            </div>
+          )}
+        </div>
+
+        <button
+          type="button"
+          onClick={toggleHomeAmountVisible}
+          className="shrink-0 w-[34px] h-[34px] flex items-center justify-center text-white/95 active:opacity-80"
+          aria-label={isHomeAmountVisible ? "金額を非表示" : "金額を表示"}
+        >
+          <EyeToggleIcon
+            hidden={!isHomeAmountVisible}
+            className="w-[28px] h-[28px]"
+          />
+        </button>
+      </div>
+    );
+  }
+
   function HomeTopHeader({
     timeParts,
     homeDisplayAmount,
@@ -128,23 +170,11 @@ window.AppComponents = (() => {
             累計＋乗務分
           </div>
 
-          <div className="mt-[12px] flex items-center justify-between gap-3">
-            <div className="min-w-0 flex-1 text-[34px] leading-none font-normal tracking-[-0.02em] text-white whitespace-nowrap overflow-hidden text-ellipsis">
-              {isHomeAmountVisible ? formatPlainYen(homeDisplayAmount) : "ーーー"}
-            </div>
-
-            <button
-              type="button"
-              onClick={toggleHomeAmountVisible}
-              className="shrink-0 w-[34px] h-[34px] flex items-center justify-center text-white/95 active:opacity-80"
-              aria-label={isHomeAmountVisible ? "金額を非表示" : "金額を表示"}
-            >
-              <EyeToggleIcon
-                hidden={!isHomeAmountVisible}
-                className="w-[28px] h-[28px]"
-              />
-            </button>
-          </div>
+          <HomeAmountRow
+            homeDisplayAmount={homeDisplayAmount}
+            isHomeAmountVisible={isHomeAmountVisible}
+            toggleHomeAmountVisible={toggleHomeAmountVisible}
+          />
         </div>
       </div>
     );
@@ -457,27 +487,33 @@ window.AppComponents = (() => {
         type="button"
         onClick={onClick}
         disabled={disabled}
-        className={`w-full flex items-center rounded-full overflow-hidden border-[6px] border-white shadow-[0_8px_18px_rgba(0,0,0,0.16)] ${
+        className={`w-full rounded-full overflow-hidden border-[6px] border-white shadow-[0_8px_18px_rgba(0,0,0,0.16)] ${
           disabled ? "opacity-45" : "opacity-100 active:scale-[0.99]"
         }`}
         style={{
-          height: "74px",
-          background: "#375f1d",
+          height: "76px",
+          background: END_GREEN,
         }}
       >
-        <div className="w-[82px] shrink-0 flex items-center justify-center">
-          <div className="w-[58px] h-[58px] rounded-full bg-white flex items-center justify-center">
-            <svg viewBox="0 0 64 64" className="w-[40px] h-[40px]" aria-hidden="true">
-              <path
-                fill="#375f1d"
-                d="M8 28h24V14l24 18-24 18V36H8z"
-              />
-            </svg>
+        <div className="h-full grid grid-cols-[78px_1fr_54px] items-center">
+          <div className="flex items-center justify-center">
+            <div className="w-[56px] h-[56px] rounded-full bg-white flex items-center justify-center">
+              <svg viewBox="0 0 64 64" className="w-[38px] h-[38px]" aria-hidden="true">
+                <path
+                  fill={END_GREEN}
+                  d="M8 28h24V14l24 18-24 18V36H8z"
+                />
+              </svg>
+            </div>
           </div>
-        </div>
 
-        <div className="flex-1 pr-6 text-center text-white text-[21px] font-bold tracking-[-0.02em]">
-          本日の乗務を終了
+          <div className="text-white text-[20px] font-bold tracking-[-0.02em] text-center">
+            本日の乗務を終了
+          </div>
+
+          <div className="flex items-center justify-center pr-[4px]">
+            <span className="text-[30px] leading-none font-bold text-white/80">▼</span>
+          </div>
         </div>
       </button>
     );
