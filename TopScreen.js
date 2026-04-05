@@ -1,43 +1,46 @@
-window.AppScreens = window.AppScreens || {};
-window.AppScreens.TopScreen = (() => {
-  const { BottomCard, FloatingToggle } = window.AppComponents;
-  const C = window.AppConstants;
+window.AppScreens=window.AppScreens||{};
+window.AppScreens.TopScreen=(()=>{
 
-  return function TopScreen({
-    handleTopMain,
-    showBottom,
-    setShowBottom,
-    handleFinishTap,
-  }) {
-    return (
-      <div className="flex-1 relative">
-        <div className="pt-4">
-          <button
-            onClick={() => {
-              setShowBottom(false);
-              handleTopMain();
-            }}
-            className={`${C.mainButtonBase}`}
-            style={{
-              height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px`,
-              background: "linear-gradient(180deg,#5dffcf,#008a6a)",
-            }}
-          >
-            乗務開始
-          </button>
-        </div>
+const {BottomCard}=window.AppComponents;
 
-        <FloatingToggle
-          open={showBottom}
-          toggle={() => setShowBottom(!showBottom)}
-        />
+return function TopScreen(props){
 
-        <BottomCard
-          open={showBottom}
-          onClose={() => setShowBottom(false)}
-          onFinish={handleFinishTap}
-        />
-      </div>
-    );
-  };
+const{
+mainLabel,
+onMain,
+showBottom,
+setShowBottom,
+onFinish
+}=props;
+
+return(
+<div className="flex-1 flex flex-col">
+
+<div className="p-4 h-[140px]">
+<button
+onClick={onMain}
+className="w-full h-full bg-blue-500 text-white text-xl rounded-2xl"
+>
+{mainLabel}
+</button>
+</div>
+
+{/* ▲ */}
+<button
+onClick={()=>setShowBottom(v=>!v)}
+className="absolute bottom-20 right-4 text-3xl"
+>
+▲
+</button>
+
+<BottomCard
+show={showBottom}
+onClose={()=>setShowBottom(false)}
+onFinish={onFinish}
+/>
+
+</div>
+);
+};
+
 })();
