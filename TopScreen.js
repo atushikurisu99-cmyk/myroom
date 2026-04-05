@@ -45,39 +45,55 @@ window.AppScreens.TopScreen = (() => {
           className="pt-4 shrink-0"
           style={{ height: `${C.SHARED_INFO_SLOT_HEIGHT}px` }}
         >
-          <div className="h-full rounded-[28px] opacity-0 pointer-events-none" />
+          <div
+            className="h-full rounded-[28px] px-3 py-3"
+            style={{ background: "#7FC84E" }}
+          >
+            <HomeGraphCards />
+          </div>
         </div>
 
         <div
-          className="pt-4 flex-1 min-h-0 overflow-hidden relative"
+          className="pt-4 flex-1 min-h-0 overflow-hidden"
           style={startupOtherStyle || undefined}
         >
-          <HomeGraphCards />
-
           <div
-            className="absolute z-20"
-            style={{
-              right: "16px",
-              bottom: "92px",
-            }}
+            className="h-full rounded-[28px] px-3 py-3 flex flex-col"
+            style={{ background: "#7FC84E" }}
           >
-            <button
-              type="button"
-              onClick={toggleHomeEndSheet}
-              className="flex items-center justify-center w-[48px] h-[42px] active:opacity-80"
-              aria-label={homeEndSheetOpen ? "終了ボタンを閉じる" : "終了ボタンを開く"}
-            >
-              <span className="text-[33px] leading-none font-bold text-slate-300">
-                {homeEndSheetOpen ? "▼" : "▲"}
-              </span>
-            </button>
-          </div>
+            <div className="flex-1 min-h-0 overflow-hidden">
+              <div className="h-full rounded-[24px] bg-white/10 border border-white/15 px-3 py-3">
+                <HomeGraphCards />
+              </div>
+            </div>
 
-          <HomeEndDutySheet
-            open={homeEndSheetOpen}
-            dutyStarted={dutyStarted}
-            onFinishTap={handleFinishTap}
-          />
+            <div className="pt-3 shrink-0 h-[116px] relative">
+              <HomeEndDutySheet
+                open={homeEndSheetOpen}
+                dutyStarted={dutyStarted}
+                onFinishTap={handleFinishTap}
+              />
+
+              <div
+                className="absolute z-20"
+                style={{
+                  right: "10px",
+                  bottom: "10px",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={toggleHomeEndSheet}
+                  className="flex items-center justify-center w-[46px] h-[40px] active:opacity-80"
+                  aria-label={homeEndSheetOpen ? "終了ボタンを閉じる" : "終了ボタンを開く"}
+                >
+                  <span className="text-[32px] leading-none font-bold text-slate-400">
+                    {homeEndSheetOpen ? "▼" : "▲"}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
