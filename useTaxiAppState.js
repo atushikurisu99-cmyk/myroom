@@ -1,29 +1,34 @@
-window.AppHooks = (() => {
-  const { useState } = React;
+window.AppHooks=(()=>{
 
-  function useTaxiAppState() {
-    const [screen, setScreen] = useState("top");
-    const [showBottom, setShowBottom] = useState(false);
+const {useState}=React;
 
-    const handleTopMain = () => setScreen("standby");
-    const handleFinishTap = () => setScreen("top");
+function useTaxiAppState(){
 
-    const now = new Date();
-    const timeParts = {
-      hh: String(now.getHours()).padStart(2, "0"),
-      mm: String(now.getMinutes()).padStart(2, "0"),
-      showColon: true,
-    };
+const[screen,setScreen]=useState("top");
+const[showBottom,setShowBottom]=useState(false);
 
-    return {
-      state: { screen, showBottom, timeParts },
-      actions: {
-        setShowBottom,
-        handleTopMain,
-        handleFinishTap,
-      },
-    };
-  }
+const handleMain=()=>{
+if(screen==="top"){
+setScreen("standby");
+}else if(screen==="standby"){
+setScreen("ride");
+}else if(screen==="ride"){
+setScreen("standby");
+}
+};
 
-  return { useTaxiAppState };
+const handleFinish=()=>{
+setScreen("top");
+setShowBottom(false);
+};
+
+return{
+state:{screen,showBottom},
+actions:{setShowBottom,handleMain,handleFinish}
+};
+
+}
+
+return{useTaxiAppState};
+
 })();
