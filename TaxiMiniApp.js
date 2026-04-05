@@ -12,8 +12,8 @@ const TopScreen = window.AppScreens.TopScreen;
 const StandbyScreen = window.AppScreens.StandbyScreen;
 const RideScreen = window.AppScreens.RideScreen;
 const FareScreen = window.AppScreens.FareScreen;
-const HistoryModal = window.AppScreens.HistoryModal;
 const FinishCheckScreen = window.AppScreens.FinishCheckScreen;
+const HistoryModal = window.AppScreens.HistoryModal;
 
 function TaxiMiniApp() {
   const { refs, state, derived, actions } = useTaxiAppState();
@@ -152,6 +152,10 @@ function TaxiMiniApp() {
     state.screen === "ride";
 
   const navCenterLabel = state.screen === "top" ? "経費" : "履歴";
+  const showHeader =
+    state.screen === "top" ||
+    state.screen === "standby" ||
+    state.screen === "ride";
 
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
@@ -230,7 +234,7 @@ function TaxiMiniApp() {
             paddingBottom: showBottomNav ? `${C.BOTTOM_NAV_HEIGHT + 8}px` : 0,
           }}
         >
-          {state.screen !== "fare" && state.screen !== "finishCheck" && (
+          {showHeader && (
             <div style={headerStyle}>
               <HeaderCard
                 timeParts={derived.timeParts}
@@ -259,7 +263,9 @@ function TaxiMiniApp() {
           )}
 
           {state.screen === "standby" && (
-            <StandbyScreen handleStartRide={actions.handleStartRide} />
+            <StandbyScreen
+              handleStartRide={actions.handleStartRide}
+            />
           )}
 
           {state.screen === "ride" && (
@@ -295,7 +301,7 @@ function TaxiMiniApp() {
               finishForm={state.finishForm}
               setFinishFormField={actions.setFinishFormField}
               openHistoryModalWithFilter={actions.openHistoryModalWithFilter}
-              onBack={actions.backFromFinishCheck}
+              onBack={actions.closeFinishCheck}
               onConfirm={actions.performDutyEnd}
             />
           )}
