@@ -1,46 +1,43 @@
-window.AppScreens=window.AppScreens||{};
-window.AppScreens.TopScreen=(()=>{
+window.AppScreens.TopScreen = (() => {
+  const { BottomCard } = window.AppComponents;
+  const C = window.AppConstants;
 
-const {BottomCard}=window.AppComponents;
+  return function TopScreen(props) {
+    const {
+      mainLabel,
+      handleMain,
+      showBottom,
+      setShowBottom,
+      handleFinish,
+    } = props;
 
-return function TopScreen(props){
+    return (
+      <div className="flex-1 flex flex-col relative">
 
-const{
-mainLabel,
-onMain,
-showBottom,
-setShowBottom,
-onFinish
-}=props;
+        <div className="pt-4" style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}>
+          <button
+            onClick={handleMain}
+            className={`${C.mainButtonBase} bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)]`}
+          >
+            <span className={C.bigButtonText}>{mainLabel}</span>
+          </button>
+        </div>
 
-return(
-<div className="flex-1 flex flex-col">
+        {/* ▲ */}
+        <button
+          onClick={() => setShowBottom((v) => !v)}
+          className="absolute right-4 bottom-[90px] text-[28px] text-slate-400"
+        >
+          ▲
+        </button>
 
-<div className="p-4 h-[140px]">
-<button
-onClick={onMain}
-className="w-full h-full bg-blue-500 text-white text-xl rounded-2xl"
->
-{mainLabel}
-</button>
-</div>
+        <BottomCard
+          show={showBottom}
+          onClose={() => setShowBottom(false)}
+          onFinish={handleFinish}
+        />
 
-{/* ▲ */}
-<button
-onClick={()=>setShowBottom(v=>!v)}
-className="absolute bottom-20 right-4 text-3xl"
->
-▲
-</button>
-
-<BottomCard
-show={showBottom}
-onClose={()=>setShowBottom(false)}
-onFinish={onFinish}
-/>
-
-</div>
-);
-};
-
+      </div>
+    );
+  };
 })();
