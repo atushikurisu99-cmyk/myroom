@@ -1,34 +1,26 @@
-window.AppHooks=(()=>{
+window.AppHooks = (() => {
+  const { useState } = React;
 
-const {useState}=React;
+  function useTaxiAppState() {
+    const [screen, setScreen] = useState("top");
+    const [showBottom, setShowBottom] = useState(false);
 
-function useTaxiAppState(){
+    const handleMain = () => {
+      if (screen === "top") setScreen("standby");
+      else if (screen === "standby") setScreen("ride");
+      else if (screen === "ride") setScreen("standby");
+    };
 
-const[screen,setScreen]=useState("top");
-const[showBottom,setShowBottom]=useState(false);
+    const handleFinish = () => {
+      setScreen("top");
+      setShowBottom(false);
+    };
 
-const handleMain=()=>{
-if(screen==="top"){
-setScreen("standby");
-}else if(screen==="standby"){
-setScreen("ride");
-}else if(screen==="ride"){
-setScreen("standby");
-}
-};
+    return {
+      state: { screen, showBottom },
+      actions: { handleMain, handleFinish, setShowBottom },
+    };
+  }
 
-const handleFinish=()=>{
-setScreen("top");
-setShowBottom(false);
-};
-
-return{
-state:{screen,showBottom},
-actions:{setShowBottom,handleMain,handleFinish}
-};
-
-}
-
-return{useTaxiAppState};
-
+  return { useTaxiAppState };
 })();
