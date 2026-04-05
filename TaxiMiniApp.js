@@ -7,13 +7,13 @@ const {
   OtherSheet,
   PaymentDialog,
   ViaDialog,
-  FinishDialog,
 } = window.AppComponents;
 const TopScreen = window.AppScreens.TopScreen;
 const StandbyScreen = window.AppScreens.StandbyScreen;
 const RideScreen = window.AppScreens.RideScreen;
 const FareScreen = window.AppScreens.FareScreen;
 const HistoryModal = window.AppScreens.HistoryModal;
+const FinishCheckScreen = window.AppScreens.FinishCheckScreen;
 
 function TaxiMiniApp() {
   const { refs, state, derived, actions } = useTaxiAppState();
@@ -146,7 +146,11 @@ function TaxiMiniApp() {
     };
   }, [startupPhase]);
 
-  const showBottomNav = state.screen === "top" || state.screen === "standby" || state.screen === "ride";
+  const showBottomNav =
+    state.screen === "top" ||
+    state.screen === "standby" ||
+    state.screen === "ride";
+
   const navCenterLabel = state.screen === "top" ? "経費" : "履歴";
 
   return (
@@ -197,16 +201,6 @@ function TaxiMiniApp() {
           />
         )}
 
-        {state.showFinishDialog && (
-          <FinishDialog
-            workDate={state.workDate}
-            recordCount={derived.recordCount}
-            totalAmount={derived.totalAmount}
-            onCancel={() => actions.setShowFinishDialog(false)}
-            onConfirm={actions.performDutyEnd}
-          />
-        )}
-
         <HistoryModal
           show={state.showHistoryModal}
           editingRecord={state.editingRecord}
@@ -236,8 +230,8 @@ function TaxiMiniApp() {
             paddingBottom: showBottomNav ? `${C.BOTTOM_NAV_HEIGHT + 8}px` : 0,
           }}
         >
-          {state.screen !== "fare" && (
-            <div style={headerStyle} onClick={actions.handleCardModeNext}>
+          {state.screen !== "fare" && state.screen !== "finishCheck" && (
+            <div style={headerStyle}>
               <HeaderCard
                 timeParts={derived.timeParts}
                 cardMode={state.cardMode}
@@ -265,9 +259,7 @@ function TaxiMiniApp() {
           )}
 
           {state.screen === "standby" && (
-            <StandbyScreen
-              handleStartRide={actions.handleStartRide}
-            />
+            <StandbyScreen handleStartRide={actions.handleStartRide} />
           )}
 
           {state.screen === "ride" && (
@@ -296,6 +288,17 @@ function TaxiMiniApp() {
               openPaymentDialog={actions.openPaymentDialog}
             />
           )}
+
+          {state.screen === "finishCheck" && (
+            <FinishCheckScreen
+              finishSummary={derived.finishSummary}
+              finishForm={state.finishForm}
+              setFinishFormField={actions.setFinishFormField}
+              openHistoryModalWithFilter={actions.openHistoryModalWithFilter}
+              onBack={actions.backFromFinishCheck}
+              onConfirm={actions.performDutyEnd}
+            />
+          )}
         </div>
 
         {showBottomNav && startupPhase !== "tapFade" && (
@@ -306,7 +309,11 @@ function TaxiMiniApp() {
             <BottomNav
               centerLabel={navCenterLabel}
               onHome={actions.goHome}
-              onCenter={state.screen === "top" ? actions.openExpenseSoon : actions.openHistorySimple}
+              onCenter={
+                state.screen === "top"
+                  ? actions.openExpenseSoon
+                  : actions.openHistorySimple
+              }
               onMenu={actions.openMenu}
               active={state.screen === "top" ? "home" : ""}
             />
