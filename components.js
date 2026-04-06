@@ -113,15 +113,21 @@ window.AppComponents = (() => {
       <div className="mt-[12px] flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
           {isHomeAmountVisible ? (
-            <div className="w-[252px] max-w-full flex items-end text-white whitespace-nowrap">
-              <div className="text-[34px] leading-none font-normal tracking-[-0.02em]">
-                {numberText}
+            <div className="w-[252px] max-w-full flex justify-end">
+              <div className="inline-flex items-end text-white whitespace-nowrap">
+                <div className="text-[34px] leading-none font-normal tracking-[-0.02em]">
+                  {numberText}
+                </div>
+                <div className="ml-[2px] text-[34px] leading-none font-normal">
+                  円
+                </div>
               </div>
-              <div className="ml-[2px] text-[34px] leading-none font-normal">円</div>
             </div>
           ) : (
-            <div className="w-[252px] max-w-full text-[34px] leading-none font-normal tracking-[-0.02em] text-white whitespace-nowrap">
-              ーーー
+            <div className="w-[252px] max-w-full flex justify-end">
+              <div className="text-[34px] leading-none font-normal tracking-[-0.02em] text-white whitespace-nowrap">
+                ーーー
+              </div>
             </div>
           )}
         </div>
@@ -493,7 +499,7 @@ window.AppComponents = (() => {
           background: END_GREEN,
         }}
       >
-        <div className="h-full grid grid-cols-[72px_1fr_42px] items-center">
+        <div className="h-full grid grid-cols-[72px_1fr] items-center">
           <div className="flex items-center justify-center pl-[4px]">
             <div className="w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center">
               <svg viewBox="0 0 64 64" className="w-[34px] h-[34px]" aria-hidden="true">
@@ -505,12 +511,8 @@ window.AppComponents = (() => {
             </div>
           </div>
 
-          <div className="text-white text-[19px] font-bold tracking-[-0.02em] text-center">
+          <div className="text-white text-[19px] font-bold tracking-[-0.02em] text-center pr-[18px]">
             本日の乗務を終了
-          </div>
-
-          <div className="flex items-center justify-center pr-[2px]">
-            <span className="text-[24px] leading-none font-bold text-white/60">▼</span>
           </div>
         </div>
       </button>
