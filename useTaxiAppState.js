@@ -71,6 +71,13 @@ window.AppHooks = (() => {
     const dropTapRef = useRef({ lastTapAt: 0 });
     const paymentTypeRef = useRef(null);
 
+    const pickupTaskIdRef = useRef(0);
+    const dropoffTaskIdRef = useRef(0);
+    const pickupProgressTimerRef = useRef(null);
+    const dropoffProgressTimerRef = useRef(null);
+    const pickupPromiseRef = useRef(Promise.resolve(null));
+    const dropoffPromiseRef = useRef(Promise.resolve(null));
+
     useEffect(() => {
       try {
         const raw = window.localStorage.getItem("taxi_home_amount_visible");
@@ -130,6 +137,8 @@ window.AppHooks = (() => {
         if (paymentTimerRef.current) clearTimeout(paymentTimerRef.current);
         if (paymentCountdownRef.current) clearInterval(paymentCountdownRef.current);
         if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+        if (pickupProgressTimerRef.current) clearInterval(pickupProgressTimerRef.current);
+        if (dropoffProgressTimerRef.current) clearInterval(dropoffProgressTimerRef.current);
       };
     }, []);
 
@@ -464,41 +473,180 @@ window.AppHooks = (() => {
     const handleCardModeNext = () => setCardMode((prev) => (prev >= 5 ? 1 : prev + 1));
 
     async function getReliablePlace() {
-      let best = null;
+      const best = await Geo.getBestCurrentPlace();
+      return (
+        best || {
+          label: "未取得",
+          accuracy: null,
+          latitude: null,
+          longitude: null,
+        }
+      );
+    }
 
-      for (let i = 0; i < 3; i += 1) {
-        const candidate = await Geo.getBestCurrentPlace();
+    const isPendingPlaceLabel = (text) => {
+      const value = String(text || "").trim();
+      return (
+        value === "取得中…" ||
+        value === "位置を確認中…" ||
+        value === "より正確に確認中…" ||
+        value === "住所調整中…"
+      );
+    };
 
-        if (candidate && candidate.latitude != null && candidate.longitude != null) {
-          if (!best) best = candidate;
-          else if (
-            candidate.accuracy != null &&
-            (best.accuracy == null || candidate.accuracy < best.accuracy)
-          ) {
-            best = candidate;
-          }
+    const getPlaceProgressLabel = (elapsedMs) => {
+      if (elapsedMs < 3000) return "位置を確認中…";
+      if (elapsedMs < 6000) return "より正確に確認中…";
+      return "住所調整中…";
+    };
 
-          if (candidate.accuracy != null && candidate.accuracy <= 25) {
-            return candidate;
+    const clearPickupProgress = () => {
+      if (pickupProgressTimerRef.current) {
+        clearInterval(pickupProgressTimerRef.current);
+        pickupProgressTimerRef.current = null;
+      }
+    };
+
+    const clearDropoffProgress = () => {
+      if (dropoffProgressTimerRef.current) {
+        clearInterval(dropoffProgressTimerRef.current);
+        dropoffProgressTimerRef.current = null;
+      }
+    };
+
+    const resolveActivePlace = (resolved, currentLabel, currentMeta) => {
+      if (resolved && resolved.latitude != null && resolved.longitude != null) {
+        return {
+          label: resolved.label || "未取得",
+          accuracy: resolved.accuracy ?? null,
+          latitude: resolved.latitude ?? null,
+          longitude: resolved.longitude ?? null,
+        };
+      }
+
+      if (
+        currentMeta &&
+        currentMeta.latitude != null &&
+        currentMeta.longitude != null &&
+        !isPendingPlaceLabel(currentLabel)
+      ) {
+        return {
+          label: (currentLabel || currentMeta.label || "未取得").trim() || "未取得",
+          accuracy: currentMeta.accuracy ?? null,
+          latitude: currentMeta.latitude ?? null,
+          longitude: currentMeta.longitude ?? null,
+        };
+      }
+
+      return {
+        label: isPendingPlaceLabel(currentLabel) ? "未取得" : (currentLabel || "未取得").trim(),
+        accuracy: currentMeta?.accuracy ?? null,
+        latitude: currentMeta?.latitude ?? null,
+        longitude: currentMeta?.longitude ?? null,
+      };
+    };
+
+    const startPickupResolve = () => {
+      pickupTaskIdRef.current += 1;
+      const taskId = pickupTaskIdRef.current;
+      const startedAt = Date.now();
+
+      clearPickupProgress();
+      setPickup("位置を確認中…");
+      setPickupMeta(null);
+
+      pickupProgressTimerRef.current = setInterval(() => {
+        if (pickupTaskIdRef.current !== taskId) return;
+        setPickup(getPlaceProgressLabel(Date.now() - startedAt));
+      }, 300);
+
+      const promise = (async () => {
+        try {
+          const best = await getReliablePlace();
+          if (pickupTaskIdRef.current !== taskId) return best;
+          setPickup(best.label || "未取得");
+          setPickupMeta(best);
+          ensureWeatherFresh(best);
+          return best;
+        } catch (_) {
+          if (pickupTaskIdRef.current !== taskId) return null;
+          const fallback = {
+            label: "未取得",
+            accuracy: null,
+            latitude: null,
+            longitude: null,
+          };
+          setPickup(fallback.label);
+          setPickupMeta(fallback);
+          return fallback;
+        } finally {
+          if (pickupTaskIdRef.current === taskId) {
+            clearPickupProgress();
           }
         }
-      }
+      })();
 
-      if (best && best.accuracy != null && best.accuracy <= 50) {
-        return best;
-      }
+      pickupPromiseRef.current = promise;
+      return promise;
+    };
 
-      return best || {
-        label: "未取得",
-        accuracy: null,
-        latitude: null,
-        longitude: null,
-      };
-    }
+    const startDropoffResolve = () => {
+      dropoffTaskIdRef.current += 1;
+      const taskId = dropoffTaskIdRef.current;
+      const startedAt = Date.now();
+
+      clearDropoffProgress();
+      setDropoff("位置を確認中…");
+      setDropoffMeta(null);
+
+      dropoffProgressTimerRef.current = setInterval(() => {
+        if (dropoffTaskIdRef.current !== taskId) return;
+        setDropoff(getPlaceProgressLabel(Date.now() - startedAt));
+      }, 300);
+
+      const promise = (async () => {
+        try {
+          const best = await getReliablePlace();
+          if (dropoffTaskIdRef.current !== taskId) return best;
+          setDropoff(best.label || "未取得");
+          setDropoffMeta(best);
+          return best;
+        } catch (_) {
+          if (dropoffTaskIdRef.current !== taskId) return null;
+          const fallback = {
+            label: "未取得",
+            accuracy: null,
+            latitude: null,
+            longitude: null,
+          };
+          setDropoff(fallback.label);
+          setDropoffMeta(fallback);
+          return fallback;
+        } finally {
+          if (dropoffTaskIdRef.current === taskId) {
+            clearDropoffProgress();
+          }
+        }
+      })();
+
+      dropoffPromiseRef.current = promise;
+      return promise;
+    };
+
+    const cancelPlaceTasks = () => {
+      pickupTaskIdRef.current += 1;
+      dropoffTaskIdRef.current += 1;
+      clearPickupProgress();
+      clearDropoffProgress();
+      pickupPromiseRef.current = Promise.resolve(null);
+      dropoffPromiseRef.current = Promise.resolve(null);
+    };
 
     const handleDutyStart = async () => {
       vibrateTap();
       const startDutyDate = new Date();
+
+      cancelPlaceTasks();
 
       setDutyStarted(true);
       setIsRiding(false);
@@ -526,6 +674,8 @@ window.AppHooks = (() => {
     };
 
     const performDutyEnd = () => {
+      cancelPlaceTasks();
+
       setDutyStarted(false);
       setIsRiding(false);
       setRideStartAt(null);
@@ -588,10 +738,12 @@ window.AppHooks = (() => {
       vibrateTap();
       const start = new Date();
 
+      cancelPlaceTasks();
+
       setRideStartAt(start);
       setRideEndAt(null);
       setIsRiding(true);
-      setPickup("取得中…");
+      setPickup("");
       setDropoff("");
       setPickupMeta(null);
       setDropoffMeta(null);
@@ -600,10 +752,7 @@ window.AppHooks = (() => {
       setHomeEndSheetOpen(false);
       setScreen("ride");
 
-      const best = await getReliablePlace();
-      setPickup(best.label || "未取得");
-      setPickupMeta(best);
-      ensureWeatherFresh(best);
+      startPickupResolve();
     };
 
     const openNormalDropoff = async () => {
@@ -612,13 +761,11 @@ window.AppHooks = (() => {
 
       setRideEndAt(end);
       setAmount("");
-      setDropoff("取得中…");
+      setDropoff("");
       setDropoffMeta(null);
       setScreen("fare");
 
-      const best = await getReliablePlace();
-      setDropoff(best.label || "未取得");
-      setDropoffMeta(best);
+      startDropoffResolve();
     };
 
     const handleDropOffTap = async () => {
@@ -673,14 +820,25 @@ window.AppHooks = (() => {
         receipt = true;
       }
 
+      const [resolvedPickup, resolvedDropoff] = await Promise.all([
+        pickupPromiseRef.current.catch(() => null),
+        dropoffPromiseRef.current.catch(() => null),
+      ]);
+
+      const finalPickup = resolveActivePlace(resolvedPickup, pickup, pickupMeta);
+      const finalDropoff = resolveActivePlace(resolvedDropoff, dropoff, dropoffMeta);
+
+      if (isPendingPlaceLabel(finalPickup.label)) finalPickup.label = "未取得";
+      if (isPendingPlaceLabel(finalDropoff.label)) finalDropoff.label = "未取得";
+
       const viaText = viaStops.length > 0 ? `経由：${viaStops.join(" → ")}` : "";
       const newRecord = {
         id: Date.now(),
         乗務日: workDate,
         乗車時刻: rideStartAt,
         降車時刻: rideEndAt,
-        乗車地: pickup.trim() || "未取得",
-        降車地: dropoff.trim() || "未取得",
+        乗車地: finalPickup.label || "未取得",
+        降車地: finalDropoff.label || "未取得",
         人数: finalPassengers,
         金額: numericAmount,
         決済方法: payment,
@@ -688,12 +846,12 @@ window.AppHooks = (() => {
         領収証: receipt,
         receipt,
         天気: weather.nowKind || "",
-        乗車位置精度: pickupMeta?.accuracy ?? null,
-        降車位置精度: dropoffMeta?.accuracy ?? null,
-        乗車緯度: pickupMeta?.latitude ?? null,
-        乗車経度: pickupMeta?.longitude ?? null,
-        降車緯度: dropoffMeta?.latitude ?? null,
-        降車経度: dropoffMeta?.longitude ?? null,
+        乗車位置精度: finalPickup.accuracy ?? null,
+        降車位置精度: finalDropoff.accuracy ?? null,
+        乗車緯度: finalPickup.latitude ?? null,
+        乗車経度: finalPickup.longitude ?? null,
+        降車緯度: finalDropoff.latitude ?? null,
+        降車経度: finalDropoff.longitude ?? null,
         備考: viaText,
       };
 
@@ -704,6 +862,8 @@ window.AppHooks = (() => {
       setPaymentCountdown(2.5);
       setSavingDots(4);
       setRecords((prev) => [newRecord, ...prev]);
+
+      cancelPlaceTasks();
 
       setIsRiding(false);
       setRideStartAt(null);
@@ -721,7 +881,7 @@ window.AppHooks = (() => {
       if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
       savedTimerRef.current = setTimeout(() => setShowSaved(false), 2200);
 
-      ensureWeatherFresh(dropoffMeta);
+      ensureWeatherFresh(finalDropoff);
     };
 
     const openPaymentDialog = (type) => {
