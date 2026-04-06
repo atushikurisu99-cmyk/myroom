@@ -151,7 +151,7 @@ window.AppScreens.FareScreen = (() => {
                       className="select-none"
                       style={{
                         fontFamily: '"Arial Black", "Arial", system-ui, sans-serif',
-                        fontSize: "36px",
+                        fontSize: "39px",
                         fontWeight: 900,
                         lineHeight: 1,
                         letterSpacing: "0",
