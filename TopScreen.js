@@ -48,7 +48,7 @@ window.AppScreens.TopScreen = (() => {
                 type="button"
                 onClick={handleTopMain}
                 disabled={topMainButtonDisabled}
-                className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white rounded-[28px] border border-white/60`}
+                className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white rounded-[28px] border border-white/60 shadow-[0_8px_16px_rgba(0,0,0,0.14),inset_0_1px_0_rgba(255,255,255,0.45)]`}
               >
                 <span className={C.bigButtonText}>{topMainLabel}</span>
               </button>
