@@ -10,7 +10,6 @@ window.AppComponents = (() => {
   const C = window.AppConstants;
 
   const GREEN_MAIN = "#9ED36A";
-  const GREEN_SUB = "#7FC84E";
   const GREEN_CIRCLE = "#92CD4C";
   const END_GREEN = "#375f1d";
 
@@ -40,7 +39,7 @@ window.AppComponents = (() => {
   function MenuDotsFilledIcon({ className = "" }) {
     return (
       <svg viewBox="0 0 64 64" className={className} aria-hidden="true">
-        {[14, 32, 50].map((cx) =>
+        {[14, 32, 50].flatMap((cx) =>
           [14, 32, 50].map((cy) => (
             <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={5.3} fill="currentColor" />
           ))
@@ -142,7 +141,7 @@ window.AppComponents = (() => {
       <div className="mt-[14px] flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
           {isHomeAmountVisible ? (
-            <div className="w-[266px] max-w-full flex justify-end">
+            <div className="w-[270px] max-w-full flex justify-end">
               <div className="inline-flex items-end text-white whitespace-nowrap">
                 <div className="text-[40px] leading-none font-bold tracking-[-0.03em]">
                   {numberText}
@@ -151,7 +150,7 @@ window.AppComponents = (() => {
               </div>
             </div>
           ) : (
-            <div className="w-[266px] max-w-full flex justify-end">
+            <div className="w-[270px] max-w-full flex justify-end">
               <div className="text-[40px] leading-none font-bold tracking-[-0.03em] text-white whitespace-nowrap">
                 ーーー
               </div>
@@ -215,7 +214,7 @@ window.AppComponents = (() => {
               <WeatherMiniPair weather={weather} />
             </div>
 
-            <div className="shrink-0 text-right pt-[6px] pr-[0px]">
+            <div className="shrink-0 text-right pt-[6px]">
               <ClockDigits timeParts={timeParts} />
             </div>
           </div>
@@ -422,102 +421,98 @@ window.AppComponents = (() => {
     activeArea = "home",
   }) {
     const safeInset = "env(safe-area-inset-bottom, 0px)";
-    const bubbleCenterMap = {
+    const contentHeight = 92;
+    const bandVisibleHeight = 54;
+    const bubbleSize = 104;
+    const bubbleTop = -12;
+
+    const centerMap = {
       home: "16.6667%",
       center: "50%",
       menu: "83.3333%",
     };
 
-    const activeCenter = bubbleCenterMap[activeArea] || bubbleCenterMap.center;
-
-    // iPhoneで帯が浮いて見えないよう、帯の見える開始位置を少し下げる
-    const bandTop = 26;
-    const bubbleTop = 20;
-    const visibleBandHeight = 62;
-
+    const activeCenter = centerMap[activeArea] || centerMap.center;
     const homeStrong = activeArea === "home";
     const centerStrong = activeArea === "center";
     const menuStrong = activeArea === "menu";
 
-    const NavCell = ({ onClick, icon, label, strong, isCenter = false }) => (
-      <button
-        type="button"
-        onClick={onClick}
-        className="h-full flex flex-col items-center justify-end text-white active:opacity-85"
-        style={{
-          paddingBottom: "calc(12px + env(safe-area-inset-bottom, 0px))",
-        }}
-      >
-        <div className="h-[34px] flex items-end justify-center">
-          {icon ? icon : <div className="w-[32px] h-[32px]" />}
-        </div>
-
-        <div
-          className={`mt-[8px] leading-none ${
-            isCenter
-              ? strong
-                ? "text-[17px] font-bold"
-                : "text-[17px] font-semibold"
-              : strong
-              ? "text-[12px] font-bold"
-              : "text-[12px] font-semibold"
-          }`}
-        >
-          {label}
-        </div>
-      </button>
-    );
-
     return (
       <div className="h-full relative overflow-visible">
+        {/* 帯だけ下へ伸ばす */}
         <div
-          className="absolute inset-x-0 rounded-t-[24px]"
+          className="absolute inset-x-0 bottom-0 rounded-t-[26px]"
           style={{
-            top: `${bandTop}px`,
-            bottom: "calc(-1 * env(safe-area-inset-bottom, 0px))",
             background: GREEN_MAIN,
+            height: `calc(${bandVisibleHeight}px + ${safeInset})`,
           }}
         />
 
+        {/* 丸は帯と別基準 */}
         <div
-          className="absolute w-[98px] h-[98px] rounded-full z-10 transition-[left] duration-250 ease-out"
+          className="absolute z-10 rounded-full transition-[left] duration-250 ease-out"
           style={{
+            width: `${bubbleSize}px`,
+            height: `${bubbleSize}px`,
             left: activeCenter,
             top: `${bubbleTop}px`,
             transform: "translateX(-50%)",
             background: GREEN_CIRCLE,
-            boxShadow: "0 8px 16px rgba(0,0,0,0.10)",
+            boxShadow: "0 10px 18px rgba(0,0,0,0.08)",
           }}
         />
 
+        {/* 中身は固定高さで沈めない */}
         <div
-          className="absolute inset-x-0 z-20 grid grid-cols-3"
+          className="absolute inset-x-0 bottom-0 z-20 grid grid-cols-3"
           style={{
-            top: `${bandTop}px`,
-            height: `calc(${visibleBandHeight}px + ${safeInset})`,
+            height: `${contentHeight}px`,
           }}
         >
-          <NavCell
+          <button
+            type="button"
             onClick={onHome}
-            icon={<HomeFilledIcon className="w-[32px] h-[32px]" />}
-            label="ホーム"
-            strong={homeStrong}
-          />
+            className="h-full flex flex-col items-center justify-end pb-[12px] text-white active:opacity-85"
+          >
+            <HomeFilledIcon className="w-[34px] h-[34px]" />
+            <div
+              className={`mt-[6px] text-[12px] leading-none ${
+                homeStrong ? "font-bold" : "font-semibold"
+              }`}
+            >
+              ホーム
+            </div>
+          </button>
 
-          <NavCell
+          <button
+            type="button"
             onClick={onCenter}
-            icon={null}
-            label={centerLabel}
-            strong={centerStrong}
-            isCenter
-          />
+            className="h-full flex flex-col items-center justify-end pb-[12px] text-white active:opacity-85"
+          >
+            <div className="w-[34px] h-[34px]" />
+            <div
+              className={`mt-[6px] text-[17px] leading-none tracking-[0.04em] ${
+                centerStrong ? "font-bold" : "font-semibold"
+              }`}
+            >
+              {centerLabel}
+            </div>
+          </button>
 
-          <NavCell
+          <button
+            type="button"
             onClick={onMenu}
-            icon={<MenuDotsFilledIcon className="w-[28px] h-[28px]" />}
-            label="メニュー"
-            strong={menuStrong}
-          />
+            className="h-full flex flex-col items-center justify-end pb-[12px] text-white active:opacity-85"
+          >
+            <MenuDotsFilledIcon className="w-[30px] h-[30px]" />
+            <div
+              className={`mt-[10px] text-[12px] leading-none ${
+                menuStrong ? "font-bold" : "font-semibold"
+              }`}
+            >
+              メニュー
+            </div>
+          </button>
         </div>
       </div>
     );
