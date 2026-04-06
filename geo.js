@@ -8,8 +8,7 @@ window.AppGeo = (() => {
     longitude: null,
   };
 
-  const MUNICIPALITY_CACHE_KEY = "taxi_muni_code_cache_v1";
-  const REVERSE_LABEL_CACHE_KEY = "taxi_reverse_label_cache_v1";
+  const REVERSE_LABEL_CACHE_KEY = "taxi_reverse_label_cache_v2";
 
   const loadJsonCache = (key) => {
     try {
@@ -29,7 +28,6 @@ window.AppGeo = (() => {
     } catch (_) {}
   };
 
-  let municipalityNameCache = loadJsonCache(MUNICIPALITY_CACHE_KEY);
   let reverseLabelCache = loadJsonCache(REVERSE_LABEL_CACHE_KEY);
 
   const buildCacheKeyFromLatLon = (latitude, longitude) => {
@@ -37,6 +35,22 @@ window.AppGeo = (() => {
     const lon = Number(longitude);
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) return "";
     return `${lat.toFixed(5)},${lon.toFixed(5)}`;
+  };
+
+  const fetchJson = async (url) => {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error(`http ${response.status}`);
+    }
+
+    return response.json();
   };
 
   const getSinglePosition = (options = {}) =>
@@ -111,7 +125,12 @@ window.AppGeo = (() => {
 
   const chooseBestSample = (samples) => {
     if (!samples || samples.length === 0) return null;
-    if (samples.length === 1) return { ...samples[0], clusterScore: 1 };
+    if (samples.length === 1) {
+      return {
+        ...samples[0],
+        clusterScore: 1,
+      };
+    }
 
     const uniqueSamples = dedupeCloseSamples(samples);
 
@@ -133,22 +152,6 @@ window.AppGeo = (() => {
     return scored[0];
   };
 
-  const fetchJson = async (url) => {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      throw new Error(`http ${response.status}`);
-    }
-
-    return response.json();
-  };
-
   const reverseGeocodeGsi = async (latitude, longitude) => {
     try {
       const url =
@@ -156,21 +159,19 @@ window.AppGeo = (() => {
         `?lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}`;
 
       const data = await fetchJson(url);
-      const results = data?.results || null;
+      const results = data?.results || {};
 
       return {
-        muniCd: results?.muniCd || "",
-        lv01Nm: results?.lv01Nm || "",
+        lv01Nm: String(results.lv01Nm || "").trim(),
       };
     } catch (_) {
       return {
-        muniCd: "",
         lv01Nm: "",
       };
     }
   };
 
-  const extractBroadAddressFromNominatim = async (latitude, longitude) => {
+  const reverseGeocodeBroad = async (latitude, longitude) => {
     try {
       const url =
         `https://nominatim.openstreetmap.org/reverse` +
@@ -181,76 +182,45 @@ window.AppGeo = (() => {
       const data = await fetchJson(url);
       const address = data?.address || {};
 
-      const prefecture =
-        address.state ||
-        address.province ||
-        address.region ||
-        "";
-
-      const city =
-        address.city ||
-        address.town ||
-        address.village ||
-        address.municipality ||
-        address.county ||
-        "";
-
-      const ward =
-        address.city_district ||
-        address.borough ||
-        address.suburb ||
-        address.neighbourhood ||
-        "";
-
       return {
-        prefecture: String(prefecture || "").trim(),
-        city: String(city || "").trim(),
-        ward: String(ward || "").trim(),
+        prefecture: String(
+          address.state || address.province || address.region || ""
+        ).trim(),
+        city: String(
+          address.city ||
+            address.town ||
+            address.village ||
+            address.municipality ||
+            address.county ||
+            ""
+        ).trim(),
+        ward: String(
+          address.city_district ||
+            address.borough ||
+            address.suburb ||
+            address.neighbourhood ||
+            ""
+        ).trim(),
+        district: String(
+          address.quarter ||
+            address.hamlet ||
+            address.neighbourhood ||
+            address.suburb ||
+            address.road ||
+            ""
+        ).trim(),
       };
     } catch (_) {
       return {
         prefecture: "",
         city: "",
         ward: "",
+        district: "",
       };
     }
   };
 
-  const fetchMunicipalityNameFromCode = async (muniCd) => {
-    const code = String(muniCd || "").trim();
-    if (!code) return "";
-
-    if (municipalityNameCache[code]) {
-      return municipalityNameCache[code];
-    }
-
-    try {
-      const url =
-        `https://mreversegeocoder.gsi.go.jp/reverse-geocoder/csis?muniCd=${encodeURIComponent(
-          code
-        )}`;
-
-      const data = await fetchJson(url);
-
-      const candidate =
-        data?.municipality ||
-        data?.muni ||
-        data?.name ||
-        data?.results?.municipality ||
-        "";
-
-      const text = String(candidate || "").trim();
-      if (text) {
-        municipalityNameCache[code] = text;
-        saveJsonCache(MUNICIPALITY_CACHE_KEY, municipalityNameCache);
-        return text;
-      }
-    } catch (_) {}
-
-    return "";
-  };
-
-  const uniqueJoin = (parts) => {
+  const compactUniqueJoin = (parts) => {
     const out = [];
 
     parts.forEach((part) => {
@@ -260,38 +230,74 @@ window.AppGeo = (() => {
       out.push(text);
     });
 
-    return out.join(" ");
+    return out.join("");
   };
 
-  const composeJapaneseAddressLabel = async (latitude, longitude) => {
+  const stripLeadingDuplicates = (text, prefixes) => {
+    let next = String(text || "").trim();
+
+    prefixes.forEach((prefix) => {
+      const p = String(prefix || "").trim();
+      if (!p) return;
+      if (next.startsWith(p)) {
+        next = next.slice(p.length).trim();
+      }
+    });
+
+    return next;
+  };
+
+  const buildDisplayLabel = ({ prefecture, city, ward, district }) => {
+    const safePrefecture = String(prefecture || "").trim();
+    const safeCity = String(city || "").trim();
+    const safeWard = String(ward || "").trim();
+    const rawDistrict = String(district || "").trim();
+
+    const safeDistrict = stripLeadingDuplicates(rawDistrict, [
+      safePrefecture,
+      safeCity,
+      safeWard,
+    ]);
+
+    if (safePrefecture === "広島県" && safeCity === "広島市") {
+      return compactUniqueJoin([safeWard, safeDistrict]);
+    }
+
+    if (safePrefecture === "広島県") {
+      return compactUniqueJoin([safeCity, safeWard, safeDistrict]);
+    }
+
+    return compactUniqueJoin([safePrefecture, safeCity, safeWard, safeDistrict]);
+  };
+
+  const reverseGeocode = async (latitude, longitude) => {
     const cacheKey = buildCacheKeyFromLatLon(latitude, longitude);
     if (cacheKey && reverseLabelCache[cacheKey]) {
       return reverseLabelCache[cacheKey];
     }
 
-    const gsi = await reverseGeocodeGsi(latitude, longitude);
+    const [gsi, broad] = await Promise.all([
+      reverseGeocodeGsi(latitude, longitude),
+      reverseGeocodeBroad(latitude, longitude),
+    ]);
 
-    let municipalityName = "";
-    if (gsi.muniCd) {
-      municipalityName = await fetchMunicipalityNameFromCode(gsi.muniCd);
-    }
+    const district =
+      String(gsi.lv01Nm || "").trim() || String(broad.district || "").trim();
 
-    const broad = await extractBroadAddressFromNominatim(latitude, longitude);
+    let label = buildDisplayLabel({
+      prefecture: broad.prefecture,
+      city: broad.city,
+      ward: broad.ward,
+      district,
+    });
 
-    const broadBase = uniqueJoin([broad.prefecture, broad.city, broad.ward]);
-    const municipalityBase = municipalityName || broadBase;
-    const chome = String(gsi.lv01Nm || "").trim();
-
-    let label = "";
-
-    if (municipalityBase && chome) {
-      label = `${municipalityBase} ${chome}`;
-    } else if (municipalityBase) {
-      label = municipalityBase;
-    } else if (chome) {
-      label = chome;
-    } else {
-      label = "未取得";
+    if (!label) {
+      label = buildDisplayLabel({
+        prefecture: broad.prefecture,
+        city: broad.city,
+        ward: broad.ward,
+        district: "",
+      });
     }
 
     const normalized = normalizePlaceLabel(label || "未取得") || "未取得";
@@ -300,9 +306,9 @@ window.AppGeo = (() => {
       reverseLabelCache[cacheKey] = normalized;
 
       const keys = Object.keys(reverseLabelCache);
-      if (keys.length > 400) {
+      if (keys.length > 500) {
         const next = {};
-        keys.slice(-250).forEach((key) => {
+        keys.slice(-300).forEach((key) => {
           next[key] = reverseLabelCache[key];
         });
         reverseLabelCache = next;
@@ -314,51 +320,59 @@ window.AppGeo = (() => {
     return normalized;
   };
 
-  const reverseGeocode = async (latitude, longitude) => {
-    return composeJapaneseAddressLabel(latitude, longitude);
-  };
-
   const getBestCurrentPlace = async () => {
     if (!("geolocation" in navigator)) {
       return { ...EMPTY_RESULT };
     }
 
+    const startedAt = Date.now();
+    const hardLimitMs = 6200;
     const samples = [];
-    const tryCount = 7;
-    const excellentAccuracy = 10;
-    const goodEnoughAccuracy = 20;
+    let attempt = 0;
 
-    for (let i = 0; i < tryCount; i += 1) {
+    while (Date.now() - startedAt < hardLimitMs && attempt < 6) {
+      attempt += 1;
+
+      const elapsed = Date.now() - startedAt;
+      const remaining = hardLimitMs - elapsed;
+      if (remaining < 900) break;
+
       try {
+        const timeout = Math.min(
+          attempt <= 2 ? 1800 : 2200,
+          Math.max(900, remaining - 120)
+        );
+
         const position = await getSinglePosition({
-          timeout: i < 2 ? 3800 : 5200,
+          timeout,
           maximumAge: 0,
         });
 
         const sample = toSample(position);
         samples.push(sample);
 
-        if (samples.length >= 3) {
-          const provisionalBest = chooseBestSample(samples);
-          if (
-            provisionalBest &&
-            provisionalBest.clusterScore >= 3 &&
-            provisionalBest.accuracy <= goodEnoughAccuracy
-          ) {
-            break;
-          }
+        const provisionalBest = chooseBestSample(samples);
+
+        if (
+          provisionalBest &&
+          provisionalBest.clusterScore >= 3 &&
+          provisionalBest.accuracy <= 20
+        ) {
+          break;
         }
 
-        if (sample.accuracy <= excellentAccuracy && samples.length >= 2) {
-          const provisionalBest = chooseBestSample(samples);
-          if (provisionalBest && provisionalBest.clusterScore >= 2) {
-            break;
-          }
+        if (
+          provisionalBest &&
+          provisionalBest.clusterScore >= 2 &&
+          provisionalBest.accuracy <= 10 &&
+          samples.length >= 2
+        ) {
+          break;
         }
       } catch (_) {}
 
-      if (i < tryCount - 1) {
-        await sleep(i < 2 ? 160 : 220);
+      if (Date.now() - startedAt < hardLimitMs - 150) {
+        await sleep(attempt <= 2 ? 120 : 160);
       }
     }
 
