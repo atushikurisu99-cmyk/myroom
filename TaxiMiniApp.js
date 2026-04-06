@@ -35,6 +35,15 @@ function TaxiMiniApp() {
     };
   }, []);
 
+  useEffect(() => {
+    if (state.startupResetKey > 0) {
+      startupTimersRef.current.forEach((id) => clearTimeout(id));
+      startupTimersRef.current = [];
+      setStartupStage(0);
+      setStartupPhase("tap");
+    }
+  }, [state.startupResetKey]);
+
   const startApp = () => {
     if (startupPhase !== "tap") return;
 
@@ -282,6 +291,7 @@ function TaxiMiniApp() {
               workDate={state.workDate}
               recordCount={derived.recordCount}
               totalAmount={derived.totalAmount}
+              finishCountdown={state.finishCountdown}
               onCancel={actions.closeFinishCheck}
               onConfirm={actions.performDutyEnd}
             />
