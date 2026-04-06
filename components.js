@@ -439,7 +439,6 @@ window.AppComponents = (() => {
 
     return (
       <div className="h-full relative overflow-visible">
-        {/* 帯だけ下へ伸ばす */}
         <div
           className="absolute inset-x-0 bottom-0 rounded-t-[26px]"
           style={{
@@ -448,7 +447,6 @@ window.AppComponents = (() => {
           }}
         />
 
-        {/* 丸は帯と別基準 */}
         <div
           className="absolute z-10 rounded-full transition-[left] duration-250 ease-out"
           style={{
@@ -462,7 +460,6 @@ window.AppComponents = (() => {
           }}
         />
 
-        {/* 中身は固定高さで沈めない */}
         <div
           className="absolute inset-x-0 bottom-0 z-20 grid grid-cols-3"
           style={{
@@ -700,17 +697,32 @@ window.AppComponents = (() => {
     );
   }
 
-  function FinishDialog({ workDate, recordCount, totalAmount, onCancel, onConfirm }) {
+  function FinishDialog({
+    workDate,
+    recordCount,
+    totalAmount,
+    finishCountdown = 3,
+    onCancel,
+    onConfirm,
+  }) {
     return (
       <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
         <div className="w-full rounded-[28px] bg-white shadow-2xl p-5">
           <div className="text-[20px] font-bold text-slate-800">
             {formatDutyDate(workDate)}の乗務を終了しますか？
           </div>
+
+          <div className="mt-3 text-[15px] font-semibold text-slate-500">
+            {finishCountdown > 0
+              ? `${finishCountdown}秒後に自動で終了します`
+              : "終了しています"}
+          </div>
+
           <div className="mt-4 grid gap-2 text-sm text-slate-600">
             <div>乗車回数：{recordCount}回</div>
             <div>売上合計：{formatMoney(totalAmount)}</div>
           </div>
+
           <div className="mt-5 grid grid-cols-2 gap-3">
             <button
               type="button"
