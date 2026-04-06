@@ -111,6 +111,26 @@ window.AppComponents = (() => {
     );
   }
 
+  function ClockDigits({ timeParts, dark = false }) {
+    return (
+      <div
+        className={`flex items-center justify-end text-[58px] leading-[0.88] font-black tracking-[-0.05em] ${
+          dark ? "text-black" : "text-slate-800"
+        }`}
+      >
+        <span>{timeParts?.hh || "00"}</span>
+        <span
+          className={`${
+            timeParts?.showColon ? "opacity-100" : "opacity-0"
+          } transition-opacity duration-150 mx-[-0.08em]`}
+        >
+          ：
+        </span>
+        <span>{timeParts?.mm || "00"}</span>
+      </div>
+    );
+  }
+
   function HomeAmountRow({
     homeDisplayAmount,
     isHomeAmountVisible,
@@ -122,17 +142,17 @@ window.AppComponents = (() => {
       <div className="mt-[14px] flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
           {isHomeAmountVisible ? (
-            <div className="w-[258px] max-w-full flex justify-end">
+            <div className="w-[266px] max-w-full flex justify-end">
               <div className="inline-flex items-end text-white whitespace-nowrap">
-                <div className="text-[34px] leading-none font-normal tracking-[-0.02em]">
+                <div className="text-[40px] leading-none font-bold tracking-[-0.03em]">
                   {numberText}
                 </div>
                 <div className="ml-[2px] text-[34px] leading-none font-normal">円</div>
               </div>
             </div>
           ) : (
-            <div className="w-[258px] max-w-full flex justify-end">
-              <div className="text-[34px] leading-none font-normal tracking-[-0.02em] text-white whitespace-nowrap">
+            <div className="w-[266px] max-w-full flex justify-end">
+              <div className="text-[40px] leading-none font-bold tracking-[-0.03em] text-white whitespace-nowrap">
                 ーーー
               </div>
             </div>
@@ -158,19 +178,9 @@ window.AppComponents = (() => {
     toggleHomeAmountVisible,
   }) {
     return (
-      <div className="h-full w-full flex flex-col justify-between px-[18px] pt-[18px] pb-[16px]">
+      <div className="h-full w-full px-[30px] pt-[22px] pb-[16px] flex flex-col justify-between">
         <div className="flex items-start justify-end">
-          <div className="flex items-center justify-end text-[58px] leading-[0.88] font-black tracking-[-0.05em] text-black">
-            <span>{timeParts?.hh || "00"}</span>
-            <span
-              className={`${
-                timeParts?.showColon ? "opacity-100" : "opacity-0"
-              } transition-opacity duration-150 mx-[-0.08em]`}
-            >
-              ：
-            </span>
-            <span>{timeParts?.mm || "00"}</span>
-          </div>
+          <ClockDigits timeParts={timeParts} dark />
         </div>
 
         <div className="min-h-0">
@@ -198,25 +208,15 @@ window.AppComponents = (() => {
     amount2,
   }) {
     return (
-      <div className={`${C.cardClass} h-full px-4 py-4 overflow-hidden`}>
+      <div className={`${C.cardClass} h-full px-[16px] py-[16px] overflow-hidden`}>
         <div className="h-full flex flex-col">
-          <div className="flex items-start justify-between gap-4 shrink-0 pt-[4px]">
+          <div className="flex items-start justify-between gap-4 shrink-0">
             <div className="min-w-0">
               <WeatherMiniPair weather={weather} />
             </div>
 
-            <div className="shrink-0 text-right pt-[4px]">
-              <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-800">
-                <span>{timeParts.hh}</span>
-                <span
-                  className={`${
-                    timeParts.showColon ? "opacity-100" : "opacity-0"
-                  } transition-opacity duration-150 mx-[-0.08em]`}
-                >
-                  ：
-                </span>
-                <span>{timeParts.mm}</span>
-              </div>
+            <div className="shrink-0 text-right pt-[6px] pr-[0px]">
+              <ClockDigits timeParts={timeParts} />
             </div>
           </div>
 
@@ -421,16 +421,19 @@ window.AppComponents = (() => {
     onMenu,
     activeArea = "home",
   }) {
-    const bubbleClass =
-      activeArea === "home"
-        ? "left-[8px]"
-        : activeArea === "menu"
-        ? "right-[8px]"
-        : "left-1/2 -translate-x-1/2";
+    const bubbleCenterMap = {
+      home: "16.6667%",
+      center: "50%",
+      menu: "83.3333%",
+    };
+
+    const activeCenter = bubbleCenterMap[activeArea] || bubbleCenterMap.center;
+    const safeInset = "env(safe-area-inset-bottom, 0px)";
+    const visibleBandHeight = 56;
 
     const homeStrong = activeArea === "home";
-    const menuStrong = activeArea === "menu";
     const centerStrong = activeArea === "center";
+    const menuStrong = activeArea === "menu";
 
     return (
       <div className="h-full relative overflow-visible">
@@ -438,13 +441,16 @@ window.AppComponents = (() => {
           className="absolute inset-x-0 bottom-0 rounded-t-[24px]"
           style={{
             background: GREEN_MAIN,
-            height: "calc(100% + env(safe-area-inset-bottom, 0px))",
+            height: `calc(${visibleBandHeight}px + ${safeInset})`,
           }}
         />
 
         <div
-          className={`absolute top-[-10px] w-[94px] h-[94px] rounded-full z-10 transition-all duration-250 ease-out ${bubbleClass}`}
+          className="absolute w-[94px] h-[94px] rounded-full z-10 transition-[left] duration-250 ease-out"
           style={{
+            left: activeCenter,
+            top: "-10px",
+            transform: "translateX(-50%)",
             background: GREEN_CIRCLE,
             boxShadow: "0 8px 16px rgba(0,0,0,0.10)",
           }}
@@ -453,8 +459,8 @@ window.AppComponents = (() => {
         <div
           className="absolute inset-x-0 top-0 z-20 grid grid-cols-3"
           style={{
-            height: `calc(100% + env(safe-area-inset-bottom, 0px))`,
-            paddingBottom: "env(safe-area-inset-bottom, 0px)",
+            height: `calc(100% + ${safeInset})`,
+            paddingBottom: safeInset,
           }}
         >
           <button
@@ -463,11 +469,7 @@ window.AppComponents = (() => {
             className="h-full flex flex-col items-center justify-end pb-[10px] text-white active:opacity-85"
           >
             <HomeFilledIcon className="w-[32px] h-[32px]" />
-            <div
-              className={`mt-[5px] text-[12px] leading-none ${
-                homeStrong ? "font-bold" : "font-semibold"
-              }`}
-            >
+            <div className={`mt-[5px] text-[12px] leading-none ${homeStrong ? "font-bold" : "font-semibold"}`}>
               ホーム
             </div>
           </button>
@@ -475,13 +477,10 @@ window.AppComponents = (() => {
           <button
             type="button"
             onClick={onCenter}
-            className="h-full flex items-center justify-center pb-[2px] text-white active:opacity-85"
+            className="h-full flex flex-col items-center justify-end pb-[10px] text-white active:opacity-85"
           >
-            <div
-              className={`text-[17px] tracking-[0.06em] leading-none ${
-                centerStrong ? "font-bold" : "font-semibold"
-              }`}
-            >
+            <div className="w-[32px] h-[32px]" />
+            <div className={`mt-[5px] text-[17px] tracking-[0.06em] leading-none ${centerStrong ? "font-bold" : "font-semibold"}`}>
               {centerLabel}
             </div>
           </button>
@@ -492,11 +491,7 @@ window.AppComponents = (() => {
             className="h-full flex flex-col items-center justify-end pb-[10px] text-white active:opacity-85"
           >
             <MenuDotsFilledIcon className="w-[28px] h-[28px]" />
-            <div
-              className={`mt-[5px] text-[12px] leading-none ${
-                menuStrong ? "font-bold" : "font-semibold"
-              }`}
-            >
+            <div className={`mt-[9px] text-[12px] leading-none ${menuStrong ? "font-bold" : "font-semibold"}`}>
               メニュー
             </div>
           </button>
