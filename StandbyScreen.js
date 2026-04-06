@@ -1,6 +1,6 @@
 window.AppScreens = window.AppScreens || {};
 window.AppScreens.StandbyScreen = (() => {
-  const { HeaderCard } = window.AppComponents;
+  const { HeaderCard, BottomNav } = window.AppComponents;
   const C = window.AppConstants;
 
   const GREEN_MAIN = "#9ED36A";
@@ -16,6 +16,11 @@ window.AppScreens.StandbyScreen = (() => {
       amount1,
       amount2,
       handleStartRide,
+      navCenterLabel,
+      navActiveArea,
+      onHome,
+      onCenter,
+      onMenu,
     } = props;
 
     return (
@@ -42,15 +47,28 @@ window.AppScreens.StandbyScreen = (() => {
               <button
                 type="button"
                 onClick={handleStartRide}
-                className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)] text-white rounded-[28px] border border-white/60`}
+                className={`${C.mainButtonBase} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)] text-white rounded-[28px] shadow-[0_8px_16px_rgba(0,0,0,0.14),inset_0_1px_0_rgba(255,255,255,0.45)]`}
               >
-                <span className={C.bigButtonText}>実車</span>
+                <span className="text-[30px] font-bold tracking-[-0.02em]">実車</span>
               </button>
             </div>
           </div>
         </div>
 
         <div className="flex-1 min-h-0"></div>
+
+        <div
+          className="absolute left-0 right-0 bottom-0 z-20"
+          style={{ height: `${C.BOTTOM_NAV_HEIGHT}px` }}
+        >
+          <BottomNav
+            centerLabel={navCenterLabel}
+            onHome={onHome}
+            onCenter={onCenter}
+            onMenu={onMenu}
+            activeArea={navActiveArea}
+          />
+        </div>
       </div>
     );
   };
