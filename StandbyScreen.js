@@ -24,38 +24,43 @@ window.AppScreens.StandbyScreen = (() => {
     } = props;
 
     return (
-      <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-        <div className="shrink-0" style={{ background: GREEN_MAIN }}>
-          <div className="h-[172px] shrink-0">
-            <HeaderCard
-              screen={screen}
-              timeParts={timeParts}
-              cardMode={cardMode}
-              weather={weather}
-              totalAmount={totalAmount}
-              recordCount={recordCount}
-              amount1={amount1}
-              amount2={amount2}
-            />
-          </div>
+      <div
+        className="absolute inset-0 overflow-hidden"
+        style={{ paddingBottom: `${C.BOTTOM_NAV_HEIGHT}px` }}
+      >
+        <div className="h-full flex flex-col overflow-hidden">
+          <div className="shrink-0" style={{ background: GREEN_MAIN }}>
+            <div className="h-[172px] shrink-0">
+              <HeaderCard
+                screen={screen}
+                timeParts={timeParts}
+                cardMode={cardMode}
+                weather={weather}
+                totalAmount={totalAmount}
+                recordCount={recordCount}
+                amount1={amount1}
+                amount2={amount2}
+              />
+            </div>
 
-          <div
-            className="shrink-0 px-3 pb-4"
-            style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
-          >
-            <div className="h-full pt-1">
-              <button
-                type="button"
-                onClick={handleStartRide}
-                className={`${C.mainButtonBase} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)] text-white rounded-[28px] shadow-[0_8px_16px_rgba(0,0,0,0.14),inset_0_1px_0_rgba(255,255,255,0.45)]`}
-              >
-                <span className="text-[30px] font-bold tracking-[-0.02em]">実車</span>
-              </button>
+            <div
+              className="shrink-0 px-3 pb-4"
+              style={{ height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px` }}
+            >
+              <div className="h-full pt-1">
+                <button
+                  type="button"
+                  onClick={handleStartRide}
+                  className={`${C.mainButtonBase} bg-[linear-gradient(180deg,#5ecbff,#2fa8ff,#0072d9)] text-white rounded-[28px] shadow-[0_8px_16px_rgba(0,0,0,0.14),inset_0_1px_0_rgba(255,255,255,0.45)]`}
+                >
+                  <span className="text-[30px] font-bold tracking-[-0.02em]">実車</span>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex-1 min-h-0"></div>
+          <div className="flex-1 min-h-0"></div>
+        </div>
 
         <div
           className="absolute left-0 right-0 bottom-0 z-20"
