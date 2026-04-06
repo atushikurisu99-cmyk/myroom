@@ -10,12 +10,20 @@ window.AppComponents = (() => {
   const C = window.AppConstants;
 
   const GREEN_MAIN = "#9ED36A";
-  const GREEN_SOFT = "#7FC84E";
+  const GREEN_SUB = "#7FC84E";
   const GREEN_CIRCLE = "#92CD4C";
   const END_GREEN = "#375f1d";
 
   function formatPlainNumber(value) {
     return `${Number(value || 0).toLocaleString("ja-JP")}`;
+  }
+
+  function AppFrame({ children }) {
+    return (
+      <div className="w-full h-full max-w-sm mx-auto relative overflow-hidden bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)]">
+        {children}
+      </div>
+    );
   }
 
   function HomeFilledIcon({ className = "" }) {
@@ -427,8 +435,11 @@ window.AppComponents = (() => {
     return (
       <div className="h-full relative overflow-visible">
         <div
-          className="absolute inset-x-0 bottom-0 h-[56px] rounded-t-[24px]"
-          style={{ background: GREEN_MAIN }}
+          className="absolute inset-x-0 bottom-0 rounded-t-[24px]"
+          style={{
+            background: GREEN_MAIN,
+            height: "calc(100% + env(safe-area-inset-bottom, 0px))",
+          }}
         />
 
         <div
@@ -439,7 +450,13 @@ window.AppComponents = (() => {
           }}
         />
 
-        <div className="absolute inset-0 grid grid-cols-3 h-full z-20">
+        <div
+          className="absolute inset-x-0 top-0 z-20 grid grid-cols-3"
+          style={{
+            height: `calc(100% + env(safe-area-inset-bottom, 0px))`,
+            paddingBottom: "env(safe-area-inset-bottom, 0px)",
+          }}
+        >
           <button
             type="button"
             onClick={onHome}
@@ -703,6 +720,7 @@ window.AppComponents = (() => {
   }
 
   return {
+    AppFrame,
     HeaderCard,
     RideInfoCard,
     HistoryRecordCard,
