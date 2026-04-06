@@ -48,6 +48,8 @@ window.AppHooks = (() => {
     const [toastMessage, setToastMessage] = useState("");
     const [now, setNow] = useState(new Date());
 
+    const [finishCountdown, setFinishCountdown] = useState(3);
+
     const [finishForm, setFinishForm] = useState({
       totalDistance: "",
       note: "",
@@ -77,6 +79,8 @@ window.AppHooks = (() => {
     const dropoffProgressTimerRef = useRef(null);
     const pickupPromiseRef = useRef(Promise.resolve(null));
     const dropoffPromiseRef = useRef(Promise.resolve(null));
+    const finishCountdownTimerRef = useRef(null);
+    const finishAutoDoneRef = useRef(false);
 
     useEffect(() => {
       try {
@@ -139,12 +143,43 @@ window.AppHooks = (() => {
         if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
         if (pickupProgressTimerRef.current) clearInterval(pickupProgressTimerRef.current);
         if (dropoffProgressTimerRef.current) clearInterval(dropoffProgressTimerRef.current);
+        if (finishCountdownTimerRef.current) clearTimeout(finishCountdownTimerRef.current);
       };
     }, []);
 
     useEffect(() => {
       if (screen !== "top") setHomeEndSheetOpen(false);
     }, [screen]);
+
+    useEffect(() => {
+      if (screen !== "finishCheck") {
+        finishAutoDoneRef.current = false;
+        if (finishCountdownTimerRef.current) {
+          clearTimeout(finishCountdownTimerRef.current);
+          finishCountdownTimerRef.current = null;
+        }
+        return;
+      }
+
+      if (finishAutoDoneRef.current) return;
+
+      if (finishCountdown <= 0) {
+        finishAutoDoneRef.current = true;
+        performDutyEnd();
+        return;
+      }
+
+      finishCountdownTimerRef.current = setTimeout(() => {
+        setFinishCountdown((prev) => Math.max(0, prev - 1));
+      }, 1000);
+
+      return () => {
+        if (finishCountdownTimerRef.current) {
+          clearTimeout(finishCountdownTimerRef.current);
+          finishCountdownTimerRef.current = null;
+        }
+      };
+    }, [screen, finishCountdown]);
 
     const vibrateTap = () => {
       if (navigator.vibrate) navigator.vibrate(18);
@@ -647,6 +682,8 @@ window.AppHooks = (() => {
       const startDutyDate = new Date();
 
       cancelPlaceTasks();
+      finishAutoDoneRef.current = false;
+      setFinishCountdown(3);
 
       setDutyStarted(true);
       setIsRiding(false);
@@ -675,6 +712,8 @@ window.AppHooks = (() => {
 
     const performDutyEnd = () => {
       cancelPlaceTasks();
+      finishAutoDoneRef.current = true;
+      setFinishCountdown(3);
 
       setDutyStarted(false);
       setIsRiding(false);
@@ -704,6 +743,8 @@ window.AppHooks = (() => {
     const handleFinishTap = () => {
       if (!dutyStarted) return;
       if (isRiding) return;
+      finishAutoDoneRef.current = false;
+      setFinishCountdown(3);
       setShowOtherSheet(false);
       setShowHistoryModal(false);
       setEditingRecord(null);
@@ -712,6 +753,8 @@ window.AppHooks = (() => {
     };
 
     const closeFinishCheck = () => {
+      finishAutoDoneRef.current = false;
+      setFinishCountdown(3);
       setScreen("top");
     };
 
@@ -1011,6 +1054,7 @@ window.AppHooks = (() => {
         historyUiMode,
         homeEndSheetOpen,
         finishForm,
+        finishCountdown,
         isHomeAmountVisible,
       },
       derived: {
