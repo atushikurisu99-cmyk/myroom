@@ -31,6 +31,42 @@ window.AppScreens.FareScreen = (() => {
       } catch (_) {}
     };
 
+    const getPassengerButtonStyle = (count, enabled) => {
+      if (!enabled) {
+        return {
+          visibility: "hidden",
+        };
+      }
+
+      const isSelected = selectedPassengers === count;
+      const isOtherAfterSelected = hasPassengerSelected && !isSelected;
+
+      if (isSelected) {
+        return {
+          background: "linear-gradient(135deg, #F3F06A 0%, #D9DC3C 100%)",
+          color: "#3b3b3b",
+          border: "none",
+          boxShadow: "none",
+        };
+      }
+
+      if (isOtherAfterSelected) {
+        return {
+          background: "#EBE9EA",
+          color: "#8d8a8c",
+          border: "none",
+          boxShadow: "none",
+        };
+      }
+
+      return {
+        background: "linear-gradient(135deg, #808C88 0%, #897E86 100%)",
+        color: "#ffffff",
+        border: "none",
+        boxShadow: "none",
+      };
+    };
+
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden pt-4">
         <div className={`${C.cardClass} h-[122px] px-4 py-4 shrink-0`}>
@@ -95,34 +131,53 @@ window.AppScreens.FareScreen = (() => {
 
         {!hasPassengerSelected && (
           <div className="pt-4 shrink-0">
-            <div className="grid grid-cols-6 gap-3">
-              {passengerSlots.map((count) => {
-                const enabled = count <= safeMaxPassengers;
-                return (
-                  <button
-                    key={count}
-                    type="button"
-                    disabled={!enabled}
-                    onClick={() => enabled && onSelectPassenger(count)}
-                    className={
-                      enabled
-                        ? "h-[72px] rounded-[20px] border font-extrabold text-[24px] text-slate-800 shadow-[0_6px_12px_rgba(0,0,0,0.10)] active:scale-[0.985]"
-                        : "h-[72px] rounded-[20px] pointer-events-none opacity-0"
-                    }
-                    style={
-                      enabled
-                        ? {
-                            background: C.PASSENGER_ACTIVE,
-                            borderColor: "#c9ced6",
-                          }
-                        : undefined
-                    }
-                    aria-hidden={!enabled}
-                  >
-                    {enabled ? count : ""}
-                  </button>
-                );
-              })}
+            <div className="rounded-[30px] bg-[#F3F4F6] px-[14px] py-[12px]">
+              <div className="grid grid-cols-6 gap-3">
+                {passengerSlots.map((count) => {
+                  const enabled = count <= safeMaxPassengers;
+
+                  return (
+                    <button
+                      key={count}
+                      type="button"
+                      disabled={!enabled}
+                      onClick={() => enabled && onSelectPassenger(count)}
+                      className="h-[62px] w-[62px] rounded-full flex items-center justify-center text-[26px] font-black leading-none active:scale-[0.985] transition-transform duration-75"
+                      style={getPassengerButtonStyle(count, enabled)}
+                      aria-hidden={!enabled}
+                    >
+                      {enabled ? count : ""}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {hasPassengerSelected && (
+          <div className="pt-4 shrink-0">
+            <div className="rounded-[30px] bg-[#F3F4F6] px-[14px] py-[12px]">
+              <div className="grid grid-cols-6 gap-3">
+                {passengerSlots.map((count) => {
+                  const enabled = count <= safeMaxPassengers;
+                  const isSelected = selectedPassengers === count;
+
+                  return (
+                    <button
+                      key={count}
+                      type="button"
+                      disabled={!enabled}
+                      onClick={() => enabled && onSelectPassenger(count)}
+                      className="h-[62px] w-[62px] rounded-full flex items-center justify-center text-[26px] font-black leading-none active:scale-[0.985] transition-transform duration-75"
+                      style={getPassengerButtonStyle(count, enabled)}
+                      aria-hidden={!enabled}
+                    >
+                      {enabled ? count : ""}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}
