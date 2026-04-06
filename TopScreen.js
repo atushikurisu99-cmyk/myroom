@@ -58,8 +58,27 @@ window.AppScreens.TopScreen = (() => {
 
         <div className="pt-3 flex-1 min-h-0 overflow-hidden" style={contentStyle || undefined}>
           {!homeEndSheetOpen ? (
-            <div className="h-[150px] shrink-0">
+            <div className="h-[150px] shrink-0 relative">
               <HomeGraphCards />
+
+              <div
+                className="absolute z-20"
+                style={{
+                  right: "8px",
+                  top: "6px",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={toggleHomeEndSheet}
+                  className="flex items-center justify-center w-[46px] h-[40px] active:opacity-80"
+                  aria-label="終了ボタンを開く"
+                >
+                  <span className="text-[32px] leading-none font-bold text-slate-400">
+                    ▲
+                  </span>
+                </button>
+              </div>
             </div>
           ) : (
             <div className="h-[86px] shrink-0 relative">
@@ -68,29 +87,29 @@ window.AppScreens.TopScreen = (() => {
                 dutyStarted={dutyStarted}
                 onFinishTap={handleFinishTap}
               />
+
+              <div
+                className="absolute z-20"
+                style={{
+                  right: "8px",
+                  top: "4px",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={toggleHomeEndSheet}
+                  className="flex items-center justify-center w-[46px] h-[40px] active:opacity-80"
+                  aria-label="終了ボタンを閉じる"
+                >
+                  <span className="text-[32px] leading-none font-bold text-slate-400">
+                    ▼
+                  </span>
+                </button>
+              </div>
             </div>
           )}
 
-          <div className={`${homeEndSheetOpen ? "pt-0" : "pt-4"} flex-1 min-h-0 relative`}>
-            <div
-              className="absolute z-20"
-              style={{
-                right: "8px",
-                top: homeEndSheetOpen ? "4px" : "6px",
-              }}
-            >
-              <button
-                type="button"
-                onClick={toggleHomeEndSheet}
-                className="flex items-center justify-center w-[46px] h-[40px] active:opacity-80"
-                aria-label={homeEndSheetOpen ? "終了ボタンを閉じる" : "終了ボタンを開く"}
-              >
-                <span className="text-[32px] leading-none font-bold text-slate-400">
-                  {homeEndSheetOpen ? "▼" : "▲"}
-                </span>
-              </button>
-            </div>
-          </div>
+          <div className="flex-1 min-h-0"></div>
         </div>
       </div>
     );
