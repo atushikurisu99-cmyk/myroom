@@ -1,11 +1,7 @@
 window.AppScreens = window.AppScreens || {};
 window.AppScreens.HistoryModal = (() => {
   const { HistoryRecordCard } = window.AppComponents;
-  const {
-    formatMoney,
-    formatTime,
-    formatFullDate,
-  } = window.AppUtils;
+  const { formatMoney, formatTime, formatFullDate } = window.AppUtils;
   const shadowSub = window.AppConstants.shadowSub;
 
   function HistoryModal(props) {
@@ -38,7 +34,7 @@ window.AppScreens.HistoryModal = (() => {
 
     return (
       <div
-        className="absolute inset-0 z-40 bg-white flex flex-col"
+        className="absolute inset-0 z-40 bg-white flex flex-col overflow-hidden"
         style={{
           animation: "historySheetUp 240ms cubic-bezier(0.22,1,0.36,1)",
         }}
@@ -85,8 +81,8 @@ window.AppScreens.HistoryModal = (() => {
                   >
                     ←
                   </button>
-                  <div className="h-[42px] rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center px-3 text-sm font-bold text-slate-800">
-                    {getHistoryPeriodText()}
+                  <div className="h-[42px] rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center px-3 text-sm font-bold text-slate-800 overflow-hidden">
+                    <div className="truncate">{getHistoryPeriodText()}</div>
                   </div>
                   <button
                     type="button"
@@ -123,7 +119,7 @@ window.AppScreens.HistoryModal = (() => {
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-4 py-3">
+            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 py-3 touch-pan-y">
               {filteredHistoryRecords.length === 0 ? (
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
                   該当する履歴はありません
@@ -204,7 +200,7 @@ window.AppScreens.HistoryModal = (() => {
         ) : (
           <>
             <div className="px-4 pt-3 pb-2 border-b border-slate-100 shrink-0">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <button
                   type="button"
                   onClick={closeEditRecord}
@@ -223,7 +219,7 @@ window.AppScreens.HistoryModal = (() => {
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-4 py-3">
+            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 py-3 touch-pan-y">
               <div className="grid gap-3">
                 <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${shadowSub}`}>
                   <div className="text-xs font-semibold text-slate-500">対象履歴</div>
@@ -251,7 +247,7 @@ window.AppScreens.HistoryModal = (() => {
                           金額入力: e.target.value.replace(/[^\d]/g, ""),
                         }))
                       }
-                      className="w-full rounded-2xl border border-slate-300 pl-12 pr-4 py-4 text-3xl font-bold text-slate-800 outline-none focus:border-sky-300"
+                      className="block w-full min-w-0 rounded-2xl border border-slate-300 pl-12 pr-4 py-4 text-3xl font-bold text-slate-800 outline-none focus:border-sky-300 box-border"
                     />
                   </div>
                 </div>
@@ -322,7 +318,7 @@ window.AppScreens.HistoryModal = (() => {
                           [key]: e.target.value,
                         }))
                       }
-                      className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 text-base text-slate-800 outline-none focus:border-sky-300"
+                      className="mt-2 block w-full min-w-0 rounded-2xl border border-slate-300 px-4 py-3 text-base text-slate-800 outline-none focus:border-sky-300 box-border"
                     />
                   </div>
                 ))}
@@ -345,7 +341,7 @@ window.AppScreens.HistoryModal = (() => {
                           [key]: e.target.value,
                         }))
                       }
-                      className="mt-2 w-full rounded-2xl border border-slate-300 px-4 py-3 text-base text-slate-800 outline-none focus:border-sky-300"
+                      className="mt-2 block w-full min-w-0 rounded-2xl border border-slate-300 px-3 py-3 text-[15px] text-slate-800 outline-none focus:border-sky-300 box-border overflow-hidden"
                     />
                   </div>
                 ))}
