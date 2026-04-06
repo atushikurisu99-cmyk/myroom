@@ -421,6 +421,7 @@ window.AppComponents = (() => {
     onMenu,
     activeArea = "home",
   }) {
+    const safeInset = "env(safe-area-inset-bottom, 0px)";
     const bubbleCenterMap = {
       home: "16.6667%",
       center: "50%",
@@ -428,28 +429,61 @@ window.AppComponents = (() => {
     };
 
     const activeCenter = bubbleCenterMap[activeArea] || bubbleCenterMap.center;
-    const safeInset = "env(safe-area-inset-bottom, 0px)";
-    const visibleBandHeight = 56;
+
+    // iPhoneで帯が浮いて見えないよう、帯の見える開始位置を少し下げる
+    const bandTop = 26;
+    const bubbleTop = 20;
+    const visibleBandHeight = 62;
 
     const homeStrong = activeArea === "home";
     const centerStrong = activeArea === "center";
     const menuStrong = activeArea === "menu";
 
+    const NavCell = ({ onClick, icon, label, strong, isCenter = false }) => (
+      <button
+        type="button"
+        onClick={onClick}
+        className="h-full flex flex-col items-center justify-end text-white active:opacity-85"
+        style={{
+          paddingBottom: "calc(12px + env(safe-area-inset-bottom, 0px))",
+        }}
+      >
+        <div className="h-[34px] flex items-end justify-center">
+          {icon ? icon : <div className="w-[32px] h-[32px]" />}
+        </div>
+
+        <div
+          className={`mt-[8px] leading-none ${
+            isCenter
+              ? strong
+                ? "text-[17px] font-bold"
+                : "text-[17px] font-semibold"
+              : strong
+              ? "text-[12px] font-bold"
+              : "text-[12px] font-semibold"
+          }`}
+        >
+          {label}
+        </div>
+      </button>
+    );
+
     return (
       <div className="h-full relative overflow-visible">
         <div
-          className="absolute inset-x-0 bottom-0 rounded-t-[24px]"
+          className="absolute inset-x-0 rounded-t-[24px]"
           style={{
+            top: `${bandTop}px`,
+            bottom: "calc(-1 * env(safe-area-inset-bottom, 0px))",
             background: GREEN_MAIN,
-            height: `calc(${visibleBandHeight}px + ${safeInset})`,
           }}
         />
 
         <div
-          className="absolute w-[94px] h-[94px] rounded-full z-10 transition-[left] duration-250 ease-out"
+          className="absolute w-[98px] h-[98px] rounded-full z-10 transition-[left] duration-250 ease-out"
           style={{
             left: activeCenter,
-            top: "-10px",
+            top: `${bubbleTop}px`,
             transform: "translateX(-50%)",
             background: GREEN_CIRCLE,
             boxShadow: "0 8px 16px rgba(0,0,0,0.10)",
@@ -457,44 +491,33 @@ window.AppComponents = (() => {
         />
 
         <div
-          className="absolute inset-x-0 top-0 z-20 grid grid-cols-3"
+          className="absolute inset-x-0 z-20 grid grid-cols-3"
           style={{
-            height: `calc(100% + ${safeInset})`,
-            paddingBottom: safeInset,
+            top: `${bandTop}px`,
+            height: `calc(${visibleBandHeight}px + ${safeInset})`,
           }}
         >
-          <button
-            type="button"
+          <NavCell
             onClick={onHome}
-            className="h-full flex flex-col items-center justify-end pb-[10px] text-white active:opacity-85"
-          >
-            <HomeFilledIcon className="w-[32px] h-[32px]" />
-            <div className={`mt-[5px] text-[12px] leading-none ${homeStrong ? "font-bold" : "font-semibold"}`}>
-              ホーム
-            </div>
-          </button>
+            icon={<HomeFilledIcon className="w-[32px] h-[32px]" />}
+            label="ホーム"
+            strong={homeStrong}
+          />
 
-          <button
-            type="button"
+          <NavCell
             onClick={onCenter}
-            className="h-full flex flex-col items-center justify-end pb-[10px] text-white active:opacity-85"
-          >
-            <div className="w-[32px] h-[32px]" />
-            <div className={`mt-[5px] text-[17px] tracking-[0.06em] leading-none ${centerStrong ? "font-bold" : "font-semibold"}`}>
-              {centerLabel}
-            </div>
-          </button>
+            icon={null}
+            label={centerLabel}
+            strong={centerStrong}
+            isCenter
+          />
 
-          <button
-            type="button"
+          <NavCell
             onClick={onMenu}
-            className="h-full flex flex-col items-center justify-end pb-[10px] text-white active:opacity-85"
-          >
-            <MenuDotsFilledIcon className="w-[28px] h-[28px]" />
-            <div className={`mt-[9px] text-[12px] leading-none ${menuStrong ? "font-bold" : "font-semibold"}`}>
-              メニュー
-            </div>
-          </button>
+            icon={<MenuDotsFilledIcon className="w-[28px] h-[28px]" />}
+            label="メニュー"
+            strong={menuStrong}
+          />
         </div>
       </div>
     );
