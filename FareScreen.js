@@ -32,55 +32,74 @@ window.AppScreens.FareScreen = (() => {
     };
 
     const getPassengerStyle = (count, enabled) => {
-      if (!enabled) return { visibility: "hidden" };
+      if (!enabled) {
+        return {
+          visibility: "hidden",
+          pointerEvents: "none",
+        };
+      }
 
       const isSelected = selectedPassengers === count;
-      const isOther = hasPassengerSelected && !isSelected;
+      const isOtherAfterSelected = hasPassengerSelected && !isSelected;
 
       if (isSelected) {
         return {
           background: "linear-gradient(135deg, #F3F06A 0%, #D9DC3C 100%)",
-          color: "#2f2f2f",
+          color: "#2F2F2F",
+          border: "none",
+          boxShadow: "none",
         };
       }
 
-      if (isOther) {
+      if (isOtherAfterSelected) {
         return {
           background: "#EBE9EA",
-          color: "#9a9799",
+          color: "#8E8A8C",
+          border: "none",
+          boxShadow: "none",
         };
       }
 
       return {
         background: "linear-gradient(135deg, #808C88 0%, #897E86 100%)",
-        color: "#ffffff",
+        color: "#FFFFFF",
+        border: "none",
+        boxShadow: "none",
       };
     };
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden pt-4">
-        {/* 上部カード */}
         <div className={`${C.cardClass} h-[122px] px-4 py-4 shrink-0`}>
           <div className="flex items-start justify-center gap-4">
-            <div className="flex-1 text-left">
-              <div className="text-[24px] font-bold">{formatTime(rideStartAt)}</div>
-              <div className="mt-3 text-[15px] font-semibold truncate">
+            <div className="flex-1 min-w-0 text-left">
+              <div className="text-[24px] font-bold text-slate-800 leading-none">
+                {formatTime(rideStartAt)}
+              </div>
+              <div className="mt-3 text-[15px] font-semibold text-slate-600 truncate">
                 {pickup || "未取得"}
+              </div>
+              <div className="mt-1 text-[11px] text-slate-400">
+                精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}
               </div>
             </div>
 
-            <div className="pt-1 text-[20px] font-bold text-slate-400">→</div>
+            <div className="pt-1 text-[20px] font-bold text-slate-400 shrink-0">→</div>
 
-            <div className="flex-1 text-right">
-              <div className="text-[24px] font-bold">{formatTime(rideEndAt)}</div>
-              <div className="mt-3 text-[15px] font-semibold truncate">
+            <div className="flex-1 min-w-0 text-right">
+              <div className="text-[24px] font-bold text-slate-800 leading-none">
+                {formatTime(rideEndAt)}
+              </div>
+              <div className="mt-3 text-[15px] font-semibold text-slate-600 truncate">
                 {dropoff || "未取得"}
+              </div>
+              <div className="mt-1 text-[11px] text-slate-400">
+                精度：{dropoffMeta?.accuracy != null ? `${dropoffMeta.accuracy}m` : "--"}
               </div>
             </div>
           </div>
         </div>
 
-        {/* 金額 */}
         <div className="pt-4 shrink-0">
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[26px] font-bold text-slate-400">
@@ -94,74 +113,86 @@ window.AppScreens.FareScreen = (() => {
               value={formattedAmount}
               onChange={handleAmountChange}
               placeholder="0"
-              className="w-full rounded-[22px] border border-white/60 bg-white pl-10 pr-[110px] h-[72px] text-[40px] font-bold outline-none shadow-[0_6px_12px_rgba(0,0,0,0.08)]"
+              className="w-full rounded-[22px] border border-white/60 bg-white pl-10 pr-[110px] h-[72px] text-[40px] font-bold text-slate-800 outline-none shadow-[0_8px_16px_rgba(0,0,0,0.10)] focus:border-sky-300"
             />
+
+            {hasPassengerSelected && (
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-end gap-1 text-slate-800">
+                <span className="text-[11px] font-semibold text-slate-500 pb-[4px]">
+                  乗車人員
+                </span>
+                <span className="text-[26px] font-black leading-none">
+                  {selectedPassengers}
+                </span>
+                <span className="text-[13px] font-bold pb-[3px]">名</span>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* 人数ボタン */}
         <div className="pt-4 shrink-0">
-          <div className="rounded-[28px] bg-[#F3F4F6] px-[14px] py-[12px]">
-            <div className="grid grid-cols-6 gap-3">
-              {passengerSlots.map((count) => {
-                const enabled = count <= safeMaxPassengers;
+          <div className="grid grid-cols-6 gap-3">
+            {passengerSlots.map((count) => {
+              const enabled = count <= safeMaxPassengers;
 
-                return (
-                  <button
-                    key={count}
-                    type="button"
-                    disabled={!enabled}
-                    onClick={() => enabled && onSelectPassenger(count)}
-                    style={getPassengerStyle(count, enabled)}
-                    className="
-                      h-[62px] w-[62px]
-                      rounded-full
-                      flex items-center justify-center
-                      transition-all duration-75
-                      active:scale-[0.96]
-                    "
-                  >
+              return (
+                <button
+                  key={count}
+                  type="button"
+                  disabled={!enabled}
+                  onClick={() => enabled && onSelectPassenger(count)}
+                  className="h-[62px] w-[62px] rounded-full flex items-center justify-center active:scale-[0.97] transition-transform duration-75"
+                  style={getPassengerStyle(count, enabled)}
+                  aria-hidden={!enabled}
+                >
+                  {enabled ? (
                     <span
-                      className="
-                        text-[28px]
-                        font-extrabold
-                        tracking-[-0.03em]
-                        leading-none
-                        select-none
-                      "
+                      className="leading-none select-none"
+                      style={{
+                        fontFamily: '"Arial Black", "Arial", system-ui, sans-serif',
+                        fontSize: "31px",
+                        fontWeight: 900,
+                        letterSpacing: "-0.04em",
+                        lineHeight: 1,
+                        transform: "translateY(1px)",
+                      }}
                     >
-                      {enabled ? count : ""}
+                      {count}
                     </span>
-                  </button>
-                );
-              })}
-            </div>
+                  ) : (
+                    ""
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* 決済 */}
         {hasPassengerSelected && (
           <div className="pt-4 flex-1 min-h-0">
             <div className="grid gap-3">
               <button
+                type="button"
                 onClick={() => openPaymentDialog("cash")}
-                className={`${C.smallButtonBase} h-[70px] text-[24px] font-extrabold`}
+                className={`${C.smallButtonBase} h-[70px] text-[24px] font-extrabold text-slate-900`}
                 style={{ background: C.PAYMENT_CASH }}
               >
                 現金
               </button>
 
               <button
+                type="button"
                 onClick={() => openPaymentDialog("cardQr")}
-                className={`${C.smallButtonBase} h-[70px] text-[24px] font-extrabold`}
+                className={`${C.smallButtonBase} h-[70px] text-[24px] font-extrabold text-slate-900`}
                 style={{ background: C.PAYMENT_CARD }}
               >
                 カード・QR
               </button>
 
               <button
+                type="button"
                 onClick={() => openPaymentDialog("receipt")}
-                className={`${C.smallButtonBase} h-[70px] text-[24px] font-extrabold`}
+                className={`${C.smallButtonBase} h-[70px] text-[24px] font-extrabold text-slate-900`}
                 style={{ background: C.PAYMENT_RECEIPT }}
               >
                 領収証発行
