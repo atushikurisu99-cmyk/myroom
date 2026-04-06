@@ -1,6 +1,6 @@
 window.AppScreens = window.AppScreens || {};
 window.AppScreens.RideScreen = (() => {
-  const { HeaderCard, RideInfoCard } = window.AppComponents;
+  const { HeaderCard, RideInfoCard, BottomNav } = window.AppComponents;
   const C = window.AppConstants;
 
   const GREEN_MAIN = "#9ED36A";
@@ -20,6 +20,11 @@ window.AppScreens.RideScreen = (() => {
       elapsedText,
       viaStops,
       handleDropOffTap,
+      navCenterLabel,
+      navActiveArea,
+      onHome,
+      onCenter,
+      onMenu,
     } = props;
 
     return (
@@ -46,9 +51,9 @@ window.AppScreens.RideScreen = (() => {
               <button
                 type="button"
                 onClick={handleDropOffTap}
-                className={`${C.mainButtonBase} ${C.mainButtonShine} bg-[linear-gradient(180deg,#ffe066,#ffb400,#cc7a00)] text-white rounded-[28px] border border-white/60`}
+                className={`${C.mainButtonBase} bg-[linear-gradient(180deg,#ffe066,#ffb400,#cc7a00)] text-white rounded-[28px] shadow-[0_8px_16px_rgba(0,0,0,0.14),inset_0_1px_0_rgba(255,255,255,0.45)]`}
               >
-                <span className={C.bigButtonText}>降車</span>
+                <span className="text-[30px] font-bold tracking-[-0.02em]">降車</span>
               </button>
             </div>
           </div>
@@ -67,6 +72,19 @@ window.AppScreens.RideScreen = (() => {
         </div>
 
         <div className="flex-1 min-h-0"></div>
+
+        <div
+          className="absolute left-0 right-0 bottom-0 z-20"
+          style={{ height: `${C.BOTTOM_NAV_HEIGHT}px` }}
+        >
+          <BottomNav
+            centerLabel={navCenterLabel}
+            onHome={onHome}
+            onCenter={onCenter}
+            onMenu={onMenu}
+            activeArea={navActiveArea}
+          />
+        </div>
       </div>
     );
   };
