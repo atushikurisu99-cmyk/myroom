@@ -10,6 +10,7 @@ window.AppComponents = (() => {
   const C = window.AppConstants;
 
   const GREEN_MAIN = "#9ED36A";
+  const GREEN_SOFT = "#7FC84E";
   const GREEN_CIRCLE = "#92CD4C";
   const END_GREEN = "#375f1d";
 
@@ -89,7 +90,7 @@ window.AppComponents = (() => {
     ];
 
     return (
-      <div className="flex items-start gap-5 pt-[6px]">
+      <div className="flex items-start gap-5 pt-[10px]">
         {items.map((item) => (
           <div key={item.label} className="w-[38px] shrink-0">
             <div className="text-[10px] leading-none font-semibold text-slate-500">
@@ -110,21 +111,19 @@ window.AppComponents = (() => {
     const numberText = formatPlainNumber(homeDisplayAmount);
 
     return (
-      <div className="mt-[12px] flex items-center justify-between gap-3">
+      <div className="mt-[14px] flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
           {isHomeAmountVisible ? (
-            <div className="w-[252px] max-w-full flex justify-end">
+            <div className="w-[258px] max-w-full flex justify-end">
               <div className="inline-flex items-end text-white whitespace-nowrap">
                 <div className="text-[34px] leading-none font-normal tracking-[-0.02em]">
                   {numberText}
                 </div>
-                <div className="ml-[2px] text-[34px] leading-none font-normal">
-                  円
-                </div>
+                <div className="ml-[2px] text-[34px] leading-none font-normal">円</div>
               </div>
             </div>
           ) : (
-            <div className="w-[252px] max-w-full flex justify-end">
+            <div className="w-[258px] max-w-full flex justify-end">
               <div className="text-[34px] leading-none font-normal tracking-[-0.02em] text-white whitespace-nowrap">
                 ーーー
               </div>
@@ -138,10 +137,7 @@ window.AppComponents = (() => {
           className="shrink-0 w-[34px] h-[34px] flex items-center justify-center text-white/95 active:opacity-80"
           aria-label={isHomeAmountVisible ? "金額を非表示" : "金額を表示"}
         >
-          <EyeToggleIcon
-            hidden={!isHomeAmountVisible}
-            className="w-[28px] h-[28px]"
-          />
+          <EyeToggleIcon hidden={!isHomeAmountVisible} className="w-[28px] h-[28px]" />
         </button>
       </div>
     );
@@ -154,9 +150,9 @@ window.AppComponents = (() => {
     toggleHomeAmountVisible,
   }) {
     return (
-      <div className="h-full w-full flex flex-col justify-between px-[18px] pt-[14px] pb-[16px]">
+      <div className="h-full w-full flex flex-col justify-between px-[18px] pt-[18px] pb-[16px]">
         <div className="flex items-start justify-end">
-          <div className="flex items-center justify-end text-[60px] leading-[0.88] font-black tracking-[-0.05em] text-black">
+          <div className="flex items-center justify-end text-[58px] leading-[0.88] font-black tracking-[-0.05em] text-black">
             <span>{timeParts?.hh || "00"}</span>
             <span
               className={`${
@@ -291,7 +287,7 @@ window.AppComponents = (() => {
     }
 
     return (
-      <div className="h-full w-full px-[14px] pt-[14px] pb-[14px]">
+      <div className="h-full w-full px-[14px] pt-[18px] pb-[14px]">
         <WhiteStatusHeader
           timeParts={timeParts}
           cardMode={cardMode}
@@ -400,7 +396,7 @@ window.AppComponents = (() => {
           <button
             key={card.title}
             type="button"
-            className="rounded-[22px] border border-slate-200 bg-slate-100/70 active:bg-slate-200/70 text-left px-4 py-4 overflow-hidden"
+            className="rounded-[24px] border border-slate-200 bg-slate-100/80 active:bg-slate-200/70 text-left px-4 py-4 overflow-hidden"
           >
             <div className="text-[16px] font-bold text-slate-600">{card.title}</div>
             <div className="mt-1 text-[12px] font-semibold text-slate-400">{card.sub}</div>
@@ -417,6 +413,13 @@ window.AppComponents = (() => {
     onMenu,
     activeArea = "home",
   }) {
+    const bubbleClass =
+      activeArea === "home"
+        ? "left-[8px]"
+        : activeArea === "menu"
+        ? "right-[8px]"
+        : "left-1/2 -translate-x-1/2";
+
     const homeStrong = activeArea === "home";
     const menuStrong = activeArea === "menu";
     const centerStrong = activeArea === "center";
@@ -424,12 +427,12 @@ window.AppComponents = (() => {
     return (
       <div className="h-full relative overflow-visible">
         <div
-          className="absolute inset-x-0 bottom-0 h-[58px] rounded-t-[24px]"
+          className="absolute inset-x-0 bottom-0 h-[56px] rounded-t-[24px]"
           style={{ background: GREEN_MAIN }}
         />
 
         <div
-          className="absolute left-1/2 -translate-x-1/2 top-[-28px] w-[98px] h-[98px] rounded-full z-10"
+          className={`absolute top-[-10px] w-[94px] h-[94px] rounded-full z-10 transition-all duration-250 ease-out ${bubbleClass}`}
           style={{
             background: GREEN_CIRCLE,
             boxShadow: "0 8px 16px rgba(0,0,0,0.10)",
@@ -440,9 +443,9 @@ window.AppComponents = (() => {
           <button
             type="button"
             onClick={onHome}
-            className="h-full flex flex-col items-center justify-end pb-[8px] text-white active:opacity-85"
+            className="h-full flex flex-col items-center justify-end pb-[10px] text-white active:opacity-85"
           >
-            <HomeFilledIcon className="w-[34px] h-[34px]" />
+            <HomeFilledIcon className="w-[32px] h-[32px]" />
             <div
               className={`mt-[5px] text-[12px] leading-none ${
                 homeStrong ? "font-bold" : "font-semibold"
@@ -469,9 +472,9 @@ window.AppComponents = (() => {
           <button
             type="button"
             onClick={onMenu}
-            className="h-full flex flex-col items-center justify-end pb-[8px] text-white active:opacity-85"
+            className="h-full flex flex-col items-center justify-end pb-[10px] text-white active:opacity-85"
           >
-            <MenuDotsFilledIcon className="w-[30px] h-[30px]" />
+            <MenuDotsFilledIcon className="w-[28px] h-[28px]" />
             <div
               className={`mt-[5px] text-[12px] leading-none ${
                 menuStrong ? "font-bold" : "font-semibold"
@@ -503,10 +506,7 @@ window.AppComponents = (() => {
           <div className="flex items-center justify-center pl-[4px]">
             <div className="w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center">
               <svg viewBox="0 0 64 64" className="w-[34px] h-[34px]" aria-hidden="true">
-                <path
-                  fill={END_GREEN}
-                  d="M8 28h24V14l24 18-24 18V36H8z"
-                />
+                <path fill={END_GREEN} d="M8 28h24V14l24 18-24 18V36H8z" />
               </svg>
             </div>
           </div>
@@ -519,11 +519,7 @@ window.AppComponents = (() => {
     );
   }
 
-  function HomeEndDutySheet({
-    open,
-    dutyStarted,
-    onFinishTap,
-  }) {
+  function HomeEndDutySheet({ open, dutyStarted, onFinishTap }) {
     return (
       <div className="relative h-full w-full overflow-hidden">
         <div
