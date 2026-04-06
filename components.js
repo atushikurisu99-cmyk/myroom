@@ -113,16 +113,14 @@ window.AppComponents = (() => {
       <div className="mt-[12px] flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
           {isHomeAmountVisible ? (
-            <div className="w-[252px] max-w-full flex items-end text-white">
-              <div className="flex-1 min-w-0 text-[34px] leading-none font-normal tracking-[-0.02em] whitespace-nowrap overflow-hidden">
+            <div className="w-[252px] max-w-full flex items-end text-white whitespace-nowrap">
+              <div className="text-[34px] leading-none font-normal tracking-[-0.02em]">
                 {numberText}
               </div>
-              <div className="w-[30px] shrink-0 text-[34px] leading-none font-normal text-right">
-                円
-              </div>
+              <div className="ml-[2px] text-[34px] leading-none font-normal">円</div>
             </div>
           ) : (
-            <div className="w-[252px] max-w-full text-[34px] leading-none font-normal tracking-[-0.02em] text-white whitespace-nowrap overflow-hidden">
+            <div className="w-[252px] max-w-full text-[34px] leading-none font-normal tracking-[-0.02em] text-white whitespace-nowrap">
               ーーー
             </div>
           )}
@@ -487,7 +485,7 @@ window.AppComponents = (() => {
         type="button"
         onClick={onClick}
         disabled={disabled}
-        className={`w-full rounded-full overflow-hidden border-[6px] border-white shadow-[0_8px_18px_rgba(0,0,0,0.16)] ${
+        className={`w-full rounded-full overflow-hidden border-[5px] border-white shadow-[0_8px_18px_rgba(0,0,0,0.14)] ${
           disabled ? "opacity-45" : "opacity-100 active:scale-[0.99]"
         }`}
         style={{
@@ -495,10 +493,10 @@ window.AppComponents = (() => {
           background: END_GREEN,
         }}
       >
-        <div className="h-full grid grid-cols-[78px_1fr_54px] items-center">
-          <div className="flex items-center justify-center">
-            <div className="w-[56px] h-[56px] rounded-full bg-white flex items-center justify-center">
-              <svg viewBox="0 0 64 64" className="w-[38px] h-[38px]" aria-hidden="true">
+        <div className="h-full grid grid-cols-[72px_1fr_42px] items-center">
+          <div className="flex items-center justify-center pl-[4px]">
+            <div className="w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center">
+              <svg viewBox="0 0 64 64" className="w-[34px] h-[34px]" aria-hidden="true">
                 <path
                   fill={END_GREEN}
                   d="M8 28h24V14l24 18-24 18V36H8z"
@@ -507,12 +505,12 @@ window.AppComponents = (() => {
             </div>
           </div>
 
-          <div className="text-white text-[20px] font-bold tracking-[-0.02em] text-center">
+          <div className="text-white text-[19px] font-bold tracking-[-0.02em] text-center">
             本日の乗務を終了
           </div>
 
-          <div className="flex items-center justify-center pr-[4px]">
-            <span className="text-[30px] leading-none font-bold text-white/80">▼</span>
+          <div className="flex items-center justify-center pr-[2px]">
+            <span className="text-[24px] leading-none font-bold text-white/60">▼</span>
           </div>
         </div>
       </button>
