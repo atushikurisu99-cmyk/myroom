@@ -49,6 +49,7 @@ window.AppHooks = (() => {
     const [now, setNow] = useState(new Date());
 
     const [finishCountdown, setFinishCountdown] = useState(3);
+    const [startupResetKey, setStartupResetKey] = useState(0);
 
     const [finishForm, setFinishForm] = useState({
       totalDistance: "",
@@ -79,6 +80,7 @@ window.AppHooks = (() => {
     const dropoffProgressTimerRef = useRef(null);
     const pickupPromiseRef = useRef(Promise.resolve(null));
     const dropoffPromiseRef = useRef(Promise.resolve(null));
+
     const finishCountdownTimerRef = useRef(null);
     const finishAutoDoneRef = useRef(false);
 
@@ -738,6 +740,7 @@ window.AppHooks = (() => {
         note: "",
       });
       setScreen("top");
+      setStartupResetKey((prev) => prev + 1);
     };
 
     const handleFinishTap = () => {
@@ -1056,6 +1059,7 @@ window.AppHooks = (() => {
         finishForm,
         finishCountdown,
         isHomeAmountVisible,
+        startupResetKey,
       },
       derived: {
         timeParts,
