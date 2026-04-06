@@ -2,7 +2,6 @@ const { useEffect, useMemo, useRef, useState } = React;
 
 const { useTaxiAppState } = window.AppHooks;
 const {
-  BottomNav,
   OtherSheet,
   PaymentDialog,
   ViaDialog,
@@ -134,9 +133,7 @@ function TaxiMiniApp() {
   }, [startupPhase]);
 
   const showBottomNav =
-    state.screen === "top" ||
-    state.screen === "standby" ||
-    state.screen === "ride";
+    state.screen === "top" || state.screen === "standby" || state.screen === "ride";
 
   const navCenterLabel = state.screen === "top" ? "経費" : "履歴";
   const activeNavArea = state.showOtherSheet
@@ -219,18 +216,16 @@ function TaxiMiniApp() {
         <div
           className="h-full flex flex-col overflow-hidden relative pt-0"
           style={{
-            paddingBottom: showBottomNav ? `${C.BOTTOM_NAV_HEIGHT + 12}px` : 0,
+            paddingBottom: showBottomNav ? `${C.BOTTOM_NAV_HEIGHT + 10}px` : 0,
           }}
         >
           {state.screen === "top" && (
             <TopScreen
               screen={state.screen}
               timeParts={derived.timeParts}
-              homeDisplayAmount={derived.homeDisplayAmount ?? derived.totalAmount}
-              isHomeAmountVisible={state.isHomeAmountVisible ?? true}
-              toggleHomeAmountVisible={
-                actions.toggleHomeAmountVisible || (() => {})
-              }
+              homeDisplayAmount={derived.homeDisplayAmount}
+              isHomeAmountVisible={state.isHomeAmountVisible}
+              toggleHomeAmountVisible={actions.toggleHomeAmountVisible}
               topMainLabel={derived.topMainLabel}
               topMainButtonDisabled={derived.topMainButtonDisabled || startupLock}
               handleTopMain={actions.handleTopMain}
@@ -240,6 +235,12 @@ function TaxiMiniApp() {
               toggleHomeEndSheet={actions.toggleHomeEndSheet}
               handleFinishTap={actions.handleFinishTap}
               dutyStarted={state.dutyStarted}
+              isRiding={state.isRiding}
+              navCenterLabel={navCenterLabel}
+              navActiveArea={activeNavArea}
+              onHome={actions.goHome}
+              onCenter={actions.openExpenseSoon}
+              onMenu={actions.openMenu}
             />
           )}
 
@@ -254,6 +255,11 @@ function TaxiMiniApp() {
               amount1={derived.amount1}
               amount2={derived.amount2}
               handleStartRide={actions.handleStartRide}
+              navCenterLabel={navCenterLabel}
+              navActiveArea={activeNavArea}
+              onHome={actions.goHome}
+              onCenter={actions.openHistorySimple}
+              onMenu={actions.openMenu}
             />
           )}
 
@@ -272,6 +278,11 @@ function TaxiMiniApp() {
               elapsedText={derived.elapsedText}
               viaStops={state.viaStops}
               handleDropOffTap={actions.handleDropOffTap}
+              navCenterLabel={navCenterLabel}
+              navActiveArea={activeNavArea}
+              onHome={actions.goHome}
+              onCenter={actions.openHistorySimple}
+              onMenu={actions.openMenu}
             />
           )}
 
@@ -303,25 +314,6 @@ function TaxiMiniApp() {
             />
           )}
         </div>
-
-        {showBottomNav && startupPhase !== "tapFade" && (
-          <div
-            className="absolute left-0 right-0 bottom-0 z-20"
-            style={{ height: `${C.BOTTOM_NAV_HEIGHT}px` }}
-          >
-            <BottomNav
-              centerLabel={navCenterLabel}
-              onHome={actions.goHome}
-              onCenter={
-                state.screen === "top"
-                  ? actions.openExpenseSoon
-                  : actions.openHistorySimple
-              }
-              onMenu={actions.openMenu}
-              activeArea={activeNavArea}
-            />
-          </div>
-        )}
 
         {showSplash && (
           <div
