@@ -44,8 +44,8 @@ window.AppScreens.FareScreen = (() => {
 
       if (isSelected) {
         return {
-          background: "linear-gradient(135deg, #F3F06A 0%, #D9DC3C 100%)",
-          color: "#2F2F2F",
+          background: "#808C88",
+          color: "#FFFFFF",
           border: "none",
           boxShadow: "none",
         };
@@ -54,14 +54,15 @@ window.AppScreens.FareScreen = (() => {
       if (isOtherAfterSelected) {
         return {
           background: "#EBE9EA",
-          color: "#8E8A8C",
+          color: "#8D8A8C",
           border: "none",
           boxShadow: "none",
         };
       }
 
       return {
-        background: "linear-gradient(135deg, #808C88 0%, #897E86 100%)",
+        background:
+          "linear-gradient(135deg, #808C88 0%, #808C88 45%, #897E86 100%)",
         color: "#FFFFFF",
         border: "none",
         boxShadow: "none",
@@ -147,14 +148,15 @@ window.AppScreens.FareScreen = (() => {
                 >
                   {enabled ? (
                     <span
-                      className="leading-none select-none"
+                      className="select-none"
                       style={{
                         fontFamily: '"Arial Black", "Arial", system-ui, sans-serif',
-                        fontSize: "31px",
+                        fontSize: "36px",
                         fontWeight: 900,
-                        letterSpacing: "-0.04em",
                         lineHeight: 1,
-                        transform: "translateY(1px)",
+                        letterSpacing: "0",
+                        transform: "none",
+                        display: "block",
                       }}
                     >
                       {count}
