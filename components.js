@@ -1,6 +1,8 @@
 // ===============================
-// 共通カラー
+// components.js 全文置き換え
+// 既存思想は維持しつつ、下ナビのみ座標基準で再設計
 // ===============================
+
 const GREEN_MAIN = "#9ED36A";
 const GREEN_CIRCLE = "#7FC84E";
 
@@ -29,7 +31,7 @@ function HeaderCard(props) {
 
   const colonOpacity = showColon ? 1 : 0.22;
 
-  const renderTopDisplay = () => {
+  const renderRightBottom = () => {
     if (screen === "top") {
       const homeDisplayAmount = Number(props.homeDisplayAmount || 0);
       const isHomeAmountVisible = props.isHomeAmountVisible !== false;
@@ -50,12 +52,15 @@ function HeaderCard(props) {
           <div className="text-[42px] font-black tracking-[-0.04em] leading-none text-slate-800">
             {displayText}
           </div>
-          <div className="text-[18px] font-bold leading-none text-slate-500 pb-[4px]">円</div>
+          <div className="text-[18px] font-bold leading-none text-slate-500 pb-[4px]">
+            円
+          </div>
         </div>
       );
     }
 
-    const weatherNow = window.AppUtils?.getWeatherIcon?.(props.weather?.nowKind || "unknown") || "・";
+    const weatherNow =
+      window.AppUtils?.getWeatherIcon?.(props.weather?.nowKind || "unknown") || "・";
     const weatherTomorrow =
       window.AppUtils?.getWeatherIcon?.(props.weather?.tomorrowKind || "unknown") || "・";
 
@@ -96,11 +101,15 @@ function HeaderCard(props) {
         </div>
 
         <div className="absolute right-4 bottom-4 flex items-end gap-[2px]">
-          <div className="mr-2 text-[12px] font-semibold text-slate-500 pb-[6px]">{label}</div>
+          <div className="mr-2 text-[12px] font-semibold text-slate-500 pb-[6px]">
+            {label}
+          </div>
           <div className="text-[38px] font-black tracking-[-0.04em] leading-none text-slate-800">
             {value}
           </div>
-          <div className="text-[16px] font-bold leading-none text-slate-500 pb-[4px]">{unit}</div>
+          <div className="text-[16px] font-bold leading-none text-slate-500 pb-[4px]">
+            {unit}
+          </div>
         </div>
       </>
     );
@@ -110,17 +119,21 @@ function HeaderCard(props) {
     <div className="h-full px-3 pt-3 pb-0">
       <div className="relative h-full rounded-b-[28px] rounded-t-none bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] overflow-hidden">
         <div className="absolute left-1/2 top-[16px] -translate-x-1/2 flex items-center text-slate-800 select-none">
-          <span className="text-[46px] font-black tracking-[-0.05em] leading-none">{hh}</span>
+          <span className="text-[46px] font-black tracking-[-0.05em] leading-none">
+            {hh}
+          </span>
           <span
             className="text-[42px] font-black leading-none px-[2px] transition-opacity duration-150"
             style={{ opacity: colonOpacity }}
           >
             :
           </span>
-          <span className="text-[46px] font-black tracking-[-0.05em] leading-none">{mm}</span>
+          <span className="text-[46px] font-black tracking-[-0.05em] leading-none">
+            {mm}
+          </span>
         </div>
 
-        {renderTopDisplay()}
+        {renderRightBottom()}
       </div>
     </div>
   );
@@ -170,12 +183,7 @@ function RideInfoCard({
 // HomeGraphCards
 // ===============================
 function HomeGraphCards() {
-  const cards = [
-    "売上",
-    "件数",
-    "時間帯",
-    "曜日",
-  ];
+  const cards = ["売上", "件数", "時間帯", "曜日"];
 
   return (
     <div className="px-3 h-full">
@@ -251,7 +259,9 @@ function HistoryRecordCard({ item, record, onClick }) {
           <div className="text-[18px] font-black text-slate-800 leading-none">
             {formatMoney(amountValue)}
           </div>
-          <div className="mt-1 text-[12px] font-semibold text-slate-500">{typeText}</div>
+          <div className="mt-1 text-[12px] font-semibold text-slate-500">
+            {typeText}
+          </div>
         </div>
       </div>
     </button>
@@ -271,10 +281,7 @@ function OtherSheet({
 
   return (
     <div className="absolute inset-0 z-40 bg-black/18">
-      <div
-        className="absolute inset-0"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0" onClick={onClose} />
       <div
         className="absolute left-3 right-3 bottom-[92px] rounded-[28px] bg-white border border-white/70 shadow-[0_16px_32px_rgba(0,0,0,0.16)] p-4"
         style={{
@@ -331,7 +338,6 @@ function PaymentDialog({
 }) {
   const { formatMoney } = window.AppUtils;
   const amountValue = Number(amount || 0);
-
   const dots = ".".repeat(Math.max(0, Number(savingDots || 0)));
 
   return (
@@ -352,8 +358,12 @@ function PaymentDialog({
         </div>
 
         <div className="mt-4 grid gap-2 text-[12px] text-slate-500">
-          <div>乗車精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}</div>
-          <div>降車精度：{dropoffMeta?.accuracy != null ? `${dropoffMeta.accuracy}m` : "--"}</div>
+          <div>
+            乗車精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}
+          </div>
+          <div>
+            降車精度：{dropoffMeta?.accuracy != null ? `${dropoffMeta.accuracy}m` : "--"}
+          </div>
         </div>
 
         <div className="mt-6">
@@ -414,7 +424,165 @@ function ViaDialog({
 }
 
 // ===============================
+// FinishCheckScreen
+// components.js 側に持たせて白画面要因を潰す
+// ===============================
+function FinishCheckScreen(props) {
+  const {
+    finishLocked = false,
+    finishPhase = "check",
+    finishSummary,
+    onBack,
+    onToggleLock,
+    onConfirm,
+    onFinalTap,
+    openHistoryModalWithFilter,
+  } = props;
+
+  const summary = finishSummary || {
+    amount1: 0,
+    amount2: 0,
+    totalAmount: 0,
+    businessKm: 0,
+    recordCount: 0,
+    passengerCount: 0,
+  };
+
+  const isSaving = finishPhase === "saving";
+  const isDone = finishPhase === "done";
+
+  return (
+    <div className="absolute inset-0 bg-[#eef2f5] overflow-hidden">
+      <div className="h-full flex flex-col px-3 pt-3 pb-4">
+        <div className="rounded-[28px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] px-4 py-4">
+          <div className="text-[24px] font-bold text-slate-800 text-center">
+            終了前チェック
+          </div>
+          <div className="mt-2 text-[13px] text-slate-500 text-center">
+            この内容で本日の乗務を終了します
+          </div>
+        </div>
+
+        <div className="mt-3 grid gap-3">
+          <div className="rounded-[24px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] px-4 py-4">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+              <div>
+                <div className="text-[12px] text-slate-500">①</div>
+                <button
+                  type="button"
+                  onClick={() => openHistoryModalWithFilter?.("1")}
+                  className="mt-1 text-[22px] font-black text-slate-800 active:opacity-70"
+                >
+                  {Number(summary.amount1 || 0).toLocaleString("ja-JP")}円
+                </button>
+              </div>
+
+              <div>
+                <div className="text-[12px] text-slate-500">②</div>
+                <button
+                  type="button"
+                  onClick={() => openHistoryModalWithFilter?.("2")}
+                  className="mt-1 text-[22px] font-black text-slate-800 active:opacity-70"
+                >
+                  {Number(summary.amount2 || 0).toLocaleString("ja-JP")}円
+                </button>
+              </div>
+
+              <div>
+                <div className="text-[12px] text-slate-500">合計</div>
+                <button
+                  type="button"
+                  onClick={() => openHistoryModalWithFilter?.("all")}
+                  className="mt-1 text-[24px] font-black text-slate-800 active:opacity-70"
+                >
+                  {Number(summary.totalAmount || 0).toLocaleString("ja-JP")}円
+                </button>
+              </div>
+
+              <div>
+                <div className="text-[12px] text-slate-500">＝営走</div>
+                <div className="mt-1 text-[24px] font-black text-slate-800">
+                  {Number(summary.businessKm || 0).toLocaleString("ja-JP")}km
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[12px] text-slate-500">件数</div>
+                <div className="mt-1 text-[22px] font-black text-slate-800">
+                  {Number(summary.recordCount || 0)}件
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[12px] text-slate-500">人数</div>
+                <div className="mt-1 text-[22px] font-black text-slate-800">
+                  {Number(summary.passengerCount || 0)}名
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {!isDone && (
+            <button
+              type="button"
+              onClick={onToggleLock}
+              className={`h-[62px] rounded-[24px] border text-[22px] font-bold active:scale-[0.985] ${
+                finishLocked
+                  ? "bg-emerald-500 border-emerald-500 text-white"
+                  : "bg-white border-slate-200 text-slate-700"
+              }`}
+            >
+              {finishLocked ? "ロック解除済み" : "ロック解除"}
+            </button>
+          )}
+
+          {!isSaving && !isDone && (
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={onBack}
+                className="h-[56px] rounded-[22px] bg-slate-100 text-slate-700 font-bold active:bg-slate-200"
+              >
+                戻る
+              </button>
+
+              <button
+                type="button"
+                onClick={onConfirm}
+                disabled={!finishLocked}
+                className="h-[56px] rounded-[22px] bg-slate-800 text-white font-bold active:opacity-90 disabled:opacity-40"
+              >
+                終了する
+              </button>
+            </div>
+          )}
+
+          {isSaving && (
+            <div className="rounded-[24px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] px-4 py-6 text-center">
+              <div className="text-[24px] font-bold text-slate-800">保存中…</div>
+            </div>
+          )}
+
+          {isDone && (
+            <button
+              type="button"
+              onClick={onFinalTap}
+              className="h-[62px] rounded-[24px] bg-slate-800 text-white text-[22px] font-bold active:opacity-90"
+            >
+              タップして開始へ
+            </button>
+          )}
+        </div>
+
+        <div className="flex-1" />
+      </div>
+    </div>
+  );
+}
+
+// ===============================
 // BottomNav
+// 下ナビを座標基準で再設計
 // ===============================
 function BottomNav({
   centerLabel,
@@ -439,7 +607,7 @@ function BottomNav({
   const ACTIVE_CIRCLE_CENTER_Y = 28;
 
   const ICON_CENTER_Y = 28;
-  const LABEL_BOTTOM_Y = 69;
+  const LABEL_BOTTOM_Y = 70;
 
   const HOME_ICON_W = 34;
   const HOME_ICON_H = 28;
@@ -465,7 +633,7 @@ function BottomNav({
     />
   );
 
-  const BottomLabel = ({ area, text, fontSize = 12, fontWeight = 500 }) => (
+  const BottomLabel = ({ area, text }) => (
     <div
       aria-hidden="true"
       className="absolute text-white leading-none whitespace-nowrap select-none"
@@ -473,8 +641,8 @@ function BottomNav({
         left: SLOT_CENTERS[area],
         bottom: `${NAV_HEIGHT - LABEL_BOTTOM_Y}px`,
         transform: "translateX(-50%)",
-        fontSize: `${fontSize}px`,
-        fontWeight,
+        fontSize: "12px",
+        fontWeight: 500,
         pointerEvents: "none",
       }}
     >
@@ -566,7 +734,7 @@ function BottomNav({
     );
   };
 
-  const CenterMainLabel = () => (
+  const CenterMain = () => (
     <div
       aria-hidden="true"
       className="absolute text-white font-medium tracking-[-0.01em] leading-none whitespace-nowrap select-none"
@@ -614,12 +782,12 @@ function BottomNav({
 
       {/* 表示 */}
       <HomeGlyph />
-      <CenterMainLabel />
+      <CenterMain />
       <MenuGlyph />
 
-      <BottomLabel area="home" text="ホーム" fontSize={12} fontWeight={500} />
-      <BottomLabel area="center" text={centerLabel} fontSize={12} fontWeight={500} />
-      <BottomLabel area="menu" text="メニュー" fontSize={12} fontWeight={500} />
+      <BottomLabel area="home" text="ホーム" />
+      <BottomLabel area="center" text={centerLabel} />
+      <BottomLabel area="menu" text="メニュー" />
 
       {/* タップ領域 */}
       <NavHitArea area="home" onPress={onHome} label="ホーム" />
@@ -642,5 +810,6 @@ window.AppComponents = {
   OtherSheet,
   PaymentDialog,
   ViaDialog,
+  FinishCheckScreen,
   BottomNav,
 };
