@@ -705,20 +705,20 @@ window.AppComponents = (() => {
   }
 
   function FinishLockSwitch({ checked, onChange, disabled = false }) {
-    const trackBg = checked ? "#1f2937" : "#d3d3d3";
+    const trackBg = checked ? "#111111" : "#d3d3d3";
 
     return (
       <button
         type="button"
         onClick={onChange}
         disabled={disabled}
-        className={`relative shrink-0 w-[56px] h-[34px] rounded-full transition-all duration-200 ${
+        className={`relative shrink-0 w-[58px] h-[34px] rounded-full transition-all duration-200 ${
           disabled ? "opacity-60" : "active:scale-[0.98]"
         }`}
         style={{
           background: trackBg,
           boxShadow: checked
-            ? "inset 0 1px 2px rgba(255,255,255,0.10), inset 0 -1px 3px rgba(0,0,0,0.18)"
+            ? "inset 0 1px 2px rgba(255,255,255,0.08), inset 0 -1px 3px rgba(0,0,0,0.20)"
             : "inset 0 1px 2px rgba(255,255,255,0.45), inset 0 -1px 3px rgba(0,0,0,0.12)",
         }}
         aria-pressed={checked}
@@ -727,7 +727,7 @@ window.AppComponents = (() => {
         <span
           className="absolute top-[4px] w-[26px] h-[26px] rounded-full bg-white transition-all duration-200"
           style={{
-            left: checked ? "26px" : "4px",
+            left: checked ? "28px" : "4px",
             boxShadow: "0 2px 6px rgba(0,0,0,0.18)",
           }}
         />
@@ -759,24 +759,24 @@ window.AppComponents = (() => {
     const canConfirm = finishLocked && !isSaving && !isDone;
 
     const actionButtonBase =
-      "h-[46px] px-5 rounded-[16px] text-[18px] font-bold tracking-[-0.02em] transition-all duration-200";
+      "h-[46px] px-5 rounded-[12px] text-[18px] font-bold tracking-[-0.02em] transition-all duration-200";
     const confirmButtonStyle = canConfirm
       ? {
           background: "#000000",
           color: "#ffffff",
           boxShadow:
-            "inset 0 1px 0 rgba(255,255,255,0.12), 0 8px 16px rgba(0,0,0,0.14)",
+            "inset 0 1px 0 rgba(255,255,255,0.10), 0 8px 16px rgba(0,0,0,0.14)",
         }
       : {
           background: "#d3d3d3",
-          color: "#9aa0a6",
+          color: "#8f96a3",
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.45), 0 4px 8px rgba(0,0,0,0.06)",
         };
 
     if (isSaving) {
       return (
-        <div className="absolute inset-0 z-50 bg-[#e8edf4]">
+        <div className="absolute inset-0 z-[35] bg-[#e8edf4]">
           <div className="h-full flex items-center justify-center px-4">
             <div className="text-[22px] font-bold tracking-[-0.02em] text-slate-800">
               保存しています…
@@ -788,7 +788,7 @@ window.AppComponents = (() => {
 
     if (isDone) {
       return (
-        <div className="absolute inset-0 z-50 bg-[#e8edf4]">
+        <div className="absolute inset-0 z-[35] bg-[#e8edf4]">
           <div className="h-full flex items-center justify-center px-4">
             <button
               type="button"
@@ -803,7 +803,7 @@ window.AppComponents = (() => {
     }
 
     return (
-      <div className="absolute inset-0 z-50 bg-[#e8edf4] overflow-hidden">
+      <div className="absolute inset-0 z-[35] bg-[#e8edf4] overflow-hidden">
         <div className="h-full flex flex-col overflow-hidden">
           <div className="shrink-0" style={{ background: GREEN_MAIN }}>
             <div className="h-[172px] shrink-0">
@@ -821,14 +821,14 @@ window.AppComponents = (() => {
           </div>
 
           <div className="flex-1 min-h-0 px-3 pt-3 pb-4">
-            <div className="h-full min-h-0 rounded-[16px] border border-slate-200 bg-white shadow-[0_10px_22px_rgba(0,0,0,0.08)] overflow-hidden">
+            <div className="h-full min-h-0 rounded-[12px] border border-slate-200 bg-white shadow-[0_10px_22px_rgba(0,0,0,0.08)] overflow-hidden">
               <div className="h-full min-h-0 flex flex-col">
                 <div className="shrink-0 px-4 py-3 border-b border-slate-200 bg-slate-50/70">
                   <div className="flex items-center justify-between gap-3">
                     <button
                       type="button"
                       onClick={onBack}
-                      className="h-[42px] px-4 rounded-[14px] bg-slate-100 text-slate-700 text-[16px] font-bold active:bg-slate-200"
+                      className="h-[42px] px-4 rounded-[10px] bg-slate-100 text-slate-700 text-[16px] font-bold active:bg-slate-200"
                     >
                       戻る
                     </button>
@@ -862,7 +862,7 @@ window.AppComponents = (() => {
                       <button
                         type="button"
                         onClick={() => openHistoryModalWithFilter("1")}
-                        className="shrink-0 h-[38px] px-4 rounded-[14px] bg-slate-100 text-slate-700 text-[14px] font-bold active:bg-slate-200"
+                        className="shrink-0 h-[38px] px-4 rounded-[10px] bg-slate-100 text-slate-700 text-[14px] font-bold active:bg-slate-200"
                       >
                         修正
                       </button>
@@ -882,7 +882,7 @@ window.AppComponents = (() => {
                       <button
                         type="button"
                         onClick={() => openHistoryModalWithFilter("2")}
-                        className="shrink-0 h-[38px] px-4 rounded-[14px] bg-slate-100 text-slate-700 text-[14px] font-bold active:bg-slate-200"
+                        className="shrink-0 h-[38px] px-4 rounded-[10px] bg-slate-100 text-slate-700 text-[14px] font-bold active:bg-slate-200"
                       >
                         修正
                       </button>
@@ -892,7 +892,7 @@ window.AppComponents = (() => {
                   <div className="border-b border-slate-200">
                     <div className="px-4 py-4">
                       <div className="text-[13px] font-semibold text-slate-500">売上（①＋②）</div>
-                      <div className="mt-2 text-[34px] font-bold tracking-[-0.03em] text-slate-800 leading-none">
+                      <div className="mt-2 text-[36px] font-bold tracking-[-0.03em] text-slate-800 leading-none">
                         {formatMoney(finishSummary.totalAmount)}
                       </div>
                     </div>
@@ -937,7 +937,7 @@ window.AppComponents = (() => {
                         value={finishForm.note}
                         onChange={(e) => setFinishFormField("note", e.target.value)}
                         rows={5}
-                        className="mt-2 block w-full rounded-[14px] border border-slate-300 bg-white px-4 py-3 text-[15px] text-slate-800 outline-none resize-none focus:border-sky-300"
+                        className="mt-2 block w-full rounded-[10px] border border-slate-300 bg-white px-4 py-3 text-[15px] text-slate-800 outline-none resize-none focus:border-sky-300"
                       />
                     </div>
                   </div>
