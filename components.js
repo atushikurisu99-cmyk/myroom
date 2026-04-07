@@ -424,7 +424,7 @@ window.AppComponents = (() => {
     const contentHeight = 96;
     const bandVisibleHeight = 58;
     const bubbleSize = 112;
-    const bubbleTop = -22;
+    const bubbleTop = -18;
 
     const centerMap = {
       home: "16.6667%",
@@ -472,7 +472,7 @@ window.AppComponents = (() => {
             <div
               className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
               style={{
-                top: "31px",
+                top: "28px",
                 width: "38px",
                 height: "38px",
                 transform: "translate(-50%, -50%)",
@@ -484,7 +484,7 @@ window.AppComponents = (() => {
               className={`absolute left-1/2 -translate-x-1/2 text-[12px] leading-none whitespace-nowrap ${
                 homeStrong ? "font-bold" : "font-semibold"
               }`}
-              style={{ top: "71px" }}
+              style={{ top: "59px" }}
             >
               ホーム
             </div>
@@ -502,9 +502,9 @@ window.AppComponents = (() => {
                 centerStrong ? "font-bold" : "font-semibold"
               }`}
               style={{
-                top: "31px",
+                top: "44px",
                 transform: "translate(-50%, -50%)",
-                fontSize: "18px",
+                fontSize: "17px",
                 letterSpacing: "0.02em",
               }}
             >
@@ -522,7 +522,7 @@ window.AppComponents = (() => {
             <div
               className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
               style={{
-                top: "31px",
+                top: "28px",
                 width: "34px",
                 height: "34px",
                 transform: "translate(-50%, -50%)",
@@ -534,7 +534,7 @@ window.AppComponents = (() => {
               className={`absolute left-1/2 -translate-x-1/2 text-[12px] leading-none whitespace-nowrap ${
                 menuStrong ? "font-bold" : "font-semibold"
               }`}
-              style={{ top: "71px" }}
+              style={{ top: "59px" }}
             >
               メニュー
             </div>
