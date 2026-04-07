@@ -443,8 +443,9 @@ window.AppHooks = (() => {
         return alert("降車時刻は乗車時刻より後にしてください");
       }
 
-      const nextPayment = editingRecord.区分入力 === "1" ? "cash" : "cardQr";
-      const nextReceipt = false;
+      const nextType = editingRecord.区分入力 === "1" ? "1" : "2";
+      const nextPayment = nextType === "1" ? "cash" : "cardQr";
+      const nextReceipt = nextType === "1" ? false : true;
 
       const updatedRecord = {
         ...editingRecord,
@@ -457,6 +458,7 @@ window.AppHooks = (() => {
         payment: nextPayment,
         領収証: nextReceipt,
         receipt: nextReceipt,
+        営走: Math.round(numericAmount * BUSINESS_KM_FACTOR),
         乗車地: (editingRecord.乗車地入力 || "").trim() || "未取得",
         降車地: (editingRecord.降車地入力 || "").trim() || "未取得",
         人数: editingRecord.人数入力 === "" ? "" : Number(editingRecord.人数入力 || ""),
@@ -732,6 +734,8 @@ window.AppHooks = (() => {
 
     const closeFinishCheck = () => {
       resetFinishFlow();
+      setShowHistoryModal(false);
+      setEditingRecord(null);
       setScreen("top");
     };
 
@@ -746,6 +750,8 @@ window.AppHooks = (() => {
       if (!finishLocked) return;
 
       vibrateStrong();
+      setShowHistoryModal(false);
+      setEditingRecord(null);
       setFinishPhase("saving");
 
       if (finishSaveTimerRef.current) clearTimeout(finishSaveTimerRef.current);
