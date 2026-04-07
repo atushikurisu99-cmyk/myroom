@@ -691,7 +691,7 @@ window.AppHooks = (() => {
       ensureWeatherFresh();
     };
 
-    const performDutyEnd = () => {
+    const clearDutyRuntimeState = () => {
       cancelPlaceTasks();
       resetFinishFlow();
 
@@ -716,8 +716,17 @@ window.AppHooks = (() => {
       setFinishForm({
         note: "",
       });
+    };
+
+    const performDutyEnd = () => {
+      clearDutyRuntimeState();
       setScreen("top");
       setStartupResetKey((prev) => prev + 1);
+    };
+
+    const performDutyEndToReadyTop = () => {
+      clearDutyRuntimeState();
+      setScreen("top");
     };
 
     const handleFinishTap = () => {
@@ -764,7 +773,7 @@ window.AppHooks = (() => {
     const completeFinishReturn = () => {
       if (finishPhase !== "done") return;
       vibrateTap();
-      performDutyEnd();
+      performDutyEndToReadyTop();
     };
 
     const handleTopMain = () => {
