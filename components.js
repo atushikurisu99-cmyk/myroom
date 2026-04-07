@@ -3,17 +3,15 @@ window.AppComponents = (() => {
   const U = window.AppUtils;
 
   const GREEN_MAIN = "#9ED36A";
-  const GREEN_CIRCLE = "#7FC84E";
-  const GREEN_CIRCLE_INACTIVE = "rgba(127,200,78,0.58)";
+  const GREEN_CIRCLE = "#8FC15A";
+  const GREEN_CIRCLE_INACTIVE = "rgba(143,193,90,0.55)";
 
   function AppFrame({ children }) {
     return (
       <div className="w-full h-full flex justify-center bg-[#eef2f5] overflow-hidden">
         <div
           className="relative h-full w-full max-w-[430px] bg-white overflow-hidden"
-          style={{
-            minHeight: "100dvh",
-          }}
+          style={{ minHeight: "100dvh" }}
         >
           {children}
         </div>
@@ -228,9 +226,36 @@ window.AppComponents = (() => {
 
   function BottomNav({ centerLabel, onHome, onCenter, onMenu, activeArea = "home" }) {
     const items = [
-      { key: "home", label: "ホーム", icon: "▲", onClick: onHome },
-      { key: "center", label: centerLabel || "履歴", icon: "履", onClick: onCenter },
-      { key: "menu", label: "メニュー", icon: "•••", onClick: onMenu },
+      {
+        key: "home",
+        label: "ホーム",
+        icon: "▲",
+        onClick: onHome,
+        iconClass: "text-[29px] font-black",
+        iconTranslateY: 1,
+        labelTranslateY: 0,
+        labelTracking: "0em",
+      },
+      {
+        key: "center",
+        label: centerLabel || "履歴",
+        icon: "履",
+        onClick: onCenter,
+        iconClass: "text-[31px] font-black",
+        iconTranslateY: 0,
+        labelTranslateY: 0,
+        labelTracking: "-0.01em",
+      },
+      {
+        key: "menu",
+        label: "メニュー",
+        icon: "•••",
+        onClick: onMenu,
+        iconClass: "text-[22px] font-black tracking-[0.08em]",
+        iconTranslateY: -5,
+        labelTranslateY: 0,
+        labelTracking: "0em",
+      },
     ];
 
     return (
@@ -238,59 +263,73 @@ window.AppComponents = (() => {
         <div
           className="absolute left-0 right-0 bottom-0"
           style={{
-            height: "62px",
+            height: "56px",
             background: GREEN_MAIN,
-            borderTopLeftRadius: "0px",
-            borderTopRightRadius: "0px",
           }}
         />
 
         <div className="absolute inset-0 grid grid-cols-3">
-          {items.map((item, index) => {
+          {items.map((item) => {
             const isActive = activeArea === item.key;
+
             return (
-              <div key={item.key} className="relative h-full flex items-end justify-center">
+              <div key={item.key} className="relative h-full">
                 <div
                   aria-hidden="true"
                   className="absolute left-1/2 -translate-x-1/2 rounded-full"
                   style={{
-                    width: "118px",
-                    height: "118px",
-                    bottom: "16px",
+                    width: "124px",
+                    height: "124px",
+                    bottom: "6px",
                     background: isActive ? GREEN_CIRCLE : GREEN_CIRCLE_INACTIVE,
-                    transition: "background 180ms ease, transform 180ms ease, opacity 180ms ease",
-                    opacity: 1,
+                    transition: "background 180ms ease, opacity 180ms ease",
                   }}
                 />
 
                 <button
                   type="button"
                   onClick={item.onClick}
-                  className="relative z-10 w-full h-full flex flex-col items-center justify-end pb-[10px] text-white active:scale-[0.985]"
+                  className="absolute inset-0 z-10"
                 >
-                  <div
-                    className={`leading-none ${index === 0 ? "text-[28px]" : index === 1 ? "text-[30px]" : "text-[22px]"}`}
-                    style={{
-                      height: "34px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: 900,
-                      letterSpacing: index === 1 ? "-0.08em" : "0",
-                    }}
-                  >
-                    {item.icon}
-                  </div>
-                  <div
-                    className="mt-[6px] text-[13px] font-bold leading-none"
-                    style={{
-                      height: "14px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {item.label}
+                  <div className="h-full w-full flex flex-col items-center justify-end">
+                    <div
+                      className="flex items-center justify-center"
+                      style={{
+                        height: "42px",
+                        width: "84px",
+                        marginBottom: "8px",
+                        transform: `translateY(${item.iconTranslateY}px)`,
+                      }}
+                    >
+                      <span
+                        className={`leading-none text-white select-none ${item.iconClass}`}
+                        style={{
+                          display: "block",
+                          lineHeight: 1,
+                        }}
+                      >
+                        {item.icon}
+                      </span>
+                    </div>
+
+                    <div
+                      className="flex items-center justify-center"
+                      style={{
+                        height: "18px",
+                        width: "84px",
+                        marginBottom: "10px",
+                        transform: `translateY(${item.labelTranslateY}px)`,
+                      }}
+                    >
+                      <span
+                        className="text-white text-[12px] font-bold leading-none select-none"
+                        style={{
+                          letterSpacing: item.labelTracking,
+                        }}
+                      >
+                        {item.label}
+                      </span>
+                    </div>
                   </div>
                 </button>
               </div>
