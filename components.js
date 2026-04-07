@@ -284,9 +284,9 @@ window.AppComponents = (() => {
         kind: "icon+label",
         iconNode: <HomeIcon />,
         onClick: onHome,
-        groupBottom: 11,
+        groupBottom: 15,
         iconTop: 0,
-        labelTop: 30,
+        labelTop: 26,
         labelSize: 11,
         labelWeight: 700,
         labelTracking: "0em",
@@ -297,9 +297,9 @@ window.AppComponents = (() => {
         kind: "labelOnly",
         iconNode: null,
         onClick: onCenter,
-        groupBottom: 16,
+        groupBottom: 18,
         iconTop: 0,
-        labelTop: 10,
+        labelTop: 8,
         labelSize: 17,
         labelWeight: 900,
         labelTracking: "-0.04em",
@@ -310,9 +310,9 @@ window.AppComponents = (() => {
         kind: "icon+label",
         iconNode: <MenuIcon />,
         onClick: onMenu,
-        groupBottom: 11,
+        groupBottom: 15,
         iconTop: -1,
-        labelTop: 30,
+        labelTop: 26,
         labelSize: 11,
         labelWeight: 700,
         labelTracking: "0em",
@@ -320,11 +320,11 @@ window.AppComponents = (() => {
     ];
 
     return (
-      <div className="absolute bottom-0 left-0 right-0 h-[100px]">
+      <div className="absolute inset-0 overflow-visible">
         <div
           className="absolute left-0 right-0 bottom-0 rounded-t-[24px]"
           style={{
-            height: "52px",
+            height: "44px",
             background: GREEN_MAIN,
           }}
         />
@@ -338,10 +338,10 @@ window.AppComponents = (() => {
                 <div
                   className="absolute rounded-full"
                   style={{
-                    width: "80px",
-                    height: "80px",
-                    bottom: "8px",
-                    background: isActive ? GREEN_CIRCLE : "rgba(127,200,78,0.38)",
+                    width: "68px",
+                    height: "68px",
+                    bottom: "7px",
+                    background: isActive ? GREEN_CIRCLE : "rgba(127,200,78,0.34)",
                   }}
                 />
 
@@ -350,13 +350,13 @@ window.AppComponents = (() => {
                   className="absolute inset-0"
                   type="button"
                 >
-                  <div className="absolute left-1/2 -translate-x-1/2 w-[90px] h-full">
+                  <div className="absolute left-1/2 -translate-x-1/2 w-[82px] h-full">
                     <div
                       className="absolute left-1/2 -translate-x-1/2"
                       style={{
                         bottom: `${item.groupBottom}px`,
-                        width: "90px",
-                        height: "52px",
+                        width: "82px",
+                        height: "42px",
                       }}
                     >
                       {item.kind === "icon+label" && (
@@ -365,7 +365,7 @@ window.AppComponents = (() => {
                           style={{
                             top: `${item.iconTop}px`,
                             width: "28px",
-                            height: "24px",
+                            height: "22px",
                           }}
                         >
                           {item.iconNode}
@@ -376,8 +376,8 @@ window.AppComponents = (() => {
                         className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
                         style={{
                           top: `${item.labelTop}px`,
-                          width: item.kind === "labelOnly" ? "64px" : "58px",
-                          height: item.kind === "labelOnly" ? "20px" : "13px",
+                          width: item.kind === "labelOnly" ? "58px" : "54px",
+                          height: item.kind === "labelOnly" ? "18px" : "12px",
                         }}
                       >
                         <span
