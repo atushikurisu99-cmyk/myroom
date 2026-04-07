@@ -12,6 +12,7 @@ window.AppComponents = (() => {
   const GREEN_MAIN = "#9ED36A";
   const GREEN_CIRCLE = "#92CD4C";
   const END_GREEN = "#375f1d";
+  const OVERLAY_BG = "rgba(20,28,40,0.10)";
 
   function formatPlainNumber(value) {
     return `${Number(value || 0).toLocaleString("ja-JP")}`;
@@ -568,7 +569,8 @@ window.AppComponents = (() => {
 
     return (
       <div
-        className="absolute inset-0 z-30 bg-slate-900/40 flex items-end"
+        className="absolute inset-0 z-30 flex items-end"
+        style={{ background: OVERLAY_BG }}
         onClick={onClose}
       >
         <div
@@ -635,15 +637,18 @@ window.AppComponents = (() => {
     onCancel,
   }) {
     return (
-      <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
+      <div
+        className="absolute inset-0 z-40 flex items-center justify-center px-4"
+        style={{ background: OVERLAY_BG }}
+      >
         <div className="w-full rounded-[28px] bg-white shadow-2xl p-5">
           <div className="text-[34px] font-black text-slate-800 tracking-[-0.04em]">
             {formatMoney(amount)}
           </div>
           <div className="mt-5 text-[18px] font-bold text-slate-800">
             {paymentCountdown > 0.5
-              ? `自動保存中${"・".repeat(Math.max(0, savingDots))}`
-              : "保存中"}
+              ? `保存しています${"・".repeat(Math.max(0, savingDots))}`
+              : "保存しています…"}
           </div>
           <div className="mt-3 text-sm text-slate-500">
             乗車位置精度：
@@ -668,7 +673,10 @@ window.AppComponents = (() => {
 
   function ViaDialog({ pendingViaPlace, onCancel, onRecord }) {
     return (
-      <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
+      <div
+        className="absolute inset-0 z-40 flex items-center justify-center px-4"
+        style={{ background: OVERLAY_BG }}
+      >
         <div className="w-full rounded-[28px] bg-white shadow-2xl p-5">
           <div className="text-[18px] font-bold text-slate-800">
             現在地を経由地として記録します
@@ -697,49 +705,263 @@ window.AppComponents = (() => {
     );
   }
 
+  function FinishLockSwitch({ checked, onChange, disabled = false }) {
+    const trackBg = checked ? "#1f2937" : "#d3d3d3";
+
+    return (
+      <button
+        type="button"
+        onClick={onChange}
+        disabled={disabled}
+        className={`relative shrink-0 w-[56px] h-[34px] rounded-full transition-all duration-200 ${
+          disabled ? "opacity-60" : "active:scale-[0.98]"
+        }`}
+        style={{
+          background: trackBg,
+          boxShadow: checked
+            ? "inset 0 1px 2px rgba(255,255,255,0.10), inset 0 -1px 3px rgba(0,0,0,0.18)"
+            : "inset 0 1px 2px rgba(255,255,255,0.45), inset 0 -1px 3px rgba(0,0,0,0.12)",
+        }}
+        aria-pressed={checked}
+        aria-label={checked ? "ロック解除済み" : "ロック中"}
+      >
+        <span
+          className="absolute top-[4px] w-[26px] h-[26px] rounded-full bg-white transition-all duration-200"
+          style={{
+            left: checked ? "26px" : "4px",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.18)",
+          }}
+        />
+      </button>
+    );
+  }
+
+  function FinishSummaryRow({ label, value, strong = false }) {
+    return (
+      <div className="flex items-center justify-between gap-4">
+        <div className="text-[14px] font-semibold text-slate-500">{label}</div>
+        <div
+          className={`text-right ${
+            strong
+              ? "text-[18px] font-bold text-slate-800"
+              : "text-[17px] font-bold text-slate-700"
+          }`}
+        >
+          {value}
+        </div>
+      </div>
+    );
+  }
+
   function FinishDialog({
     workDate,
-    recordCount,
-    totalAmount,
-    finishCountdown = 3,
-    onCancel,
+    finishLocked,
+    finishPhase,
+    finishForm,
+    finishSummary,
+    onBack,
+    onToggleLock,
     onConfirm,
+    onFinalTap,
+    setFinishFormField,
+    openHistoryModalWithFilter,
   }) {
-    return (
-      <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
-        <div className="w-full rounded-[28px] bg-white shadow-2xl p-5">
-          <div className="text-[20px] font-bold text-slate-800">
-            {formatDutyDate(workDate)}の乗務を終了しますか？
-          </div>
+    const isSaving = finishPhase === "saving";
+    const isDone = finishPhase === "done";
+    const canConfirm = finishLocked && !isSaving && !isDone;
 
-          <div className="mt-3 text-[15px] font-semibold text-slate-500">
-            {finishCountdown > 0
-              ? `${finishCountdown}秒後に自動で終了します`
-              : "終了しています"}
-          </div>
+    const buttonBase =
+      "h-[46px] px-5 rounded-[18px] text-[18px] font-bold tracking-[-0.02em] transition-all duration-200";
+    const confirmButtonStyle = canConfirm
+      ? {
+          background: "#000000",
+          color: "#ffffff",
+          boxShadow:
+            "inset 0 1px 0 rgba(255,255,255,0.12), 0 8px 16px rgba(0,0,0,0.14)",
+        }
+      : {
+          background: "#d3d3d3",
+          color: "#9aa0a6",
+          boxShadow:
+            "inset 0 1px 0 rgba(255,255,255,0.45), 0 4px 8px rgba(0,0,0,0.06)",
+        };
 
-          <div className="mt-4 grid gap-2 text-sm text-slate-600">
-            <div>乗車回数：{recordCount}回</div>
-            <div>売上合計：{formatMoney(totalAmount)}</div>
-          </div>
-
-          <div className="mt-5 grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={onCancel}
-              className="h-[48px] rounded-2xl bg-slate-100 text-slate-700 font-bold"
-            >
-              戻る
-            </button>
-            <button
-              type="button"
-              onClick={onConfirm}
-              className="h-[48px] rounded-2xl bg-slate-800 text-white font-bold"
-            >
-              本日の乗務を終了
-            </button>
+    if (isSaving) {
+      return (
+        <div
+          className="absolute inset-0 z-40 flex items-center justify-center px-4"
+          style={{ background: OVERLAY_BG }}
+        >
+          <div className="w-full max-w-[320px] rounded-[28px] bg-white shadow-2xl px-6 py-8 text-center">
+            <div className="text-[22px] font-bold text-slate-800">保存しています…</div>
           </div>
         </div>
+      );
+    }
+
+    if (isDone) {
+      return (
+        <div
+          className="absolute inset-0 z-40 flex items-center justify-center px-4"
+          style={{ background: OVERLAY_BG }}
+        >
+          <button
+            type="button"
+            onClick={onFinalTap}
+            className="w-full max-w-[320px] rounded-[28px] bg-white shadow-2xl px-6 py-8 text-center active:scale-[0.99]"
+          >
+            <div className="text-[24px] font-bold text-slate-800">タップして開始へ</div>
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div
+        className="absolute inset-0 z-40 px-3 pb-[96px] pt-[174px]"
+        style={{ background: OVERLAY_BG }}
+      >
+        <div
+          className="h-full rounded-[30px] bg-[#f7f9fc] border border-white/70 shadow-[0_16px_32px_rgba(0,0,0,0.10)] overflow-hidden"
+          style={{
+            animation: "finishCheckUp 220ms cubic-bezier(0.22,1,0.36,1)",
+          }}
+        >
+          <div className="h-full flex flex-col min-h-0">
+            <div className="shrink-0 px-4 pt-4 pb-3">
+              <div className="flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={onBack}
+                  className="h-[42px] px-4 rounded-[18px] bg-slate-100 text-slate-700 text-[16px] font-bold active:bg-slate-200"
+                >
+                  戻る
+                </button>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <FinishLockSwitch checked={finishLocked} onChange={onToggleLock} />
+                  <button
+                    type="button"
+                    onClick={onConfirm}
+                    disabled={!canConfirm}
+                    className={buttonBase}
+                    style={confirmButtonStyle}
+                  >
+                    計上
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 pb-5 touch-pan-y">
+              <div className="grid gap-3">
+                <div className={`${C.cardClass} px-4 py-4`}>
+                  <div className="text-[15px] font-bold text-slate-800">
+                    {formatDutyDate(workDate)}の売上
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-[1fr_auto] gap-x-3 gap-y-3 items-center">
+                    <div className="min-w-0">
+                      <div className="text-[12px] font-semibold text-slate-500">
+                        ① 現金・領収証なし
+                      </div>
+                      <div className="mt-1 text-[22px] font-bold text-slate-800">
+                        {formatMoney(finishSummary.amount1)}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => openHistoryModalWithFilter("1")}
+                      className="h-[38px] px-4 rounded-[16px] bg-slate-100 text-slate-700 text-[14px] font-bold active:bg-slate-200"
+                    >
+                      修正
+                    </button>
+
+                    <div className="min-w-0">
+                      <div className="text-[12px] font-semibold text-slate-500">
+                        ② カード・QR・領収証あり
+                      </div>
+                      <div className="mt-1 text-[22px] font-bold text-slate-800">
+                        {formatMoney(finishSummary.amount2)}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => openHistoryModalWithFilter("2")}
+                      className="h-[38px] px-4 rounded-[16px] bg-slate-100 text-slate-700 text-[14px] font-bold active:bg-slate-200"
+                    >
+                      修正
+                    </button>
+                  </div>
+                </div>
+
+                <div className={`${C.cardClass} px-4 py-4`}>
+                  <div className="text-[13px] font-semibold text-slate-500">全走行</div>
+                  <div className="mt-2 relative">
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={finishForm.totalDistance}
+                      onChange={(e) =>
+                        setFinishFormField(
+                          "totalDistance",
+                          e.target.value.replace(/[^\d]/g, "")
+                        )
+                      }
+                      placeholder="0"
+                      className="block w-full rounded-[22px] border border-slate-300 bg-white pl-4 pr-14 py-4 text-[34px] font-bold text-slate-800 outline-none focus:border-sky-300"
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[18px] font-bold text-slate-500">
+                      km
+                    </span>
+                  </div>
+                </div>
+
+                <div className={`${C.cardClass} px-4 py-4`}>
+                  <div className="grid gap-3">
+                    <FinishSummaryRow
+                      label="売上金額"
+                      value={formatMoney(finishSummary.totalAmount)}
+                      strong
+                    />
+                    <FinishSummaryRow
+                      label="営走"
+                      value={`${Number(finishSummary.businessKm || 0).toLocaleString("ja-JP")}km`}
+                    />
+                    <FinishSummaryRow
+                      label="件数"
+                      value={`${finishSummary.recordCount}件`}
+                    />
+                    <FinishSummaryRow
+                      label="人数"
+                      value={`${finishSummary.passengerCount}人`}
+                    />
+                  </div>
+                </div>
+
+                <div className={`${C.cardClass} px-4 py-4`}>
+                  <div className="text-[13px] font-semibold text-slate-500">備考</div>
+                  <textarea
+                    value={finishForm.note}
+                    onChange={(e) => setFinishFormField("note", e.target.value)}
+                    placeholder=""
+                    rows={4}
+                    className="mt-2 block w-full rounded-[22px] border border-slate-300 bg-white px-4 py-3 text-[15px] text-slate-800 outline-none resize-none focus:border-sky-300"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <style>{`
+          @keyframes finishCheckUp {
+            0% { transform: translateY(18px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+          }
+        `}</style>
       </div>
     );
   }
