@@ -6,7 +6,7 @@ const {
   OtherSheet,
   PaymentDialog,
   ViaDialog,
-  FinishDialog,
+  FinishCheckScreen,
 } = window.AppComponents;
 
 const TopScreen = window.AppScreens.TopScreen;
@@ -123,8 +123,7 @@ function TaxiMiniApp() {
     };
   }, [startupPhase]);
 
-  const navCenterLabel =
-    state.screen === "top" || state.screen === "finishCheck" ? "経費" : "履歴";
+  const navCenterLabel = state.screen === "top" ? "経費" : "履歴";
 
   const activeNavArea = state.showOtherSheet
     ? "menu"
@@ -204,7 +203,7 @@ function TaxiMiniApp() {
         />
 
         <div className="absolute inset-0 overflow-hidden">
-          {(state.screen === "top" || state.screen === "finishCheck") && (
+          {state.screen === "top" && (
             <TopScreen
               screen="top"
               timeParts={derived.timeParts}
@@ -289,8 +288,14 @@ function TaxiMiniApp() {
           )}
 
           {state.screen === "finishCheck" && (
-            <FinishDialog
-              workDate={state.workDate}
+            <FinishCheckScreen
+              timeParts={derived.timeParts}
+              cardMode={state.cardMode}
+              weather={state.weather}
+              totalAmount={derived.totalAmount}
+              recordCount={derived.recordCount}
+              amount1={derived.amount1}
+              amount2={derived.amount2}
               finishLocked={state.finishLocked}
               finishPhase={state.finishPhase}
               finishForm={state.finishForm}
