@@ -3,7 +3,8 @@ window.AppComponents = (() => {
   const U = window.AppUtils;
 
   const GREEN_MAIN = "#9ED36A";
-  const GREEN_CIRCLE = "#7FC84E";
+  const GREEN_CIRCLE = "#8FCB4D";
+  const GREEN_CIRCLE_INACTIVE = "rgba(143,203,77,0.55)";
 
   function AppFrame({ children }) {
     return (
@@ -178,7 +179,10 @@ window.AppComponents = (() => {
           <button
             type="button"
             onClick={onFinishTap}
-            className={C.endDutyButtonClass + " w-full h-full flex items-center justify-center text-[22px] tracking-[-0.02em]"}
+            className={
+              C.endDutyButtonClass +
+              " w-full h-full flex items-center justify-center text-[22px] tracking-[-0.02em]"
+            }
           >
             {label}
           </button>
@@ -243,9 +247,9 @@ window.AppComponents = (() => {
 
   function HomeIcon() {
     return (
-      <svg width="24" height="22" viewBox="0 0 24 22" aria-hidden="true">
+      <svg width="30" height="26" viewBox="0 0 30 26" aria-hidden="true">
         <path
-          d="M12 1.2L22 9.2H18.8V20.2H13.7V14.6H10.3V20.2H5.2V9.2H2L12 1.2Z"
+          d="M15 1.4L28 11.7H23.8V24.2H17.1V17.8H12.9V24.2H6.2V11.7H2L15 1.4Z"
           fill="white"
         />
       </svg>
@@ -255,15 +259,15 @@ window.AppComponents = (() => {
   function MenuIcon() {
     return (
       <div
-        className="grid grid-cols-3 place-items-center gap-[4px]"
-        style={{ width: "24px", height: "24px" }}
+        className="grid grid-cols-3 place-items-center gap-[5px]"
+        style={{ width: "30px", height: "30px" }}
         aria-hidden="true"
       >
         {Array.from({ length: 9 }).map((_, i) => (
           <span
             key={i}
             className="block rounded-full bg-white"
-            style={{ width: "5px", height: "5px" }}
+            style={{ width: "6px", height: "6px" }}
           />
         ))}
       </div>
@@ -284,10 +288,12 @@ window.AppComponents = (() => {
         kind: "icon+label",
         iconNode: <HomeIcon />,
         onClick: onHome,
-        groupBottom: 15,
+        unitBottom: 15,
         iconTop: 0,
-        labelTop: 26,
-        labelSize: 11,
+        labelTop: 34,
+        unitWidth: 92,
+        labelWidth: 60,
+        labelSize: 12,
         labelWeight: 700,
         labelTracking: "0em",
       },
@@ -297,10 +303,12 @@ window.AppComponents = (() => {
         kind: "labelOnly",
         iconNode: null,
         onClick: onCenter,
-        groupBottom: 18,
+        unitBottom: 18,
         iconTop: 0,
         labelTop: 8,
-        labelSize: 17,
+        unitWidth: 92,
+        labelWidth: 66,
+        labelSize: 18,
         labelWeight: 900,
         labelTracking: "-0.04em",
       },
@@ -310,10 +318,12 @@ window.AppComponents = (() => {
         kind: "icon+label",
         iconNode: <MenuIcon />,
         onClick: onMenu,
-        groupBottom: 15,
+        unitBottom: 15,
         iconTop: -1,
-        labelTop: 26,
-        labelSize: 11,
+        labelTop: 34,
+        unitWidth: 92,
+        labelWidth: 64,
+        labelSize: 12,
         labelWeight: 700,
         labelTracking: "0em",
       },
@@ -322,9 +332,9 @@ window.AppComponents = (() => {
     return (
       <div className="absolute inset-0 overflow-visible">
         <div
-          className="absolute left-0 right-0 bottom-0 rounded-t-[24px]"
+          className="absolute left-0 right-0 bottom-0 rounded-t-[26px]"
           style={{
-            height: "44px",
+            height: "46px",
             background: GREEN_MAIN,
           }}
         />
@@ -338,10 +348,10 @@ window.AppComponents = (() => {
                 <div
                   className="absolute rounded-full"
                   style={{
-                    width: "68px",
-                    height: "68px",
-                    bottom: "7px",
-                    background: isActive ? GREEN_CIRCLE : "rgba(127,200,78,0.34)",
+                    width: "76px",
+                    height: "76px",
+                    bottom: "5px",
+                    background: isActive ? GREEN_CIRCLE : GREEN_CIRCLE_INACTIVE,
                   }}
                 />
 
@@ -350,13 +360,16 @@ window.AppComponents = (() => {
                   className="absolute inset-0"
                   type="button"
                 >
-                  <div className="absolute left-1/2 -translate-x-1/2 w-[82px] h-full">
+                  <div
+                    className="absolute left-1/2 -translate-x-1/2 h-full"
+                    style={{ width: `${item.unitWidth}px` }}
+                  >
                     <div
                       className="absolute left-1/2 -translate-x-1/2"
                       style={{
-                        bottom: `${item.groupBottom}px`,
-                        width: "82px",
-                        height: "42px",
+                        bottom: `${item.unitBottom}px`,
+                        width: `${item.unitWidth}px`,
+                        height: "48px",
                       }}
                     >
                       {item.kind === "icon+label" && (
@@ -364,8 +377,8 @@ window.AppComponents = (() => {
                           className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
                           style={{
                             top: `${item.iconTop}px`,
-                            width: "28px",
-                            height: "22px",
+                            width: "32px",
+                            height: "26px",
                           }}
                         >
                           {item.iconNode}
@@ -376,8 +389,8 @@ window.AppComponents = (() => {
                         className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
                         style={{
                           top: `${item.labelTop}px`,
-                          width: item.kind === "labelOnly" ? "58px" : "54px",
-                          height: item.kind === "labelOnly" ? "18px" : "12px",
+                          width: `${item.labelWidth}px`,
+                          height: item.kind === "labelOnly" ? "20px" : "14px",
                         }}
                       >
                         <span
