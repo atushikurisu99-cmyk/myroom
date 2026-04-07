@@ -539,7 +539,7 @@ window.AppComponents = (() => {
           </div>
 
           <div className="text-white text-[19px] font-bold tracking-[-0.02em] text-center pr-[18px]">
-            本日の乗務を終了
+            終了前チェックへ
           </div>
         </div>
       </button>
@@ -778,8 +778,8 @@ window.AppComponents = (() => {
       return (
         <div className="absolute inset-0 z-50 bg-[#e8edf4]">
           <div className="h-full flex items-center justify-center px-4">
-            <div className="w-full max-w-[320px] rounded-[18px] border border-slate-200 bg-white px-6 py-8 text-center shadow-[0_12px_24px_rgba(0,0,0,0.10)]">
-              <div className="text-[22px] font-bold text-slate-800">保存しています…</div>
+            <div className="text-[22px] font-bold tracking-[-0.02em] text-slate-800">
+              保存しています…
             </div>
           </div>
         </div>
@@ -793,9 +793,9 @@ window.AppComponents = (() => {
             <button
               type="button"
               onClick={onFinalTap}
-              className="w-full max-w-[320px] rounded-[18px] border border-slate-200 bg-white px-6 py-8 text-center shadow-[0_12px_24px_rgba(0,0,0,0.10)] active:scale-[0.99]"
+              className="text-[24px] font-bold tracking-[-0.02em] text-slate-800 active:opacity-75"
             >
-              <div className="text-[24px] font-bold text-slate-800">タップして開始へ</div>
+              タップして開始へ
             </button>
           </div>
         </div>
