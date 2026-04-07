@@ -48,7 +48,8 @@ window.AppHooks = (() => {
     const [toastMessage, setToastMessage] = useState("");
     const [now, setNow] = useState(new Date());
 
-    const [finishCountdown, setFinishCountdown] = useState(3);
+    const [finishLocked, setFinishLocked] = useState(false);
+    const [finishPhase, setFinishPhase] = useState("check");
     const [startupResetKey, setStartupResetKey] = useState(0);
 
     const [finishForm, setFinishForm] = useState({
@@ -81,8 +82,7 @@ window.AppHooks = (() => {
     const pickupPromiseRef = useRef(Promise.resolve(null));
     const dropoffPromiseRef = useRef(Promise.resolve(null));
 
-    const finishCountdownTimerRef = useRef(null);
-    const finishAutoDoneRef = useRef(false);
+    const finishSaveTimerRef = useRef(null);
 
     useEffect(() => {
       try {
@@ -145,43 +145,13 @@ window.AppHooks = (() => {
         if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
         if (pickupProgressTimerRef.current) clearInterval(pickupProgressTimerRef.current);
         if (dropoffProgressTimerRef.current) clearInterval(dropoffProgressTimerRef.current);
-        if (finishCountdownTimerRef.current) clearTimeout(finishCountdownTimerRef.current);
+        if (finishSaveTimerRef.current) clearTimeout(finishSaveTimerRef.current);
       };
     }, []);
 
     useEffect(() => {
       if (screen !== "top") setHomeEndSheetOpen(false);
     }, [screen]);
-
-    useEffect(() => {
-      if (screen !== "finishCheck") {
-        finishAutoDoneRef.current = false;
-        if (finishCountdownTimerRef.current) {
-          clearTimeout(finishCountdownTimerRef.current);
-          finishCountdownTimerRef.current = null;
-        }
-        return;
-      }
-
-      if (finishAutoDoneRef.current) return;
-
-      if (finishCountdown <= 0) {
-        finishAutoDoneRef.current = true;
-        performDutyEnd();
-        return;
-      }
-
-      finishCountdownTimerRef.current = setTimeout(() => {
-        setFinishCountdown((prev) => Math.max(0, prev - 1));
-      }, 1000);
-
-      return () => {
-        if (finishCountdownTimerRef.current) {
-          clearTimeout(finishCountdownTimerRef.current);
-          finishCountdownTimerRef.current = null;
-        }
-      };
-    }, [screen, finishCountdown]);
 
     const vibrateTap = () => {
       if (navigator.vibrate) navigator.vibrate(18);
@@ -679,13 +649,21 @@ window.AppHooks = (() => {
       dropoffPromiseRef.current = Promise.resolve(null);
     };
 
+    const resetFinishFlow = () => {
+      if (finishSaveTimerRef.current) {
+        clearTimeout(finishSaveTimerRef.current);
+        finishSaveTimerRef.current = null;
+      }
+      setFinishLocked(false);
+      setFinishPhase("check");
+    };
+
     const handleDutyStart = async () => {
       vibrateTap();
       const startDutyDate = new Date();
 
       cancelPlaceTasks();
-      finishAutoDoneRef.current = false;
-      setFinishCountdown(3);
+      resetFinishFlow();
 
       setDutyStarted(true);
       setIsRiding(false);
@@ -714,8 +692,7 @@ window.AppHooks = (() => {
 
     const performDutyEnd = () => {
       cancelPlaceTasks();
-      finishAutoDoneRef.current = true;
-      setFinishCountdown(3);
+      resetFinishFlow();
 
       setDutyStarted(false);
       setIsRiding(false);
@@ -746,8 +723,8 @@ window.AppHooks = (() => {
     const handleFinishTap = () => {
       if (!dutyStarted) return;
       if (isRiding) return;
-      finishAutoDoneRef.current = false;
-      setFinishCountdown(3);
+
+      resetFinishFlow();
       setShowOtherSheet(false);
       setShowHistoryModal(false);
       setEditingRecord(null);
@@ -756,9 +733,34 @@ window.AppHooks = (() => {
     };
 
     const closeFinishCheck = () => {
-      finishAutoDoneRef.current = false;
-      setFinishCountdown(3);
+      resetFinishFlow();
       setScreen("top");
+    };
+
+    const toggleFinishLock = () => {
+      if (finishPhase !== "check") return;
+      vibrateTap();
+      setFinishLocked((prev) => !prev);
+    };
+
+    const beginFinishSave = () => {
+      if (finishPhase !== "check") return;
+      if (!finishLocked) return;
+
+      vibrateStrong();
+      setFinishPhase("saving");
+
+      if (finishSaveTimerRef.current) clearTimeout(finishSaveTimerRef.current);
+      finishSaveTimerRef.current = setTimeout(() => {
+        setFinishPhase("done");
+        finishSaveTimerRef.current = null;
+      }, 2000);
+    };
+
+    const completeFinishReturn = () => {
+      if (finishPhase !== "done") return;
+      vibrateTap();
+      performDutyEnd();
     };
 
     const handleTopMain = () => {
@@ -1057,7 +1059,8 @@ window.AppHooks = (() => {
         historyUiMode,
         homeEndSheetOpen,
         finishForm,
-        finishCountdown,
+        finishLocked,
+        finishPhase,
         isHomeAmountVisible,
         startupResetKey,
       },
@@ -1093,6 +1096,9 @@ window.AppHooks = (() => {
         performDutyEnd,
         handleFinishTap,
         closeFinishCheck,
+        toggleFinishLock,
+        beginFinishSave,
+        completeFinishReturn,
         handleTopMain,
         handleStartRide,
         handleDropOffTap,
