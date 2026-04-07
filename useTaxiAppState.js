@@ -53,7 +53,6 @@ window.AppHooks = (() => {
     const [startupResetKey, setStartupResetKey] = useState(0);
 
     const [finishForm, setFinishForm] = useState({
-      totalDistance: "",
       note: "",
     });
 
@@ -83,6 +82,8 @@ window.AppHooks = (() => {
     const dropoffPromiseRef = useRef(Promise.resolve(null));
 
     const finishSaveTimerRef = useRef(null);
+
+    const BUSINESS_KM_FACTOR = 0.0022;
 
     useEffect(() => {
       try {
@@ -214,9 +215,8 @@ window.AppHooks = (() => {
     );
 
     const businessKm = useMemo(() => {
-      const raw = String(finishForm.totalDistance || "").replace(/[^\d]/g, "");
-      return raw ? Number(raw) : 0;
-    }, [finishForm.totalDistance]);
+      return Math.round(Number(totalAmount || 0) * BUSINESS_KM_FACTOR);
+    }, [totalAmount]);
 
     const finishSummary = useMemo(
       () => ({
@@ -677,7 +677,6 @@ window.AppHooks = (() => {
       setSelectedPassengers(null);
       setViaStops([]);
       setFinishForm({
-        totalDistance: "",
         note: "",
       });
       setShowHistoryModal(false);
@@ -713,7 +712,6 @@ window.AppHooks = (() => {
       setCardMode(3);
       setHomeEndSheetOpen(false);
       setFinishForm({
-        totalDistance: "",
         note: "",
       });
       setScreen("top");
@@ -894,6 +892,7 @@ window.AppHooks = (() => {
         領収証: receipt,
         receipt,
         天気: weather.nowKind || "",
+        営走: Math.round(numericAmount * BUSINESS_KM_FACTOR),
         乗車位置精度: finalPickup.accuracy ?? null,
         降車位置精度: finalDropoff.accuracy ?? null,
         乗車緯度: finalPickup.latitude ?? null,
