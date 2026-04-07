@@ -1,6 +1,3 @@
-// =========================
-// TopScreen.js（全文置き換え）
-// =========================
 window.AppScreens = window.AppScreens || {};
 window.AppScreens.TopScreen = (() => {
   const {
@@ -21,19 +18,30 @@ window.AppScreens.TopScreen = (() => {
     const {
       screen,
       timeParts,
+      cardMode,
+      weather,
+      totalAmount,
+      recordCount,
+      amount1,
+      amount2,
       homeDisplayAmount,
       isHomeAmountVisible,
       toggleHomeAmountVisible,
+
       topMainLabel,
       topMainButtonDisabled,
       handleTopMain,
+
       contentStyle,
       mainButtonStyle,
+
       homeEndSheetOpen,
       toggleHomeEndSheet,
       handleFinishTap,
+
       dutyStarted,
       isRiding,
+
       navCenterLabel,
       navActiveArea,
       onHome,
@@ -54,6 +62,12 @@ window.AppScreens.TopScreen = (() => {
               <HeaderCard
                 screen={screen}
                 timeParts={timeParts}
+                cardMode={cardMode}
+                weather={weather}
+                totalAmount={totalAmount}
+                recordCount={recordCount}
+                amount1={amount1}
+                amount2={amount2}
                 homeDisplayAmount={homeDisplayAmount}
                 isHomeAmountVisible={isHomeAmountVisible}
                 toggleHomeAmountVisible={toggleHomeAmountVisible}
@@ -159,7 +173,10 @@ window.AppScreens.TopScreen = (() => {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0">
+        <div
+          className="absolute bottom-0 left-0 right-0"
+          style={{ height: `${C.BOTTOM_NAV_HEIGHT}px` }}
+        >
           <BottomNav
             centerLabel={navCenterLabel}
             onHome={onHome}
