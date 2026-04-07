@@ -1,13 +1,10 @@
 window.AppComponents = (() => {
-  // ===============================
-  // 共通カラー
-  // ===============================
+  const C = window.AppConstants;
+  const U = window.AppUtils;
+
   const GREEN_MAIN = "#9ED36A";
   const GREEN_CIRCLE = "#7FC84E";
 
-  // ===============================
-  // AppFrame
-  // ===============================
   function AppFrame({ children }) {
     return (
       <div className="w-full h-screen flex justify-center bg-[#eef2f5]">
@@ -18,9 +15,54 @@ window.AppComponents = (() => {
     );
   }
 
-  // ===============================
-  // HeaderCard
-  // ===============================
+  function WeatherIcon({ kind }) {
+    const getWeatherIcon = (value) => {
+      if (value === "clear") return "☀️";
+      if (value === "partlyCloudy") return "⛅";
+      if (value === "cloudy") return "☁️";
+      if (value === "fog") return "🌫️";
+      if (value === "rain") return "🌧️";
+      if (value === "snow") return "❄️";
+      if (value === "thunder") return "⛈️";
+      return "・";
+    };
+
+    return (
+      <div className="h-[22px] flex items-center justify-center text-[18px] leading-none">
+        {getWeatherIcon(kind)}
+      </div>
+    );
+  }
+
+  function ClockText({ timeParts }) {
+    const hh = timeParts?.hh || "--";
+    const mm = timeParts?.mm || "--";
+    const colon = timeParts?.showColon ? ":" : " ";
+
+    return (
+      <div className="flex items-end justify-center leading-none select-none">
+        <span className="text-[49px] font-black tracking-[-0.045em] text-slate-800">{hh}</span>
+        <span className="w-[16px] text-center text-[44px] font-black text-slate-800">
+          {colon}
+        </span>
+        <span className="text-[49px] font-black tracking-[-0.045em] text-slate-800">{mm}</span>
+      </div>
+    );
+  }
+
+  function AmountEyeButton({ visible, onClick }) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="h-8 min-w-8 rounded-full bg-slate-100 px-2 text-[12px] font-bold text-slate-500 active:scale-[0.98]"
+        aria-label="金額表示切替"
+      >
+        {visible ? "表示" : "非表示"}
+      </button>
+    );
+  }
+
   function HeaderCard({
     screen,
     timeParts,
@@ -34,104 +76,80 @@ window.AppComponents = (() => {
     isHomeAmountVisible = true,
     toggleHomeAmountVisible,
   }) {
-    const hh = timeParts?.hh || "--";
-    const mm = timeParts?.mm || "--";
-    const showColon = timeParts?.showColon ?? true;
-
-    const colon = showColon ? ":" : " ";
-    const nowWeather = weather?.nowKind || "unknown";
-    const tomorrowWeather = weather?.tomorrowKind || "unknown";
-
-    const getWeatherIcon = (kind) => {
-      if (kind === "clear") return "☀️";
-      if (kind === "partlyCloudy") return "⛅";
-      if (kind === "cloudy") return "☁️";
-      if (kind === "fog") return "🌫️";
-      if (kind === "rain") return "🌧️";
-      if (kind === "snow") return "❄️";
-      if (kind === "thunder") return "⛈️";
-      return "・";
-    };
+    const isTop = screen === "top";
 
     return (
-      <div className="w-full px-3 pt-3">
-        <div className="bg-white rounded-[28px] px-4 pt-4 pb-3 shadow-[0_8px_16px_rgba(0,0,0,0.10)] h-full">
-          <div className="flex items-start justify-between">
-            <div className="w-[42px] pt-1 flex flex-col items-center gap-2 text-[20px] leading-none">
-              <div>{getWeatherIcon(nowWeather)}</div>
-              <div>{getWeatherIcon(tomorrowWeather)}</div>
-            </div>
-
-            <div className="flex-1 min-w-0 px-2">
-              <div className="flex items-end justify-center leading-none">
-                <span className="text-[48px] font-black tracking-[-0.04em] text-slate-800">
-                  {hh}
-                </span>
-                <span className="w-[16px] text-center text-[44px] font-black text-slate-800">
-                  {colon}
-                </span>
-                <span className="text-[48px] font-black tracking-[-0.04em] text-slate-800">
-                  {mm}
-                </span>
+      <div className="w-full h-full px-3 pt-3 pb-2">
+        <div className={`${C.cardClass} h-full px-4 py-3`}>
+          <div className="h-full flex flex-col">
+            <div className="grid grid-cols-[34px_1fr_34px] items-start gap-2">
+              <div className="pt-[4px] flex flex-col items-center gap-[7px]">
+                <WeatherIcon kind={weather?.nowKind} />
+                <WeatherIcon kind={weather?.tomorrowKind} />
               </div>
 
-              {screen === "top" ? (
-                <div className="mt-3 flex items-center justify-center gap-2">
-                  <div className="text-center min-w-0">
-                    <div className="text-[12px] font-semibold tracking-[0.08em] text-slate-500">
+              <div className="min-w-0 flex items-start justify-center">
+                <ClockText timeParts={timeParts} />
+              </div>
+
+              <div className="pt-[2px] flex justify-end">
+                <button
+                  type="button"
+                  className="h-8 w-8 rounded-full bg-slate-100 text-[12px] font-bold text-slate-500"
+                  aria-label="状態表示"
+                >
+                  {cardMode || 3}
+                </button>
+              </div>
+            </div>
+
+            {isTop ? (
+              <div className="flex-1 min-h-0 flex items-center justify-center">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="text-center">
+                    <div className="text-[12px] font-semibold tracking-[0.06em] text-slate-500 leading-none">
                       累計 + 乗務分
                     </div>
-                    <div className="mt-1 text-[28px] font-black tracking-[-0.03em] text-slate-800 leading-none">
+                    <div className="mt-[8px] text-[28px] font-black tracking-[-0.03em] text-slate-800 leading-none">
                       {isHomeAmountVisible
                         ? `¥${Number(homeDisplayAmount || 0).toLocaleString("ja-JP")}`
                         : "••••••"}
                     </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={toggleHomeAmountVisible}
-                    className="h-8 min-w-8 rounded-full bg-slate-100 px-2 text-[12px] font-bold text-slate-500 active:scale-[0.98]"
-                    aria-label="金額表示切替"
-                  >
-                    {isHomeAmountVisible ? "表示" : "非表示"}
-                  </button>
+                  <div className="pt-[8px]">
+                    <AmountEyeButton
+                      visible={isHomeAmountVisible}
+                      onClick={toggleHomeAmountVisible}
+                    />
+                  </div>
                 </div>
-              ) : (
-                <div className="mt-3 w-full max-w-[230px] mx-auto rounded-[18px] bg-slate-50 px-3 py-2 border border-slate-100">
-                  <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500">
+              </div>
+            ) : (
+              <div className="flex-1 min-h-0 flex items-center justify-center">
+                <div className="w-full max-w-[232px] rounded-[18px] bg-slate-50 px-3 py-2 border border-slate-100">
+                  <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 leading-none">
                     <span>合計</span>
                     <span>{recordCount}件</span>
                   </div>
-                  <div className="mt-1 text-[24px] font-black tracking-[-0.03em] text-slate-800 leading-none text-center">
+
+                  <div className="mt-[8px] text-[23px] font-black tracking-[-0.03em] text-slate-800 leading-none text-center">
                     ¥{Number(totalAmount || 0).toLocaleString("ja-JP")}
                   </div>
-                  <div className="mt-2 flex items-center justify-between text-[11px] font-semibold text-slate-500">
+
+                  <div className="mt-[10px] flex items-center justify-between text-[11px] font-semibold text-slate-500 leading-none">
                     <span>① ¥{Number(amount1 || 0).toLocaleString("ja-JP")}</span>
                     <span>② ¥{Number(amount2 || 0).toLocaleString("ja-JP")}</span>
                   </div>
                 </div>
-              )}
-            </div>
-
-            <div className="w-[42px] flex justify-end">
-              <button
-                type="button"
-                className="h-8 w-8 rounded-full bg-slate-100 text-[12px] font-bold text-slate-500"
-                aria-label="状態表示"
-              >
-                {cardMode || 3}
-              </button>
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
     );
   }
 
-  // ===============================
-  // HomeGraphCards
-  // ===============================
   function HomeGraphCards() {
     return (
       <div className="h-full px-3 pb-3">
@@ -151,15 +169,7 @@ window.AppComponents = (() => {
     );
   }
 
-  // ===============================
-  // HomeEndDutySheet
-  // ===============================
-  function HomeEndDutySheet({
-    open,
-    dutyStarted,
-    onFinishTap,
-    label = "終了前チェックへ",
-  }) {
+  function HomeEndDutySheet({ open, dutyStarted, onFinishTap, label = "終了前チェックへ" }) {
     if (!open || !dutyStarted) return null;
 
     return (
@@ -168,7 +178,7 @@ window.AppComponents = (() => {
           <button
             type="button"
             onClick={onFinishTap}
-            className="w-full h-full relative overflow-hidden rounded-[18px] border border-[#d8c7c7] text-white font-bold shadow-[inset_0_2px_0_rgba(255,255,255,0.30),inset_0_-2px_6px_rgba(0,0,0,0.15),0_6px_12px_rgba(0,0,0,0.12)] active:scale-[0.985] bg-[linear-gradient(180deg,#8f8787,#7f7777,#706868)] flex items-center justify-center text-[22px] tracking-[-0.02em]"
+            className={C.endDutyButtonClass + " w-full h-full flex items-center justify-center text-[22px] tracking-[-0.02em]"}
           >
             {label}
           </button>
@@ -177,30 +187,20 @@ window.AppComponents = (() => {
     );
   }
 
-  // ===============================
-  // RideInfoCard
-  // ===============================
   function RideInfoCard({ pickup, rideStartAt, elapsedText, viaStops }) {
-    const formatTime = (dateValue) => {
-      if (!dateValue) return "";
-      return new Date(dateValue).toLocaleTimeString("ja-JP", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    };
-
     return (
       <div className="px-3 h-full">
-        <div className="rounded-[28px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] h-full px-4 py-3 flex flex-col justify-center">
+        <div className={`${C.cardClass} h-full px-4 py-3 flex flex-col justify-center`}>
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0 flex-1">
               <div className="text-[13px] font-semibold text-slate-500">
-                {formatTime(rideStartAt)}
+                {U.formatTime(rideStartAt)}
               </div>
               <div className="mt-1 text-[18px] font-bold text-slate-800 truncate">
                 {pickup || "未取得"}
               </div>
             </div>
+
             <div className="shrink-0 text-right">
               <div className="text-[12px] font-semibold text-slate-500">経過時間</div>
               <div className="mt-1 text-[24px] font-black text-slate-800 leading-none">
@@ -219,18 +219,8 @@ window.AppComponents = (() => {
     );
   }
 
-  // ===============================
-  // History
-  // ===============================
   function HistoryRecordCard({ record, item, onClick }) {
     const row = record || item || {};
-    const formatTime = (dateValue) => {
-      if (!dateValue) return "--:--";
-      return new Date(dateValue).toLocaleTimeString("ja-JP", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    };
 
     return (
       <button
@@ -239,7 +229,7 @@ window.AppComponents = (() => {
         className="w-full bg-white rounded-xl p-3 shadow-sm mb-2 text-left"
       >
         <div className="text-sm">
-          {formatTime(row?.乗車時刻 || row?.time)} → {formatTime(row?.降車時刻 || row?.time)}
+          {U.formatTime(row?.乗車時刻 || row?.time)} → {U.formatTime(row?.降車時刻 || row?.time)}
         </div>
         <div className="text-sm text-gray-500">
           {row?.乗車地 || row?.from || "-"} → {row?.降車地 || row?.to || "-"}
@@ -251,9 +241,35 @@ window.AppComponents = (() => {
     );
   }
 
-  // ===============================
-  // BottomNav
-  // ===============================
+  function HomeIcon() {
+    return (
+      <svg width="24" height="22" viewBox="0 0 24 22" aria-hidden="true">
+        <path
+          d="M12 1.2L22 9.2H18.8V20.2H13.7V14.6H10.3V20.2H5.2V9.2H2L12 1.2Z"
+          fill="white"
+        />
+      </svg>
+    );
+  }
+
+  function MenuIcon() {
+    return (
+      <div
+        className="grid grid-cols-3 place-items-center gap-[4px]"
+        style={{ width: "24px", height: "24px" }}
+        aria-hidden="true"
+      >
+        {Array.from({ length: 9 }).map((_, i) => (
+          <span
+            key={i}
+            className="block rounded-full bg-white"
+            style={{ width: "5px", height: "5px" }}
+          />
+        ))}
+      </div>
+    );
+  }
+
   function BottomNav({
     centerLabel,
     onHome,
@@ -266,19 +282,40 @@ window.AppComponents = (() => {
         key: "home",
         label: "ホーム",
         kind: "icon+label",
+        iconNode: <HomeIcon />,
         onClick: onHome,
+        groupBottom: 11,
+        iconTop: 0,
+        labelTop: 30,
+        labelSize: 11,
+        labelWeight: 700,
+        labelTracking: "0em",
       },
       {
         key: "center",
         label: centerLabel,
         kind: "labelOnly",
+        iconNode: null,
         onClick: onCenter,
+        groupBottom: 16,
+        iconTop: 0,
+        labelTop: 10,
+        labelSize: 17,
+        labelWeight: 900,
+        labelTracking: "-0.04em",
       },
       {
         key: "menu",
         label: "メニュー",
         kind: "icon+label",
+        iconNode: <MenuIcon />,
         onClick: onMenu,
+        groupBottom: 11,
+        iconTop: -1,
+        labelTop: 30,
+        labelSize: 11,
+        labelWeight: 700,
+        labelTracking: "0em",
       },
     ];
 
@@ -303,39 +340,58 @@ window.AppComponents = (() => {
                   style={{
                     width: "80px",
                     height: "80px",
-                    bottom: "10px",
+                    bottom: "8px",
                     background: isActive ? GREEN_CIRCLE : "rgba(127,200,78,0.38)",
                   }}
                 />
 
                 <button
                   onClick={item.onClick}
-                  className="absolute left-1/2 -translate-x-1/2 text-white"
-                  style={{
-                    bottom: item.kind === "labelOnly" ? "32px" : "14px",
-                    width: "92px",
-                  }}
+                  className="absolute inset-0"
+                  type="button"
                 >
-                  {item.kind === "icon+label" && item.key === "home" && (
-                    <div className="flex justify-center mb-[4px]">
-                      <div className="text-[22px] leading-none">▲</div>
-                    </div>
-                  )}
+                  <div className="absolute left-1/2 -translate-x-1/2 w-[90px] h-full">
+                    <div
+                      className="absolute left-1/2 -translate-x-1/2"
+                      style={{
+                        bottom: `${item.groupBottom}px`,
+                        width: "90px",
+                        height: "52px",
+                      }}
+                    >
+                      {item.kind === "icon+label" && (
+                        <div
+                          className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
+                          style={{
+                            top: `${item.iconTop}px`,
+                            width: "28px",
+                            height: "24px",
+                          }}
+                        >
+                          {item.iconNode}
+                        </div>
+                      )}
 
-                  {item.kind === "icon+label" && item.key === "menu" && (
-                    <div className="flex justify-center mb-[5px]">
-                      <div className="text-[18px] leading-none tracking-[0.14em]">•••</div>
+                      <div
+                        className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
+                        style={{
+                          top: `${item.labelTop}px`,
+                          width: item.kind === "labelOnly" ? "64px" : "58px",
+                          height: item.kind === "labelOnly" ? "20px" : "13px",
+                        }}
+                      >
+                        <span
+                          className="leading-none text-white select-none text-center"
+                          style={{
+                            fontSize: `${item.labelSize}px`,
+                            fontWeight: item.labelWeight,
+                            letterSpacing: item.labelTracking,
+                          }}
+                        >
+                          {item.label}
+                        </span>
+                      </div>
                     </div>
-                  )}
-
-                  <div
-                    className="leading-none text-center"
-                    style={{
-                      fontSize: item.kind === "labelOnly" ? "15px" : "12px",
-                      fontWeight: item.kind === "labelOnly" ? 700 : 400,
-                    }}
-                  >
-                    {item.label}
                   </div>
                 </button>
               </div>
@@ -346,9 +402,6 @@ window.AppComponents = (() => {
     );
   }
 
-  // ===============================
-  // OtherSheet
-  // ===============================
   function OtherSheet({ show, onClose, openHistoryFull, onShowSoon }) {
     if (!show) return null;
 
@@ -387,9 +440,6 @@ window.AppComponents = (() => {
     );
   }
 
-  // ===============================
-  // PaymentDialog
-  // ===============================
   function PaymentDialog({ amount, paymentCountdown, savingDots, onCancel }) {
     return (
       <div className="absolute inset-0 z-50 bg-black/30 flex items-center justify-center px-4">
@@ -415,9 +465,6 @@ window.AppComponents = (() => {
     );
   }
 
-  // ===============================
-  // ViaDialog
-  // ===============================
   function ViaDialog({ pendingViaPlace, onCancel, onRecord }) {
     return (
       <div className="absolute inset-0 z-50 bg-black/30 flex items-center justify-center px-4">
@@ -449,9 +496,6 @@ window.AppComponents = (() => {
     );
   }
 
-  // ===============================
-  // SummaryRow
-  // ===============================
   function SummaryRow({ label, value, onClick }) {
     const body = (
       <div className="flex items-center justify-between rounded-[18px] bg-slate-50 border border-slate-100 px-4 py-3">
@@ -469,9 +513,6 @@ window.AppComponents = (() => {
     );
   }
 
-  // ===============================
-  // FinishCheckScreen
-  // ===============================
   function FinishCheckScreen(props) {
     const {
       finishLocked,
