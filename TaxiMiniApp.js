@@ -123,7 +123,9 @@ function TaxiMiniApp() {
     };
   }, [startupPhase]);
 
-  const navCenterLabel = state.screen === "top" || state.screen === "finishCheck" ? "経費" : "履歴";
+  const navCenterLabel =
+    state.screen === "top" || state.screen === "finishCheck" ? "経費" : "履歴";
+
   const activeNavArea = state.showOtherSheet
     ? "menu"
     : state.screen === "standby" || state.screen === "ride"
@@ -289,11 +291,16 @@ function TaxiMiniApp() {
           {state.screen === "finishCheck" && (
             <FinishDialog
               workDate={state.workDate}
-              recordCount={derived.recordCount}
-              totalAmount={derived.totalAmount}
-              finishCountdown={state.finishCountdown}
-              onCancel={actions.closeFinishCheck}
-              onConfirm={actions.performDutyEnd}
+              finishLocked={state.finishLocked}
+              finishPhase={state.finishPhase}
+              finishForm={state.finishForm}
+              finishSummary={derived.finishSummary}
+              onBack={actions.closeFinishCheck}
+              onToggleLock={actions.toggleFinishLock}
+              onConfirm={actions.beginFinishSave}
+              onFinalTap={actions.completeFinishReturn}
+              setFinishFormField={actions.setFinishFormField}
+              openHistoryModalWithFilter={actions.openHistoryModalWithFilter}
             />
           )}
         </div>
