@@ -3,7 +3,6 @@ window.AppComponents = (() => {
     formatMoney,
     formatTime,
     formatFullDate,
-    formatDutyDate,
     recordType,
     getWeatherIcon,
   } = window.AppUtils;
@@ -736,25 +735,14 @@ window.AppComponents = (() => {
     );
   }
 
-  function FinishSummaryRow({ label, value, strong = false }) {
-    return (
-      <div className="flex items-center justify-between gap-4">
-        <div className="text-[14px] font-semibold text-slate-500">{label}</div>
-        <div
-          className={`text-right ${
-            strong
-              ? "text-[18px] font-bold text-slate-800"
-              : "text-[17px] font-bold text-slate-700"
-          }`}
-        >
-          {value}
-        </div>
-      </div>
-    );
-  }
-
-  function FinishDialog({
-    workDate,
+  function FinishCheckScreen({
+    timeParts,
+    cardMode,
+    weather,
+    totalAmount,
+    recordCount,
+    amount1,
+    amount2,
     finishLocked,
     finishPhase,
     finishForm,
@@ -770,8 +758,8 @@ window.AppComponents = (() => {
     const isDone = finishPhase === "done";
     const canConfirm = finishLocked && !isSaving && !isDone;
 
-    const buttonBase =
-      "h-[46px] px-5 rounded-[18px] text-[18px] font-bold tracking-[-0.02em] transition-all duration-200";
+    const actionButtonBase =
+      "h-[46px] px-5 rounded-[16px] text-[18px] font-bold tracking-[-0.02em] transition-all duration-200";
     const confirmButtonStyle = canConfirm
       ? {
           background: "#000000",
@@ -788,12 +776,11 @@ window.AppComponents = (() => {
 
     if (isSaving) {
       return (
-        <div
-          className="absolute inset-0 z-40 flex items-center justify-center px-4"
-          style={{ background: OVERLAY_BG }}
-        >
-          <div className="w-full max-w-[320px] rounded-[28px] bg-white shadow-2xl px-6 py-8 text-center">
-            <div className="text-[22px] font-bold text-slate-800">保存しています…</div>
+        <div className="absolute inset-0 z-50 bg-[#e8edf4]">
+          <div className="h-full flex items-center justify-center px-4">
+            <div className="w-full max-w-[320px] rounded-[18px] border border-slate-200 bg-white px-6 py-8 text-center shadow-[0_12px_24px_rgba(0,0,0,0.10)]">
+              <div className="text-[22px] font-bold text-slate-800">保存しています…</div>
+            </div>
           </div>
         </div>
       );
@@ -801,167 +788,164 @@ window.AppComponents = (() => {
 
     if (isDone) {
       return (
-        <div
-          className="absolute inset-0 z-40 flex items-center justify-center px-4"
-          style={{ background: OVERLAY_BG }}
-        >
-          <button
-            type="button"
-            onClick={onFinalTap}
-            className="w-full max-w-[320px] rounded-[28px] bg-white shadow-2xl px-6 py-8 text-center active:scale-[0.99]"
-          >
-            <div className="text-[24px] font-bold text-slate-800">タップして開始へ</div>
-          </button>
+        <div className="absolute inset-0 z-50 bg-[#e8edf4]">
+          <div className="h-full flex items-center justify-center px-4">
+            <button
+              type="button"
+              onClick={onFinalTap}
+              className="w-full max-w-[320px] rounded-[18px] border border-slate-200 bg-white px-6 py-8 text-center shadow-[0_12px_24px_rgba(0,0,0,0.10)] active:scale-[0.99]"
+            >
+              <div className="text-[24px] font-bold text-slate-800">タップして開始へ</div>
+            </button>
+          </div>
         </div>
       );
     }
 
     return (
-      <div
-        className="absolute inset-0 z-40 px-3 pb-[96px] pt-[174px]"
-        style={{ background: OVERLAY_BG }}
-      >
-        <div
-          className="h-full rounded-[30px] bg-[#f7f9fc] border border-white/70 shadow-[0_16px_32px_rgba(0,0,0,0.10)] overflow-hidden"
-          style={{
-            animation: "finishCheckUp 220ms cubic-bezier(0.22,1,0.36,1)",
-          }}
-        >
-          <div className="h-full flex flex-col min-h-0">
-            <div className="shrink-0 px-4 pt-4 pb-3">
-              <div className="flex items-center justify-between gap-3">
-                <button
-                  type="button"
-                  onClick={onBack}
-                  className="h-[42px] px-4 rounded-[18px] bg-slate-100 text-slate-700 text-[16px] font-bold active:bg-slate-200"
-                >
-                  戻る
-                </button>
-
-                <div className="flex items-center gap-2 shrink-0">
-                  <FinishLockSwitch checked={finishLocked} onChange={onToggleLock} />
-                  <button
-                    type="button"
-                    onClick={onConfirm}
-                    disabled={!canConfirm}
-                    className={buttonBase}
-                    style={confirmButtonStyle}
-                  >
-                    計上
-                  </button>
-                </div>
-              </div>
+      <div className="absolute inset-0 z-50 bg-[#e8edf4] overflow-hidden">
+        <div className="h-full flex flex-col overflow-hidden">
+          <div className="shrink-0" style={{ background: GREEN_MAIN }}>
+            <div className="h-[172px] shrink-0">
+              <HeaderCard
+                screen="finishCheck"
+                timeParts={timeParts}
+                cardMode={cardMode}
+                weather={weather}
+                totalAmount={totalAmount}
+                recordCount={recordCount}
+                amount1={amount1}
+                amount2={amount2}
+              />
             </div>
+          </div>
 
-            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 pb-5 touch-pan-y">
-              <div className="grid gap-3">
-                <div className={`${C.cardClass} px-4 py-4`}>
-                  <div className="text-[15px] font-bold text-slate-800">
-                    {formatDutyDate(workDate)}の売上
-                  </div>
-
-                  <div className="mt-4 grid grid-cols-[1fr_auto] gap-x-3 gap-y-3 items-center">
-                    <div className="min-w-0">
-                      <div className="text-[12px] font-semibold text-slate-500">
-                        ① 現金・領収証なし
-                      </div>
-                      <div className="mt-1 text-[22px] font-bold text-slate-800">
-                        {formatMoney(finishSummary.amount1)}
-                      </div>
-                    </div>
-
+          <div className="flex-1 min-h-0 px-3 pt-3 pb-4">
+            <div className="h-full min-h-0 rounded-[16px] border border-slate-200 bg-white shadow-[0_10px_22px_rgba(0,0,0,0.08)] overflow-hidden">
+              <div className="h-full min-h-0 flex flex-col">
+                <div className="shrink-0 px-4 py-3 border-b border-slate-200 bg-slate-50/70">
+                  <div className="flex items-center justify-between gap-3">
                     <button
                       type="button"
-                      onClick={() => openHistoryModalWithFilter("1")}
-                      className="h-[38px] px-4 rounded-[16px] bg-slate-100 text-slate-700 text-[14px] font-bold active:bg-slate-200"
+                      onClick={onBack}
+                      className="h-[42px] px-4 rounded-[14px] bg-slate-100 text-slate-700 text-[16px] font-bold active:bg-slate-200"
                     >
-                      修正
+                      戻る
                     </button>
 
-                    <div className="min-w-0">
-                      <div className="text-[12px] font-semibold text-slate-500">
-                        ② カード・QR・領収証あり
+                    <div className="flex items-center gap-2 shrink-0">
+                      <FinishLockSwitch checked={finishLocked} onChange={onToggleLock} />
+                      <button
+                        type="button"
+                        onClick={onConfirm}
+                        disabled={!canConfirm}
+                        className={actionButtonBase}
+                        style={confirmButtonStyle}
+                      >
+                        計上
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden touch-pan-y">
+                  <div className="border-b border-slate-200">
+                    <div className="px-4 py-3 flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="text-[12px] font-semibold text-slate-500">
+                          ① 現金・領収証なし
+                        </div>
+                        <div className="mt-1 text-[24px] font-bold text-slate-800">
+                          {formatMoney(amount1)}
+                        </div>
                       </div>
-                      <div className="mt-1 text-[22px] font-bold text-slate-800">
-                        {formatMoney(finishSummary.amount2)}
+                      <button
+                        type="button"
+                        onClick={() => openHistoryModalWithFilter("1")}
+                        className="shrink-0 h-[38px] px-4 rounded-[14px] bg-slate-100 text-slate-700 text-[14px] font-bold active:bg-slate-200"
+                      >
+                        修正
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="border-b border-slate-200">
+                    <div className="px-4 py-3 flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="text-[12px] font-semibold text-slate-500">
+                          ② カード・QR・領収証あり
+                        </div>
+                        <div className="mt-1 text-[24px] font-bold text-slate-800">
+                          {formatMoney(amount2)}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => openHistoryModalWithFilter("2")}
+                        className="shrink-0 h-[38px] px-4 rounded-[14px] bg-slate-100 text-slate-700 text-[14px] font-bold active:bg-slate-200"
+                      >
+                        修正
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="border-b border-slate-200">
+                    <div className="px-4 py-4">
+                      <div className="text-[13px] font-semibold text-slate-500">売上（①＋②）</div>
+                      <div className="mt-2 text-[34px] font-bold tracking-[-0.03em] text-slate-800 leading-none">
+                        {formatMoney(finishSummary.totalAmount)}
                       </div>
                     </div>
-
-                    <button
-                      type="button"
-                      onClick={() => openHistoryModalWithFilter("2")}
-                      className="h-[38px] px-4 rounded-[16px] bg-slate-100 text-slate-700 text-[14px] font-bold active:bg-slate-200"
-                    >
-                      修正
-                    </button>
                   </div>
-                </div>
 
-                <div className={`${C.cardClass} px-4 py-4`}>
-                  <div className="text-[13px] font-semibold text-slate-500">全走行</div>
-                  <div className="mt-2 relative">
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      value={finishForm.totalDistance}
-                      onChange={(e) =>
-                        setFinishFormField(
-                          "totalDistance",
-                          e.target.value.replace(/[^\d]/g, "")
-                        )
-                      }
-                      placeholder="0"
-                      className="block w-full rounded-[22px] border border-slate-300 bg-white pl-4 pr-14 py-4 text-[34px] font-bold text-slate-800 outline-none focus:border-sky-300"
-                    />
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[18px] font-bold text-slate-500">
-                      km
-                    </span>
+                  <div className="border-b border-slate-200">
+                    <div className="px-4 py-4 flex items-end justify-between gap-4">
+                      <div className="text-[18px] font-semibold tracking-[-0.01em] text-slate-300">
+                        ＝営走
+                      </div>
+                      <div className="flex items-end gap-1 text-slate-800">
+                        <span className="text-[34px] font-bold leading-none tracking-[-0.03em]">
+                          {finishSummary.businessKm}
+                        </span>
+                        <span className="text-[16px] font-bold pb-[3px]">km</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div className={`${C.cardClass} px-4 py-4`}>
-                  <div className="grid gap-3">
-                    <FinishSummaryRow
-                      label="売上金額"
-                      value={formatMoney(finishSummary.totalAmount)}
-                      strong
-                    />
-                    <FinishSummaryRow
-                      label="営走"
-                      value={`${Number(finishSummary.businessKm || 0).toLocaleString("ja-JP")}km`}
-                    />
-                    <FinishSummaryRow
-                      label="件数"
-                      value={`${finishSummary.recordCount}件`}
-                    />
-                    <FinishSummaryRow
-                      label="人数"
-                      value={`${finishSummary.passengerCount}人`}
-                    />
+                  <div className="border-b border-slate-200">
+                    <div className="px-4 py-3 flex items-center justify-between gap-4">
+                      <div className="text-[14px] font-semibold text-slate-500">件数</div>
+                      <div className="text-[20px] font-bold text-slate-800">
+                        {finishSummary.recordCount}件
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div className={`${C.cardClass} px-4 py-4`}>
-                  <div className="text-[13px] font-semibold text-slate-500">備考</div>
-                  <textarea
-                    value={finishForm.note}
-                    onChange={(e) => setFinishFormField("note", e.target.value)}
-                    placeholder=""
-                    rows={4}
-                    className="mt-2 block w-full rounded-[22px] border border-slate-300 bg-white px-4 py-3 text-[15px] text-slate-800 outline-none resize-none focus:border-sky-300"
-                  />
+                  <div className="border-b border-slate-200">
+                    <div className="px-4 py-3 flex items-center justify-between gap-4">
+                      <div className="text-[14px] font-semibold text-slate-500">人数</div>
+                      <div className="text-[20px] font-bold text-slate-800">
+                        {finishSummary.passengerCount}人
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="px-4 py-3">
+                      <div className="text-[14px] font-semibold text-slate-500">備考</div>
+                      <textarea
+                        value={finishForm.note}
+                        onChange={(e) => setFinishFormField("note", e.target.value)}
+                        rows={5}
+                        className="mt-2 block w-full rounded-[14px] border border-slate-300 bg-white px-4 py-3 text-[15px] text-slate-800 outline-none resize-none focus:border-sky-300"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <style>{`
-          @keyframes finishCheckUp {
-            0% { transform: translateY(18px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-          }
-        `}</style>
       </div>
     );
   }
@@ -977,6 +961,6 @@ window.AppComponents = (() => {
     OtherSheet,
     PaymentDialog,
     ViaDialog,
-    FinishDialog,
+    FinishCheckScreen,
   };
 })();
