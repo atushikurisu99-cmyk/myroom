@@ -1,644 +1,646 @@
-window.AppComponents = (() => {
-  const C = window.AppConstants;
-  const U = window.AppUtils;
+// ===============================
+// 共通カラー
+// ===============================
+const GREEN_MAIN = "#9ED36A";
+const GREEN_CIRCLE = "#7FC84E";
 
-  const GREEN_MAIN = "#9ED36A";
-  const GREEN_CIRCLE = "#8FCB4D";
-  const GREEN_CIRCLE_INACTIVE = "rgba(143,203,77,0.55)";
+// ===============================
+// AppFrame
+// ===============================
+function AppFrame({ children }) {
+  return (
+    <div className="w-full h-screen flex justify-center bg-[#eef2f5]">
+      <div className="w-[390px] h-full relative bg-white overflow-hidden">
+        {children}
+      </div>
+    </div>
+  );
+}
 
-  function AppFrame({ children }) {
-    return (
-      <div className="w-full h-screen flex justify-center bg-[#eef2f5]">
-        <div className="w-[390px] h-full relative bg-white overflow-hidden">
-          {children}
+// ===============================
+// HeaderCard
+// ===============================
+function HeaderCard(props) {
+  const { timeParts, screen } = props;
+
+  const hh = timeParts?.hh || "--";
+  const mm = timeParts?.mm || "--";
+  const showColon = timeParts?.showColon ?? true;
+
+  const colonOpacity = showColon ? 1 : 0.22;
+
+  const renderTopDisplay = () => {
+    if (screen === "top") {
+      const homeDisplayAmount = Number(props.homeDisplayAmount || 0);
+      const isHomeAmountVisible = props.isHomeAmountVisible !== false;
+      const displayText = isHomeAmountVisible
+        ? homeDisplayAmount.toLocaleString("ja-JP")
+        : "••••••";
+
+      return (
+        <div className="absolute right-4 bottom-4 flex items-end gap-[2px]">
+          <button
+            type="button"
+            onClick={props.toggleHomeAmountVisible}
+            className="mr-2 text-[16px] leading-none text-slate-400 active:opacity-70"
+            aria-label="売上表示切替"
+          >
+            {isHomeAmountVisible ? "👁" : "🙈"}
+          </button>
+          <div className="text-[42px] font-black tracking-[-0.04em] leading-none text-slate-800">
+            {displayText}
+          </div>
+          <div className="text-[18px] font-bold leading-none text-slate-500 pb-[4px]">円</div>
         </div>
+      );
+    }
+
+    const weatherNow = window.AppUtils?.getWeatherIcon?.(props.weather?.nowKind || "unknown") || "・";
+    const weatherTomorrow =
+      window.AppUtils?.getWeatherIcon?.(props.weather?.tomorrowKind || "unknown") || "・";
+
+    const cardMode = Number(props.cardMode || 3);
+
+    let value = "";
+    let unit = "";
+    let label = "";
+
+    if (cardMode === 1) {
+      value = Number(props.totalAmount || 0).toLocaleString("ja-JP");
+      unit = "円";
+      label = "売上合計";
+    } else if (cardMode === 2) {
+      value = String(Number(props.recordCount || 0));
+      unit = "件";
+      label = "件数";
+    } else if (cardMode === 4) {
+      value = Number(props.amount1 || 0).toLocaleString("ja-JP");
+      unit = "円";
+      label = "①";
+    } else if (cardMode === 5) {
+      value = Number(props.amount2 || 0).toLocaleString("ja-JP");
+      unit = "円";
+      label = "②";
+    } else {
+      value = Number(props.totalAmount || 0).toLocaleString("ja-JP");
+      unit = "円";
+      label = "売上合計";
+    }
+
+    return (
+      <>
+        <div className="absolute left-4 bottom-4 flex items-center gap-2 text-[24px]">
+          <span>{weatherNow}</span>
+          <span className="text-slate-400 text-[16px]">→</span>
+          <span>{weatherTomorrow}</span>
+        </div>
+
+        <div className="absolute right-4 bottom-4 flex items-end gap-[2px]">
+          <div className="mr-2 text-[12px] font-semibold text-slate-500 pb-[6px]">{label}</div>
+          <div className="text-[38px] font-black tracking-[-0.04em] leading-none text-slate-800">
+            {value}
+          </div>
+          <div className="text-[16px] font-bold leading-none text-slate-500 pb-[4px]">{unit}</div>
+        </div>
+      </>
+    );
+  };
+
+  return (
+    <div className="h-full px-3 pt-3 pb-0">
+      <div className="relative h-full rounded-b-[28px] rounded-t-none bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] overflow-hidden">
+        <div className="absolute left-1/2 top-[16px] -translate-x-1/2 flex items-center text-slate-800 select-none">
+          <span className="text-[46px] font-black tracking-[-0.05em] leading-none">{hh}</span>
+          <span
+            className="text-[42px] font-black leading-none px-[2px] transition-opacity duration-150"
+            style={{ opacity: colonOpacity }}
+          >
+            :
+          </span>
+          <span className="text-[46px] font-black tracking-[-0.05em] leading-none">{mm}</span>
+        </div>
+
+        {renderTopDisplay()}
       </div>
-    );
-  }
+    </div>
+  );
+}
 
-  function WeatherIcon({ kind }) {
-    const getWeatherIcon = (value) => {
-      if (value === "clear") return "☀️";
-      if (value === "partlyCloudy") return "⛅";
-      if (value === "cloudy") return "☁️";
-      if (value === "fog") return "🌫️";
-      if (value === "rain") return "🌧️";
-      if (value === "snow") return "❄️";
-      if (value === "thunder") return "⛈️";
-      return "・";
-    };
+// ===============================
+// RideInfoCard
+// ===============================
+function RideInfoCard({
+  pickup,
+  rideStartAt,
+  elapsedText,
+  viaStops = [],
+}) {
+  const { formatTime } = window.AppUtils;
 
-    return (
-      <div className="h-[22px] flex items-center justify-center text-[18px] leading-none">
-        {getWeatherIcon(kind)}
-      </div>
-    );
-  }
-
-  function ClockText({ timeParts }) {
-    const hh = timeParts?.hh || "--";
-    const mm = timeParts?.mm || "--";
-    const colon = timeParts?.showColon ? ":" : " ";
-
-    return (
-      <div className="flex items-end justify-center leading-none select-none">
-        <span className="text-[49px] font-black tracking-[-0.045em] text-slate-800">{hh}</span>
-        <span className="w-[16px] text-center text-[44px] font-black text-slate-800">
-          {colon}
-        </span>
-        <span className="text-[49px] font-black tracking-[-0.045em] text-slate-800">{mm}</span>
-      </div>
-    );
-  }
-
-  function AmountEyeButton({ visible, onClick }) {
-    return (
-      <button
-        type="button"
-        onClick={onClick}
-        className="h-8 min-w-8 rounded-full bg-slate-100 px-2 text-[12px] font-bold text-slate-500 active:scale-[0.98]"
-        aria-label="金額表示切替"
-      >
-        {visible ? "表示" : "非表示"}
-      </button>
-    );
-  }
-
-  function HeaderCard({
-    screen,
-    timeParts,
-    cardMode,
-    weather,
-    totalAmount = 0,
-    recordCount = 0,
-    amount1 = 0,
-    amount2 = 0,
-    homeDisplayAmount = 0,
-    isHomeAmountVisible = true,
-    toggleHomeAmountVisible,
-  }) {
-    const isTop = screen === "top";
-
-    return (
-      <div className="w-full h-full px-3 pt-3 pb-2">
-        <div className={`${C.cardClass} h-full px-4 py-3`}>
-          <div className="h-full flex flex-col">
-            <div className="grid grid-cols-[34px_1fr_34px] items-start gap-2">
-              <div className="pt-[4px] flex flex-col items-center gap-[7px]">
-                <WeatherIcon kind={weather?.nowKind} />
-                <WeatherIcon kind={weather?.tomorrowKind} />
-              </div>
-
-              <div className="min-w-0 flex items-start justify-center">
-                <ClockText timeParts={timeParts} />
-              </div>
-
-              <div className="pt-[2px] flex justify-end">
-                <button
-                  type="button"
-                  className="h-8 w-8 rounded-full bg-slate-100 text-[12px] font-bold text-slate-500"
-                  aria-label="状態表示"
-                >
-                  {cardMode || 3}
-                </button>
-              </div>
+  return (
+    <div className="px-3">
+      <div className="rounded-[28px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] px-4 py-3">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <div className="text-[18px] font-bold text-slate-800 leading-none truncate">
+              {pickup || "未取得"}
             </div>
-
-            {isTop ? (
-              <div className="flex-1 min-h-0 flex items-center justify-center">
-                <div className="flex items-center justify-center gap-2">
-                  <div className="text-center">
-                    <div className="text-[12px] font-semibold tracking-[0.06em] text-slate-500 leading-none">
-                      累計 + 乗務分
-                    </div>
-                    <div className="mt-[8px] text-[28px] font-black tracking-[-0.03em] text-slate-800 leading-none">
-                      {isHomeAmountVisible
-                        ? `¥${Number(homeDisplayAmount || 0).toLocaleString("ja-JP")}`
-                        : "••••••"}
-                    </div>
-                  </div>
-
-                  <div className="pt-[8px]">
-                    <AmountEyeButton
-                      visible={isHomeAmountVisible}
-                      onClick={toggleHomeAmountVisible}
-                    />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="flex-1 min-h-0 flex items-center justify-center">
-                <div className="w-full max-w-[232px] rounded-[18px] bg-slate-50 px-3 py-2 border border-slate-100">
-                  <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 leading-none">
-                    <span>合計</span>
-                    <span>{recordCount}件</span>
-                  </div>
-
-                  <div className="mt-[8px] text-[23px] font-black tracking-[-0.03em] text-slate-800 leading-none text-center">
-                    ¥{Number(totalAmount || 0).toLocaleString("ja-JP")}
-                  </div>
-
-                  <div className="mt-[10px] flex items-center justify-between text-[11px] font-semibold text-slate-500 leading-none">
-                    <span>① ¥{Number(amount1 || 0).toLocaleString("ja-JP")}</span>
-                    <span>② ¥{Number(amount2 || 0).toLocaleString("ja-JP")}</span>
-                  </div>
-                </div>
+            {viaStops.length > 0 && (
+              <div className="mt-2 text-[12px] text-slate-500 truncate">
+                経由：{viaStops.join(" → ")}
               </div>
             )}
           </div>
-        </div>
-      </div>
-    );
-  }
 
-  function HomeGraphCards() {
-    return (
-      <div className="h-full px-3 pb-3">
-        <div className="grid grid-cols-2 gap-3 h-full">
-          {["売上", "ペース", "① / ②", "履歴"].map((label) => (
-            <div
-              key={label}
-              className="rounded-[24px] border border-[#dbe5d3] bg-[#f3f7ef] shadow-[0_6px_14px_rgba(0,0,0,0.06)] flex items-center justify-center"
-            >
-              <span className="text-[15px] font-bold text-slate-500 tracking-[0.04em]">
-                {label}
-              </span>
+          <div className="shrink-0 text-right">
+            <div className="text-[16px] font-bold text-slate-800 leading-none">
+              {formatTime(rideStartAt)}
             </div>
-          ))}
+            <div className="mt-2 text-[13px] font-semibold text-slate-500 leading-none">
+              {elapsedText || "0分"}
+            </div>
+          </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
-  function HomeEndDutySheet({ open, dutyStarted, onFinishTap, label = "終了前チェックへ" }) {
-    if (!open || !dutyStarted) return null;
+// ===============================
+// HomeGraphCards
+// ===============================
+function HomeGraphCards() {
+  const cards = [
+    "売上",
+    "件数",
+    "時間帯",
+    "曜日",
+  ];
 
-    return (
-      <div className="px-3 pb-3 h-full">
-        <div className="h-full rounded-[24px] border border-[#d7d7d7] bg-white shadow-[0_6px_14px_rgba(0,0,0,0.08)] p-3 flex items-center">
+  return (
+    <div className="px-3 h-full">
+      <div className="grid grid-cols-2 gap-3 h-full">
+        {cards.map((label) => (
+          <div
+            key={label}
+            className="rounded-[24px] bg-[#dfe5db] border border-[#d6ddcf] shadow-[0_4px_10px_rgba(0,0,0,0.05)] flex items-center justify-center"
+          >
+            <span className="text-[18px] font-bold text-[#90a08a]">{label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ===============================
+// HomeEndDutySheet
+// ===============================
+function HomeEndDutySheet({
+  open,
+  dutyStarted,
+  onFinishTap,
+  label = "終了前チェックへ",
+}) {
+  if (!open || !dutyStarted) return null;
+
+  return (
+    <div className="px-3 h-full">
+      <button
+        type="button"
+        onClick={onFinishTap}
+        className="w-full h-full rounded-[24px] border border-[#d8c7c7] text-white font-bold text-[22px] shadow-[inset_0_2px_0_rgba(255,255,255,0.30),inset_0_-2px_6px_rgba(0,0,0,0.15),0_6px_12px_rgba(0,0,0,0.12)] active:scale-[0.985] bg-[linear-gradient(180deg,#8f8787,#7f7777,#706868)]"
+      >
+        {label}
+      </button>
+    </div>
+  );
+}
+
+// ===============================
+// HistoryRecordCard
+// ===============================
+function HistoryRecordCard({ item, record, onClick }) {
+  const target = record || item || {};
+  const { formatMoney, formatTime } = window.AppUtils;
+
+  const amountValue = Number(target.金額 || target.amount || 0);
+  const pickup = target.乗車地 || target.from || "-";
+  const dropoff = target.降車地 || target.to || "-";
+  const startAt = target.乗車時刻 || target.time || null;
+  const typeText =
+    window.AppUtils?.recordType?.(target) === "1" ? "①" : "②";
+
+  return (
+    <button
+      type="button"
+      onClick={() => onClick?.(target)}
+      className="w-full text-left rounded-[22px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] px-4 py-3 active:scale-[0.99]"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <div className="text-[15px] font-bold text-slate-800 truncate">
+            {pickup} → {dropoff}
+          </div>
+          <div className="mt-1 text-[12px] text-slate-500">
+            {formatTime(startAt)}
+          </div>
+        </div>
+
+        <div className="shrink-0 text-right">
+          <div className="text-[18px] font-black text-slate-800 leading-none">
+            {formatMoney(amountValue)}
+          </div>
+          <div className="mt-1 text-[12px] font-semibold text-slate-500">{typeText}</div>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+// ===============================
+// OtherSheet
+// ===============================
+function OtherSheet({
+  show,
+  onClose,
+  openHistoryFull,
+  onShowSoon,
+}) {
+  if (!show) return null;
+
+  return (
+    <div className="absolute inset-0 z-40 bg-black/18">
+      <div
+        className="absolute inset-0"
+        onClick={onClose}
+      />
+      <div
+        className="absolute left-3 right-3 bottom-[92px] rounded-[28px] bg-white border border-white/70 shadow-[0_16px_32px_rgba(0,0,0,0.16)] p-4"
+        style={{
+          animation: "otherSheetUp 180ms cubic-bezier(0.22,1,0.36,1)",
+        }}
+      >
+        <div className="grid gap-3">
           <button
             type="button"
-            onClick={onFinishTap}
-            className={
-              C.endDutyButtonClass +
-              " w-full h-full flex items-center justify-center text-[22px] tracking-[-0.02em]"
-            }
+            onClick={openHistoryFull}
+            className="h-[58px] rounded-[20px] bg-slate-100 text-slate-800 text-[20px] font-bold active:bg-slate-200"
           >
-            {label}
+            履歴一覧
+          </button>
+
+          <button
+            type="button"
+            onClick={onShowSoon}
+            className="h-[58px] rounded-[20px] bg-slate-100 text-slate-800 text-[20px] font-bold active:bg-slate-200"
+          >
+            設定
+          </button>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-[52px] rounded-[20px] bg-slate-800 text-white text-[18px] font-bold active:opacity-90"
+          >
+            閉じる
           </button>
         </div>
       </div>
-    );
-  }
 
-  function RideInfoCard({ pickup, rideStartAt, elapsedText, viaStops }) {
-    return (
-      <div className="px-3 h-full">
-        <div className={`${C.cardClass} h-full px-4 py-3 flex flex-col justify-center`}>
-          <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0 flex-1">
-              <div className="text-[13px] font-semibold text-slate-500">
-                {U.formatTime(rideStartAt)}
-              </div>
-              <div className="mt-1 text-[18px] font-bold text-slate-800 truncate">
-                {pickup || "未取得"}
-              </div>
-            </div>
+      <style>{`
+        @keyframes otherSheetUp {
+          0% { transform: translateY(18px); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
+        }
+      `}</style>
+    </div>
+  );
+}
 
-            <div className="shrink-0 text-right">
-              <div className="text-[12px] font-semibold text-slate-500">経過時間</div>
-              <div className="mt-1 text-[24px] font-black text-slate-800 leading-none">
-                {elapsedText || "0分"}
-              </div>
-            </div>
-          </div>
+// ===============================
+// PaymentDialog
+// ===============================
+function PaymentDialog({
+  amount,
+  pickupMeta,
+  dropoffMeta,
+  paymentCountdown = 2.5,
+  savingDots = 4,
+  onCancel,
+}) {
+  const { formatMoney } = window.AppUtils;
+  const amountValue = Number(amount || 0);
 
-          {viaStops?.length > 0 && (
-            <div className="mt-3 rounded-[16px] bg-slate-50 border border-slate-100 px-3 py-2 text-[12px] text-slate-600 truncate">
-              経由：{viaStops.join(" → ")}
-            </div>
-          )}
+  const dots = ".".repeat(Math.max(0, Number(savingDots || 0)));
+
+  return (
+    <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
+      <div className="w-full max-w-[330px] rounded-[28px] bg-white shadow-2xl p-5">
+        <div className="text-[20px] font-bold text-slate-800 text-center tracking-[-0.02em]">
+          保存します
         </div>
-      </div>
-    );
-  }
 
-  function HistoryRecordCard({ record, item, onClick }) {
-    const row = record || item || {};
-
-    return (
-      <button
-        type="button"
-        onClick={() => onClick?.(row)}
-        className="w-full bg-white rounded-xl p-3 shadow-sm mb-2 text-left"
-      >
-        <div className="text-sm">
-          {U.formatTime(row?.乗車時刻 || row?.time)} → {U.formatTime(row?.降車時刻 || row?.time)}
-        </div>
-        <div className="text-sm text-gray-500">
-          {row?.乗車地 || row?.from || "-"} → {row?.降車地 || row?.to || "-"}
-        </div>
-        <div className="text-right font-semibold">
-          {Number(row?.金額 || row?.amount || 0).toLocaleString("ja-JP")}円
-        </div>
-      </button>
-    );
-  }
-
-  function HomeIcon() {
-    return (
-      <svg width="30" height="26" viewBox="0 0 30 26" aria-hidden="true">
-        <path
-          d="M15 1.4L28 11.7H23.8V24.2H17.1V17.8H12.9V24.2H6.2V11.7H2L15 1.4Z"
-          fill="white"
-        />
-      </svg>
-    );
-  }
-
-  function MenuIcon() {
-    return (
-      <div
-        className="grid grid-cols-3 place-items-center gap-[5px]"
-        style={{ width: "30px", height: "30px" }}
-        aria-hidden="true"
-      >
-        {Array.from({ length: 9 }).map((_, i) => (
-          <span
-            key={i}
-            className="block rounded-full bg-white"
-            style={{ width: "6px", height: "6px" }}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  function BottomNav({
-    centerLabel,
-    onHome,
-    onCenter,
-    onMenu,
-    activeArea = "home",
-  }) {
-    const items = [
-      {
-        key: "home",
-        label: "ホーム",
-        kind: "icon+label",
-        iconNode: <HomeIcon />,
-        onClick: onHome,
-        unitBottom: 15,
-        iconTop: 0,
-        labelTop: 34,
-        unitWidth: 92,
-        labelWidth: 60,
-        labelSize: 12,
-        labelWeight: 700,
-        labelTracking: "0em",
-      },
-      {
-        key: "center",
-        label: centerLabel,
-        kind: "labelOnly",
-        iconNode: null,
-        onClick: onCenter,
-        unitBottom: 18,
-        iconTop: 0,
-        labelTop: 8,
-        unitWidth: 92,
-        labelWidth: 66,
-        labelSize: 18,
-        labelWeight: 900,
-        labelTracking: "-0.04em",
-      },
-      {
-        key: "menu",
-        label: "メニュー",
-        kind: "icon+label",
-        iconNode: <MenuIcon />,
-        onClick: onMenu,
-        unitBottom: 15,
-        iconTop: -1,
-        labelTop: 34,
-        unitWidth: 92,
-        labelWidth: 64,
-        labelSize: 12,
-        labelWeight: 700,
-        labelTracking: "0em",
-      },
-    ];
-
-    return (
-      <div className="absolute inset-0 overflow-visible">
-        <div
-          className="absolute left-0 right-0 bottom-0 rounded-t-[26px]"
-          style={{
-            height: "46px",
-            background: GREEN_MAIN,
-          }}
-        />
-
-        <div className="absolute inset-0 grid grid-cols-3">
-          {items.map((item) => {
-            const isActive = activeArea === item.key;
-
-            return (
-              <div key={item.key} className="relative h-full flex justify-center">
-                <div
-                  className="absolute rounded-full"
-                  style={{
-                    width: "76px",
-                    height: "76px",
-                    bottom: "5px",
-                    background: isActive ? GREEN_CIRCLE : GREEN_CIRCLE_INACTIVE,
-                  }}
-                />
-
-                <button
-                  onClick={item.onClick}
-                  className="absolute inset-0"
-                  type="button"
-                >
-                  <div
-                    className="absolute left-1/2 -translate-x-1/2 h-full"
-                    style={{ width: `${item.unitWidth}px` }}
-                  >
-                    <div
-                      className="absolute left-1/2 -translate-x-1/2"
-                      style={{
-                        bottom: `${item.unitBottom}px`,
-                        width: `${item.unitWidth}px`,
-                        height: "48px",
-                      }}
-                    >
-                      {item.kind === "icon+label" && (
-                        <div
-                          className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
-                          style={{
-                            top: `${item.iconTop}px`,
-                            width: "32px",
-                            height: "26px",
-                          }}
-                        >
-                          {item.iconNode}
-                        </div>
-                      )}
-
-                      <div
-                        className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
-                        style={{
-                          top: `${item.labelTop}px`,
-                          width: `${item.labelWidth}px`,
-                          height: item.kind === "labelOnly" ? "20px" : "14px",
-                        }}
-                      >
-                        <span
-                          className="leading-none text-white select-none text-center"
-                          style={{
-                            fontSize: `${item.labelSize}px`,
-                            fontWeight: item.labelWeight,
-                            letterSpacing: item.labelTracking,
-                          }}
-                        >
-                          {item.label}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-
-  function OtherSheet({ show, onClose, openHistoryFull, onShowSoon }) {
-    if (!show) return null;
-
-    return (
-      <div className="absolute inset-0 z-40 bg-black/30" onClick={onClose}>
-        <div
-          className="absolute left-3 right-3 bottom-[88px] rounded-[28px] bg-white p-4 shadow-2xl"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="text-[18px] font-bold text-slate-800 text-center">メニュー</div>
-          <div className="mt-4 grid gap-3">
-            <button
-              type="button"
-              onClick={openHistoryFull}
-              className="h-[52px] rounded-[18px] bg-slate-800 text-white font-bold"
-            >
-              履歴一覧を開く
-            </button>
-            <button
-              type="button"
-              onClick={onShowSoon}
-              className="h-[52px] rounded-[18px] bg-slate-100 text-slate-700 font-bold"
-            >
-              準備中
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="h-[48px] rounded-[18px] bg-slate-50 text-slate-500 font-bold"
-            >
-              閉じる
-            </button>
+        <div className="mt-4 text-center">
+          <div className="text-[34px] font-black text-slate-800 leading-none">
+            {formatMoney(amountValue)}
           </div>
         </div>
-      </div>
-    );
-  }
 
-  function PaymentDialog({ amount, paymentCountdown, savingDots, onCancel }) {
-    return (
-      <div className="absolute inset-0 z-50 bg-black/30 flex items-center justify-center px-4">
-        <div className="w-full max-w-[330px] rounded-[28px] bg-white p-5 shadow-2xl">
-          <div className="text-center text-[22px] font-black text-slate-800">
-            ¥{Number(amount || 0).toLocaleString("ja-JP")}
-          </div>
-          <div className="mt-3 text-center text-[14px] text-slate-500 font-semibold">
-            保存まで {Number(paymentCountdown || 0).toFixed(1)}秒
-          </div>
-          <div className="mt-3 text-center text-[20px] tracking-[0.25em] text-slate-400">
-            {"•".repeat(Math.max(0, Math.round(savingDots || 0)))}
-          </div>
+        <div className="mt-4 text-[14px] leading-relaxed text-slate-500 text-center">
+          保存まで {paymentCountdown.toFixed(1)}秒{dots}
+        </div>
+
+        <div className="mt-4 grid gap-2 text-[12px] text-slate-500">
+          <div>乗車精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}</div>
+          <div>降車精度：{dropoffMeta?.accuracy != null ? `${dropoffMeta.accuracy}m` : "--"}</div>
+        </div>
+
+        <div className="mt-6">
           <button
             type="button"
             onClick={onCancel}
-            className="mt-5 h-[48px] w-full rounded-[18px] bg-slate-100 text-slate-700 font-bold"
+            className="w-full h-[48px] rounded-2xl bg-slate-100 text-slate-700 font-bold active:bg-slate-200"
           >
             キャンセル
           </button>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
-  function ViaDialog({ pendingViaPlace, onCancel, onRecord }) {
-    return (
-      <div className="absolute inset-0 z-50 bg-black/30 flex items-center justify-center px-4">
-        <div className="w-full max-w-[340px] rounded-[28px] bg-white p-5 shadow-2xl">
-          <div className="text-[18px] font-bold text-slate-800 text-center">
-            経由地として記録しますか？
-          </div>
-          <div className="mt-4 rounded-[18px] bg-slate-50 border border-slate-100 px-4 py-3 text-[14px] text-slate-600 text-center break-words">
+// ===============================
+// ViaDialog
+// ===============================
+function ViaDialog({
+  pendingViaPlace,
+  onCancel,
+  onRecord,
+}) {
+  return (
+    <div className="absolute inset-0 z-40 bg-slate-900/40 flex items-center justify-center px-4">
+      <div className="w-full max-w-[330px] rounded-[28px] bg-white shadow-2xl p-5">
+        <div className="text-[20px] font-bold text-slate-800 text-center tracking-[-0.02em]">
+          経由地を記録しますか？
+        </div>
+
+        <div className="mt-4 rounded-[20px] bg-slate-50 border border-slate-200 px-4 py-4 text-center">
+          <div className="text-[16px] font-bold text-slate-800 break-words">
             {pendingViaPlace || "未取得"}
           </div>
-          <div className="mt-5 grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={onCancel}
-              className="h-[48px] rounded-[18px] bg-slate-100 text-slate-700 font-bold"
-            >
-              戻る
-            </button>
-            <button
-              type="button"
-              onClick={onRecord}
-              className="h-[48px] rounded-[18px] bg-slate-800 text-white font-bold"
-            >
-              記録
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  function SummaryRow({ label, value, onClick }) {
-    const body = (
-      <div className="flex items-center justify-between rounded-[18px] bg-slate-50 border border-slate-100 px-4 py-3">
-        <span className="text-[14px] font-semibold text-slate-500">{label}</span>
-        <span className="text-[18px] font-black text-slate-800">{value}</span>
-      </div>
-    );
-
-    if (!onClick) return body;
-
-    return (
-      <button type="button" onClick={onClick} className="w-full text-left active:scale-[0.995]">
-        {body}
-      </button>
-    );
-  }
-
-  function FinishCheckScreen(props) {
-    const {
-      finishLocked,
-      finishPhase,
-      finishSummary,
-      onBack,
-      onToggleLock,
-      onConfirm,
-      onFinalTap,
-      openHistoryModalWithFilter,
-    } = props;
-
-    const isSaving = finishPhase === "saving";
-    const isDone = finishPhase === "done";
-
-    return (
-      <div className="absolute inset-0 z-40 bg-white flex flex-col overflow-hidden">
-        <div className="px-4 pt-4 pb-3 border-b border-slate-100 shrink-0">
-          <div className="flex items-center justify-between gap-3">
-            <button
-              type="button"
-              onClick={onBack}
-              className="h-[44px] px-4 rounded-[16px] bg-slate-100 text-slate-700 font-bold"
-            >
-              戻る
-            </button>
-            <div className="text-[20px] font-black text-slate-800">終了前チェック</div>
-            <div className="w-[68px]" />
-          </div>
         </div>
 
-        <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4">
-          <div className="grid gap-3">
-            <SummaryRow
-              label="売上合計"
-              value={`¥${Number(finishSummary?.totalAmount || 0).toLocaleString("ja-JP")}`}
-              onClick={() => openHistoryModalWithFilter?.("all")}
-            />
-            <SummaryRow
-              label="①"
-              value={`¥${Number(finishSummary?.amount1 || 0).toLocaleString("ja-JP")}`}
-              onClick={() => openHistoryModalWithFilter?.("1")}
-            />
-            <SummaryRow
-              label="②"
-              value={`¥${Number(finishSummary?.amount2 || 0).toLocaleString("ja-JP")}`}
-              onClick={() => openHistoryModalWithFilter?.("2")}
-            />
-            <SummaryRow
-              label="件数"
-              value={`${Number(finishSummary?.recordCount || 0)}件`}
-            />
-            <SummaryRow
-              label="人数"
-              value={`${Number(finishSummary?.passengerCount || 0)}名`}
-            />
-            <SummaryRow
-              label="営走"
-              value={`${Number(finishSummary?.businessKm || 0)}km`}
-            />
+        <div className="mt-6 grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="h-[48px] rounded-2xl bg-slate-100 text-slate-700 font-bold active:bg-slate-200"
+          >
+            戻る
+          </button>
 
-            {!isDone && (
-              <button
-                type="button"
-                onClick={onToggleLock}
-                className={`mt-2 h-[58px] rounded-[20px] text-[18px] font-black border ${
-                  finishLocked
-                    ? "bg-emerald-500 border-emerald-500 text-white"
-                    : "bg-slate-100 border-slate-200 text-slate-600"
-                }`}
-              >
-                {finishLocked ? "ロック解除済み" : "ロック解除"}
-              </button>
-            )}
-
-            {!isDone && (
-              <button
-                type="button"
-                onClick={onConfirm}
-                disabled={!finishLocked || isSaving}
-                className="h-[64px] rounded-[22px] bg-slate-800 text-white text-[22px] font-black disabled:opacity-40"
-              >
-                {isSaving ? "保存中…" : "スライドで終了"}
-              </button>
-            )}
-
-            {isDone && (
-              <button
-                type="button"
-                onClick={onFinalTap}
-                className="h-[64px] rounded-[22px] bg-sky-500 text-white text-[22px] font-black"
-              >
-                タップして開始へ
-              </button>
-            )}
-          </div>
+          <button
+            type="button"
+            onClick={onRecord}
+            className="h-[48px] rounded-2xl bg-slate-800 text-white font-bold active:opacity-90"
+          >
+            記録
+          </button>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
-  return {
-    AppFrame,
-    HeaderCard,
-    HomeGraphCards,
-    HomeEndDutySheet,
-    RideInfoCard,
-    HistoryRecordCard,
-    BottomNav,
-    OtherSheet,
-    PaymentDialog,
-    ViaDialog,
-    SummaryRow,
-    FinishCheckScreen,
+// ===============================
+// BottomNav
+// ===============================
+function BottomNav({
+  centerLabel,
+  onHome,
+  onCenter,
+  onMenu,
+  activeArea = "home",
+}) {
+  const SLOT_CENTERS = {
+    home: "16.6667%",
+    center: "50%",
+    menu: "83.3333%",
   };
-})();
+
+  const activeLeft = SLOT_CENTERS[activeArea] || SLOT_CENTERS.home;
+
+  const NAV_HEIGHT = 82;
+  const BAND_HEIGHT = 56;
+  const BAND_RADIUS = 24;
+
+  const ACTIVE_CIRCLE_SIZE = 76;
+  const ACTIVE_CIRCLE_CENTER_Y = 28;
+
+  const ICON_CENTER_Y = 28;
+  const LABEL_BOTTOM_Y = 69;
+
+  const HOME_ICON_W = 34;
+  const HOME_ICON_H = 28;
+
+  const MENU_DOT_SIZE = 10;
+  const MENU_DOT_GAP = 8;
+
+  const NavHitArea = ({ area, onPress, label }) => (
+    <button
+      type="button"
+      onClick={onPress}
+      aria-label={label}
+      className="absolute top-0 h-full bg-transparent border-0 p-0 m-0"
+      style={{
+        width: "33.3333%",
+        left:
+          area === "home"
+            ? "0%"
+            : area === "center"
+            ? "33.3333%"
+            : "66.6667%",
+      }}
+    />
+  );
+
+  const BottomLabel = ({ area, text, fontSize = 12, fontWeight = 500 }) => (
+    <div
+      aria-hidden="true"
+      className="absolute text-white leading-none whitespace-nowrap select-none"
+      style={{
+        left: SLOT_CENTERS[area],
+        bottom: `${NAV_HEIGHT - LABEL_BOTTOM_Y}px`,
+        transform: "translateX(-50%)",
+        fontSize: `${fontSize}px`,
+        fontWeight,
+        pointerEvents: "none",
+      }}
+    >
+      {text}
+    </div>
+  );
+
+  const HomeGlyph = () => (
+    <div
+      aria-hidden="true"
+      className="absolute"
+      style={{
+        left: SLOT_CENTERS.home,
+        top: `${ICON_CENTER_Y}px`,
+        width: `${HOME_ICON_W}px`,
+        height: `${HOME_ICON_H}px`,
+        transform: "translate(-50%, -50%)",
+        pointerEvents: "none",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "0px",
+          width: "34px",
+          height: "18px",
+          background: "#ffffff",
+          transform: "translateX(-50%)",
+          clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "16px",
+          width: "20px",
+          height: "10px",
+          background: "#ffffff",
+          transform: "translateX(-50%)",
+          borderRadius: "1px",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "18px",
+          width: "6px",
+          height: "8px",
+          background: GREEN_CIRCLE,
+          transform: "translateX(-50%)",
+          borderRadius: "1px",
+        }}
+      />
+    </div>
+  );
+
+  const MenuGlyph = () => {
+    const dots = new Array(9).fill(0);
+
+    return (
+      <div
+        aria-hidden="true"
+        className="absolute grid"
+        style={{
+          left: SLOT_CENTERS.menu,
+          top: `${ICON_CENTER_Y}px`,
+          transform: "translate(-50%, -50%)",
+          gridTemplateColumns: `repeat(3, ${MENU_DOT_SIZE}px)`,
+          gap: `${MENU_DOT_GAP}px`,
+          pointerEvents: "none",
+        }}
+      >
+        {dots.map((_, idx) => (
+          <span
+            key={idx}
+            style={{
+              width: `${MENU_DOT_SIZE}px`,
+              height: `${MENU_DOT_SIZE}px`,
+              borderRadius: "9999px",
+              background: "#ffffff",
+              display: "block",
+            }}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  const CenterMainLabel = () => (
+    <div
+      aria-hidden="true"
+      className="absolute text-white font-medium tracking-[-0.01em] leading-none whitespace-nowrap select-none"
+      style={{
+        left: SLOT_CENTERS.center,
+        top: `${ICON_CENTER_Y + 2}px`,
+        transform: "translate(-50%, -50%)",
+        fontSize: "24px",
+        pointerEvents: "none",
+      }}
+    >
+      {centerLabel}
+    </div>
+  );
+
+  return (
+    <div
+      className="absolute bottom-0 left-0 right-0 overflow-hidden"
+      style={{ height: `${NAV_HEIGHT}px` }}
+    >
+      {/* 帯 */}
+      <div
+        className="absolute left-0 right-0 bottom-0"
+        style={{
+          height: `${BAND_HEIGHT}px`,
+          background: GREEN_MAIN,
+          borderTopLeftRadius: `${BAND_RADIUS}px`,
+          borderTopRightRadius: `${BAND_RADIUS}px`,
+        }}
+      />
+
+      {/* アクティブ丸 */}
+      <div
+        className="absolute rounded-full transition-all duration-200"
+        style={{
+          width: `${ACTIVE_CIRCLE_SIZE}px`,
+          height: `${ACTIVE_CIRCLE_SIZE}px`,
+          left: activeLeft,
+          top: `${ACTIVE_CIRCLE_CENTER_Y}px`,
+          transform: "translate(-50%, -50%)",
+          background: GREEN_CIRCLE,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* 表示 */}
+      <HomeGlyph />
+      <CenterMainLabel />
+      <MenuGlyph />
+
+      <BottomLabel area="home" text="ホーム" fontSize={12} fontWeight={500} />
+      <BottomLabel area="center" text={centerLabel} fontSize={12} fontWeight={500} />
+      <BottomLabel area="menu" text="メニュー" fontSize={12} fontWeight={500} />
+
+      {/* タップ領域 */}
+      <NavHitArea area="home" onPress={onHome} label="ホーム" />
+      <NavHitArea area="center" onPress={onCenter} label={centerLabel} />
+      <NavHitArea area="menu" onPress={onMenu} label="メニュー" />
+    </div>
+  );
+}
+
+// ===============================
+// export
+// ===============================
+window.AppComponents = {
+  AppFrame,
+  HeaderCard,
+  RideInfoCard,
+  HomeGraphCards,
+  HomeEndDutySheet,
+  HistoryRecordCard,
+  OtherSheet,
+  PaymentDialog,
+  ViaDialog,
+  BottomNav,
+};
