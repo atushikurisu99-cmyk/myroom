@@ -224,48 +224,84 @@ window.AppComponents = (() => {
     );
   }
 
+  function HomeIcon() {
+    return (
+      <svg
+        width="26"
+        height="22"
+        viewBox="0 0 26 22"
+        aria-hidden="true"
+        className="block"
+      >
+        <path
+          d="M13 1.2L24 10.2H20.8V20.2H15.2V14.3H10.8V20.2H5.2V10.2H2L13 1.2Z"
+          fill="white"
+        />
+      </svg>
+    );
+  }
+
+  function MenuIcon() {
+    const dots = Array.from({ length: 9 });
+    return (
+      <div
+        className="grid grid-cols-3 gap-[4px] place-items-center"
+        style={{ width: "22px", height: "22px" }}
+        aria-hidden="true"
+      >
+        {dots.map((_, i) => (
+          <span
+            key={i}
+            className="block rounded-full bg-white"
+            style={{ width: "4px", height: "4px" }}
+          />
+        ))}
+      </div>
+    );
+  }
+
   function BottomNav({ centerLabel, onHome, onCenter, onMenu, activeArea = "home" }) {
     const items = [
       {
         key: "home",
         label: "ホーム",
-        icon: "▲",
         onClick: onHome,
-        clusterOffsetY: 0,
-        iconOffsetY: -2,
-        labelOffsetY: 0,
-        iconClass: "text-[22px] font-black",
-        labelClass: "text-[11px] font-bold",
-        iconWidth: 46,
-        labelWidth: 56,
+        kind: "icon+label",
+        icon: <HomeIcon />,
+        circleOffsetX: 0,
+        clusterBottom: 16,
+        iconTop: 0,
+        labelTop: 25,
+        labelWidth: 54,
+        labelSize: 11,
         labelTracking: "0em",
       },
       {
         key: "center",
         label: centerLabel || "履歴",
-        icon: null,
         onClick: onCenter,
-        clusterOffsetY: -1,
-        iconOffsetY: 0,
-        labelOffsetY: 0,
-        iconClass: "",
-        labelClass: "text-[20px] font-black",
-        iconWidth: 0,
-        labelWidth: 64,
+        kind: "labelOnly",
+        icon: null,
+        circleOffsetX: 0,
+        clusterBottom: 19,
+        iconTop: 0,
+        labelTop: 7,
+        labelWidth: 62,
+        labelSize: 18,
         labelTracking: "-0.04em",
       },
       {
         key: "menu",
         label: "メニュー",
-        icon: "•••",
         onClick: onMenu,
-        clusterOffsetY: -1,
-        iconOffsetY: -3,
-        labelOffsetY: 0,
-        iconClass: "text-[18px] font-black tracking-[0.14em]",
-        labelClass: "text-[11px] font-bold",
-        iconWidth: 46,
-        labelWidth: 62,
+        kind: "icon+label",
+        icon: <MenuIcon />,
+        circleOffsetX: 0,
+        clusterBottom: 16,
+        iconTop: -1,
+        labelTop: 25,
+        labelWidth: 58,
+        labelSize: 11,
         labelTracking: "0em",
       },
     ];
@@ -293,6 +329,7 @@ window.AppComponents = (() => {
                     width: "82px",
                     height: "82px",
                     bottom: "7px",
+                    marginLeft: `${item.circleOffsetX}px`,
                     background: isActive ? GREEN_CIRCLE : GREEN_CIRCLE_INACTIVE,
                     transition: "background 180ms ease, opacity 180ms ease",
                   }}
@@ -307,43 +344,40 @@ window.AppComponents = (() => {
                     <div
                       className="absolute left-1/2 -translate-x-1/2"
                       style={{
-                        bottom: `${18 + item.clusterOffsetY}px`,
+                        bottom: `${item.clusterBottom}px`,
                         width: "86px",
                         height: "48px",
                       }}
                     >
-                      {item.icon ? (
+                      {item.kind === "icon+label" && (
                         <div
                           className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
                           style={{
-                            top: `${1 + item.iconOffsetY}px`,
-                            width: `${item.iconWidth}px`,
+                            top: `${item.iconTop}px`,
+                            width: "34px",
                             height: "20px",
                           }}
                         >
-                          <span
-                            className={`leading-none text-white select-none ${item.iconClass}`}
-                            style={{ display: "block", lineHeight: 1 }}
-                          >
-                            {item.icon}
-                          </span>
+                          {item.icon}
                         </div>
-                      ) : null}
+                      )}
 
                       <div
                         className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
                         style={{
-                          top: item.icon ? `${24 + item.labelOffsetY}px` : `${12 + item.labelOffsetY}px`,
+                          top: `${item.labelTop}px`,
                           width: `${item.labelWidth}px`,
-                          height: item.icon ? "14px" : "20px",
+                          height: item.kind === "icon+label" ? "14px" : "20px",
                         }}
                       >
                         <span
-                          className={`leading-none text-white select-none ${item.labelClass}`}
+                          className="leading-none text-white select-none font-bold"
                           style={{
                             display: "block",
                             lineHeight: 1,
+                            fontSize: `${item.labelSize}px`,
                             letterSpacing: item.labelTracking,
+                            fontWeight: item.kind === "labelOnly" ? 900 : 700,
                           }}
                         >
                           {item.label}
