@@ -13,6 +13,17 @@ window.AppComponents = (() => {
   const END_GREEN = "#375f1d";
   const OVERLAY_BG = "rgba(20,28,40,0.10)";
 
+  const CLOCK_RIGHT_INSET = 18;
+  const CLOCK_TOP_OFFSET = 6;
+
+  const NAV_SAFE_INSET = "env(safe-area-inset-bottom, 0px)";
+  const NAV_CONTENT_HEIGHT = 92;
+  const NAV_BAND_VISIBLE_HEIGHT = 54;
+  const NAV_BUBBLE_SIZE = 104;
+  const NAV_BUBBLE_TOP = -12;
+  const NAV_ICON_CENTER_Y = 27;
+  const NAV_TEXT_BASE_Y = 70;
+
   function formatPlainNumber(value) {
     return `${Number(value || 0).toLocaleString("ja-JP")}`;
   }
@@ -113,9 +124,10 @@ window.AppComponents = (() => {
   function ClockDigits({ timeParts, dark = false }) {
     return (
       <div
-        className={`flex items-center justify-end text-[58px] leading-[0.88] font-black tracking-[-0.05em] ${
+        className={`inline-flex items-center justify-end text-[58px] leading-[0.88] font-black tracking-[-0.05em] tabular-nums whitespace-nowrap ${
           dark ? "text-black" : "text-slate-800"
         }`}
+        style={{ fontVariantNumeric: "tabular-nums" }}
       >
         <span>{timeParts?.hh || "00"}</span>
         <span
@@ -178,7 +190,10 @@ window.AppComponents = (() => {
   }) {
     return (
       <div className="h-full w-full px-[30px] pt-[22px] pb-[16px] flex flex-col justify-between">
-        <div className="flex items-start justify-end">
+        <div
+          className="flex justify-end"
+          style={{ paddingRight: `${CLOCK_RIGHT_INSET}px`, paddingTop: `${CLOCK_TOP_OFFSET}px` }}
+        >
           <ClockDigits timeParts={timeParts} dark />
         </div>
 
@@ -214,7 +229,10 @@ window.AppComponents = (() => {
               <WeatherMiniPair weather={weather} />
             </div>
 
-            <div className="shrink-0 text-right pt-[6px]">
+            <div
+              className="shrink-0 text-right"
+              style={{ paddingRight: `${CLOCK_RIGHT_INSET}px`, paddingTop: `${CLOCK_TOP_OFFSET}px` }}
+            >
               <ClockDigits timeParts={timeParts} />
             </div>
           </div>
@@ -413,6 +431,48 @@ window.AppComponents = (() => {
     );
   }
 
+  function NavBubbleButton({
+    label,
+    icon,
+    onClick,
+    strong = false,
+    textSize = 12,
+    textWeight = "font-semibold",
+  }) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="relative h-full w-full text-white active:opacity-85"
+      >
+        <div
+          className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
+          style={{
+            top: `${NAV_ICON_CENTER_Y}px`,
+            width: "36px",
+            height: "36px",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          {icon}
+        </div>
+
+        <div
+          className={`absolute left-1/2 -translate-x-1/2 leading-none whitespace-nowrap ${
+            strong ? "font-bold" : textWeight
+          }`}
+          style={{
+            top: `${NAV_TEXT_BASE_Y}px`,
+            transform: "translateX(-50%)",
+            fontSize: `${textSize}px`,
+          }}
+        >
+          {label}
+        </div>
+      </button>
+    );
+  }
+
   function BottomNav({
     centerLabel,
     onHome,
@@ -420,12 +480,6 @@ window.AppComponents = (() => {
     onMenu,
     activeArea = "home",
   }) {
-    const safeInset = "env(safe-area-inset-bottom, 0px)";
-    const contentHeight = 92;
-    const bandVisibleHeight = 54;
-    const bubbleSize = 104;
-    const bubbleTop = -12;
-
     const centerMap = {
       home: "16.6667%",
       center: "50%",
@@ -438,22 +492,22 @@ window.AppComponents = (() => {
     const menuStrong = activeArea === "menu";
 
     return (
-      <div className="h-full relative overflow-visible">
+      <div className="relative overflow-visible" style={{ height: `${NAV_CONTENT_HEIGHT}px` }}>
         <div
           className="absolute inset-x-0 bottom-0 rounded-t-[26px]"
           style={{
             background: GREEN_MAIN,
-            height: `calc(${bandVisibleHeight}px + ${safeInset})`,
+            height: `calc(${NAV_BAND_VISIBLE_HEIGHT}px + ${NAV_SAFE_INSET})`,
           }}
         />
 
         <div
           className="absolute z-10 rounded-full transition-[left] duration-250 ease-out"
           style={{
-            width: `${bubbleSize}px`,
-            height: `${bubbleSize}px`,
+            width: `${NAV_BUBBLE_SIZE}px`,
+            height: `${NAV_BUBBLE_SIZE}px`,
             left: activeCenter,
-            top: `${bubbleTop}px`,
+            top: `${NAV_BUBBLE_TOP}px`,
             transform: "translateX(-50%)",
             background: GREEN_CIRCLE,
             boxShadow: "0 10px 18px rgba(0,0,0,0.08)",
@@ -462,54 +516,34 @@ window.AppComponents = (() => {
 
         <div
           className="absolute inset-x-0 bottom-0 z-20 grid grid-cols-3"
-          style={{
-            height: `${contentHeight}px`,
-          }}
+          style={{ height: `${NAV_CONTENT_HEIGHT}px` }}
         >
-          <button
-            type="button"
+          <NavBubbleButton
+            label="ホーム"
             onClick={onHome}
-            className="h-full flex flex-col items-center justify-end pb-[12px] text-white active:opacity-85"
-          >
-            <HomeFilledIcon className="w-[34px] h-[34px]" />
-            <div
-              className={`mt-[6px] text-[12px] leading-none ${
-                homeStrong ? "font-bold" : "font-semibold"
-              }`}
-            >
-              ホーム
-            </div>
-          </button>
+            strong={homeStrong}
+            icon={<HomeFilledIcon className="w-[34px] h-[34px]" />}
+            textSize={12}
+            textWeight="font-semibold"
+          />
 
-          <button
-            type="button"
+          <NavBubbleButton
+            label={centerLabel}
             onClick={onCenter}
-            className="h-full flex flex-col items-center justify-end pb-[12px] text-white active:opacity-85"
-          >
-            <div className="w-[34px] h-[34px]" />
-            <div
-              className={`mt-[6px] text-[17px] leading-none tracking-[0.04em] ${
-                centerStrong ? "font-bold" : "font-semibold"
-              }`}
-            >
-              {centerLabel}
-            </div>
-          </button>
+            strong={centerStrong}
+            icon={<div className="w-[34px] h-[34px]" />}
+            textSize={17}
+            textWeight="font-semibold"
+          />
 
-          <button
-            type="button"
+          <NavBubbleButton
+            label="メニュー"
             onClick={onMenu}
-            className="h-full flex flex-col items-center justify-end pb-[12px] text-white active:opacity-85"
-          >
-            <MenuDotsFilledIcon className="w-[30px] h-[30px]" />
-            <div
-              className={`mt-[10px] text-[12px] leading-none ${
-                menuStrong ? "font-bold" : "font-semibold"
-              }`}
-            >
-              メニュー
-            </div>
-          </button>
+            strong={menuStrong}
+            icon={<MenuDotsFilledIcon className="w-[30px] h-[30px]" />}
+            textSize={12}
+            textWeight="font-semibold"
+          />
         </div>
       </div>
     );
