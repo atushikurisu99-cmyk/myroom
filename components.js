@@ -4,7 +4,7 @@ window.AppComponents = (() => {
 
   const GREEN_MAIN = "#9ED36A";
   const GREEN_CIRCLE = "#8FC15A";
-  const GREEN_CIRCLE_INACTIVE = "rgba(143,193,90,0.55)";
+  const GREEN_CIRCLE_INACTIVE = "rgba(143,193,90,0.52)";
 
   function AppFrame({ children }) {
     return (
@@ -231,29 +231,41 @@ window.AppComponents = (() => {
         label: "ホーム",
         icon: "▲",
         onClick: onHome,
-        iconClass: "text-[29px] font-black",
-        iconTranslateY: 1,
-        labelTranslateY: 0,
+        clusterOffsetY: 0,
+        iconOffsetY: -2,
+        labelOffsetY: 0,
+        iconClass: "text-[22px] font-black",
+        labelClass: "text-[11px] font-bold",
+        iconWidth: 46,
+        labelWidth: 56,
         labelTracking: "0em",
       },
       {
         key: "center",
         label: centerLabel || "履歴",
-        icon: "履",
+        icon: null,
         onClick: onCenter,
-        iconClass: "text-[31px] font-black",
-        iconTranslateY: 0,
-        labelTranslateY: 0,
-        labelTracking: "-0.01em",
+        clusterOffsetY: -1,
+        iconOffsetY: 0,
+        labelOffsetY: 0,
+        iconClass: "",
+        labelClass: "text-[20px] font-black",
+        iconWidth: 0,
+        labelWidth: 64,
+        labelTracking: "-0.04em",
       },
       {
         key: "menu",
         label: "メニュー",
         icon: "•••",
         onClick: onMenu,
-        iconClass: "text-[22px] font-black tracking-[0.08em]",
-        iconTranslateY: -5,
-        labelTranslateY: 0,
+        clusterOffsetY: -1,
+        iconOffsetY: -3,
+        labelOffsetY: 0,
+        iconClass: "text-[18px] font-black tracking-[0.14em]",
+        labelClass: "text-[11px] font-bold",
+        iconWidth: 46,
+        labelWidth: 62,
         labelTracking: "0em",
       },
     ];
@@ -263,7 +275,7 @@ window.AppComponents = (() => {
         <div
           className="absolute left-0 right-0 bottom-0"
           style={{
-            height: "56px",
+            height: "52px",
             background: GREEN_MAIN,
           }}
         />
@@ -278,9 +290,9 @@ window.AppComponents = (() => {
                   aria-hidden="true"
                   className="absolute left-1/2 -translate-x-1/2 rounded-full"
                   style={{
-                    width: "124px",
-                    height: "124px",
-                    bottom: "6px",
+                    width: "82px",
+                    height: "82px",
+                    bottom: "7px",
                     background: isActive ? GREEN_CIRCLE : GREEN_CIRCLE_INACTIVE,
                     transition: "background 180ms ease, opacity 180ms ease",
                   }}
@@ -291,44 +303,52 @@ window.AppComponents = (() => {
                   onClick={item.onClick}
                   className="absolute inset-0 z-10"
                 >
-                  <div className="h-full w-full flex flex-col items-center justify-end">
+                  <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[86px] h-full">
                     <div
-                      className="flex items-center justify-center"
+                      className="absolute left-1/2 -translate-x-1/2"
                       style={{
-                        height: "42px",
-                        width: "84px",
-                        marginBottom: "8px",
-                        transform: `translateY(${item.iconTranslateY}px)`,
+                        bottom: `${18 + item.clusterOffsetY}px`,
+                        width: "86px",
+                        height: "48px",
                       }}
                     >
-                      <span
-                        className={`leading-none text-white select-none ${item.iconClass}`}
-                        style={{
-                          display: "block",
-                          lineHeight: 1,
-                        }}
-                      >
-                        {item.icon}
-                      </span>
-                    </div>
+                      {item.icon ? (
+                        <div
+                          className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
+                          style={{
+                            top: `${1 + item.iconOffsetY}px`,
+                            width: `${item.iconWidth}px`,
+                            height: "20px",
+                          }}
+                        >
+                          <span
+                            className={`leading-none text-white select-none ${item.iconClass}`}
+                            style={{ display: "block", lineHeight: 1 }}
+                          >
+                            {item.icon}
+                          </span>
+                        </div>
+                      ) : null}
 
-                    <div
-                      className="flex items-center justify-center"
-                      style={{
-                        height: "18px",
-                        width: "84px",
-                        marginBottom: "10px",
-                        transform: `translateY(${item.labelTranslateY}px)`,
-                      }}
-                    >
-                      <span
-                        className="text-white text-[12px] font-bold leading-none select-none"
+                      <div
+                        className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
                         style={{
-                          letterSpacing: item.labelTracking,
+                          top: item.icon ? `${24 + item.labelOffsetY}px` : `${12 + item.labelOffsetY}px`,
+                          width: `${item.labelWidth}px`,
+                          height: item.icon ? "14px" : "20px",
                         }}
                       >
-                        {item.label}
-                      </span>
+                        <span
+                          className={`leading-none text-white select-none ${item.labelClass}`}
+                          style={{
+                            display: "block",
+                            lineHeight: 1,
+                            letterSpacing: item.labelTracking,
+                          }}
+                        >
+                          {item.label}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </button>
