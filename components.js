@@ -1,194 +1,140 @@
-function BottomNav({
+// ===============================
+// 共通カラー
+// ===============================
+const GREEN_MAIN = "#9ED36A";
+const GREEN_CIRCLE = "#7FC84E";
+
+// ===============================
+// AppFrame（全体レイアウト固定）
+// ===============================
+export function AppFrame({ children }) {
+  return (
+    <div className="w-full h-screen flex justify-center bg-[#eef2f5]">
+      <div className="w-[390px] h-full relative bg-white overflow-hidden">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ===============================
+// HeaderCard（上部カード）
+// ===============================
+export function HeaderCard({
+  time,
+  subText = "",
+  amount = 0,
+}) {
+  return (
+    <div className="w-full px-4 pt-4">
+      <div className="bg-white rounded-2xl p-4 shadow-sm">
+        <div className="text-[32px] font-bold tracking-wide text-center">
+          {time}
+        </div>
+        <div className="text-xs text-gray-500 mt-2 text-center">
+          {subText}
+        </div>
+        <div className="text-center mt-2 text-lg font-semibold">
+          {amount.toLocaleString()}円
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ===============================
+// 履歴カード（仮復旧）
+// ===============================
+export function HistoryRecordCard({ item }) {
+  return (
+    <div className="bg-white rounded-xl p-3 shadow-sm mb-2">
+      <div className="text-sm">{item?.time || "--:--"}</div>
+      <div className="text-sm text-gray-500">
+        {item?.from || "-"} → {item?.to || "-"}
+      </div>
+      <div className="text-right font-semibold">
+        {item?.amount || 0}円
+      </div>
+    </div>
+  );
+}
+
+// ===============================
+// BottomNav（完全安定版）
+// ===============================
+export function BottomNav({
   centerLabel,
   onHome,
   onCenter,
   onMenu,
   activeArea = "home",
 }) {
-  const safeInset = "env(safe-area-inset-bottom, 0px)";
+  const safe = "env(safe-area-inset-bottom,0px)";
 
-  // -------------------------
-  // 完全固定値
-  // -------------------------
-  const navHeight = 94;
-  const bandHeight = 56;
-
-  const bubbleSize = 78;
-  const bubbleBottom = 22;
-
-  const slotWidth = "33.3333%";
-
-  // ユニット基準
-  const sideUnitWidth = 60;
-  const sideIconBox = 28;
-  const sideLabelFont = 12;
-  const sideGap = 3;
-
-  const centerUnitWidth = 72;
-  const centerLabelFont = 16;
-
-  // 帯の中の基準線
-  const sideUnitTop = 8;
-  const centerUnitTop = 22;
-
-  const centerMap = {
+  const slot = {
     home: "16.6667%",
     center: "50%",
     menu: "83.3333%",
   };
 
-  const activeCenter = centerMap[activeArea] || centerMap.home;
-
-  const homeStrong = activeArea === "home";
-  const centerStrong = activeArea === "center";
-  const menuStrong = activeArea === "menu";
+  const activeLeft = slot[activeArea] || slot.home;
 
   return (
     <div
-      className="relative overflow-visible"
-      style={{
-        height: `calc(${navHeight}px + ${safeInset})`,
-      }}
+      className="absolute bottom-0 left-0 right-0"
+      style={{ height: `100px` }}
     >
-      {/* 帯：絶対固定 */}
+      {/* 帯（絶対固定） */}
       <div
         className="absolute left-0 right-0 bottom-0 rounded-t-[24px]"
         style={{
-          height: `calc(${bandHeight}px + ${safeInset})`,
+          height: `60px`,
           background: GREEN_MAIN,
         }}
       />
 
-      {/* 選択丸：ユニット中心に合わせるだけ */}
+      {/* 丸（ユニット中心に固定） */}
       <div
-        className="absolute z-10 rounded-full transition-[left] duration-220 ease-out"
+        className="absolute rounded-full transition-all duration-200"
         style={{
-          width: `${bubbleSize}px`,
-          height: `${bubbleSize}px`,
-          left: activeCenter,
-          bottom: `calc(${bubbleBottom}px + ${safeInset})`,
+          width: "64px",
+          height: "64px",
+          left: activeLeft,
+          bottom: `28px`,
           transform: "translateX(-50%)",
           background: GREEN_CIRCLE,
-          boxShadow: "0 8px 14px rgba(0,0,0,0.05)",
         }}
       />
 
       {/* ホーム */}
       <button
-        type="button"
         onClick={onHome}
-        className="absolute left-0 top-0 z-20 text-white active:opacity-85"
-        style={{
-          width: slotWidth,
-          height: `${navHeight}px`,
-        }}
+        className="absolute left-0 top-0 w-1/3 h-full flex justify-center items-end pb-2 text-white"
       >
-        <div
-          className="absolute left-1/2 -translate-x-1/2"
-          style={{
-            top: `${sideUnitTop}px`,
-            width: `${sideUnitWidth}px`,
-            height: `${sideIconBox + sideGap + sideLabelFont}px`,
-          }}
-        >
-          <div
-            className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
-            style={{
-              top: 0,
-              width: `${sideIconBox}px`,
-              height: `${sideIconBox}px`,
-            }}
-          >
-            <HomeFilledIcon className="w-[28px] h-[28px]" />
-          </div>
-
-          <div
-            className={`absolute left-1/2 -translate-x-1/2 leading-none whitespace-nowrap ${
-              homeStrong ? "font-bold" : "font-semibold"
-            }`}
-            style={{
-              top: `${sideIconBox + sideGap}px`,
-              fontSize: `${sideLabelFont}px`,
-            }}
-          >
-            ホーム
-          </div>
+        <div className="flex flex-col items-center gap-[2px]">
+          <div className="text-[22px] leading-none">▲</div>
+          <div className="text-[12px] leading-none">ホーム</div>
         </div>
       </button>
 
       {/* 中央 */}
       <button
-        type="button"
         onClick={onCenter}
-        className="absolute left-1/2 top-0 -translate-x-1/2 z-20 text-white active:opacity-85"
-        style={{
-          width: slotWidth,
-          height: `${navHeight}px`,
-        }}
+        className="absolute left-1/2 -translate-x-1/2 top-0 w-1/3 h-full flex justify-center items-end pb-3 text-white"
       >
-        <div
-          className="absolute left-1/2 -translate-x-1/2"
-          style={{
-            top: `${centerUnitTop}px`,
-            width: `${centerUnitWidth}px`,
-            height: `${centerLabelFont}px`,
-          }}
-        >
-          <div
-            className={`absolute left-1/2 -translate-x-1/2 leading-none whitespace-nowrap ${
-              centerStrong ? "font-bold" : "font-semibold"
-            }`}
-            style={{
-              top: 0,
-              fontSize: `${centerLabelFont}px`,
-              letterSpacing: "0.01em",
-            }}
-          >
-            {centerLabel}
-          </div>
+        <div className="text-[14px] font-semibold">
+          {centerLabel}
         </div>
       </button>
 
       {/* メニュー */}
       <button
-        type="button"
         onClick={onMenu}
-        className="absolute right-0 top-0 z-20 text-white active:opacity-85"
-        style={{
-          width: slotWidth,
-          height: `${navHeight}px`,
-        }}
+        className="absolute right-0 top-0 w-1/3 h-full flex justify-center items-end pb-2 text-white"
       >
-        <div
-          className="absolute left-1/2 -translate-x-1/2"
-          style={{
-            top: `${sideUnitTop}px`,
-            width: `${sideUnitWidth}px`,
-            height: `${sideIconBox + sideGap + sideLabelFont}px`,
-          }}
-        >
-          <div
-            className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
-            style={{
-              top: 0,
-              width: `${sideIconBox}px`,
-              height: `${sideIconBox}px`,
-            }}
-          >
-            <MenuDotsFilledIcon className="w-[26px] h-[26px]" />
-          </div>
-
-          <div
-            className={`absolute left-1/2 -translate-x-1/2 leading-none whitespace-nowrap ${
-              menuStrong ? "font-bold" : "font-semibold"
-            }`}
-            style={{
-              top: `${sideIconBox + sideGap}px`,
-              fontSize: `${sideLabelFont}px`,
-            }}
-          >
-            メニュー
-          </div>
+        <div className="flex flex-col items-center gap-[2px]">
+          <div className="text-[18px] leading-none">•••</div>
+          <div className="text-[12px] leading-none">メニュー</div>
         </div>
       </button>
     </div>
