@@ -421,10 +421,16 @@ window.AppComponents = (() => {
     activeArea = "home",
   }) {
     const safeInset = "env(safe-area-inset-bottom, 0px)";
-    const contentHeight = 96;
-    const bandVisibleHeight = 58;
-    const bubbleSize = 112;
-    const bubbleTop = -18;
+    const navHeight = 96;
+    const bandHeight = 56;
+    const circleSize = 92;
+    const circleOverlap = 18;
+
+    const unitGap = 4;
+    const iconBoxSize = 30;
+    const menuIconBoxSize = 28;
+    const textFontSize = 12;
+    const centerTextFontSize = 16;
 
     const centerMap = {
       home: "16.6667%",
@@ -437,54 +443,70 @@ window.AppComponents = (() => {
     const centerStrong = activeArea === "center";
     const menuStrong = activeArea === "menu";
 
-    const slotBaseClass =
-      "absolute top-0 bottom-0 w-1/3 text-white active:opacity-85";
+    const totalUnitHeight = iconBoxSize + unitGap + textFontSize;
+    const menuUnitHeight = menuIconBoxSize + unitGap + textFontSize;
+    const unitTop = (circleSize - totalUnitHeight) / 2;
+    const menuUnitTop = (circleSize - menuUnitHeight) / 2 + 1;
+    const centerTextTop = (circleSize - centerTextFontSize) / 2 + 9;
+
+    const slotClass =
+      "absolute top-0 bottom-0 w-1/3 flex items-start justify-center text-white active:opacity-85 z-20";
 
     return (
-      <div className="relative overflow-visible" style={{ height: `${contentHeight}px` }}>
+      <div
+        className="relative overflow-visible"
+        style={{
+          height: `calc(${navHeight}px + ${safeInset})`,
+        }}
+      >
         <div
-          className="absolute inset-x-0 bottom-0 rounded-t-[26px]"
+          className="absolute inset-x-0 bottom-0 rounded-t-[24px]"
           style={{
+            height: `calc(${bandHeight}px + ${safeInset})`,
             background: GREEN_MAIN,
-            height: `calc(${bandVisibleHeight}px + ${safeInset})`,
           }}
         />
 
         <div
           className="absolute z-10 rounded-full transition-[left] duration-250 ease-out"
           style={{
-            width: `${bubbleSize}px`,
-            height: `${bubbleSize}px`,
+            width: `${circleSize}px`,
+            height: `${circleSize}px`,
             left: activeCenter,
-            top: `${bubbleTop}px`,
+            bottom: `calc(${bandHeight - circleOverlap}px + ${safeInset})`,
             transform: "translateX(-50%)",
             background: GREEN_CIRCLE,
             boxShadow: "0 8px 14px rgba(0,0,0,0.06)",
           }}
         />
 
-        <button
-          type="button"
-          onClick={onHome}
-          className={`${slotBaseClass} left-0 z-20`}
-        >
-          <div className="absolute inset-0">
+        <button type="button" onClick={onHome} className={`${slotClass} left-0`}>
+          <div
+            className="relative"
+            style={{
+              width: `${circleSize}px`,
+              height: `${circleSize}px`,
+            }}
+          >
             <div
               className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
               style={{
-                top: "28px",
-                width: "38px",
-                height: "38px",
-                transform: "translate(-50%, -50%)",
+                top: `${unitTop}px`,
+                width: `${iconBoxSize}px`,
+                height: `${iconBoxSize}px`,
               }}
             >
-              <HomeFilledIcon className="w-[34px] h-[34px]" />
+              <HomeFilledIcon className="w-[28px] h-[28px]" />
             </div>
+
             <div
-              className={`absolute left-1/2 -translate-x-1/2 text-[12px] leading-none whitespace-nowrap ${
+              className={`absolute left-1/2 -translate-x-1/2 leading-none whitespace-nowrap ${
                 homeStrong ? "font-bold" : "font-semibold"
               }`}
-              style={{ top: "59px" }}
+              style={{
+                top: `${unitTop + iconBoxSize + unitGap}px`,
+                fontSize: `${textFontSize}px`,
+              }}
             >
               ホーム
             </div>
@@ -494,18 +516,23 @@ window.AppComponents = (() => {
         <button
           type="button"
           onClick={onCenter}
-          className={`${slotBaseClass} left-1/2 -translate-x-1/2 z-20`}
+          className={`${slotClass} left-1/2 -translate-x-1/2`}
         >
-          <div className="absolute inset-0">
+          <div
+            className="relative"
+            style={{
+              width: `${circleSize}px`,
+              height: `${circleSize}px`,
+            }}
+          >
             <div
               className={`absolute left-1/2 -translate-x-1/2 leading-none whitespace-nowrap ${
                 centerStrong ? "font-bold" : "font-semibold"
               }`}
               style={{
-                top: "44px",
-                transform: "translate(-50%, -50%)",
-                fontSize: "17px",
-                letterSpacing: "0.02em",
+                top: `${centerTextTop}px`,
+                fontSize: `${centerTextFontSize}px`,
+                letterSpacing: "0.01em",
               }}
             >
               {centerLabel}
@@ -513,28 +540,33 @@ window.AppComponents = (() => {
           </div>
         </button>
 
-        <button
-          type="button"
-          onClick={onMenu}
-          className={`${slotBaseClass} right-0 z-20`}
-        >
-          <div className="absolute inset-0">
+        <button type="button" onClick={onMenu} className={`${slotClass} right-0`}>
+          <div
+            className="relative"
+            style={{
+              width: `${circleSize}px`,
+              height: `${circleSize}px`,
+            }}
+          >
             <div
               className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
               style={{
-                top: "28px",
-                width: "34px",
-                height: "34px",
-                transform: "translate(-50%, -50%)",
+                top: `${menuUnitTop}px`,
+                width: `${menuIconBoxSize}px`,
+                height: `${menuIconBoxSize}px`,
               }}
             >
-              <MenuDotsFilledIcon className="w-[30px] h-[30px]" />
+              <MenuDotsFilledIcon className="w-[26px] h-[26px]" />
             </div>
+
             <div
-              className={`absolute left-1/2 -translate-x-1/2 text-[12px] leading-none whitespace-nowrap ${
+              className={`absolute left-1/2 -translate-x-1/2 leading-none whitespace-nowrap ${
                 menuStrong ? "font-bold" : "font-semibold"
               }`}
-              style={{ top: "59px" }}
+              style={{
+                top: `${menuUnitTop + menuIconBoxSize + unitGap}px`,
+                fontSize: `${textFontSize}px`,
+              }}
             >
               メニュー
             </div>
