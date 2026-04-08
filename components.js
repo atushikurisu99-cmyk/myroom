@@ -9,6 +9,9 @@ window.AppComponents = (() => {
   } = window.AppUtils;
   const C = window.AppConstants;
 
+  const NAV_BAND = "#32CD32";
+  const NAV_ACTIVE = "#33CC6D";
+
   function WeatherMiniPair({ weather }) {
     const base = new Date();
     const tomorrow = new Date();
@@ -39,6 +42,40 @@ window.AppComponents = (() => {
     );
   }
 
+  function EyeToggleButton({ visible, onClick }) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="w-[28px] h-[28px] flex items-center justify-center rounded-full active:scale-[0.96]"
+        aria-label={visible ? "金額を隠す" : "金額を表示する"}
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M2.2 12C4.1 8.6 7.7 6.5 12 6.5C16.3 6.5 19.9 8.6 21.8 12C19.9 15.4 16.3 17.5 12 17.5C7.7 17.5 4.1 15.4 2.2 12Z"
+            stroke="#dff7df"
+            strokeWidth="1.8"
+          />
+          <circle cx="12" cy="12" r="3.2" fill="#dff7df" />
+          {!visible && (
+            <path
+              d="M4.5 19.5L19.5 4.5"
+              stroke="#dff7df"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            />
+          )}
+        </svg>
+      </button>
+    );
+  }
+
   function HeaderCard({
     timeParts,
     cardMode,
@@ -47,7 +84,16 @@ window.AppComponents = (() => {
     recordCount,
     amount1,
     amount2,
+    showProgressAmount = false,
+    progressAmount = 0,
+    progressLabel = "累計＋乗務分",
+    progressAmountVisible = true,
+    onToggleProgressAmount,
   }) {
+    const displayAmount = progressAmountVisible
+      ? formatMoney(progressAmount)
+      : "●●●,●●●円";
+
     return (
       <div className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0 overflow-hidden`}>
         <div className="h-full flex flex-col">
@@ -57,7 +103,7 @@ window.AppComponents = (() => {
             </div>
 
             <div className="shrink-0 text-right pt-[4px]">
-              <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-800">
+              <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-900">
                 <span>{timeParts.hh}</span>
                 <span
                   className={`${
@@ -71,7 +117,24 @@ window.AppComponents = (() => {
             </div>
           </div>
 
-          {cardMode === 1 ? (
+          {showProgressAmount ? (
+            <div className="mt-3 flex-1 min-h-0 flex flex-col justify-end">
+              <div className="text-[12px] font-semibold text-[#efffef]">
+                {progressLabel}
+              </div>
+              <div className="mt-1 flex items-center gap-2">
+                <div className="min-w-0 text-[18px] leading-none font-bold text-white tracking-[-0.01em] truncate">
+                  {displayAmount}
+                </div>
+                <div className="shrink-0">
+                  <EyeToggleButton
+                    visible={progressAmountVisible}
+                    onClick={onToggleProgressAmount}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : cardMode === 1 ? (
             <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
               <div className="text-[12px] font-medium text-slate-500">売上合計</div>
               <div className="mt-1 flex items-end justify-between gap-3">
@@ -222,6 +285,100 @@ window.AppComponents = (() => {
     );
   }
 
+  function HomeGlyph({ active }) {
+    const fill = active ? "#ffffff" : "#f2fff2";
+    return (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M3 10.8L12 3L21 10.8"
+          stroke={fill}
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path d="M6.5 10V20H17.5V10" fill={fill} />
+        <rect x="10.2" y="13.8" width="3.6" height="6.2" rx="0.6" fill={NAV_BAND} />
+      </svg>
+    );
+  }
+
+  function GridGlyph({ active }) {
+    const fill = active ? "#ffffff" : "#f2fff2";
+    return (
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        {[4, 10, 16].map((x) =>
+          [4, 10, 16].map((y) => (
+            <circle key={`${x}-${y}`} cx={x} cy={y} r="1.9" fill={fill} />
+          ))
+        )}
+      </svg>
+    );
+  }
+
+  function NavHomeContent({ active }) {
+    if (active) {
+      return (
+        <div className="absolute inset-0 flex flex-col items-center justify-center pt-[6px]">
+          <HomeGlyph active />
+          <div className="mt-[2px] text-[11px] leading-none font-bold text-white">
+            ホーム
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="absolute inset-0 flex flex-col items-center justify-center pt-[8px]">
+        <HomeGlyph active={false} />
+        <div className="mt-[2px] text-[11px] leading-none font-bold text-[#f2fff2]">
+          ホーム
+        </div>
+      </div>
+    );
+  }
+
+  function NavCenterContent({ label, active }) {
+    if (active) {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center pt-[2px]">
+          <div className="text-[16px] leading-none font-bold text-white tracking-[0.04em]">
+            {label}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="absolute inset-0 flex items-center justify-center pt-[14px]">
+        <div className="text-[14px] leading-none font-bold text-[#f2fff2] tracking-[0.04em]">
+          {label}
+        </div>
+      </div>
+    );
+  }
+
+  function NavMenuContent({ active }) {
+    if (active) {
+      return (
+        <div className="absolute inset-0 flex flex-col items-center justify-center pt-[6px]">
+          <GridGlyph active />
+          <div className="mt-[2px] text-[11px] leading-none font-bold text-white">
+            メニュー
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="absolute inset-0 flex flex-col items-center justify-center pt-[8px]">
+        <GridGlyph active={false} />
+        <div className="mt-[2px] text-[11px] leading-none font-bold text-[#f2fff2]">
+          メニュー
+        </div>
+      </div>
+    );
+  }
+
   function BottomNav({
     centerLabel,
     onHome,
@@ -229,42 +386,58 @@ window.AppComponents = (() => {
     onMenu,
     active = "home",
   }) {
-    const itemClass =
-      "flex-1 h-full flex flex-col items-center justify-center active:opacity-80";
-    const activeClass = "text-[#7abf5a]";
-    const baseClass = "text-slate-500";
+    const areas = [
+      { key: "home", left: "16.6667%" },
+      { key: "center", left: "50%" },
+      { key: "menu", left: "83.3333%" },
+    ];
+    const activeArea = areas.find((item) => item.key === active) || areas[0];
 
     return (
-      <div className="h-full px-2">
-        <div className="h-full rounded-t-[22px] border-t border-slate-200 bg-white shadow-[0_-6px_14px_rgba(0,0,0,0.06)] flex items-stretch overflow-hidden">
-          <button type="button" onClick={onHome} className={itemClass}>
-            <div
-              className={`text-[12px] font-bold ${
-                active === "home" ? activeClass : baseClass
-              }`}
-            >
-              ホーム
-            </div>
+      <div className="h-full relative">
+        <div
+          className="absolute left-0 right-0 bottom-0 rounded-t-[24px]"
+          style={{
+            height: "58px",
+            background: NAV_BAND,
+          }}
+        />
+
+        <div
+          className="absolute top-[8px] w-[76px] h-[76px] rounded-full pointer-events-none"
+          style={{
+            left: activeArea.left,
+            transform: "translateX(-50%)",
+            background: NAV_ACTIVE,
+          }}
+        />
+
+        <div className="absolute inset-0 grid grid-cols-3">
+          <button
+            type="button"
+            onClick={onHome}
+            className="relative active:opacity-90"
+            aria-label="ホーム"
+          >
+            <NavHomeContent active={active === "home"} />
           </button>
 
-          <button type="button" onClick={onCenter} className={itemClass}>
-            <div
-              className={`text-[12px] font-bold ${
-                active === "center" ? activeClass : baseClass
-              }`}
-            >
-              {centerLabel}
-            </div>
+          <button
+            type="button"
+            onClick={onCenter}
+            className="relative active:opacity-90"
+            aria-label={centerLabel}
+          >
+            <NavCenterContent label={centerLabel} active={active === "center"} />
           </button>
 
-          <button type="button" onClick={onMenu} className={itemClass}>
-            <div
-              className={`text-[12px] font-bold ${
-                active === "menu" ? activeClass : baseClass
-              }`}
-            >
-              メニュー
-            </div>
+          <button
+            type="button"
+            onClick={onMenu}
+            className="relative active:opacity-90"
+            aria-label="メニュー"
+          >
+            <NavMenuContent active={active === "menu"} />
           </button>
         </div>
       </div>
