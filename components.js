@@ -1,9 +1,11 @@
 window.AppComponents = (() => {
+  const GREEN_MAIN = "#9ED36A";
+  const GREEN_CIRCLE = "#7FC84E";
+
   const {
     formatMoney,
     formatTime,
     formatFullDate,
-    formatDutyDate,
     recordType,
     getWeatherIcon,
   } = window.AppUtils;
@@ -49,20 +51,8 @@ window.AppComponents = (() => {
     );
   }
 
-  function HeaderCard({
-    screen,
-    timeParts,
-    homeDisplayAmount,
-    isHomeAmountVisible,
-    toggleHomeAmountVisible,
-    cardMode,
-    weather,
-    totalAmount,
-    recordCount,
-    amount1,
-    amount2,
-  }) {
-    const EyeButton = ({ visible, onClick }) => (
+  function EyeButton({ visible, onClick }) {
+    return (
       <button
         type="button"
         onClick={onClick}
@@ -115,7 +105,21 @@ window.AppComponents = (() => {
         )}
       </button>
     );
+  }
 
+  function HeaderCard({
+    screen,
+    timeParts,
+    homeDisplayAmount,
+    isHomeAmountVisible,
+    toggleHomeAmountVisible,
+    cardMode,
+    weather,
+    totalAmount,
+    recordCount,
+    amount1,
+    amount2,
+  }) {
     if (screen === "top") {
       const visible = isHomeAmountVisible !== false;
       const amountText = visible
@@ -360,101 +364,107 @@ window.AppComponents = (() => {
     const MENU_ICON_CENTER_Y = 28;
     const LABEL_BASELINE_Y = 70;
 
-    const HomeGlyph = () => (
-      <div
-        aria-hidden="true"
-        className="absolute"
-        style={{
-          left: slot.home,
-          top: `${HOME_ICON_CENTER_Y}px`,
-          width: "28px",
-          height: "24px",
-          transform: "translate(-50%, -50%)",
-          pointerEvents: "none",
-        }}
-      >
+    function HomeGlyph() {
+      return (
         <div
+          aria-hidden="true"
+          className="absolute"
           style={{
-            position: "absolute",
-            left: "50%",
-            top: "0px",
+            left: slot.home,
+            top: `${HOME_ICON_CENTER_Y}px`,
             width: "28px",
-            height: "15px",
-            background: "#ffffff",
-            transform: "translateX(-50%)",
-            clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
+            height: "24px",
+            transform: "translate(-50%, -50%)",
+            pointerEvents: "none",
           }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            left: "50%",
-            top: "13px",
-            width: "17px",
-            height: "10px",
-            background: "#ffffff",
-            transform: "translateX(-50%)",
-            borderRadius: "1px",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            left: "50%",
-            top: "15px",
-            width: "5px",
-            height: "8px",
-            background: GREEN_CIRCLE,
-            transform: "translateX(-50%)",
-            borderRadius: "1px",
-          }}
-        />
-      </div>
-    );
-
-    const MenuGlyph = () => (
-      <div
-        aria-hidden="true"
-        className="absolute grid"
-        style={{
-          left: slot.menu,
-          top: `${MENU_ICON_CENTER_Y}px`,
-          transform: "translate(-50%, -50%)",
-          gridTemplateColumns: "repeat(3, 6px)",
-          gap: "5px",
-          pointerEvents: "none",
-        }}
-      >
-        {Array.from({ length: 9 }).map((_, idx) => (
-          <span
-            key={idx}
+        >
+          <div
             style={{
-              width: "6px",
-              height: "6px",
-              borderRadius: "9999px",
+              position: "absolute",
+              left: "50%",
+              top: "0px",
+              width: "28px",
+              height: "15px",
               background: "#ffffff",
-              display: "block",
+              transform: "translateX(-50%)",
+              clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
             }}
           />
-        ))}
-      </div>
-    );
+          <div
+            style={{
+              position: "absolute",
+              left: "50%",
+              top: "13px",
+              width: "17px",
+              height: "10px",
+              background: "#ffffff",
+              transform: "translateX(-50%)",
+              borderRadius: "1px",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              left: "50%",
+              top: "15px",
+              width: "5px",
+              height: "8px",
+              background: GREEN_CIRCLE,
+              transform: "translateX(-50%)",
+              borderRadius: "1px",
+            }}
+          />
+        </div>
+      );
+    }
 
-    const BottomLabel = ({ area, text }) => (
-      <div
-        aria-hidden="true"
-        className="absolute text-white text-[12px] leading-none whitespace-nowrap select-none"
-        style={{
-          left: slot[area],
-          top: `${LABEL_BASELINE_Y}px`,
-          transform: "translate(-50%, -100%)",
-          fontWeight: 500,
-          pointerEvents: "none",
-        }}
-      >
-        {text}
-      </div>
-    );
+    function MenuGlyph() {
+      return (
+        <div
+          aria-hidden="true"
+          className="absolute grid"
+          style={{
+            left: slot.menu,
+            top: `${MENU_ICON_CENTER_Y}px`,
+            transform: "translate(-50%, -50%)",
+            gridTemplateColumns: "repeat(3, 6px)",
+            gap: "5px",
+            pointerEvents: "none",
+          }}
+        >
+          {Array.from({ length: 9 }).map((_, idx) => (
+            <span
+              key={idx}
+              style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "9999px",
+                background: "#ffffff",
+                display: "block",
+              }}
+            />
+          ))}
+        </div>
+      );
+    }
+
+    function BottomLabel({ area, text }) {
+      return (
+        <div
+          aria-hidden="true"
+          className="absolute text-white text-[12px] leading-none whitespace-nowrap select-none"
+          style={{
+            left: slot[area],
+            top: `${LABEL_BASELINE_Y}px`,
+            transform: "translate(-50%, -100%)",
+            fontWeight: 500,
+            pointerEvents: "none",
+          }}
+        >
+          {text}
+        </div>
+      );
+    }
 
     return (
       <div className="relative h-full overflow-hidden">
