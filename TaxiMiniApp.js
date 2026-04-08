@@ -2,10 +2,10 @@ const { useEffect, useMemo, useRef, useState } = React;
 
 const { useTaxiAppState } = window.AppHooks;
 const {
-  AppFrame,
   OtherSheet,
   PaymentDialog,
   ViaDialog,
+  FinishDialog,
   FinishCheckScreen,
 } = window.AppComponents;
 
@@ -17,6 +17,7 @@ const HistoryModal = window.AppScreens.HistoryModal;
 
 function TaxiMiniApp() {
   const { refs, state, derived, actions } = useTaxiAppState();
+  const C = window.AppConstants;
 
   const startupAudioRef = useRef(null);
   const startupTimersRef = useRef([]);
@@ -26,56 +27,62 @@ function TaxiMiniApp() {
 
   useEffect(() => {
     const timers = [];
-    timers.push(setTimeout(() => setStartupPhase("logoFade"), 1500));
-    timers.push(setTimeout(() => setStartupPhase("tap"), 2250));
+
+    const t1 = setTimeout(() => setStartupPhase("logoFade"), 1500);
+    const t2 = setTimeout(() => setStartupPhase("tap"), 2250);
+
+    timers.push(t1, t2);
     startupTimersRef.current = timers;
+
     return () => {
       timers.forEach((id) => clearTimeout(id));
       startupTimersRef.current = [];
     };
   }, []);
 
-  useEffect(() => {
-    if (state.startupResetKey > 0) {
-      startupTimersRef.current.forEach((id) => clearTimeout(id));
-      startupTimersRef.current = [];
-      setStartupStage(0);
-      setStartupPhase("tap");
-    }
-  }, [state.startupResetKey]);
-
   const startApp = () => {
     if (startupPhase !== "tap") return;
 
-    startupTimersRef.current.forEach((id) => clearTimeout(id));
+    const oldTimers = startupTimersRef.current || [];
+    oldTimers.forEach((id) => clearTimeout(id));
     startupTimersRef.current = [];
 
     setStartupStage(0);
     setStartupPhase("tapFade");
 
     const timers = [];
-    timers.push(
-      setTimeout(() => {
-        setStartupPhase("running");
-      }, 180)
-    );
-    timers.push(
-      setTimeout(() => {
-        try {
-          if (!startupAudioRef.current) {
-            startupAudioRef.current = new Audio("./goanzen.wav");
-            startupAudioRef.current.preload = "auto";
-            startupAudioRef.current.volume = 0.75;
-          }
-          startupAudioRef.current.currentTime = 0;
-          startupAudioRef.current.play().catch(() => {});
-        } catch (_) {}
-        setStartupStage(1);
-      }, 500)
-    );
-    timers.push(setTimeout(() => setStartupStage(2), 1000));
-    timers.push(setTimeout(() => setStartupStage(3), 1500));
-    timers.push(setTimeout(() => setStartupPhase("done"), 2050));
+
+    const t0 = setTimeout(() => {
+      setStartupPhase("running");
+    }, 180);
+
+    const t1 = setTimeout(() => {
+      try {
+        if (!startupAudioRef.current) {
+          startupAudioRef.current = new Audio("./goanzen.wav");
+          startupAudioRef.current.preload = "auto";
+          startupAudioRef.current.volume = 0.75;
+        }
+        startupAudioRef.current.currentTime = 0;
+        startupAudioRef.current.play().catch(() => {});
+      } catch (_) {}
+
+      setStartupStage(1);
+    }, 500);
+
+    const t2 = setTimeout(() => {
+      setStartupStage(2);
+    }, 1000);
+
+    const t3 = setTimeout(() => {
+      setStartupStage(3);
+    }, 1500);
+
+    const t4 = setTimeout(() => {
+      setStartupPhase("done");
+    }, 2050);
+
+    timers.push(t0, t1, t2, t3, t4);
     startupTimersRef.current = timers;
   };
 
@@ -83,9 +90,12 @@ function TaxiMiniApp() {
 
   const topMainStyle = useMemo(() => {
     if (state.screen !== "top" || startupPhase === "done") return {};
+
     return {
       transform:
-        startupStage >= 2 ? "translateX(0) scale(1)" : "translateX(-64px) scale(0.97)",
+        startupStage >= 2
+          ? "translateX(0) scale(1)"
+          : "translateX(-64px) scale(0.97)",
       opacity: startupStage >= 2 ? 1 : 0,
       transition:
         "transform 460ms cubic-bezier(0.22,1,0.36,1), opacity 460ms ease-out",
@@ -95,6 +105,7 @@ function TaxiMiniApp() {
 
   const topContentStyle = useMemo(() => {
     if (state.screen !== "top" || startupPhase === "done") return {};
+
     return {
       transform: startupStage >= 3 ? "translateX(0)" : "translateX(-72px)",
       opacity: startupStage >= 3 ? 1 : 0,
@@ -124,15 +135,10 @@ function TaxiMiniApp() {
   }, [startupPhase]);
 
   const navCenterLabel = state.screen === "top" ? "経費" : "履歴";
-
-  const activeNavArea = state.showOtherSheet
-    ? "menu"
-    : state.screen === "standby" || state.screen === "ride"
-    ? "center"
-    : "home";
+  const navActiveArea = state.screen === "top" ? "home" : "center";
 
   return (
-    <div className="w-full h-full flex justify-center overflow-hidden">
+    <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
       <audio
         ref={startupAudioRef}
         src="./goanzen.wav"
@@ -140,7 +146,7 @@ function TaxiMiniApp() {
         style={{ display: "none" }}
       />
 
-      <AppFrame>
+      <div className="w-full max-w-sm h-full px-4 pt-4 pb-0 relative overflow-hidden">
         {state.showSaved && startupPhase === "done" && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-5 py-2.5 shadow-lg">
             保存しました
@@ -176,6 +182,16 @@ function TaxiMiniApp() {
             pendingViaPlace={state.pendingViaPlace}
             onCancel={actions.cancelViaDialog}
             onRecord={actions.recordVia}
+          />
+        )}
+
+        {state.showFinishDialog && (
+          <FinishDialog
+            workDate={state.workDate}
+            recordCount={derived.recordCount}
+            totalAmount={derived.totalAmount}
+            onCancel={() => actions.setShowFinishDialog(false)}
+            onConfirm={actions.performDutyEnd}
           />
         )}
 
@@ -221,7 +237,7 @@ function TaxiMiniApp() {
               dutyStarted={state.dutyStarted}
               isRiding={state.isRiding}
               navCenterLabel={navCenterLabel}
-              navActiveArea={activeNavArea}
+              navActiveArea={navActiveArea}
               onHome={actions.goHome}
               onCenter={actions.openExpenseSoon}
               onMenu={actions.openMenu}
@@ -230,7 +246,7 @@ function TaxiMiniApp() {
 
           {state.screen === "standby" && (
             <StandbyScreen
-              screen={state.screen}
+              screen="standby"
               timeParts={derived.timeParts}
               cardMode={state.cardMode}
               weather={state.weather}
@@ -240,7 +256,7 @@ function TaxiMiniApp() {
               amount2={derived.amount2}
               handleStartRide={actions.handleStartRide}
               navCenterLabel={navCenterLabel}
-              navActiveArea={activeNavArea}
+              navActiveArea={navActiveArea}
               onHome={actions.goHome}
               onCenter={actions.openHistorySimple}
               onMenu={actions.openMenu}
@@ -249,7 +265,7 @@ function TaxiMiniApp() {
 
           {state.screen === "ride" && (
             <RideScreen
-              screen={state.screen}
+              screen="ride"
               timeParts={derived.timeParts}
               cardMode={state.cardMode}
               weather={state.weather}
@@ -263,7 +279,7 @@ function TaxiMiniApp() {
               viaStops={state.viaStops}
               handleDropOffTap={actions.handleDropOffTap}
               navCenterLabel={navCenterLabel}
-              navActiveArea={activeNavArea}
+              navActiveArea={navActiveArea}
               onHome={actions.goHome}
               onCenter={actions.openHistorySimple}
               onMenu={actions.openMenu}
@@ -287,7 +303,7 @@ function TaxiMiniApp() {
             />
           )}
 
-          {state.screen === "finishCheck" && (
+          {state.screen === "finishCheck" && FinishCheckScreen && (
             <FinishCheckScreen
               timeParts={derived.timeParts}
               cardMode={state.cardMode}
@@ -353,7 +369,7 @@ function TaxiMiniApp() {
             )}
           </div>
         )}
-      </AppFrame>
+      </div>
 
       <style>{`
         @keyframes blink {
