@@ -1,25 +1,13 @@
 window.AppComponents = (() => {
-  const GREEN_MAIN = "#9ED36A";
-  const GREEN_CIRCLE = "#7FC84E";
-
   const {
     formatMoney,
     formatTime,
     formatFullDate,
+    formatDutyDate,
     recordType,
     getWeatherIcon,
   } = window.AppUtils;
   const C = window.AppConstants;
-
-  function AppFrame({ children }) {
-    return (
-      <div className="w-full h-screen flex justify-center bg-[#eef2f5] overflow-hidden">
-        <div className="w-[390px] h-full relative bg-white overflow-hidden">
-          {children}
-        </div>
-      </div>
-    );
-  }
 
   function WeatherMiniPair({ weather }) {
     const base = new Date();
@@ -51,59 +39,8 @@ window.AppComponents = (() => {
     );
   }
 
-  function EyeIcon({ visible = true }) {
-    return visible ? (
-      <svg
-        viewBox="0 0 24 24"
-        width="20"
-        height="20"
-        aria-hidden="true"
-        style={{ display: "block" }}
-      >
-        <path
-          d="M2.5 12C4.5 8.5 8 6.5 12 6.5S19.5 8.5 21.5 12C19.5 15.5 16 17.5 12 17.5S4.5 15.5 2.5 12Z"
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <circle cx="12" cy="12" r="3.2" fill="#ffffff" />
-      </svg>
-    ) : (
-      <svg
-        viewBox="0 0 24 24"
-        width="20"
-        height="20"
-        aria-hidden="true"
-        style={{ display: "block" }}
-      >
-        <path
-          d="M2.5 12C4.5 8.5 8 6.5 12 6.5S19.5 8.5 21.5 12C19.5 15.5 16 17.5 12 17.5S4.5 15.5 2.5 12Z"
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <circle cx="12" cy="12" r="3.2" fill="#ffffff" />
-        <path
-          d="M4 20L20 4"
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        />
-      </svg>
-    );
-  }
-
   function HeaderCard({
-    screen,
     timeParts,
-    homeDisplayAmount,
-    isHomeAmountVisible = true,
-    toggleHomeAmountVisible,
     cardMode,
     weather,
     totalAmount,
@@ -111,57 +48,6 @@ window.AppComponents = (() => {
     amount1,
     amount2,
   }) {
-    if (screen === "top") {
-      const visible = isHomeAmountVisible !== false;
-      const amountText = visible
-        ? Number(homeDisplayAmount || 0).toLocaleString("ja-JP")
-        : "••••••";
-
-      return (
-        <div className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0 overflow-hidden`}>
-          <div className="h-full relative">
-            <div className="absolute right-0 top-[4px]">
-              <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-800">
-                <span>{timeParts.hh}</span>
-                <span
-                  className={`${
-                    timeParts.showColon ? "opacity-100" : "opacity-0"
-                  } transition-opacity duration-150 mx-[-0.08em]`}
-                >
-                  ：
-                </span>
-                <span>{timeParts.mm}</span>
-              </div>
-            </div>
-
-            <div className="absolute left-0 bottom-[28px] text-[12px] font-medium text-white/95">
-              累計＋乗務分
-            </div>
-
-            <div className="absolute right-0 bottom-[22px] flex items-center justify-end gap-3">
-              <button
-                type="button"
-                onClick={toggleHomeAmountVisible}
-                className="flex items-center justify-center w-[24px] h-[24px] active:opacity-80"
-                aria-label="売上表示切替"
-              >
-                <EyeIcon visible={visible} />
-              </button>
-
-              <div className="flex items-end justify-end gap-[2px] min-w-[170px]">
-                <div className="text-[64px] leading-[0.82] font-normal tracking-[-0.05em] text-white">
-                  {amountText}
-                </div>
-                <div className="text-[24px] leading-none font-normal text-white pb-[8px]">
-                  円
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
     return (
       <div className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0 overflow-hidden`}>
         <div className="h-full flex flex-col">
@@ -342,200 +228,45 @@ window.AppComponents = (() => {
     onCenter,
     onMenu,
     active = "home",
-    activeArea,
   }) {
-    const current = activeArea || active || "home";
-
-    const slot = {
-      home: "16.6667%",
-      center: "50%",
-      menu: "83.3333%",
-    };
-
-    const activeLeft = slot[current] || slot.home;
-
-    const NAV_HEIGHT = C.BOTTOM_NAV_HEIGHT || 82;
-    const BAND_HEIGHT = 56;
-    const BAND_RADIUS = 22;
-
-    const CIRCLE_SIZE = 56;
-    const CIRCLE_CENTER_Y = 30;
-
-    const HOME_ICON_CENTER_Y = 31;
-    const CENTER_TEXT_CENTER_Y = 31;
-    const MENU_ICON_CENTER_Y = 31;
-    const LABEL_BASELINE_Y = 70;
-
-    function HomeGlyph() {
-      return (
-        <div
-          aria-hidden="true"
-          className="absolute"
-          style={{
-            left: slot.home,
-            top: `${HOME_ICON_CENTER_Y}px`,
-            width: "28px",
-            height: "24px",
-            transform: "translate(-50%, -50%)",
-            pointerEvents: "none",
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              left: "50%",
-              top: "0px",
-              width: "28px",
-              height: "15px",
-              background: "#ffffff",
-              transform: "translateX(-50%)",
-              clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              left: "50%",
-              top: "13px",
-              width: "17px",
-              height: "10px",
-              background: "#ffffff",
-              transform: "translateX(-50%)",
-              borderRadius: "1px",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              left: "50%",
-              top: "15px",
-              width: "5px",
-              height: "8px",
-              background: GREEN_CIRCLE,
-              transform: "translateX(-50%)",
-              borderRadius: "1px",
-            }}
-          />
-        </div>
-      );
-    }
-
-    function MenuGlyph() {
-      return (
-        <div
-          aria-hidden="true"
-          className="absolute grid"
-          style={{
-            left: slot.menu,
-            top: `${MENU_ICON_CENTER_Y}px`,
-            transform: "translate(-50%, -50%)",
-            gridTemplateColumns: "repeat(3, 6px)",
-            gap: "5px",
-            pointerEvents: "none",
-          }}
-        >
-          {Array.from({ length: 9 }).map((_, idx) => (
-            <span
-              key={idx}
-              style={{
-                width: "6px",
-                height: "6px",
-                borderRadius: "9999px",
-                background: "#ffffff",
-                display: "block",
-              }}
-            />
-          ))}
-        </div>
-      );
-    }
-
-    function BottomLabel({ area, text }) {
-      return (
-        <div
-          aria-hidden="true"
-          className="absolute text-white text-[12px] leading-none whitespace-nowrap select-none"
-          style={{
-            left: slot[area],
-            top: `${LABEL_BASELINE_Y}px`,
-            transform: "translate(-50%, -100%)",
-            fontWeight: 500,
-            pointerEvents: "none",
-          }}
-        >
-          {text}
-        </div>
-      );
-    }
+    const itemClass =
+      "flex-1 h-full flex flex-col items-center justify-center active:opacity-80";
+    const activeClass = "text-[#7abf5a]";
+    const baseClass = "text-slate-500";
 
     return (
-      <div
-        className="relative overflow-hidden"
-        style={{ height: `${NAV_HEIGHT}px` }}
-      >
-        <div
-          className="absolute left-0 right-0 bottom-0"
-          style={{
-            height: `${BAND_HEIGHT}px`,
-            background: GREEN_MAIN,
-            borderTopLeftRadius: `${BAND_RADIUS}px`,
-            borderTopRightRadius: `${BAND_RADIUS}px`,
-          }}
-        />
+      <div className="h-full px-2">
+        <div className="h-full rounded-t-[22px] border-t border-slate-200 bg-white shadow-[0_-6px_14px_rgba(0,0,0,0.06)] flex items-stretch overflow-hidden">
+          <button type="button" onClick={onHome} className={itemClass}>
+            <div
+              className={`text-[12px] font-bold ${
+                active === "home" ? activeClass : baseClass
+              }`}
+            >
+              ホーム
+            </div>
+          </button>
 
-        <div
-          className="absolute rounded-full transition-all duration-200"
-          style={{
-            width: `${CIRCLE_SIZE}px`,
-            height: `${CIRCLE_SIZE}px`,
-            left: activeLeft,
-            top: `${CIRCLE_CENTER_Y}px`,
-            transform: "translate(-50%, -50%)",
-            background: GREEN_CIRCLE,
-            pointerEvents: "none",
-          }}
-        />
+          <button type="button" onClick={onCenter} className={itemClass}>
+            <div
+              className={`text-[12px] font-bold ${
+                active === "center" ? activeClass : baseClass
+              }`}
+            >
+              {centerLabel}
+            </div>
+          </button>
 
-        <HomeGlyph />
-
-        <div
-          aria-hidden="true"
-          className="absolute text-white leading-none whitespace-nowrap select-none pointer-events-none"
-          style={{
-            left: slot.center,
-            top: `${CENTER_TEXT_CENTER_Y}px`,
-            transform: "translate(-50%, -50%)",
-            fontSize: "18px",
-            fontWeight: 700,
-            letterSpacing: "-0.02em",
-          }}
-        >
-          {centerLabel}
+          <button type="button" onClick={onMenu} className={itemClass}>
+            <div
+              className={`text-[12px] font-bold ${
+                active === "menu" ? activeClass : baseClass
+              }`}
+            >
+              メニュー
+            </div>
+          </button>
         </div>
-
-        <MenuGlyph />
-
-        <BottomLabel area="home" text="ホーム" />
-        <BottomLabel area="menu" text="メニュー" />
-
-        <button
-          type="button"
-          onClick={onHome}
-          aria-label="ホーム"
-          className="absolute left-0 top-0 w-1/3 h-full bg-transparent border-0 p-0 m-0"
-        />
-        <button
-          type="button"
-          onClick={onCenter}
-          aria-label={centerLabel}
-          className="absolute left-1/3 top-0 w-1/3 h-full bg-transparent border-0 p-0 m-0"
-        />
-        <button
-          type="button"
-          onClick={onMenu}
-          aria-label="メニュー"
-          className="absolute right-0 top-0 w-1/3 h-full bg-transparent border-0 p-0 m-0"
-        />
       </div>
     );
   }
@@ -544,7 +275,6 @@ window.AppComponents = (() => {
     open,
     dutyStarted,
     onFinishTap,
-    label = "終了前チェックへ",
   }) {
     const sheetHeight = C.HOME_END_SHEET_HEIGHT;
     const hiddenTranslate = sheetHeight + 24;
@@ -575,7 +305,7 @@ window.AppComponents = (() => {
             }}
           >
             <span className="text-[17px] font-bold tracking-[-0.02em]">
-              {label}
+              本日の乗務を終了
             </span>
           </button>
         </div>
@@ -749,181 +479,6 @@ window.AppComponents = (() => {
     );
   }
 
-  function FinishCheckScreen(props) {
-    const {
-      timeParts,
-      cardMode,
-      weather,
-      totalAmount,
-      recordCount,
-      amount1,
-      amount2,
-      finishLocked = false,
-      finishPhase = "check",
-      finishSummary,
-      onBack,
-      onToggleLock,
-      onConfirm,
-      onFinalTap,
-      openHistoryModalWithFilter,
-    } = props;
-
-    const summary = finishSummary || {
-      amount1: amount1 || 0,
-      amount2: amount2 || 0,
-      totalAmount: totalAmount || 0,
-      businessKm: 0,
-      recordCount: recordCount || 0,
-      passengerCount: 0,
-    };
-
-    const isSaving = finishPhase === "saving";
-    const isDone = finishPhase === "done";
-
-    return (
-      <div className="absolute inset-0 overflow-hidden bg-[#eef2f5]">
-        <div className="h-full flex flex-col">
-          <div className="shrink-0" style={{ background: GREEN_MAIN }}>
-            <div className="h-[172px] shrink-0">
-              <HeaderCard
-                screen="finishCheck"
-                timeParts={timeParts}
-                cardMode={cardMode}
-                weather={weather}
-                totalAmount={totalAmount}
-                recordCount={recordCount}
-                amount1={amount1}
-                amount2={amount2}
-              />
-            </div>
-          </div>
-
-          <div className="flex-1 overflow-y-auto px-3 pt-3 pb-4">
-            <div className="rounded-[28px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] px-4 py-4">
-              <div className="text-[24px] font-bold text-slate-800 text-center">
-                終了前チェック
-              </div>
-              <div className="mt-2 text-[13px] text-slate-500 text-center">
-                この内容で本日の乗務を終了します
-              </div>
-            </div>
-
-            <div className="mt-3 grid gap-3">
-              <div className="rounded-[24px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] px-4 py-4">
-                <div className="grid grid-cols-2 gap-x-4 gap-y-3">
-                  <div>
-                    <div className="text-[12px] text-slate-500">①</div>
-                    <button
-                      type="button"
-                      onClick={() => openHistoryModalWithFilter?.("1")}
-                      className="mt-1 text-[22px] font-black text-slate-800 active:opacity-70"
-                    >
-                      {Number(summary.amount1 || 0).toLocaleString("ja-JP")}円
-                    </button>
-                  </div>
-
-                  <div>
-                    <div className="text-[12px] text-slate-500">②</div>
-                    <button
-                      type="button"
-                      onClick={() => openHistoryModalWithFilter?.("2")}
-                      className="mt-1 text-[22px] font-black text-slate-800 active:opacity-70"
-                    >
-                      {Number(summary.amount2 || 0).toLocaleString("ja-JP")}円
-                    </button>
-                  </div>
-
-                  <div>
-                    <div className="text-[12px] text-slate-500">合計</div>
-                    <button
-                      type="button"
-                      onClick={() => openHistoryModalWithFilter?.("all")}
-                      className="mt-1 text-[24px] font-black text-slate-800 active:opacity-70"
-                    >
-                      {Number(summary.totalAmount || 0).toLocaleString("ja-JP")}円
-                    </button>
-                  </div>
-
-                  <div>
-                    <div className="text-[12px] text-slate-500">＝営走</div>
-                    <div className="mt-1 text-[24px] font-black text-slate-800">
-                      {Number(summary.businessKm || 0).toLocaleString("ja-JP")}km
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="text-[12px] text-slate-500">件数</div>
-                    <div className="mt-1 text-[22px] font-black text-slate-800">
-                      {Number(summary.recordCount || 0)}件
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="text-[12px] text-slate-500">人数</div>
-                    <div className="mt-1 text-[22px] font-black text-slate-800">
-                      {Number(summary.passengerCount || 0)}名
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {!isDone && (
-                <button
-                  type="button"
-                  onClick={onToggleLock}
-                  className={`h-[62px] rounded-[24px] border text-[22px] font-bold active:scale-[0.985] ${
-                    finishLocked
-                      ? "bg-emerald-500 border-emerald-500 text-white"
-                      : "bg-white border-slate-200 text-slate-700"
-                  }`}
-                >
-                  {finishLocked ? "ロック解除済み" : "ロック解除"}
-                </button>
-              )}
-
-              {!isSaving && !isDone && (
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={onBack}
-                    className="h-[56px] rounded-[22px] bg-slate-100 text-slate-700 font-bold active:bg-slate-200"
-                  >
-                    戻る
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={onConfirm}
-                    disabled={!finishLocked}
-                    className="h-[56px] rounded-[22px] bg-slate-800 text-white font-bold active:opacity-90 disabled:opacity-40"
-                  >
-                    終了する
-                  </button>
-                </div>
-              )}
-
-              {isSaving && (
-                <div className="rounded-[24px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] px-4 py-6 text-center">
-                  <div className="text-[24px] font-bold text-slate-800">保存中…</div>
-                </div>
-              )}
-
-              {isDone && (
-                <button
-                  type="button"
-                  onClick={onFinalTap}
-                  className="h-[62px] rounded-[24px] bg-slate-800 text-white text-[22px] font-bold active:opacity-90"
-                >
-                  タップして開始へ
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return {
     AppFrame,
     HeaderCard,
@@ -936,6 +491,5 @@ window.AppComponents = (() => {
     PaymentDialog,
     ViaDialog,
     FinishDialog,
-    FinishCheckScreen,
   };
 })();
