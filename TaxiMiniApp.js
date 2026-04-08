@@ -2,6 +2,7 @@ const { useEffect, useMemo, useRef, useState } = React;
 
 const { useTaxiAppState } = window.AppHooks;
 const {
+  AppFrame,
   HeaderCard,
   BottomNav,
   OtherSheet,
@@ -146,11 +147,15 @@ function TaxiMiniApp() {
     };
   }, [startupPhase]);
 
-  const showBottomNav = state.screen === "top" || state.screen === "standby" || state.screen === "ride";
+  const showBottomNav =
+    state.screen === "top" ||
+    state.screen === "standby" ||
+    state.screen === "ride";
+
   const navCenterLabel = state.screen === "top" ? "経費" : "履歴";
 
   return (
-    <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
+    <AppFrame>
       <audio
         ref={startupAudioRef}
         src="./goanzen.wav"
@@ -158,7 +163,7 @@ function TaxiMiniApp() {
         style={{ display: "none" }}
       />
 
-      <div className="w-full max-w-sm h-full px-4 pt-4 pb-0 relative overflow-hidden">
+      <div className="w-full h-full px-4 pt-4 pb-0 relative overflow-hidden">
         {state.showSaved && startupPhase === "done" && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-5 py-2.5 shadow-lg">
             保存しました
@@ -356,7 +361,6 @@ function TaxiMiniApp() {
             )}
           </div>
         )}
-
       </div>
 
       <style>{`
@@ -366,7 +370,7 @@ function TaxiMiniApp() {
           100% { opacity: 0.3; }
         }
       `}</style>
-    </div>
+    </AppFrame>
   );
 }
 
