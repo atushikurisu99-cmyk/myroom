@@ -3,6 +3,8 @@ window.AppScreens.TopScreen = (() => {
   const { HomeGraphCards, HomeEndDutySheet } = window.AppComponents;
   const C = window.AppConstants;
 
+  const GREEN_MAIN = "#32CD32";
+
   return function TopScreen(props) {
     const {
       topMainLabel,
@@ -19,9 +21,10 @@ window.AppScreens.TopScreen = (() => {
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden relative">
         <div
-          className="pt-4 shrink-0"
+          className="shrink-0 px-3 pt-4 pb-4"
           style={{
             height: `${C.MAIN_BUTTON_SLOT_HEIGHT}px`,
+            background: GREEN_MAIN,
             ...(startupMainStyle || {}),
           }}
         >
@@ -29,7 +32,7 @@ window.AppScreens.TopScreen = (() => {
             type="button"
             onClick={handleTopMain}
             disabled={topMainButtonDisabled}
-            className={`${C.mainButtonBase} ${C.mainButtonShine} ${
+            className={`${C.mainButtonBase} ${C.mainButtonShine} w-full h-full ${
               topMainLabel === "乗務開始"
                 ? "bg-[linear-gradient(180deg,#5dffcf,#21c79a,#008a6a)] text-white"
                 : topMainLabel === "実車"
