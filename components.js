@@ -480,7 +480,6 @@ window.AppComponents = (() => {
   }
 
   return {
-    AppFrame,
     HeaderCard,
     RideInfoCard,
     HistoryRecordCard,
