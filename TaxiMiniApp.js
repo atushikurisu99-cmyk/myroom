@@ -19,11 +19,14 @@ function TaxiMiniApp() {
   const { refs, state, derived, actions } = useTaxiAppState();
   const C = window.AppConstants;
 
+  const GREEN_MAIN = "#32CD32";
+
   const startupAudioRef = useRef(null);
   const startupTimersRef = useRef([]);
 
   const [startupPhase, setStartupPhase] = useState("logo");
   const [startupStage, setStartupStage] = useState(0);
+  const [homeAmountVisible, setHomeAmountVisible] = useState(true);
 
   useEffect(() => {
     const timers = [];
@@ -87,6 +90,8 @@ function TaxiMiniApp() {
   };
 
   const startupLock = state.screen === "top" && startupPhase !== "done";
+  const showBottomNav =
+    state.screen === "top" || state.screen === "standby" || state.screen === "ride";
 
   const headerStyle = useMemo(() => {
     if (state.screen !== "top" || startupPhase === "done") return {};
@@ -146,8 +151,10 @@ function TaxiMiniApp() {
     };
   }, [startupPhase]);
 
-  const showBottomNav = state.screen === "top" || state.screen === "standby" || state.screen === "ride";
   const navCenterLabel = state.screen === "top" ? "経費" : "履歴";
+  const navActive = state.screen === "top" ? "home" : "center";
+  const showGreenHeader = state.screen !== "fare";
+  const showHomeProgressAmount = state.screen === "top" && !state.dutyStarted;
 
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
@@ -236,17 +243,26 @@ function TaxiMiniApp() {
             paddingBottom: showBottomNav ? `${C.BOTTOM_NAV_HEIGHT + 8}px` : 0,
           }}
         >
-          {state.screen !== "fare" && (
-            <div style={headerStyle} onClick={actions.handleCardModeNext}>
-              <HeaderCard
-                timeParts={derived.timeParts}
-                cardMode={state.cardMode}
-                weather={state.weather}
-                totalAmount={derived.totalAmount}
-                recordCount={derived.recordCount}
-                amount1={derived.amount1}
-                amount2={derived.amount2}
-              />
+          {showGreenHeader && (
+            <div style={{ background: GREEN_MAIN }}>
+              <div style={headerStyle} onClick={actions.handleCardModeNext}>
+                <HeaderCard
+                  timeParts={derived.timeParts}
+                  cardMode={state.cardMode}
+                  weather={state.weather}
+                  totalAmount={derived.totalAmount}
+                  recordCount={derived.recordCount}
+                  amount1={derived.amount1}
+                  amount2={derived.amount2}
+                  showProgressAmount={showHomeProgressAmount}
+                  progressAmount={derived.totalAmount}
+                  progressLabel="累計＋乗務分"
+                  progressAmountVisible={homeAmountVisible}
+                  onToggleProgressAmount={() =>
+                    setHomeAmountVisible((prev) => !prev)
+                  }
+                />
+              </div>
             </div>
           )}
 
@@ -265,9 +281,7 @@ function TaxiMiniApp() {
           )}
 
           {state.screen === "standby" && (
-            <StandbyScreen
-              handleStartRide={actions.handleStartRide}
-            />
+            <StandbyScreen handleStartRide={actions.handleStartRide} />
           )}
 
           {state.screen === "ride" && (
@@ -306,9 +320,13 @@ function TaxiMiniApp() {
             <BottomNav
               centerLabel={navCenterLabel}
               onHome={actions.goHome}
-              onCenter={state.screen === "top" ? actions.openExpenseSoon : actions.openHistorySimple}
+              onCenter={
+                state.screen === "top"
+                  ? actions.openExpenseSoon
+                  : actions.openHistorySimple
+              }
               onMenu={actions.openMenu}
-              active={state.screen === "top" ? "home" : ""}
+              active={navActive}
             />
           </div>
         )}
