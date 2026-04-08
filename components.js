@@ -12,6 +12,16 @@ window.AppComponents = (() => {
   } = window.AppUtils;
   const C = window.AppConstants;
 
+  function AppFrame({ children }) {
+    return (
+      <div className="w-full h-screen flex justify-center bg-[#eef2f5] overflow-hidden">
+        <div className="w-[390px] h-full relative bg-white overflow-hidden">
+          {children}
+        </div>
+      </div>
+    );
+  }
+
   function WeatherMiniPair({ weather }) {
     const base = new Date();
     const tomorrow = new Date();
@@ -634,7 +644,161 @@ window.AppComponents = (() => {
     );
   }
 
+  function FinishCheckScreen(props) {
+    const {
+      finishLocked = false,
+      finishPhase = "check",
+      finishSummary,
+      onBack,
+      onToggleLock,
+      onConfirm,
+      onFinalTap,
+      openHistoryModalWithFilter,
+    } = props;
+
+    const summary = finishSummary || {
+      amount1: 0,
+      amount2: 0,
+      totalAmount: 0,
+      businessKm: 0,
+      recordCount: 0,
+      passengerCount: 0,
+    };
+
+    const isSaving = finishPhase === "saving";
+    const isDone = finishPhase === "done";
+
+    return (
+      <div className="absolute inset-0 bg-[#eef2f5] overflow-hidden">
+        <div className="h-full flex flex-col px-3 pt-3 pb-4">
+          <div className="rounded-[28px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] px-4 py-4">
+            <div className="text-[24px] font-bold text-slate-800 text-center">
+              終了前チェック
+            </div>
+            <div className="mt-2 text-[13px] text-slate-500 text-center">
+              この内容で本日の乗務を終了します
+            </div>
+          </div>
+
+          <div className="mt-3 grid gap-3">
+            <div className="rounded-[24px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] px-4 py-4">
+              <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+                <div>
+                  <div className="text-[12px] text-slate-500">①</div>
+                  <button
+                    type="button"
+                    onClick={() => openHistoryModalWithFilter?.("1")}
+                    className="mt-1 text-[22px] font-black text-slate-800 active:opacity-70"
+                  >
+                    {Number(summary.amount1 || 0).toLocaleString("ja-JP")}円
+                  </button>
+                </div>
+
+                <div>
+                  <div className="text-[12px] text-slate-500">②</div>
+                  <button
+                    type="button"
+                    onClick={() => openHistoryModalWithFilter?.("2")}
+                    className="mt-1 text-[22px] font-black text-slate-800 active:opacity-70"
+                  >
+                    {Number(summary.amount2 || 0).toLocaleString("ja-JP")}円
+                  </button>
+                </div>
+
+                <div>
+                  <div className="text-[12px] text-slate-500">合計</div>
+                  <button
+                    type="button"
+                    onClick={() => openHistoryModalWithFilter?.("all")}
+                    className="mt-1 text-[24px] font-black text-slate-800 active:opacity-70"
+                  >
+                    {Number(summary.totalAmount || 0).toLocaleString("ja-JP")}円
+                  </button>
+                </div>
+
+                <div>
+                  <div className="text-[12px] text-slate-500">＝営走</div>
+                  <div className="mt-1 text-[24px] font-black text-slate-800">
+                    {Number(summary.businessKm || 0).toLocaleString("ja-JP")}km
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-[12px] text-slate-500">件数</div>
+                  <div className="mt-1 text-[22px] font-black text-slate-800">
+                    {Number(summary.recordCount || 0)}件
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-[12px] text-slate-500">人数</div>
+                  <div className="mt-1 text-[22px] font-black text-slate-800">
+                    {Number(summary.passengerCount || 0)}名
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {!isDone && (
+              <button
+                type="button"
+                onClick={onToggleLock}
+                className={`h-[62px] rounded-[24px] border text-[22px] font-bold active:scale-[0.985] ${
+                  finishLocked
+                    ? "bg-emerald-500 border-emerald-500 text-white"
+                    : "bg-white border-slate-200 text-slate-700"
+                }`}
+              >
+                {finishLocked ? "ロック解除済み" : "ロック解除"}
+              </button>
+            )}
+
+            {!isSaving && !isDone && (
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={onBack}
+                  className="h-[56px] rounded-[22px] bg-slate-100 text-slate-700 font-bold active:bg-slate-200"
+                >
+                  戻る
+                </button>
+
+                <button
+                  type="button"
+                  onClick={onConfirm}
+                  disabled={!finishLocked}
+                  className="h-[56px] rounded-[22px] bg-slate-800 text-white font-bold active:opacity-90 disabled:opacity-40"
+                >
+                  終了する
+                </button>
+              </div>
+            )}
+
+            {isSaving && (
+              <div className="rounded-[24px] bg-white border border-white/70 shadow-[0_8px_16px_rgba(0,0,0,0.10)] px-4 py-6 text-center">
+                <div className="text-[24px] font-bold text-slate-800">保存中…</div>
+              </div>
+            )}
+
+            {isDone && (
+              <button
+                type="button"
+                onClick={onFinalTap}
+                className="h-[62px] rounded-[24px] bg-slate-800 text-white text-[22px] font-bold active:opacity-90"
+              >
+                タップして開始へ
+              </button>
+            )}
+          </div>
+
+          <div className="flex-1" />
+        </div>
+      </div>
+    );
+  }
+
   return {
+    AppFrame,
     HeaderCard,
     RideInfoCard,
     HistoryRecordCard,
@@ -645,5 +809,6 @@ window.AppComponents = (() => {
     PaymentDialog,
     ViaDialog,
     FinishDialog,
+    FinishCheckScreen,
   };
 })();
