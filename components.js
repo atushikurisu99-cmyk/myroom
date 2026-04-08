@@ -121,3 +121,9 @@ function BottomNav({
     </div>
   );
 }
+window.AppComponents = {
+  AppFrame,
+  HeaderCard,
+  HistoryRecordCard,
+  BottomNav,
+};
