@@ -165,7 +165,7 @@ function TaxiMiniApp() {
         style={{ display: "none" }}
       />
 
-      <div className="w-full max-w-sm h-full px-4 pt-4 pb-0 relative overflow-hidden">
+      <div className="w-full max-w-sm h-full pt-0 pb-0 relative overflow-hidden">
         {state.showSaved && startupPhase === "done" && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-5 py-2.5 shadow-lg">
             保存しました
@@ -238,13 +238,19 @@ function TaxiMiniApp() {
         />
 
         <div
-          className="h-full flex flex-col overflow-hidden relative"
+          className="h-full flex flex-col overflow-hidden relative px-4"
           style={{
             paddingBottom: showBottomNav ? `${C.BOTTOM_NAV_HEIGHT + 8}px` : 0,
           }}
         >
           {showNormalHeader && (
-            <div style={{ background: GREEN_MAIN, ...(state.screen === "top" ? headerStyle : {}) }}>
+            <div
+              className="-mx-4"
+              style={{
+                background: GREEN_MAIN,
+                ...(state.screen === "top" ? headerStyle : {}),
+              }}
+            >
               <HeaderCard
                 timeParts={derived.timeParts}
                 cardMode={state.cardMode}
