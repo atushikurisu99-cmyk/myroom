@@ -42,40 +42,6 @@ window.AppComponents = (() => {
     );
   }
 
-  function EyeToggleButton({ visible, onClick }) {
-    return (
-      <button
-        type="button"
-        onClick={onClick}
-        className="w-[28px] h-[28px] flex items-center justify-center rounded-full active:scale-[0.96]"
-        aria-label={visible ? "金額を隠す" : "金額を表示する"}
-      >
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M2.2 12C4.1 8.6 7.7 6.5 12 6.5C16.3 6.5 19.9 8.6 21.8 12C19.9 15.4 16.3 17.5 12 17.5C7.7 17.5 4.1 15.4 2.2 12Z"
-            stroke="#dff7df"
-            strokeWidth="1.8"
-          />
-          <circle cx="12" cy="12" r="3.2" fill="#dff7df" />
-          {!visible && (
-            <path
-              d="M4.5 19.5L19.5 4.5"
-              stroke="#dff7df"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-            />
-          )}
-        </svg>
-      </button>
-    );
-  }
-
   function HeaderCard({
     timeParts,
     cardMode,
@@ -84,16 +50,7 @@ window.AppComponents = (() => {
     recordCount,
     amount1,
     amount2,
-    showProgressAmount = false,
-    progressAmount = 0,
-    progressLabel = "累計＋乗務分",
-    progressAmountVisible = true,
-    onToggleProgressAmount,
   }) {
-    const displayAmount = progressAmountVisible
-      ? formatMoney(progressAmount)
-      : "●●●,●●●円";
-
     return (
       <div className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0 overflow-hidden`}>
         <div className="h-full flex flex-col">
@@ -103,7 +60,7 @@ window.AppComponents = (() => {
             </div>
 
             <div className="shrink-0 text-right pt-[4px]">
-              <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-900">
+              <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-800">
                 <span>{timeParts.hh}</span>
                 <span
                   className={`${
@@ -117,24 +74,7 @@ window.AppComponents = (() => {
             </div>
           </div>
 
-          {showProgressAmount ? (
-            <div className="mt-3 flex-1 min-h-0 flex flex-col justify-end">
-              <div className="text-[12px] font-semibold text-[#efffef]">
-                {progressLabel}
-              </div>
-              <div className="mt-1 flex items-center gap-2">
-                <div className="min-w-0 text-[18px] leading-none font-bold text-white tracking-[-0.01em] truncate">
-                  {displayAmount}
-                </div>
-                <div className="shrink-0">
-                  <EyeToggleButton
-                    visible={progressAmountVisible}
-                    onClick={onToggleProgressAmount}
-                  />
-                </div>
-              </div>
-            </div>
-          ) : cardMode === 1 ? (
+          {cardMode === 1 ? (
             <div className="mt-4 flex-1 min-h-0 flex flex-col justify-end">
               <div className="text-[12px] font-medium text-slate-500">売上合計</div>
               <div className="mt-1 flex items-end justify-between gap-3">
@@ -285,95 +225,114 @@ window.AppComponents = (() => {
     );
   }
 
-  function HomeGlyph({ active }) {
-    const fill = active ? "#ffffff" : "#f2fff2";
+  function HomeIconSvg({ color = "#ffffff" }) {
     return (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <svg width="29" height="29" viewBox="0 0 64 64" fill="none" aria-hidden="true">
         <path
-          d="M3 10.8L12 3L21 10.8"
-          stroke={fill}
-          strokeWidth="1.8"
+          d="M11 29.5L32 12L53 29.5"
+          stroke={color}
+          strokeWidth="5.6"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <path d="M6.5 10V20H17.5V10" fill={fill} />
-        <rect x="10.2" y="13.8" width="3.6" height="6.2" rx="0.6" fill={NAV_BAND} />
+        <path
+          d="M17.5 27.5V50.5C17.5 52.4 19.1 54 21 54H28.7V39.7C28.7 37.9 30.2 36.4 32 36.4C33.8 36.4 35.3 37.9 35.3 39.7V54H43C44.9 54 46.5 52.4 46.5 50.5V27.5"
+          fill={color}
+        />
       </svg>
     );
   }
 
-  function GridGlyph({ active }) {
-    const fill = active ? "#ffffff" : "#f2fff2";
+  function MenuGridSvg({ color = "#ffffff" }) {
+    const dots = [
+      [13, 13],
+      [24, 13],
+      [35, 13],
+      [13, 24],
+      [24, 24],
+      [35, 24],
+      [13, 35],
+      [24, 35],
+      [35, 35],
+    ];
     return (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        {[4, 10, 16].map((x) =>
-          [4, 10, 16].map((y) => (
-            <circle key={`${x}-${y}`} cx={x} cy={y} r="1.9" fill={fill} />
-          ))
+      <svg width="24" height="24" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        {dots.map(([cx, cy]) => (
+          <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="3.2" fill={color} />
+        ))}
+      </svg>
+    );
+  }
+
+  function EyeIconSvg({ open = true }) {
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M2.1 12C4.1 8.6 7.8 6.4 12 6.4C16.2 6.4 19.9 8.6 21.9 12C19.9 15.4 16.2 17.6 12 17.6C7.8 17.6 4.1 15.4 2.1 12Z"
+          stroke="#ffffff"
+          strokeWidth="1.8"
+        />
+        <circle cx="12" cy="12" r="2.8" fill="#ffffff" />
+        {!open && (
+          <path
+            d="M4.2 19.2L19.8 4.8"
+            stroke="#ffffff"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+          />
         )}
       </svg>
     );
   }
 
-  function NavHomeContent({ active }) {
-    if (active) {
-      return (
-        <div className="absolute inset-0 flex flex-col items-center justify-center pt-[6px]">
-          <HomeGlyph active />
-          <div className="mt-[2px] text-[11px] leading-none font-bold text-white">
-            ホーム
-          </div>
-        </div>
-      );
-    }
+  function StartHeader({
+    timeParts,
+    progressAmount,
+    progressVisible,
+    onToggleVisible,
+  }) {
+    const displayText = progressVisible
+      ? formatMoney(progressAmount || 0)
+      : "●●●,●●●円";
 
     return (
-      <div className="absolute inset-0 flex flex-col items-center justify-center pt-[8px]">
-        <HomeGlyph active={false} />
-        <div className="mt-[2px] text-[11px] leading-none font-bold text-[#f2fff2]">
-          ホーム
-        </div>
-      </div>
-    );
-  }
-
-  function NavCenterContent({ label, active }) {
-    if (active) {
-      return (
-        <div className="absolute inset-0 flex items-center justify-center pt-[2px]">
-          <div className="text-[16px] leading-none font-bold text-white tracking-[0.04em]">
-            {label}
+      <div className="h-[172px] px-4 pt-4 pb-3 shrink-0 overflow-hidden">
+        <div className="h-full flex flex-col">
+          <div className="flex items-start justify-end pt-[6px]">
+            <div className="text-right">
+              <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-white">
+                <span>{timeParts.hh}</span>
+                <span
+                  className={`${
+                    timeParts.showColon ? "opacity-100" : "opacity-0"
+                  } transition-opacity duration-150 mx-[-0.08em]`}
+                >
+                  ：
+                </span>
+                <span>{timeParts.mm}</span>
+              </div>
+            </div>
           </div>
-        </div>
-      );
-    }
 
-    return (
-      <div className="absolute inset-0 flex items-center justify-center pt-[14px]">
-        <div className="text-[14px] leading-none font-bold text-[#f2fff2] tracking-[0.04em]">
-          {label}
-        </div>
-      </div>
-    );
-  }
+          <div className="mt-auto pb-[4px]">
+            <div className="text-[12px] leading-none font-semibold text-white/90">
+              当月達成売上
+            </div>
+            <div className="mt-[7px] flex items-center justify-between gap-2">
+              <div className="min-w-0 flex-1 text-[23px] leading-none font-black tracking-[-0.03em] text-white truncate">
+                {displayText}
+              </div>
 
-  function NavMenuContent({ active }) {
-    if (active) {
-      return (
-        <div className="absolute inset-0 flex flex-col items-center justify-center pt-[6px]">
-          <GridGlyph active />
-          <div className="mt-[2px] text-[11px] leading-none font-bold text-white">
-            メニュー
+              <button
+                type="button"
+                onClick={onToggleVisible}
+                className="shrink-0 w-[28px] h-[28px] flex items-center justify-center rounded-full active:scale-[0.96]"
+                aria-label={progressVisible ? "金額を隠す" : "金額を表示"}
+              >
+                <EyeIconSvg open={progressVisible} />
+              </button>
+            </div>
           </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="absolute inset-0 flex flex-col items-center justify-center pt-[8px]">
-        <GridGlyph active={false} />
-        <div className="mt-[2px] text-[11px] leading-none font-bold text-[#f2fff2]">
-          メニュー
         </div>
       </div>
     );
@@ -386,27 +345,26 @@ window.AppComponents = (() => {
     onMenu,
     active = "home",
   }) {
-    const areas = [
-      { key: "home", left: "16.6667%" },
-      { key: "center", left: "50%" },
-      { key: "menu", left: "83.3333%" },
-    ];
-    const activeArea = areas.find((item) => item.key === active) || areas[0];
+    const activeLeft =
+      active === "home" ? "16.6667%" : active === "center" ? "50%" : "83.3333%";
+
+    const iconColor = "#ffffff";
+    const textColor = "#ffffff";
 
     return (
       <div className="h-full relative">
         <div
           className="absolute left-0 right-0 bottom-0 rounded-t-[24px]"
           style={{
-            height: "58px",
+            height: "60px",
             background: NAV_BAND,
           }}
         />
 
         <div
-          className="absolute top-[8px] w-[76px] h-[76px] rounded-full pointer-events-none"
+          className="absolute top-[8px] w-[74px] h-[74px] rounded-full pointer-events-none"
           style={{
-            left: activeArea.left,
+            left: activeLeft,
             transform: "translateX(-50%)",
             background: NAV_ACTIVE,
           }}
@@ -419,7 +377,15 @@ window.AppComponents = (() => {
             className="relative active:opacity-90"
             aria-label="ホーム"
           >
-            <NavHomeContent active={active === "home"} />
+            <div className="absolute left-1/2 top-[33px] -translate-x-1/2 -translate-y-1/2">
+              <HomeIconSvg color={iconColor} />
+            </div>
+            <div
+              className="absolute left-1/2 -translate-x-1/2 text-[11px] leading-none font-bold whitespace-nowrap"
+              style={{ bottom: "12px", color: textColor }}
+            >
+              ホーム
+            </div>
           </button>
 
           <button
@@ -428,7 +394,11 @@ window.AppComponents = (() => {
             className="relative active:opacity-90"
             aria-label={centerLabel}
           >
-            <NavCenterContent label={centerLabel} active={active === "center"} />
+            <div className="absolute left-1/2 top-[33px] -translate-x-1/2 -translate-y-1/2">
+              <div className="text-[15px] leading-none font-bold tracking-[0.03em] text-white whitespace-nowrap">
+                {centerLabel}
+              </div>
+            </div>
           </button>
 
           <button
@@ -437,7 +407,15 @@ window.AppComponents = (() => {
             className="relative active:opacity-90"
             aria-label="メニュー"
           >
-            <NavMenuContent active={active === "menu"} />
+            <div className="absolute left-1/2 top-[33px] -translate-x-1/2 -translate-y-1/2">
+              <MenuGridSvg color={iconColor} />
+            </div>
+            <div
+              className="absolute left-1/2 -translate-x-1/2 text-[11px] leading-none font-bold whitespace-nowrap"
+              style={{ bottom: "12px", color: textColor }}
+            >
+              メニュー
+            </div>
           </button>
         </div>
       </div>
@@ -663,5 +641,6 @@ window.AppComponents = (() => {
     PaymentDialog,
     ViaDialog,
     FinishDialog,
+    StartHeader,
   };
 })();
