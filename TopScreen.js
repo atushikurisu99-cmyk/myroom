@@ -1,6 +1,6 @@
 window.AppScreens = window.AppScreens || {};
 window.AppScreens.TopScreen = (() => {
-  const { HomeGraphCards, HomeEndDutySheet } = window.AppComponents;
+  const { HomeGraphCards, HomeEndDutySheet, StartHeader } = window.AppComponents;
   const C = window.AppConstants;
 
   const GREEN_MAIN = "#32CD32";
@@ -10,16 +10,34 @@ window.AppScreens.TopScreen = (() => {
       topMainLabel,
       topMainButtonDisabled,
       handleTopMain,
+      startupHeaderStyle,
       startupMainStyle,
       startupOtherStyle,
       homeEndSheetOpen,
       toggleHomeEndSheet,
       handleFinishTap,
       dutyStarted,
+      timeParts,
+      monthlyProgressAmount,
+      monthlyProgressVisible,
+      toggleMonthlyProgressVisible,
     } = props;
+
+    const isStartMode = !dutyStarted && topMainLabel === "乗務開始";
 
     return (
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden relative">
+        {isStartMode && (
+          <div style={{ background: GREEN_MAIN, ...(startupHeaderStyle || {}) }}>
+            <StartHeader
+              timeParts={timeParts}
+              progressAmount={monthlyProgressAmount}
+              progressVisible={monthlyProgressVisible}
+              onToggleVisible={toggleMonthlyProgressVisible}
+            />
+          </div>
+        )}
+
         <div
           className="shrink-0 px-3 pt-4 pb-4"
           style={{
