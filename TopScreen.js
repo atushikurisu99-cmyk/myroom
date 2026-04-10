@@ -5,12 +5,13 @@ const TopScreen = ({ onStart, state }) => {
 
   return (
     <div className="w-full h-full flex flex-col bg-gray-100 overflow-hidden">
-      {/* 上部グリーン */}
+
+      {/* 🔥 緑エリア（高さを詰める） */}
       <div
         className="w-full relative shrink-0"
         style={{
           background: "#6FCF4A",
-          height: "300px",
+          height: "250px" // ← 300 → 250 に削減（ここが効く）
         }}
       >
         {/* 時刻 */}
@@ -24,29 +25,35 @@ const TopScreen = ({ onStart, state }) => {
           <div className="text-2xl font-bold mt-1">¥0</div>
         </div>
 
-        {/* 目アイコン */}
-        <div className="absolute right-6 top-24 text-white text-xl">👁</div>
+        {/* 👁 */}
+        <div className="absolute right-6 top-24 text-white text-xl">
+          👁
+        </div>
 
-        {/* 乗務開始ボタン */}
-        <div className="absolute left-1/2 -translate-x-1/2 bottom-2 w-[85%]">
+        {/* 🔥 ボタンを下に“はみ出させる” */}
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-[-60px] w-[85%]">
           <button
             onClick={onStart}
             className="w-full py-6 rounded-3xl text-white text-2xl font-bold shadow-lg relative overflow-hidden"
             style={{
               background: "linear-gradient(180deg, #BDEDD9 0%, #79C9B0 48%, #4C997F 100%)",
-              minHeight: "118px",
+              minHeight: "120px"
             }}
           >
+            {/* 上の光沢 */}
             <div className="absolute left-4 right-4 top-3 h-14 rounded-full bg-white/20"></div>
+
             <span className="relative z-10">乗務開始</span>
           </button>
         </div>
       </div>
 
-      {/* 下エリア */}
-      <div className="flex-1 min-h-0 px-4 pt-2 pb-0 flex flex-col">
+      {/* 🔽 下エリア */}
+      <div className="flex-1 min-h-0 px-4 pt-20 flex flex-col">
+        {/* ↑ ptを増やしてボタンのはみ出し分を吸収 */}
+
         {/* グラフ入口 */}
-        <div className="grid grid-cols-2 gap-3 shrink-0">
+        <div className="grid grid-cols-2 gap-3">
           {[
             { title: "売上", sub: "グラフ" },
             { title: "本数", sub: "推移" },
@@ -57,23 +64,28 @@ const TopScreen = ({ onStart, state }) => {
               key={i}
               className="bg-gray-200 rounded-2xl p-4"
               style={{
-                height: "90px",
+                height: "90px"
               }}
             >
-              <div className="text-gray-700 font-bold text-[18px] leading-none">{item.title}</div>
-              <div className="text-gray-400 text-sm mt-2 font-semibold">{item.sub}</div>
+              <div className="text-gray-700 font-bold text-[18px] leading-none">
+                {item.title}
+              </div>
+              <div className="text-gray-400 text-sm mt-2 font-semibold">
+                {item.sub}
+              </div>
             </div>
           ))}
         </div>
 
-        {/* 余白吸収 */}
-        <div className="flex-1 min-h-0"></div>
+        {/* 余白調整 */}
+        <div className="flex-1"></div>
 
-        {/* ▲ */}
+        {/* ▲（右固定） */}
         <div className="w-full flex justify-end pr-2 pb-10">
-          <div className="text-gray-300 text-2xl leading-none">▲</div>
+          <div className="text-gray-300 text-2xl">▲</div>
         </div>
       </div>
+
     </div>
   );
 };
