@@ -53,12 +53,9 @@
     const { useEffect, useMemo, useState } = React;
 
     const COLORS = {
-      pageBg: "#e7ebf2",
+      bg: "#e7ebf2",
       green: "#32CD32",
       navActive: "#33CC6D",
-      white: "#ffffff",
-      cardText: "#1f2937",
-      subText: "#64748b",
       startTop: "#bff3de",
       startMid: "#43d2af",
       startBottom: "#148f74",
@@ -68,27 +65,6 @@
       dropTop: "#f5da66",
       dropMid: "#f0ba3e",
       dropBottom: "#cc8b25",
-      cash: "#4d4df7",
-      card: "#79e883",
-      receipt: "#f0ef47",
-    };
-
-    const LAYOUT = {
-      outerPadX: 16,
-      topPad: 16,
-      bottomNavH: 96,
-
-      headerCardH: 172,
-      mainButtonH: 142,
-      lowerCardH: 116,
-
-      gap: 16,
-
-      arrowBoxH: 34,
-      arrowBottomFromNav: 12,
-
-      graphCardH: 116,
-      graphGap: 12,
     };
 
     function formatMoney(value) {
@@ -109,7 +85,7 @@
       return (
         <div
           style={{ color }}
-          className="flex items-center justify-end text-[62px] leading-[0.9] font-black tracking-[-0.06em]"
+          className="flex items-center justify-end text-[64px] leading-[0.9] font-black tracking-[-0.06em]"
         >
           <span>{hh}</span>
           <span className="mx-[-0.06em]">：</span>
@@ -120,7 +96,7 @@
 
     function EyeIcon() {
       return (
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
             d="M2.2 12C4.1 8.7 7.7 6.6 12 6.6C16.3 6.6 19.9 8.7 21.8 12C19.9 15.3 16.3 17.4 12 17.4C7.7 17.4 4.1 15.3 2.2 12Z"
             stroke="white"
@@ -158,7 +134,7 @@
       return (
         <svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
           {dots.map(([cx, cy]) => (
-            <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="1.8" fill="white" />
+            <circle key={cx + "-" + cy} cx={cx} cy={cy} r="1.8" fill="white" />
           ))}
         </svg>
       );
@@ -181,10 +157,7 @@
 
     function WhiteHeaderCard() {
       return (
-        <div
-          className="rounded-[34px] bg-white px-5 pt-4 pb-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]"
-          style={{ height: LAYOUT.headerCardH }}
-        >
+        <div className="rounded-[34px] bg-white px-5 pt-4 pb-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]">
           <div className="flex items-start justify-between gap-4">
             <WeatherPair />
             <Clock color="#1f2a44" />
@@ -200,10 +173,7 @@
 
     function StartHeaderBlock() {
       return (
-        <div
-          className="w-full"
-          style={{ height: LAYOUT.headerCardH }}
-        >
+        <div className="w-full">
           <div className="flex justify-end pt-4">
             <Clock color="#ffffff" />
           </div>
@@ -239,11 +209,8 @@
         <button
           type="button"
           onClick={onClick}
-          className="relative w-full rounded-[30px] text-white overflow-hidden shadow-[0_10px_18px_rgba(0,0,0,0.16)]"
-          style={{
-            background: bg,
-            height: LAYOUT.mainButtonH,
-          }}
+          className="relative w-full h-[142px] rounded-[30px] text-white overflow-hidden shadow-[0_10px_18px_rgba(0,0,0,0.16)]"
+          style={{ background: bg }}
         >
           <div className="absolute left-[14px] right-[14px] top-[10px] h-[52px] rounded-[999px] bg-white/25"></div>
           <div className="absolute inset-0 flex items-center justify-center">
@@ -255,22 +222,16 @@
 
     function GraphCard({ title, sub }) {
       return (
-        <div
-          className="rounded-[28px] bg-white/55 px-5 py-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.22)]"
-          style={{ minHeight: LAYOUT.graphCardH }}
-        >
-          <div className="text-[18px] font-bold text-slate-700">{title}</div>
-          <div className="mt-1 text-[13px] font-semibold text-slate-400">{sub}</div>
+        <div className="rounded-[28px] bg-white/55 px-5 py-4 h-[90px] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.22)]">
+          <div className="text-[18px] font-bold text-slate-700 leading-none">{title}</div>
+          <div className="mt-2 text-[13px] font-semibold text-slate-400">{sub}</div>
         </div>
       );
     }
 
     function RideInfoCard() {
       return (
-        <div
-          className="rounded-[32px] bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]"
-          style={{ height: LAYOUT.lowerCardH }}
-        >
+        <div className="rounded-[32px] bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]">
           <div className="text-[18px] font-bold text-slate-800">取得中...</div>
 
           <div className="mt-4 grid grid-cols-2 gap-4">
@@ -296,9 +257,7 @@
               <div className="mt-2 text-[14px] font-bold text-slate-700">船越南三丁目</div>
               <div className="mt-1 text-[12px] font-semibold text-slate-400">精度：55m</div>
             </div>
-
             <div className="pt-[6px] text-[22px] text-slate-300">→</div>
-
             <div className="text-right">
               <div className="text-[16px] font-black text-slate-800">05:45</div>
               <div className="mt-2 text-[14px] font-bold text-slate-700">船越南三丁目</div>
@@ -370,7 +329,7 @@
         active === "home" ? "16.6667%" : active === "center" ? "50%" : "83.3333%";
 
       return (
-        <div className="absolute left-0 right-0 bottom-0" style={{ height: LAYOUT.bottomNavH }}>
+        <div className="absolute left-0 right-0 bottom-0 h-[96px]">
           <div
             className="absolute left-0 right-0 bottom-0 h-[68px] rounded-t-[28px]"
             style={{ background: COLORS.green }}
@@ -383,7 +342,6 @@
               background: COLORS.navActive,
             }}
           />
-
           <div className="absolute inset-0 grid grid-cols-3">
             <div className="relative">
               <div className="absolute left-1/2 top-[30px] -translate-x-1/2 -translate-y-1/2">
@@ -393,13 +351,11 @@
                 ホーム
               </div>
             </div>
-
             <div className="relative">
               <div className="absolute left-1/2 top-[34px] -translate-x-1/2 -translate-y-1/2 text-[16px] font-bold text-white whitespace-nowrap">
                 履歴
               </div>
             </div>
-
             <div className="relative">
               <div className="absolute left-1/2 top-[30px] -translate-x-1/2 -translate-y-1/2">
                 <MenuIcon />
@@ -413,80 +369,33 @@
       );
     }
 
-    function ArrowButton() {
-      return (
-        <div
-          className="absolute right-[24px] flex items-center justify-center text-[34px] font-bold text-slate-300 leading-none"
-          style={{
-            height: LAYOUT.arrowBoxH,
-            bottom: LAYOUT.bottomNavH + LAYOUT.arrowBottomFromNav,
-          }}
-        >
-          ▲
-        </div>
-      );
-    }
-
     function TopScreen({ onNext }) {
-      const headerBottom =
-        LAYOUT.topPad + LAYOUT.headerCardH;
-
-      const buttonTop =
-        headerBottom + LAYOUT.gap;
-
-      const buttonBottom =
-        buttonTop + LAYOUT.mainButtonH;
-
-      const lowerCardTop =
-        buttonBottom + LAYOUT.gap;
-
-      const greenBottom =
-        buttonBottom + (LAYOUT.gap / 2);
-
-      const graphTop =
-        lowerCardTop;
-
-      const graphAreaBottom =
-        LAYOUT.bottomNavH + LAYOUT.arrowBottomFromNav + LAYOUT.arrowBoxH + 8;
-
       return (
         <div className="w-full h-full relative overflow-hidden bg-[#e7ebf2]">
-          <div
-            className="absolute left-0 right-0 top-0"
-            style={{
-              background: COLORS.green,
-              height: greenBottom,
-            }}
-          />
+          <div className="absolute left-0 right-0 top-0 h-[250px]" style={{ background: COLORS.green }} />
 
-          <div
-            className="relative h-full px-4"
-            style={{ paddingTop: LAYOUT.topPad, paddingBottom: LAYOUT.bottomNavH }}
-          >
+          <div className="relative h-full px-4 pb-[96px]">
             <StartHeaderBlock />
 
-            <div style={{ marginTop: LAYOUT.gap }}>
+            <div className="mt-4 -mb-[60px] relative z-10">
               <MainButton label="乗務開始" type="start" onClick={onNext} />
             </div>
 
-            <div
-              className="absolute left-4 right-4 hide-scrollbar overflow-y-auto"
-              style={{
-                top: graphTop,
-                bottom: graphAreaBottom,
-                WebkitOverflowScrolling: "touch",
-                overscrollBehavior: "contain",
-              }}
-            >
-              <div className="grid grid-cols-2" style={{ gap: LAYOUT.graphGap }}>
+            <div className="pt-[72px] flex flex-col h-[calc(100%-250px)]">
+              <div className="grid grid-cols-2 gap-3">
                 <GraphCard title="売上" sub="グラフ" />
                 <GraphCard title="本数" sub="推移" />
                 <GraphCard title="時間帯" sub="動き" />
                 <GraphCard title="分析" sub="入口" />
               </div>
+
+              <div className="flex-1 min-h-0" />
+
+              <div className="flex justify-end pr-2 pb-10">
+                <div className="text-[34px] font-bold text-slate-300 leading-none">▲</div>
+              </div>
             </div>
 
-            <ArrowButton />
             <BottomNav active="home" />
           </div>
         </div>
@@ -494,33 +403,14 @@
     }
 
     function StandbyScreen({ onNext }) {
-      const greenBottom =
-        LAYOUT.topPad +
-        LAYOUT.headerCardH +
-        LAYOUT.gap +
-        LAYOUT.mainButtonH +
-        (LAYOUT.gap / 2);
-
       return (
         <div className="w-full h-full relative overflow-hidden bg-[#e7ebf2]">
-          <div
-            className="absolute left-0 right-0 top-0"
-            style={{
-              background: COLORS.green,
-              height: greenBottom,
-            }}
-          />
-
-          <div
-            className="relative h-full px-4"
-            style={{ paddingTop: LAYOUT.topPad, paddingBottom: LAYOUT.bottomNavH }}
-          >
+          <div className="absolute left-0 right-0 top-0 h-[394px]" style={{ background: COLORS.green }} />
+          <div className="relative h-full px-4 pt-4 pb-[96px]">
             <WhiteHeaderCard />
-
-            <div style={{ marginTop: LAYOUT.gap }}>
+            <div className="mt-4">
               <MainButton label="実車" type="ride" onClick={onNext} />
             </div>
-
             <BottomNav active="center" />
           </div>
         </div>
@@ -528,71 +418,38 @@
     }
 
     function RideScreen({ onNext }) {
-      const greenBottom =
-        LAYOUT.topPad +
-        LAYOUT.headerCardH +
-        LAYOUT.gap +
-        LAYOUT.mainButtonH +
-        (LAYOUT.gap / 2);
-
       return (
         <div className="w-full h-full relative overflow-hidden bg-[#e7ebf2]">
-          <div
-            className="absolute left-0 right-0 top-0"
-            style={{
-              background: COLORS.green,
-              height: greenBottom,
-            }}
-          />
-
-          <div
-            className="relative h-full px-4"
-            style={{ paddingTop: LAYOUT.topPad, paddingBottom: LAYOUT.bottomNavH }}
-          >
+          <div className="absolute left-0 right-0 top-0 h-[394px]" style={{ background: COLORS.green }} />
+          <div className="relative h-full px-4 pt-4 pb-[96px]">
             <WhiteHeaderCard />
-
-            <div style={{ marginTop: LAYOUT.gap }}>
+            <div className="mt-4">
               <MainButton label="降車" type="drop" onClick={onNext} />
             </div>
-
-            <div style={{ marginTop: LAYOUT.gap }}>
+            <div className="mt-4">
               <RideInfoCard />
             </div>
-
             <BottomNav active="center" />
           </div>
         </div>
       );
     }
 
-    function FareScreen({ onNext }) {
+    function FareScreen() {
       return (
         <div className="w-full h-full relative overflow-hidden bg-[#e7ebf2]">
           <div className="relative h-full px-4 pt-4 pb-[26px] overflow-y-auto hide-scrollbar">
             <FareInfoTop />
-
             <div className="mt-4">
               <FareAmountCard />
             </div>
-
             <div className="mt-4">
               <PassengerDots />
             </div>
-
             <div className="mt-5 space-y-4">
-              <PayButton label="現金" bg={COLORS.cash} color="#111827" />
-              <PayButton label="カード・QR" bg={COLORS.card} color="#111827" />
-              <PayButton label="領収証発行" bg={COLORS.receipt} color="#111827" />
-            </div>
-
-            <div className="mt-6">
-              <button
-                type="button"
-                onClick={onNext}
-                className="w-full h-[54px] rounded-[20px] bg-slate-300 text-slate-700 font-bold"
-              >
-                戻る
-              </button>
+              <PayButton label="現金" bg="#4d4df7" color="#111827" />
+              <PayButton label="カード・QR" bg="#79e883" color="#111827" />
+              <PayButton label="領収証発行" bg="#f0ef47" color="#111827" />
             </div>
           </div>
         </div>
@@ -606,7 +463,7 @@
         if (screen === "top") return <TopScreen onNext={() => setScreen("standby")} />;
         if (screen === "standby") return <StandbyScreen onNext={() => setScreen("ride")} />;
         if (screen === "ride") return <RideScreen onNext={() => setScreen("fare")} />;
-        return <FareScreen onNext={() => setScreen("top")} />;
+        return <FareScreen />;
       }, [screen]);
 
       return (
