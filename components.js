@@ -48,6 +48,8 @@ window.AppComponents = (() => {
     amount1,
     amount2,
   }) {
+    const safeTimeParts = timeParts || { hh: "--", mm: "--", showColon: true };
+
     return (
       <div className={`${C.cardClass} h-[172px] px-4 py-4 shrink-0 overflow-hidden`}>
         <div className="h-full flex flex-col">
@@ -58,15 +60,15 @@ window.AppComponents = (() => {
 
             <div className="shrink-0 text-right pt-[4px]">
               <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-slate-800">
-                <span>{timeParts.hh}</span>
+                <span>{safeTimeParts.hh}</span>
                 <span
                   className={`${
-                    timeParts.showColon ? "opacity-100" : "opacity-0"
+                    safeTimeParts.showColon ? "opacity-100" : "opacity-0"
                   } transition-opacity duration-150 mx-[-0.08em]`}
                 >
                   ：
                 </span>
-                <span>{timeParts.mm}</span>
+                <span>{safeTimeParts.mm}</span>
               </div>
             </div>
           </div>

@@ -1,23 +1,8 @@
 置き換え手順
-1. いまの壊れた js / html をいったん全部削除
-2. この一式だけを同じ階層に置く
-3. GitHub Pages を再読込
+1. 既存ファイルをこの一式で上書き
+2. GitHub Pages を再読込
 
-この版は root 直下で動くようにしてあります。
-必要なファイル
-- index.html
-- constants.js
-- utils.js
-- geo.js
-- components.js
-- useTaxiAppState.js
-- TopScreen.js
-- StandbyScreen.js
-- RideScreen.js
-- FareScreen.js
-- HistoryModal.js
-- TaxiMiniApp.js
-
-注意
-- 日本語名ファイル（トップスクリーン.js / 運賃スクリーン.js など）は使いません
-- 旧ファイルが残ると混乱しやすいので、できれば全部入れ替えてください
+この版は白画面エラー修正版です。
+- StandbyScreen.js と RideScreen.js の二重ヘッダー / 二重下ナビ構造を解消
+- components.js の HeaderCard に未定義ガードを追加
+- index.html はそのままで動作
