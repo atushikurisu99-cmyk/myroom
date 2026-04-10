@@ -1,26 +1,488 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Taxi UI</title>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Taxi UI Preview</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-<style>
-body { margin:0; background:#e5e7eb; }
-</style>
+  <style>
+    html, body, #root {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #e7ebf2;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
+        "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-<div id="root"></div>
+  <div id="root"></div>
 
-<script type="text/babel" src="TaxiMiniApp.js"></script>
-<script type="text/babel" src="TopScreen.js"></script>
-<script type="text/babel" src="StandbyScreen.js"></script>
-<script type="text/babel" src="RideScreen.js"></script>
-<script type="text/babel" src="components.js"></script>
+  <script type="text/babel">
+    const { useEffect, useMemo, useState } = React;
+
+    const COLORS = {
+      bg: "#e7ebf2",
+      green: "#32CD32",
+      navActive: "#33CC6D",
+      startTop: "#bff3de",
+      startMid: "#43d2af",
+      startBottom: "#148f74",
+      rideTop: "#8fd0ff",
+      rideMid: "#3e9eff",
+      rideBottom: "#1c73dd",
+      dropTop: "#f5da66",
+      dropMid: "#f0ba3e",
+      dropBottom: "#cc8b25",
+    };
+
+    function formatMoney(value) {
+      return "¥" + Number(value || 0).toLocaleString("ja-JP");
+    }
+
+    function Clock({ color = "#1f2a44" }) {
+      const [now, setNow] = useState(new Date());
+
+      useEffect(() => {
+        const id = setInterval(() => setNow(new Date()), 1000);
+        return () => clearInterval(id);
+      }, []);
+
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+
+      return (
+        <div
+          style={{ color }}
+          className="flex items-center justify-end text-[64px] leading-[0.9] font-black tracking-[-0.06em]"
+        >
+          <span>{hh}</span>
+          <span className="mx-[-0.06em]">：</span>
+          <span>{mm}</span>
+        </div>
+      );
+    }
+
+    function EyeIcon() {
+      return (
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M2.2 12C4.1 8.7 7.7 6.6 12 6.6C16.3 6.6 19.9 8.7 21.8 12C19.9 15.3 16.3 17.4 12 17.4C7.7 17.4 4.1 15.3 2.2 12Z"
+            stroke="white"
+            strokeWidth="1.8"
+          />
+          <circle cx="12" cy="12" r="3.1" fill="white" />
+        </svg>
+      );
+    }
+
+    function HomeIcon() {
+      return (
+        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path
+            d="M12 29.5L32 12L52 29.5"
+            stroke="white"
+            strokeWidth="5.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M18 28V51C18 52.7 19.3 54 21 54H29V40.5C29 38.6 30.5 37.1 32.4 37.1C34.3 37.1 35.8 38.6 35.8 40.5V54H43C44.7 54 46 52.7 46 51V28"
+            fill="white"
+          />
+        </svg>
+      );
+    }
+
+    function MenuIcon() {
+      const dots = [
+        [7, 7], [14, 7], [21, 7],
+        [7, 14], [14, 14], [21, 14],
+        [7, 21], [14, 21], [21, 21],
+      ];
+      return (
+        <svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          {dots.map(([cx, cy]) => (
+            <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="1.8" fill="white" />
+          ))}
+        </svg>
+      );
+    }
+
+    function WeatherPair() {
+      return (
+        <div className="flex gap-5 pt-[4px]">
+          <div className="w-[40px]">
+            <div className="text-[11px] font-semibold text-slate-500 leading-none">4/11</div>
+            <div className="mt-[6px] text-[23px] leading-none">🌞</div>
+          </div>
+          <div className="w-[40px]">
+            <div className="text-[11px] font-semibold text-slate-500 leading-none">4/12</div>
+            <div className="mt-[6px] text-[23px] leading-none">🌤️</div>
+          </div>
+        </div>
+      );
+    }
+
+    function WhiteHeaderCard() {
+      return (
+        <div className="rounded-[34px] bg-white px-5 pt-4 pb-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]">
+          <div className="flex items-start justify-between gap-4">
+            <WeatherPair />
+            <Clock color="#1f2a44" />
+          </div>
+
+          <div className="mt-4">
+            <div className="text-[13px] font-semibold text-slate-500">今日のペース</div>
+            <div className="mt-1 text-[18px] font-bold text-[#00a676] leading-none">良好</div>
+          </div>
+        </div>
+      );
+    }
+
+    function StartHeaderBlock() {
+      return (
+        <div className="w-full">
+          <div className="flex justify-end pt-4">
+            <Clock color="#ffffff" />
+          </div>
+
+          <div className="mt-5 flex items-end justify-between gap-3">
+            <div>
+              <div className="text-[13px] font-semibold text-white/95">当月達成売上</div>
+              <div className="mt-2 text-[24px] font-black text-white leading-none">
+                {formatMoney(0)}
+              </div>
+            </div>
+            <button
+              type="button"
+              className="w-[34px] h-[34px] flex items-center justify-center rounded-full"
+              aria-label="表示切替"
+            >
+              <EyeIcon />
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    function MainButton({ label, type = "start", onClick }) {
+      const bg =
+        type === "start"
+          ? "linear-gradient(180deg, #bff3de 0%, #43d2af 45%, #148f74 100%)"
+          : type === "ride"
+          ? "linear-gradient(180deg, #8fd0ff 0%, #3e9eff 45%, #1c73dd 100%)"
+          : "linear-gradient(180deg, #f5da66 0%, #f0ba3e 45%, #cc8b25 100%)";
+
+      return (
+        <button
+          type="button"
+          onClick={onClick}
+          className="relative w-full h-[142px] rounded-[30px] text-white overflow-hidden shadow-[0_10px_18px_rgba(0,0,0,0.16)]"
+          style={{ background: bg }}
+        >
+          <div className="absolute left-[14px] right-[14px] top-[10px] h-[52px] rounded-[999px] bg-white/25"></div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-[30px] font-bold tracking-[-0.03em]">{label}</span>
+          </div>
+        </button>
+      );
+    }
+
+    function GraphCard({ title, sub }) {
+      return (
+        <div className="rounded-[28px] bg-white/55 px-5 py-4 min-h-[116px] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.22)]">
+          <div className="text-[18px] font-bold text-slate-700">{title}</div>
+          <div className="mt-1 text-[13px] font-semibold text-slate-400">{sub}</div>
+        </div>
+      );
+    }
+
+    function RideInfoCard() {
+      return (
+        <div className="rounded-[32px] bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]">
+          <div className="text-[18px] font-bold text-slate-800">取得中...</div>
+
+          <div className="mt-4 grid grid-cols-2 gap-4">
+            <div>
+              <div className="text-[13px] font-semibold text-slate-500">乗車時刻</div>
+              <div className="mt-1 text-[20px] font-black text-slate-800 leading-none">05:45</div>
+            </div>
+            <div className="text-right">
+              <div className="text-[13px] font-semibold text-slate-500">経過時間</div>
+              <div className="mt-1 text-[20px] font-black text-slate-800 leading-none">0分</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function FareInfoTop() {
+      return (
+        <div className="rounded-[28px] bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]">
+          <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-start">
+            <div>
+              <div className="text-[16px] font-black text-slate-800">05:45</div>
+              <div className="mt-2 text-[14px] font-bold text-slate-700">船越南三丁目</div>
+              <div className="mt-1 text-[12px] font-semibold text-slate-400">精度：55m</div>
+            </div>
+
+            <div className="pt-[6px] text-[22px] text-slate-300">→</div>
+
+            <div className="text-right">
+              <div className="text-[16px] font-black text-slate-800">05:45</div>
+              <div className="mt-2 text-[14px] font-bold text-slate-700">船越南三丁目</div>
+              <div className="mt-1 text-[12px] font-semibold text-slate-400">精度：55m</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function FareAmountCard() {
+      return (
+        <div className="rounded-[28px] bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]">
+          <div className="flex items-center justify-between gap-4">
+            <div className="text-[16px] text-slate-400">¥</div>
+            <div className="flex-1 text-[34px] leading-none font-black tracking-[-0.04em] text-slate-800">
+              1,200
+            </div>
+            <div className="text-right">
+              <div className="text-[12px] font-semibold text-slate-400">乗車人員</div>
+              <div className="mt-1 flex items-end gap-1 justify-end">
+                <span className="text-[12px] font-semibold text-slate-400">1</span>
+                <span className="text-[12px] font-semibold text-slate-400">名</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function PassengerDots() {
+      const items = [1, 2, 3, 4];
+      return (
+        <div className="flex gap-4">
+          {items.map((n) => {
+            const selected = n === 1;
+            return (
+              <button
+                key={n}
+                type="button"
+                className="w-[62px] h-[62px] rounded-full text-[28px] font-black"
+                style={{
+                  background: selected ? "#8e968f" : "#ece8ea",
+                  color: selected ? "#ffffff" : "#6e6e73",
+                }}
+              >
+                {n}
+              </button>
+            );
+          })}
+        </div>
+      );
+    }
+
+    function PayButton({ label, bg, color = "#111827" }) {
+      return (
+        <button
+          type="button"
+          className="w-full h-[72px] rounded-[24px] text-[22px] font-bold shadow-[0_8px_16px_rgba(0,0,0,0.14)]"
+          style={{ background: bg, color }}
+        >
+          {label}
+        </button>
+      );
+    }
+
+    function BottomNav({ active = "home" }) {
+      const activeLeft =
+        active === "home" ? "16.6667%" : active === "center" ? "50%" : "83.3333%";
+
+      return (
+        <div className="absolute left-0 right-0 bottom-0 h-[96px]">
+          <div
+            className="absolute left-0 right-0 bottom-0 h-[68px] rounded-t-[28px]"
+            style={{ background: COLORS.green }}
+          />
+          <div
+            className="absolute top-[8px] w-[78px] h-[78px] rounded-full"
+            style={{
+              left: activeLeft,
+              transform: "translateX(-50%)",
+              background: COLORS.navActive,
+            }}
+          />
+
+          <div className="absolute inset-0 grid grid-cols-3">
+            <div className="relative">
+              <div className="absolute left-1/2 top-[30px] -translate-x-1/2 -translate-y-1/2">
+                <HomeIcon />
+              </div>
+              <div className="absolute left-1/2 bottom-[14px] -translate-x-1/2 text-[12px] font-bold text-white whitespace-nowrap">
+                ホーム
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="absolute left-1/2 top-[34px] -translate-x-1/2 -translate-y-1/2 text-[16px] font-bold text-white whitespace-nowrap">
+                履歴
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="absolute left-1/2 top-[30px] -translate-x-1/2 -translate-y-1/2">
+                <MenuIcon />
+              </div>
+              <div className="absolute left-1/2 bottom-[14px] -translate-x-1/2 text-[12px] font-bold text-white whitespace-nowrap">
+                メニュー
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function TopScreen({ onNext }) {
+      return (
+        <div className="w-full h-full relative overflow-hidden bg-[#e7ebf2]">
+          <div className="absolute left-0 right-0 top-0 h-[394px]" style={{ background: COLORS.green }} />
+
+          <div className="relative h-full px-4 pt-4 pb-[96px]">
+            <StartHeaderBlock />
+
+            <div className="mt-4">
+              <MainButton label="乗務開始" type="start" onClick={onNext} />
+            </div>
+
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              <GraphCard title="売上" sub="グラフ" />
+              <GraphCard title="本数" sub="推移" />
+              <GraphCard title="時間帯" sub="動き" />
+              <GraphCard title="分析" sub="入口" />
+            </div>
+
+            <div className="absolute right-[24px] bottom-[112px] text-[34px] font-bold text-slate-300 leading-none">
+              ▲
+            </div>
+
+            <BottomNav active="home" />
+          </div>
+        </div>
+      );
+    }
+
+    function StandbyScreen({ onNext }) {
+      return (
+        <div className="w-full h-full relative overflow-hidden bg-[#e7ebf2]">
+          <div className="absolute left-0 right-0 top-0 h-[394px]" style={{ background: COLORS.green }} />
+
+          <div className="relative h-full px-4 pt-4 pb-[96px]">
+            <WhiteHeaderCard />
+
+            <div className="mt-4">
+              <MainButton label="実車" type="ride" onClick={onNext} />
+            </div>
+
+            <BottomNav active="center" />
+          </div>
+        </div>
+      );
+    }
+
+    function RideScreen({ onNext }) {
+      return (
+        <div className="w-full h-full relative overflow-hidden bg-[#e7ebf2]">
+          <div className="absolute left-0 right-0 top-0 h-[394px]" style={{ background: COLORS.green }} />
+
+          <div className="relative h-full px-4 pt-4 pb-[96px]">
+            <WhiteHeaderCard />
+
+            <div className="mt-4">
+              <MainButton label="降車" type="drop" onClick={onNext} />
+            </div>
+
+            <div className="mt-4">
+              <RideInfoCard />
+            </div>
+
+            <BottomNav active="center" />
+          </div>
+        </div>
+      );
+    }
+
+    function FareScreen({ onNext }) {
+      return (
+        <div className="w-full h-full relative overflow-hidden bg-[#e7ebf2]">
+          <div className="relative h-full px-4 pt-4 pb-[26px] overflow-y-auto hide-scrollbar">
+            <FareInfoTop />
+
+            <div className="mt-4">
+              <FareAmountCard />
+            </div>
+
+            <div className="mt-4">
+              <PassengerDots />
+            </div>
+
+            <div className="mt-5 space-y-4">
+              <PayButton label="現金" bg="#4d4df7" color="#111827" />
+              <PayButton label="カード・QR" bg="#79e883" color="#111827" />
+              <PayButton label="領収証発行" bg="#f0ef47" color="#111827" />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [screen, setScreen] = useState("top");
+
+      const view = useMemo(() => {
+        if (screen === "top") return <TopScreen onNext={() => setScreen("standby")} />;
+        if (screen === "standby") return <StandbyScreen onNext={() => setScreen("ride")} />;
+        if (screen === "ride") return <RideScreen onNext={() => setScreen("fare")} />;
+        return <FareScreen onNext={() => setScreen("top")} />;
+      }, [screen]);
+
+      return (
+        <div className="w-full h-full flex justify-center bg-[#e7ebf2] overflow-hidden">
+          <div className="w-full max-w-[430px] h-full relative overflow-hidden">
+            {view}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
 </body>
 </html>
