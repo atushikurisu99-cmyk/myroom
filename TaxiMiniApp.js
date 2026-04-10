@@ -19,14 +19,11 @@ function TaxiMiniApp() {
   const { refs, state, derived, actions } = useTaxiAppState();
   const C = window.AppConstants;
 
-  const GREEN_MAIN = "#32CD32";
-
   const startupAudioRef = useRef(null);
   const startupTimersRef = useRef([]);
 
   const [startupPhase, setStartupPhase] = useState("logo");
   const [startupStage, setStartupStage] = useState(0);
-  const [monthlyProgressVisible, setMonthlyProgressVisible] = useState(true);
 
   useEffect(() => {
     const timers = [];
@@ -90,8 +87,6 @@ function TaxiMiniApp() {
   };
 
   const startupLock = state.screen === "top" && startupPhase !== "done";
-  const showBottomNav =
-    state.screen === "top" || state.screen === "standby" || state.screen === "ride";
 
   const headerStyle = useMemo(() => {
     if (state.screen !== "top" || startupPhase === "done") return {};
@@ -151,10 +146,8 @@ function TaxiMiniApp() {
     };
   }, [startupPhase]);
 
+  const showBottomNav = state.screen === "top" || state.screen === "standby" || state.screen === "ride";
   const navCenterLabel = state.screen === "top" ? "経費" : "履歴";
-  const navActive = state.screen === "top" ? "home" : "center";
-  const isTopStartMode = state.screen === "top" && !state.dutyStarted;
-  const showNormalHeader = state.screen !== "fare" && !isTopStartMode;
 
   return (
     <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
@@ -165,7 +158,7 @@ function TaxiMiniApp() {
         style={{ display: "none" }}
       />
 
-      <div className="w-full max-w-sm h-full pt-0 pb-0 relative overflow-hidden">
+      <div className="w-full max-w-sm h-full px-4 pt-4 pb-0 relative overflow-hidden">
         {state.showSaved && startupPhase === "done" && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-5 py-2.5 shadow-lg">
             保存しました
@@ -238,19 +231,13 @@ function TaxiMiniApp() {
         />
 
         <div
-          className="h-full flex flex-col overflow-hidden relative px-4"
+          className="h-full flex flex-col overflow-hidden relative"
           style={{
             paddingBottom: showBottomNav ? `${C.BOTTOM_NAV_HEIGHT + 8}px` : 0,
           }}
         >
-          {showNormalHeader && (
-            <div
-              className="-mx-4"
-              style={{
-                background: GREEN_MAIN,
-                ...(state.screen === "top" ? headerStyle : {}),
-              }}
-            >
+          {state.screen !== "fare" && (
+            <div style={headerStyle} onClick={actions.handleCardModeNext}>
               <HeaderCard
                 timeParts={derived.timeParts}
                 cardMode={state.cardMode}
@@ -268,24 +255,19 @@ function TaxiMiniApp() {
               topMainLabel={derived.topMainLabel}
               topMainButtonDisabled={derived.topMainButtonDisabled || startupLock}
               handleTopMain={actions.handleTopMain}
-              startupHeaderStyle={headerStyle}
               startupMainStyle={mainStyle}
               startupOtherStyle={otherStyle}
               homeEndSheetOpen={state.homeEndSheetOpen}
               toggleHomeEndSheet={actions.toggleHomeEndSheet}
               handleFinishTap={actions.handleFinishTap}
               dutyStarted={state.dutyStarted}
-              timeParts={derived.timeParts}
-              monthlyProgressAmount={derived.totalAmount}
-              monthlyProgressVisible={monthlyProgressVisible}
-              toggleMonthlyProgressVisible={() =>
-                setMonthlyProgressVisible((prev) => !prev)
-              }
             />
           )}
 
           {state.screen === "standby" && (
-            <StandbyScreen handleStartRide={actions.handleStartRide} />
+            <StandbyScreen
+              handleStartRide={actions.handleStartRide}
+            />
           )}
 
           {state.screen === "ride" && (
@@ -324,13 +306,9 @@ function TaxiMiniApp() {
             <BottomNav
               centerLabel={navCenterLabel}
               onHome={actions.goHome}
-              onCenter={
-                state.screen === "top"
-                  ? actions.openExpenseSoon
-                  : actions.openHistorySimple
-              }
+              onCenter={state.screen === "top" ? actions.openExpenseSoon : actions.openHistorySimple}
               onMenu={actions.openMenu}
-              active={navActive}
+              active={state.screen === "top" ? "home" : ""}
             />
           </div>
         )}

@@ -9,9 +9,6 @@ window.AppComponents = (() => {
   } = window.AppUtils;
   const C = window.AppConstants;
 
-  const NAV_BAND = "#32CD32";
-  const NAV_ACTIVE = "#33CC6D";
-
   function WeatherMiniPair({ weather }) {
     const base = new Date();
     const tomorrow = new Date();
@@ -225,119 +222,6 @@ window.AppComponents = (() => {
     );
   }
 
-  function HomeIconSvg({ color = "#ffffff" }) {
-    return (
-      <svg width="29" height="29" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-        <path
-          d="M11 29.5L32 12L53 29.5"
-          stroke={color}
-          strokeWidth="5.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M17.5 27.5V50.5C17.5 52.4 19.1 54 21 54H28.7V39.7C28.7 37.9 30.2 36.4 32 36.4C33.8 36.4 35.3 37.9 35.3 39.7V54H43C44.9 54 46.5 52.4 46.5 50.5V27.5"
-          fill={color}
-        />
-      </svg>
-    );
-  }
-
-  function MenuGridSvg({ color = "#ffffff" }) {
-    const dots = [
-      [13, 13],
-      [24, 13],
-      [35, 13],
-      [13, 24],
-      [24, 24],
-      [35, 24],
-      [13, 35],
-      [24, 35],
-      [35, 35],
-    ];
-    return (
-      <svg width="24" height="24" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-        {dots.map(([cx, cy]) => (
-          <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="3.2" fill={color} />
-        ))}
-      </svg>
-    );
-  }
-
-  function EyeIconSvg({ open = true }) {
-    return (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path
-          d="M2.1 12C4.1 8.6 7.8 6.4 12 6.4C16.2 6.4 19.9 8.6 21.9 12C19.9 15.4 16.2 17.6 12 17.6C7.8 17.6 4.1 15.4 2.1 12Z"
-          stroke="#ffffff"
-          strokeWidth="1.8"
-        />
-        <circle cx="12" cy="12" r="2.8" fill="#ffffff" />
-        {!open && (
-          <path
-            d="M4.2 19.2L19.8 4.8"
-            stroke="#ffffff"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          />
-        )}
-      </svg>
-    );
-  }
-
-  function StartHeader({
-    timeParts,
-    progressAmount,
-    progressVisible,
-    onToggleVisible,
-  }) {
-    const displayText = progressVisible
-      ? formatMoney(progressAmount || 0)
-      : "●●●,●●●円";
-
-    return (
-      <div className="h-[172px] px-4 pt-4 pb-3 shrink-0 overflow-hidden">
-        <div className="h-full flex flex-col">
-          <div className="flex items-start justify-end pt-[6px]">
-            <div className="text-right">
-              <div className="flex items-center justify-end text-[58px] leading-[0.9] font-black tracking-[-0.05em] text-white">
-                <span>{timeParts.hh}</span>
-                <span
-                  className={`${
-                    timeParts.showColon ? "opacity-100" : "opacity-0"
-                  } transition-opacity duration-150 mx-[-0.08em]`}
-                >
-                  ：
-                </span>
-                <span>{timeParts.mm}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-auto pb-[4px]">
-            <div className="text-[12px] leading-none font-semibold text-white/90">
-              当月達成売上
-            </div>
-            <div className="mt-[7px] flex items-center justify-between gap-2">
-              <div className="min-w-0 flex-1 text-[23px] leading-none font-black tracking-[-0.03em] text-white truncate">
-                {displayText}
-              </div>
-
-              <button
-                type="button"
-                onClick={onToggleVisible}
-                className="shrink-0 w-[28px] h-[28px] flex items-center justify-center rounded-full active:scale-[0.96]"
-                aria-label={progressVisible ? "金額を隠す" : "金額を表示"}
-              >
-                <EyeIconSvg open={progressVisible} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   function BottomNav({
     centerLabel,
     onHome,
@@ -345,74 +229,39 @@ window.AppComponents = (() => {
     onMenu,
     active = "home",
   }) {
-    const activeLeft =
-      active === "home" ? "16.6667%" : active === "center" ? "50%" : "83.3333%";
-
-    const iconColor = "#ffffff";
-    const textColor = "#ffffff";
+    const itemClass =
+      "flex-1 h-full flex flex-col items-center justify-center active:opacity-80";
+    const activeClass = "text-[#7abf5a]";
+    const baseClass = "text-slate-500";
 
     return (
-      <div className="h-full relative">
-        <div
-          className="absolute left-0 right-0 bottom-0 rounded-t-[24px]"
-          style={{
-            height: "60px",
-            background: NAV_BAND,
-          }}
-        />
-
-        <div
-          className="absolute top-[8px] w-[74px] h-[74px] rounded-full pointer-events-none"
-          style={{
-            left: activeLeft,
-            transform: "translateX(-50%)",
-            background: NAV_ACTIVE,
-          }}
-        />
-
-        <div className="absolute inset-0 grid grid-cols-3">
-          <button
-            type="button"
-            onClick={onHome}
-            className="relative active:opacity-90"
-            aria-label="ホーム"
-          >
-            <div className="absolute left-1/2 top-[33px] -translate-x-1/2 -translate-y-1/2">
-              <HomeIconSvg color={iconColor} />
-            </div>
+      <div className="h-full px-2">
+        <div className="h-full rounded-t-[22px] border-t border-slate-200 bg-white shadow-[0_-6px_14px_rgba(0,0,0,0.06)] flex items-stretch overflow-hidden">
+          <button type="button" onClick={onHome} className={itemClass}>
             <div
-              className="absolute left-1/2 -translate-x-1/2 text-[11px] leading-none font-bold whitespace-nowrap"
-              style={{ bottom: "12px", color: textColor }}
+              className={`text-[12px] font-bold ${
+                active === "home" ? activeClass : baseClass
+              }`}
             >
               ホーム
             </div>
           </button>
 
-          <button
-            type="button"
-            onClick={onCenter}
-            className="relative active:opacity-90"
-            aria-label={centerLabel}
-          >
-            <div className="absolute left-1/2 top-[33px] -translate-x-1/2 -translate-y-1/2">
-              <div className="text-[15px] leading-none font-bold tracking-[0.03em] text-white whitespace-nowrap">
-                {centerLabel}
-              </div>
+          <button type="button" onClick={onCenter} className={itemClass}>
+            <div
+              className={`text-[12px] font-bold ${
+                active === "center" ? activeClass : baseClass
+              }`}
+            >
+              {centerLabel}
             </div>
           </button>
 
-          <button
-            type="button"
-            onClick={onMenu}
-            className="relative active:opacity-90"
-            aria-label="メニュー"
-          >
-            <div className="absolute left-1/2 top-[33px] -translate-x-1/2 -translate-y-1/2">
-              <MenuGridSvg color={iconColor} />
-            </div>
+          <button type="button" onClick={onMenu} className={itemClass}>
             <div
-              className="absolute left-1/2 -translate-x-1/2 text-[11px] leading-none font-bold whitespace-nowrap"
-              style={{ bottom: "12px", color: textColor }}
+              className={`text-[12px] font-bold ${
+                active === "menu" ? activeClass : baseClass
+              }`}
             >
               メニュー
             </div>
@@ -641,6 +490,5 @@ window.AppComponents = (() => {
     PaymentDialog,
     ViaDialog,
     FinishDialog,
-    StartHeader,
   };
 })();

@@ -1,131 +1,59 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>UI確認</title>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Taxi App</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-<style>
-body { margin:0; background:#e5e7eb; }
-</style>
+  <style>
+    html,
+    body,
+    #root {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      touch-action: manipulation;
+      overscroll-behavior: none;
+      background: #e8edf4;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    input,
+    button,
+    textarea,
+    select {
+      font: inherit;
+    }
+  </style>
 </head>
-
 <body>
-<div id="root"></div>
+  <div id="root"></div>
 
-<script type="text/babel">
-
-const GREEN = "#32CD32";
-
-function App() {
-
-  return (
-    <div className="w-full h-screen flex justify-center">
-      
-      {/* 端末枠 */}
-      <div className="w-full max-w-sm h-full bg-gray-100 relative overflow-hidden">
-
-        {/* ===== 上部緑（フル幅） ===== */}
-        <div className="absolute top-0 left-0 right-0 bg-[#32CD32] h-[260px]"></div>
-
-        {/* ===== 上部コンテンツ ===== */}
-        <div className="relative px-4 pt-6">
-
-          {/* 時計 */}
-          <div className="flex justify-end text-white text-5xl font-black">
-            18：18
-          </div>
-
-          {/* 金額 */}
-          <div className="mt-4 text-white text-xl font-bold">
-            当月達成売上
-          </div>
-
-          <div className="flex justify-between items-center">
-            <div className="text-white text-2xl font-black">
-              12,345円
-            </div>
-            <div>👁</div>
-          </div>
-
-        </div>
-
-        {/* ===== 主ボタン ===== */}
-        <div className="relative px-4 mt-4">
-          <button className="w-full h-[80px] rounded-2xl bg-green-400 text-white text-2xl font-bold shadow-lg">
-            乗務開始
-          </button>
-        </div>
-
-        {/* ===== ①ライン（基準） ===== */}
-        <div className="absolute left-0 right-0 top-[330px] border-t-2 border-red-500"></div>
-
-        {/* ===== モックエリア ===== */}
-        <div className="absolute left-0 right-0 top-[330px] bottom-[120px] px-4 flex flex-col">
-
-          {/* 上段 */}
-          <div className="grid grid-cols-2 gap-3">
-            <MockCard/>
-            <MockCard/>
-          </div>
-
-          {/* 可変余白（吸収エリア） */}
-          <div className="flex-1"></div>
-
-          {/* 下段 */}
-          <div className="grid grid-cols-2 gap-3">
-            <MockCard/>
-            <MockCard/>
-          </div>
-
-        </div>
-
-        {/* ===== ▲（吸収エリア直下） ===== */}
-        <div className="absolute bottom-[90px] left-0 right-0 flex justify-center">
-          <div className="text-gray-400 text-3xl">▲</div>
-        </div>
-
-        {/* ===== 下ナビ ===== */}
-        <div className="absolute bottom-0 left-0 right-0 h-[80px] bg-[#32CD32] flex justify-around items-center">
-
-          <NavItem label="ホーム" active/>
-          <NavItem label="経費"/>
-          <NavItem label="メニュー"/>
-
-        </div>
-
-      </div>
-    </div>
-  );
-}
-
-function MockCard(){
-  return (
-    <div className="h-[110px] bg-gray-200 rounded-2xl p-3">
-      <div className="text-gray-600 font-bold">売上</div>
-      <div className="text-gray-400 text-sm">グラフ</div>
-    </div>
-  );
-}
-
-function NavItem({label, active}) {
-  return (
-    <div className="flex flex-col items-center">
-      <div className={`w-12 h-12 rounded-full ${active ? 'bg-[#33CC6D]' : ''} flex items-center justify-center`}>
-        ●
-      </div>
-      <div className="text-white text-xs mt-1">{label}</div>
-    </div>
-  );
-}
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
-
-</script>
+  <script type="text/babel" data-presets="env,react" src="./constants.js?v=20260408-navfix-1"></script>
+  <script type="text/babel" data-presets="env,react" src="./utils.js?v=20260408-navfix-1"></script>
+  <script type="text/babel" data-presets="env,react" src="./geo.js?v=20260408-navfix-1"></script>
+  <script type="text/babel" data-presets="env,react" src="./components.js?v=20260408-navfix-1"></script>
+  <script type="text/babel" data-presets="env,react" src="./useTaxiAppState.js?v=20260408-navfix-1"></script>
+  <script type="text/babel" data-presets="env,react" src="./TopScreen.js?v=20260408-navfix-1"></script>
+  <script type="text/babel" data-presets="env,react" src="./StandbyScreen.js?v=20260408-navfix-1"></script>
+  <script type="text/babel" data-presets="env,react" src="./RideScreen.js?v=20260408-navfix-1"></script>
+  <script type="text/babel" data-presets="env,react" src="./FareScreen.js?v=20260408-navfix-1"></script>
+  <script type="text/babel" data-presets="env,react" src="./FinishCheckScreen.js?v=20260408-navfix-1"></script>
+  <script type="text/babel" data-presets="env,react" src="./HistoryModal.js?v=20260408-navfix-1"></script>
+  <script type="text/babel" data-presets="env,react" src="./TaxiMiniApp.js?v=20260408-navfix-1"></script>
 </body>
 </html>
