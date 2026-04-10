@@ -1,27 +1,27 @@
+window.TopScreen = ({ onAdvance }) => {
+  const { StartHeader, MainButton, TopGraphArea, BottomNav } = window.__AppShared;
 
-function TopScreen({ onNext }) {
   return (
-    <div className="w-full h-screen flex flex-col items-center">
+    <>
+      <div className="absolute inset-x-0 top-0 h-[100dvh] bg-[#dfe5ee] overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-[346px] bg-[#32CD32]" />
 
-      <div className="w-full bg-green-500 text-white p-6">
-        <div className="text-4xl text-right">05:45</div>
-        <div className="mt-2">当月達成売上</div>
-        <div className="text-2xl">¥0</div>
+        <div className="relative px-5 pt-0 h-full">
+          <StartHeader time="05：45" amount="¥0" />
+
+          <div className="absolute left-5 right-5 top-[260px]">
+            <MainButton label="乗務開始" variant="start" onClick={onAdvance} />
+          </div>
+
+          <div className="absolute left-5 right-5 top-[406px] bottom-[142px] overflow-hidden">
+            <TopGraphArea />
+          </div>
+
+          <div className="absolute right-[26px] bottom-[118px] text-[28px] font-black text-[#a7adb7] leading-none">▲</div>
+        </div>
+
+        <BottomNav center="経費" active="home" />
       </div>
-
-      <button onClick={onNext}
-        className="mt-[-30px] w-[90%] bg-green-400 text-white py-6 rounded-2xl text-xl shadow-lg">
-        乗務開始
-      </button>
-
-      <div className="mt-10 grid grid-cols-2 gap-4 w-[90%]">
-        <div className="bg-gray-200 p-6 rounded-xl">売上</div>
-        <div className="bg-gray-200 p-6 rounded-xl">本数</div>
-        <div className="bg-gray-200 p-6 rounded-xl">時間帯</div>
-        <div className="bg-gray-200 p-6 rounded-xl">分析</div>
-      </div>
-
-      <BottomNav />
-    </div>
+    </>
   );
-}
+};
