@@ -66,24 +66,27 @@ window.AppScreens.TopScreen = (() => {
           </div>
         </div>
 
-        <div
-          className="pt-4 shrink-0"
-          style={{ height: `${C.SHARED_INFO_SLOT_HEIGHT}px` }}
-        >
-          <div className="h-full rounded-[28px] opacity-0 pointer-events-none" />
-        </div>
-
-        <div
-          className="pt-4 flex-1 min-h-0 overflow-hidden relative"
-          style={startupOtherStyle || undefined}
-        >
-          <HomeGraphCards />
+        <div className="flex-1 min-h-0 relative" style={startupOtherStyle || undefined}>
+          {!homeEndSheetOpen && (
+            <div
+              className="absolute inset-x-0 top-0 overflow-y-auto"
+              style={{
+                bottom: "86px",
+                WebkitOverflowScrolling: "touch",
+                overscrollBehavior: "contain",
+              }}
+            >
+              <div className="pt-0">
+                <HomeGraphCards />
+              </div>
+            </div>
+          )}
 
           <div
             className="absolute z-20"
             style={{
-              right: "18px",
-              bottom: "8px",
+              right: "22px",
+              bottom: "94px",
             }}
           >
             <button
