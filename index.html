@@ -66,17 +66,18 @@
       shellW: 430,
       navH: 112,
 
-      // 採用済み固定値
       side: 20,
-      line1ClockTop: 40,
-      line2HeaderBottom: 202,
-      line3ButtonTop: 252,
-      line4ButtonBottom: 394,
-      line5GreenBottom: 419,
-      line6ContentTop: 444,
 
-      headerH: 182,
+      line1ClockTop: 40,
+      line2HeaderBottom: 180,
+      line3ButtonTop: 196,
+      line4ButtonBottom: 338,
+      line5GreenBottom: 346,
+      line6ContentTop: 354,
+
+      headerH: 180,
       buttonH: 142,
+      gap: 16,
       contentPlaceholderH: 124,
     };
 
@@ -189,7 +190,9 @@
               </div>
             </div>
           ) : (
-            <div className="relative h-full rounded-[34px] bg-[#f8fafc] shadow-[0_8px_22px_rgba(0,0,0,0.08)] px-5 pt-5 pb-4">
+            <div
+              className="relative h-full rounded-[34px] bg-[#f8fafc] shadow-[0_8px_22px_rgba(0,0,0,0.08)] px-5 pt-5 pb-4"
+            >
               <div className="absolute left-5 top-5">
                 <WeatherBlock />
               </div>
