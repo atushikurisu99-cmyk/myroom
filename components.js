@@ -41,38 +41,23 @@ window.AppComponents = (() => {
     );
   }
 
-  function WhiteHeaderCard({ time = '05：45' }) {
+  function WhiteHeaderCardBody() {
     return (
-      <div className="rounded-[34px] bg-[#f8fafc] shadow-[0_8px_22px_rgba(0,0,0,0.08)] px-5 pt-5 pb-4 h-[182px]">
-        <div className="flex justify-between items-start gap-4">
-          <WeatherBlock />
-          <Clock time={time} dark={true} />
-        </div>
-
-        <div className="mt-10">
-          <div className="text-[14px] font-semibold text-[#6e7a93]">今日のペース</div>
-          <div className="mt-1 text-[16px] font-bold text-[#28a26b] leading-none">良好</div>
-        </div>
-      </div>
+      <>
+        <div className="text-[14px] font-semibold text-[#6e7a93]">今日のペース</div>
+        <div className="mt-1 text-[16px] font-bold text-[#28a26b] leading-none">良好</div>
+      </>
     );
   }
 
-  function TopHeaderCard({ time = '05：45', amount = '¥0' }) {
+  function TopHeaderBody({ amount = '¥0' }) {
     return (
-      <div className="h-[182px] px-5 pt-5 pb-4">
-        <div className="flex justify-between items-start gap-4">
-          <WeatherBlock hidden={true} />
-          <Clock time={time} dark={false} />
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="text-[15px] font-semibold text-white leading-none">当月達成売上</div>
+          <div className="mt-3 text-[26px] font-black text-white leading-none">{amount}</div>
         </div>
-
-        <div className="mt-10 flex items-start justify-between gap-3">
-          <div>
-            <div className="text-[15px] font-semibold text-white leading-none">当月達成売上</div>
-            <div className="mt-3 text-[26px] font-black text-white leading-none">{amount}</div>
-          </div>
-
-          <div className="pt-[18px] text-[30px] leading-none text-white">◉</div>
-        </div>
+        <div className="pt-[18px] text-[30px] leading-none text-white">◉</div>
       </div>
     );
   }
@@ -90,8 +75,8 @@ window.AppComponents = (() => {
       <button
         type="button"
         onClick={onClick}
-        className="relative w-full h-[142px] rounded-[32px] shadow-[0_10px_22px_rgba(0,0,0,0.14)] overflow-hidden"
-        style={{ background: bg }}
+        className="relative w-full rounded-[32px] shadow-[0_10px_22px_rgba(0,0,0,0.14)] overflow-hidden"
+        style={{ height: `${L.BUTTON_H}px`, background: bg }}
       >
         <div className="absolute left-[18px] right-[18px] top-[10px] h-[54px] rounded-[28px] bg-[rgba(255,255,255,0.28)]" />
         <div className="absolute inset-0 flex items-center justify-center text-white text-[34px] font-black tracking-[-0.03em]">
@@ -253,6 +238,54 @@ window.AppComponents = (() => {
     );
   }
 
+  function HeaderZone({ screen = 'top', time = '05：45', amount = '¥0' }) {
+    const darkClock = screen !== 'top';
+
+    return (
+      <div
+        className="absolute"
+        style={{
+          left: `${L.SIDE}px`,
+          right: `${L.SIDE}px`,
+          top: `${L.LINE_2_HEADER_BOTTOM - L.HEADER_H}px`,
+          height: `${L.HEADER_H}px`,
+        }}
+      >
+        {screen === 'top' ? (
+          <div className="relative h-full">
+            <div className="absolute left-0 top-0">
+              <WeatherBlock hidden={true} />
+            </div>
+
+            <div className="absolute left-0 right-0 bottom-0">
+              <TopHeaderBody amount={amount} />
+            </div>
+          </div>
+        ) : (
+          <div className="relative h-full rounded-[34px] bg-[#f8fafc] shadow-[0_8px_22px_rgba(0,0,0,0.08)] px-5 pt-5 pb-4">
+            <div className="absolute left-5 top-5">
+              <WeatherBlock />
+            </div>
+
+            <div className="absolute left-5 right-5 bottom-4">
+              <WhiteHeaderCardBody />
+            </div>
+          </div>
+        )}
+
+        <div
+          className="absolute"
+          style={{
+            top: `${L.LINE_1_CLOCK_TOP - (L.LINE_2_HEADER_BOTTOM - L.HEADER_H)}px`,
+            right: '0px',
+          }}
+        >
+          <Clock time={time} dark={darkClock} />
+        </div>
+      </div>
+    );
+  }
+
   function FixedTopLayout({
     screen = 'top',
     time = '05：45',
@@ -272,58 +305,40 @@ window.AppComponents = (() => {
           style={{ height: `${L.LINE_5_GREEN_BOTTOM}px` }}
         />
 
-        <div className="relative h-full" style={{ paddingBottom: `${C.NAV_H}px` }}>
-          <div
-            className="absolute"
-            style={{
-              left: `${L.SIDE}px`,
-              right: `${L.SIDE}px`,
-              top: `${L.HEADER_TOP}px`,
-              height: `${L.HEADER_H}px`,
-            }}
-          >
-            {screen === 'top' ? (
-              <TopHeaderCard time={time} amount={amount} />
-            ) : (
-              <WhiteHeaderCard time={time} />
-            )}
-          </div>
+        <HeaderZone screen={screen} time={time} amount={amount} />
 
-          <div
-            className="absolute"
-            style={{
-              left: `${L.SIDE}px`,
-              right: `${L.SIDE}px`,
-              top: `${L.LINE_3_BUTTON_TOP}px`,
-              height: `${L.BUTTON_H}px`,
-            }}
-          >
-            <MainButton
-              label={buttonLabel}
-              variant={buttonVariant}
-              onClick={onAdvance}
-            />
-          </div>
-
-          <div
-            className="absolute"
-            style={{
-              left: `${L.SIDE}px`,
-              right: `${L.SIDE}px`,
-              top: `${L.LINE_6_CONTENT_TOP}px`,
-              bottom: `${C.NAV_H + 20}px`,
-              overflow: 'hidden',
-            }}
-          >
-            {content}
-          </div>
-
-          {showArrow ? (
-            <div className="absolute right-[26px] bottom-[118px] text-[28px] font-black text-[#a7adb7] leading-none">
-              ▲
-            </div>
-          ) : null}
+        <div
+          className="absolute"
+          style={{
+            left: `${L.SIDE}px`,
+            right: `${L.SIDE}px`,
+            top: `${L.LINE_3_BUTTON_TOP}px`,
+            height: `${L.BUTTON_H}px`,
+          }}
+        >
+          <MainButton
+            label={buttonLabel}
+            variant={buttonVariant}
+            onClick={onAdvance}
+          />
         </div>
+
+        <div
+          className="absolute"
+          style={{
+            left: `${L.SIDE}px`,
+            right: `${L.SIDE}px`,
+            top: `${L.LINE_6_CONTENT_TOP}px`,
+          }}
+        >
+          {content}
+        </div>
+
+        {showArrow ? (
+          <div className="absolute right-[26px] bottom-[118px] text-[28px] font-black text-[#a7adb7] leading-none">
+            ▲
+          </div>
+        ) : null}
 
         <BottomNav center={bottomNavCenter} active={bottomNavActive} />
       </div>
@@ -333,8 +348,7 @@ window.AppComponents = (() => {
   window.__AppShared = {
     Shell,
     Clock,
-    WhiteHeaderCard,
-    TopHeaderCard,
+    WeatherBlock,
     MainButton,
     TopGraphArea,
     RideInfoCard,
