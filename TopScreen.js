@@ -3,11 +3,16 @@ window.TopScreen = ({ onAdvance }) => {
 
   return (
     <FixedTopLayout
-      type="top"
+      screen="top"
+      time="05：45"
+      amount="¥0"
       buttonLabel="乗務開始"
-      onClick={onAdvance}
-    >
-      <TopGraphArea />
-    </FixedTopLayout>
+      buttonVariant="start"
+      onAdvance={onAdvance}
+      bottomNavCenter="経費"
+      bottomNavActive="home"
+      showArrow={true}
+      content={<TopGraphArea />}
+    />
   );
 };
