@@ -3,11 +3,14 @@ window.RideScreen = ({ onAdvance }) => {
 
   return (
     <FixedTopLayout
-      type="ride"
+      screen="ride"
+      time="05：45"
       buttonLabel="降車"
-      onClick={onAdvance}
-    >
-      <RideInfoCard />
-    </FixedTopLayout>
+      buttonVariant="ride"
+      onAdvance={onAdvance}
+      bottomNavCenter="履歴"
+      bottomNavActive="center"
+      content={<RideInfoCard />}
+    />
   );
 };
