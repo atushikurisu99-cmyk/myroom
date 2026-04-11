@@ -12,11 +12,6 @@ window.AppConstants = {
 
   TOP_LAYOUT: {
     SIDE: 20,
-    CLOCK_TOP: 40,
-    HEADER_TOP: 20,
-    HEADER_H: 182,
-    GAP: 50,
-    BUTTON_H: 142,
 
     LINE_1_CLOCK_TOP: 40,
     LINE_2_HEADER_BOTTOM: 202,
@@ -24,5 +19,9 @@ window.AppConstants = {
     LINE_4_BUTTON_BOTTOM: 394,
     LINE_5_GREEN_BOTTOM: 419,
     LINE_6_CONTENT_TOP: 444,
+
+    HEADER_H: 182,
+    BUTTON_H: 142,
+    GAP: 50,
   },
 };
