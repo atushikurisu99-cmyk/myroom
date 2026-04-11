@@ -1,14 +1,16 @@
-
 const { useState } = React;
 
 function TaxiMiniApp() {
-  const [screen, setScreen] = useState("top");
+  const { Shell } = window.__AppShared;
+  const [screen, setScreen] = useState('top');
 
-  if (screen === "top") return <TopScreen onNext={()=>setScreen("standby")} />;
-  if (screen === "standby") return <StandbyScreen onNext={()=>setScreen("ride")} />;
-  if (screen === "ride") return <RideScreen onNext={()=>setScreen("top")} />;
-
-  return null;
+  return (
+    <Shell>
+      {screen === 'top' && <TopScreen onAdvance={() => setScreen('standby')} />}
+      {screen === 'standby' && <StandbyScreen onAdvance={() => setScreen('ride')} />}
+      {screen === 'ride' && <RideScreen onAdvance={() => setScreen('fare')} />}
+    </Shell>
+  );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<TaxiMiniApp />);
+ReactDOM.createRoot(document.getElementById('root')).render(<TaxiMiniApp />);
