@@ -3,11 +3,14 @@ window.StandbyScreen = ({ onAdvance }) => {
 
   return (
     <FixedTopLayout
-      type="standby"
+      screen="standby"
+      time="05：45"
       buttonLabel="実車"
-      onClick={onAdvance}
-    >
-      <div />
-    </FixedTopLayout>
+      buttonVariant="standby"
+      onAdvance={onAdvance}
+      bottomNavCenter="履歴"
+      bottomNavActive="center"
+      content={<div />}
+    />
   );
 };
