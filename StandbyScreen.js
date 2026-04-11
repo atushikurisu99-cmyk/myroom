@@ -10,7 +10,7 @@ window.StandbyScreen = ({ onAdvance }) => {
       onAdvance={onAdvance}
       bottomNavCenter="履歴"
       bottomNavActive="center"
-      content={<div />}
+      content={<div style={{ height: '124px' }} />}
     />
   );
 };
