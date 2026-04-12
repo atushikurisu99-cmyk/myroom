@@ -67,7 +67,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useEffect, useMemo, useState } = React;
+    const { useEffect, useMemo, useRef, useState } = React;
 
     const COLORS = {
       bg: "#dfe5ee",
@@ -88,7 +88,6 @@
 
       side: 20,
 
-      // 確定済みライン
       line1ClockTop: 40,
       line2HeaderBottom: 180,
       line3ButtonTop: 196,
@@ -100,12 +99,11 @@
       buttonH: 142,
       contentPlaceholderH: 124,
 
-      // 上カード内部
       headerInnerX: 16,
       topBandTop: 40,
-      topBandH: 68,
       lowerBandTop: 118,
       lowerBandH: 50,
+
       weatherCol2Left: "10%",
       weatherCol3Left: "20%",
       dotCol4RightAnchor: "40%",
@@ -116,7 +114,7 @@
       return Number(value || 0).toLocaleString("ja-JP");
     }
 
-    function Clock({ color = "#1f2a44" }) {
+    function Clock({ color = "#1f2a44", measureRef = null }) {
       const [now, setNow] = useState(new Date());
 
       useEffect(() => {
@@ -129,6 +127,7 @@
 
       return (
         <div
+          ref={measureRef}
           className="num-bold leading-none tracking-[-0.05em]"
           style={{ color, fontSize: "68px" }}
         >
@@ -178,20 +177,21 @@
       );
     }
 
-    function WeatherMini({ day, icon, left }) {
+    function WeatherMini({ day, icon, left, bandTop, bandHeight }) {
       return (
         <div
-          className="absolute"
+          className="absolute flex flex-col justify-between"
           style={{
             left,
-            top: `${LAYOUT.topBandTop + 4}px`,
+            top: `${bandTop}px`,
+            height: `${bandHeight}px`,
             width: "10%",
           }}
         >
           <div className="text-[11px] font-semibold text-[#7a869f] leading-none">
             {day}
           </div>
-          <div className="mt-[6px] text-[22px] leading-none">{icon}</div>
+          <div className="text-[22px] leading-none">{icon}</div>
         </div>
       );
     }
@@ -208,7 +208,7 @@
         whiteSpace: "nowrap",
       };
 
-      const mainMoneyWrapStyle = {
+      const moneyWrapStyle = {
         position: "absolute",
         left: `${LAYOUT.headerInnerX}px`,
         right: `${LAYOUT.headerInnerX}px`,
@@ -216,7 +216,7 @@
         height: "26px",
       };
 
-      const mainMoneyDigitsStyle = {
+      const digitsStyle = {
         position: "absolute",
         right: "18px",
         bottom: "0px",
@@ -225,7 +225,7 @@
         lineHeight: "1",
       };
 
-      const mainMoneyYenStyle = {
+      const yenStyle = {
         position: "absolute",
         right: "0px",
         bottom: "1px",
@@ -240,11 +240,11 @@
         return (
           <>
             <div style={labelStyle}>合計</div>
-            <div style={mainMoneyWrapStyle}>
-              <div className="num-bold" style={mainMoneyDigitsStyle}>
+            <div style={moneyWrapStyle}>
+              <div className="num-bold" style={digitsStyle}>
                 {formatMoneyNoYen(data.total)}
               </div>
-              <div style={mainMoneyYenStyle}>円</div>
+              <div style={yenStyle}>円</div>
             </div>
           </>
         );
@@ -254,11 +254,11 @@
         return (
           <>
             <div style={labelStyle}>①</div>
-            <div style={mainMoneyWrapStyle}>
-              <div className="num-bold" style={mainMoneyDigitsStyle}>
+            <div style={moneyWrapStyle}>
+              <div className="num-bold" style={digitsStyle}>
                 {formatMoneyNoYen(data.one)}
               </div>
-              <div style={mainMoneyYenStyle}>円</div>
+              <div style={yenStyle}>円</div>
             </div>
           </>
         );
@@ -268,11 +268,11 @@
         return (
           <>
             <div style={labelStyle}>②</div>
-            <div style={mainMoneyWrapStyle}>
-              <div className="num-bold" style={mainMoneyDigitsStyle}>
+            <div style={moneyWrapStyle}>
+              <div className="num-bold" style={digitsStyle}>
                 {formatMoneyNoYen(data.two)}
               </div>
-              <div style={mainMoneyYenStyle}>円</div>
+              <div style={yenStyle}>円</div>
             </div>
           </>
         );
@@ -320,6 +320,27 @@
     }
 
     function StateCard({ mode, onTap, data }) {
+      const clockRef = useRef(null);
+      const [clockBand, setClockBand] = useState({
+        top: LAYOUT.topBandTop,
+        height: 68,
+      });
+
+      useEffect(() => {
+        const updateBand = () => {
+          if (!clockRef.current) return;
+          const h = Math.ceil(clockRef.current.getBoundingClientRect().height);
+          setClockBand({
+            top: LAYOUT.topBandTop,
+            height: h,
+          });
+        };
+
+        updateBand();
+        window.addEventListener("resize", updateBand);
+        return () => window.removeEventListener("resize", updateBand);
+      }, []);
+
       return (
         <button
           type="button"
@@ -331,12 +352,24 @@
           <div
             className="absolute inset-x-0"
             style={{
-              top: `${LAYOUT.topBandTop}px`,
-              height: `${LAYOUT.topBandH}px`,
+              top: `${clockBand.top}px`,
+              height: `${clockBand.height}px`,
             }}
           >
-            <WeatherMini day="4/11" icon="🌞" left={LAYOUT.weatherCol2Left} />
-            <WeatherMini day="4/12" icon="🌤️" left={LAYOUT.weatherCol3Left} />
+            <WeatherMini
+              day="4/11"
+              icon="🌞"
+              left={LAYOUT.weatherCol2Left}
+              bandTop={0}
+              bandHeight={clockBand.height}
+            />
+            <WeatherMini
+              day="4/12"
+              icon="🌤️"
+              left={LAYOUT.weatherCol3Left}
+              bandTop={0}
+              bandHeight={clockBand.height}
+            />
 
             <div
               className="absolute"
@@ -345,7 +378,7 @@
                 right: `${LAYOUT.clockRight}px`,
               }}
             >
-              <Clock color={COLORS.text} />
+              <Clock color={COLORS.text} measureRef={clockRef} />
             </div>
           </div>
 
@@ -462,7 +495,7 @@
               <Clock color="#ffffff" />
             </div>
 
-            <TopHeaderMoney value={0} />
+            <TopHeaderMoney value={1000000} />
           </div>
         </div>
       );
