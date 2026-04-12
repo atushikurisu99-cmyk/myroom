@@ -108,10 +108,11 @@
 
       weatherDayFont: 11,
       weatherIconSize: 22,
+      weatherGap: 3,
 
+      weatherColumn2Center: 20,
+      weatherColumn3Center: 30,
       weatherSetWidth: 34,
-      weatherDayBoxH: 12,
-      weatherGap: 4,
     };
 
     function formatMoneyNoYen(value) {
@@ -227,57 +228,76 @@
       );
     }
 
-    function WeatherSet({ day, variant, centerX, bandHeight }) {
-      const totalH =
-        LAYOUT.weatherDayBoxH + LAYOUT.weatherGap + LAYOUT.weatherIconSize;
-      const topInset = Math.max(0, Math.floor((bandHeight - totalH) / 2));
+    function WeatherRail({ bandHeight }) {
+      const dayLineHeight = 12;
+      const totalHeight =
+        dayLineHeight + LAYOUT.weatherGap + LAYOUT.weatherIconSize;
+      const topInset = Math.max(0, Math.floor((bandHeight - totalHeight) / 2));
 
-      return (
-        <div
-          className="absolute overflow-hidden"
-          style={{
-            left: `calc(${centerX}% - ${LAYOUT.weatherSetWidth / 2}px)`,
-            top: "0px",
-            width: `${LAYOUT.weatherSetWidth}px`,
-            height: `${bandHeight}px`,
-          }}
-        >
-          <div className="relative w-full h-full overflow-hidden">
-            <div
-              className="absolute left-0 right-0 overflow-hidden text-center"
-              style={{
-                top: `${topInset}px`,
-                height: `${LAYOUT.weatherDayBoxH}px`,
-                lineHeight: `${LAYOUT.weatherDayBoxH}px`,
-              }}
-            >
-              <span
-                className="font-semibold text-[#7a869f]"
+      function WeatherSet({ day, variant, centerPercent }) {
+        return (
+          <div
+            className="absolute"
+            style={{
+              left: `calc(${centerPercent}% - ${LAYOUT.weatherSetWidth / 2}px)`,
+              top: "0px",
+              width: `${LAYOUT.weatherSetWidth}px`,
+              height: `${bandHeight}px`,
+              overflow: "hidden",
+            }}
+          >
+            <div className="relative w-full h-full overflow-hidden">
+              <div
+                className="absolute inset-x-0 text-center overflow-hidden"
                 style={{
-                  fontSize: `${LAYOUT.weatherDayFont}px`,
-                  lineHeight: `${LAYOUT.weatherDayBoxH}px`,
-                  whiteSpace: "nowrap",
+                  top: `${topInset}px`,
+                  height: `${dayLineHeight}px`,
+                  lineHeight: `${dayLineHeight}px`,
                 }}
               >
-                {day}
-              </span>
-            </div>
+                <span
+                  className="font-semibold text-[#7a869f]"
+                  style={{
+                    fontSize: `${LAYOUT.weatherDayFont}px`,
+                    lineHeight: `${dayLineHeight}px`,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {day}
+                </span>
+              </div>
 
-            <div
-              className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden"
-              style={{
-                top: `${topInset + LAYOUT.weatherDayBoxH + LAYOUT.weatherGap}px`,
-                width: `${LAYOUT.weatherIconSize}px`,
-                height: `${LAYOUT.weatherIconSize}px`,
-              }}
-            >
-              {variant === "sun" ? (
-                <SunWeatherIcon size={LAYOUT.weatherIconSize} />
-              ) : (
-                <PartlyCloudyWeatherIcon size={LAYOUT.weatherIconSize} />
-              )}
+              <div
+                className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden"
+                style={{
+                  top: `${topInset + dayLineHeight + LAYOUT.weatherGap}px`,
+                  width: `${LAYOUT.weatherIconSize}px`,
+                  height: `${LAYOUT.weatherIconSize}px`,
+                }}
+              >
+                {variant === "sun" ? (
+                  <SunWeatherIcon size={LAYOUT.weatherIconSize} />
+                ) : (
+                  <PartlyCloudyWeatherIcon size={LAYOUT.weatherIconSize} />
+                )}
+              </div>
             </div>
           </div>
+        );
+      }
+
+      return (
+        <div className="absolute inset-0 overflow-hidden">
+          <WeatherSet
+            day="4/11"
+            variant="sun"
+            centerPercent={LAYOUT.weatherColumn2Center}
+          />
+          <WeatherSet
+            day="4/12"
+            variant="partly"
+            centerPercent={LAYOUT.weatherColumn3Center}
+          />
         </div>
       );
     }
@@ -436,18 +456,7 @@
               height: `${clockBand.height}px`,
             }}
           >
-            <WeatherSet
-              day="4/11"
-              variant="sun"
-              centerX={20}
-              bandHeight={clockBand.height}
-            />
-            <WeatherSet
-              day="4/12"
-              variant="partly"
-              centerX={30}
-              bandHeight={clockBand.height}
-            />
+            <WeatherRail bandHeight={clockBand.height} />
 
             <div
               className="absolute"
