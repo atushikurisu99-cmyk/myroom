@@ -100,8 +100,6 @@
       lowerBandTop: 118,
       lowerBandH: 50,
 
-      weatherCol2Left: "10%",
-      weatherCol3Left: "20%",
       clockRight: 12,
 
       switchLabelTop: 8,
@@ -111,11 +109,9 @@
       weatherDayFont: 11,
       weatherIconSize: 22,
 
-      weatherDayBoxTop: 0,
-      weatherDayBoxH: 13,
-      weatherDayTextShiftY: 1,
-
-      weatherIconBottom: 0,
+      weatherSetWidth: 34,
+      weatherDayBoxH: 12,
+      weatherGap: 4,
     };
 
     function formatMoneyNoYen(value) {
@@ -231,44 +227,46 @@
       );
     }
 
-    function WeatherMini({ day, variant, left, bandTop, bandHeight }) {
+    function WeatherSet({ day, variant, centerX, bandHeight }) {
+      const totalH =
+        LAYOUT.weatherDayBoxH + LAYOUT.weatherGap + LAYOUT.weatherIconSize;
+      const topInset = Math.max(0, Math.floor((bandHeight - totalH) / 2));
+
       return (
         <div
-          className="absolute"
+          className="absolute overflow-hidden"
           style={{
-            left,
-            top: `${bandTop}px`,
+            left: `calc(${centerX}% - ${LAYOUT.weatherSetWidth / 2}px)`,
+            top: "0px",
+            width: `${LAYOUT.weatherSetWidth}px`,
             height: `${bandHeight}px`,
-            width: "10%",
-            overflow: "hidden",
           }}
         >
           <div className="relative w-full h-full overflow-hidden">
             <div
-              className="absolute left-0 right-0 overflow-hidden"
+              className="absolute left-0 right-0 overflow-hidden text-center"
               style={{
-                top: `${LAYOUT.weatherDayBoxTop}px`,
+                top: `${topInset}px`,
                 height: `${LAYOUT.weatherDayBoxH}px`,
                 lineHeight: `${LAYOUT.weatherDayBoxH}px`,
               }}
             >
-              <div
+              <span
                 className="font-semibold text-[#7a869f]"
                 style={{
                   fontSize: `${LAYOUT.weatherDayFont}px`,
-                  lineHeight: `${LAYOUT.weatherDayFont}px`,
-                  transform: `translateY(${LAYOUT.weatherDayTextShiftY}px)`,
+                  lineHeight: `${LAYOUT.weatherDayBoxH}px`,
                   whiteSpace: "nowrap",
                 }}
               >
                 {day}
-              </div>
+              </span>
             </div>
 
             <div
-              className="absolute left-0 flex items-end overflow-hidden"
+              className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden"
               style={{
-                bottom: `${LAYOUT.weatherIconBottom}px`,
+                top: `${topInset + LAYOUT.weatherDayBoxH + LAYOUT.weatherGap}px`,
                 width: `${LAYOUT.weatherIconSize}px`,
                 height: `${LAYOUT.weatherIconSize}px`,
               }}
@@ -438,18 +436,16 @@
               height: `${clockBand.height}px`,
             }}
           >
-            <WeatherMini
+            <WeatherSet
               day="4/11"
               variant="sun"
-              left={LAYOUT.weatherCol2Left}
-              bandTop={0}
+              centerX={20}
               bandHeight={clockBand.height}
             />
-            <WeatherMini
+            <WeatherSet
               day="4/12"
               variant="partly"
-              left={LAYOUT.weatherCol3Left}
-              bandTop={0}
+              centerX={30}
               bandHeight={clockBand.height}
             />
 
