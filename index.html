@@ -14,18 +14,6 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
-    @font-face {
-      font-family: "DroidSans";
-      src: url("./DroidSans.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "DroidSansBold";
-      src: url("./DroidSans-Bold.ttf") format("truetype");
-      font-display: swap;
-    }
-
     html,
     body,
     #root {
@@ -34,8 +22,16 @@
       height: 100%;
       overflow: hidden;
       background: #dfe5ee;
-      font-family: "DroidSans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-        "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        "Hiragino Sans",
+        "Hiragino Kaku Gothic ProN",
+        "Yu Gothic",
+        Meiryo,
+        sans-serif;
     }
 
     * {
@@ -49,8 +45,9 @@
     }
 
     .num-bold {
-      font-family: "DroidSansBold", "DroidSans", sans-serif;
+      font-weight: 700;
       font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
     }
 
     .hide-scrollbar {
@@ -88,6 +85,7 @@
 
       side: 20,
 
+      // 確定済み縦ライン
       line1ClockTop: 40,
       line2HeaderBottom: 180,
       line3ButtonTop: 196,
@@ -99,15 +97,21 @@
       buttonH: 142,
       contentPlaceholderH: 124,
 
+      // 上カード内部
       headerInnerX: 16,
       topBandTop: 40,
       lowerBandTop: 118,
       lowerBandH: 50,
 
+      // 横ルール
       weatherCol2Left: "10%",
       weatherCol3Left: "20%",
-      dotCol4RightAnchor: "40%",
       clockRight: 12,
+
+      // 下段切替帯
+      switchLabelTop: 8,
+      switchMainBottom: 4,
+      paceDotSize: 10,
     };
 
     function formatMoneyNoYen(value) {
@@ -200,7 +204,7 @@
       const labelStyle = {
         position: "absolute",
         left: `${LAYOUT.headerInnerX}px`,
-        top: "8px",
+        top: `${LAYOUT.switchLabelTop}px`,
         fontSize: "13px",
         lineHeight: "1",
         color: COLORS.sub,
@@ -212,7 +216,7 @@
         position: "absolute",
         left: `${LAYOUT.headerInnerX}px`,
         right: `${LAYOUT.headerInnerX}px`,
-        bottom: "4px",
+        bottom: `${LAYOUT.switchMainBottom}px`,
         height: "26px",
       };
 
@@ -223,6 +227,7 @@
         fontSize: "26px",
         color: COLORS.text,
         lineHeight: "1",
+        whiteSpace: "nowrap",
       };
 
       const yenStyle = {
@@ -280,22 +285,15 @@
 
       return (
         <>
-          <div
-            style={{
-              ...labelStyle,
-              left: `${LAYOUT.headerInnerX}px`,
-            }}
-          >
-            今日のペース
-          </div>
+          <div style={labelStyle}>今日のペース</div>
 
           <div
             style={{
               position: "absolute",
-              top: "10px",
-              right: LAYOUT.dotCol4RightAnchor,
-              width: "10px",
-              height: "10px",
+              left: `${LAYOUT.headerInnerX}px`,
+              bottom: "9px",
+              width: `${LAYOUT.paceDotSize}px`,
+              height: `${LAYOUT.paceDotSize}px`,
               borderRadius: "999px",
               background: COLORS.good,
             }}
@@ -305,7 +303,7 @@
             className="num-bold"
             style={{
               position: "absolute",
-              left: `${LAYOUT.headerInnerX}px`,
+              left: `${LAYOUT.headerInnerX + 18}px`,
               bottom: "5px",
               fontSize: "22px",
               color: COLORS.good,
@@ -469,22 +467,6 @@
           }}
         >
           <div className="relative w-full h-full">
-            <div
-              className="absolute"
-              style={{ left: "10%", top: `${LAYOUT.topBandTop + 4}px`, width: "10%", opacity: 0 }}
-            >
-              <div className="text-[11px] font-semibold leading-none">4/11</div>
-              <div className="mt-[6px] text-[22px] leading-none">🌞</div>
-            </div>
-
-            <div
-              className="absolute"
-              style={{ left: "20%", top: `${LAYOUT.topBandTop + 4}px`, width: "10%", opacity: 0 }}
-            >
-              <div className="text-[11px] font-semibold leading-none">4/12</div>
-              <div className="mt-[6px] text-[22px] leading-none">🌤️</div>
-            </div>
-
             <div
               className="absolute"
               style={{
