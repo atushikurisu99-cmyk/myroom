@@ -109,18 +109,18 @@
       weatherDayFont: 11,
       weatherIconSize: 22,
 
-      // 白カードを左から10分割した時の 2本目・3本目の中心
+      // 白カードを左から10分割したときの 2本目・3本目の中心
       weatherCol2Center: 20,
       weatherCol3Center: 30,
 
-      // 天気1セットの描画幅
-      weatherBlockW: 36,
+      // 日付は一旦OKだった高さを維持
+      weatherDayTopOffset: 2,
 
-      // 帯の中での縦設計
-      weatherTopInset: 2,
-      weatherDayH: 12,
-      weatherGap: 4,
-      weatherBottomInset: 2,
+      // アイコンは下げる
+      weatherIconBottomOffset: 1,
+
+      // 1セットの描画幅
+      weatherBlockW: 36,
     };
 
     function formatMoneyNoYen(value) {
@@ -236,53 +236,33 @@
       );
     }
 
-    function WeatherBlock({ day, variant, centerPercent, bandHeight }) {
-      const dayTop = LAYOUT.weatherTopInset;
-      const iconTop = Math.max(
-        dayTop + LAYOUT.weatherDayH + LAYOUT.weatherGap,
-        bandHeight - LAYOUT.weatherBottomInset - LAYOUT.weatherIconSize
-      );
-
+    function WeatherMini({ day, variant, center, bandTop, bandHeight }) {
       return (
         <div
           className="absolute"
           style={{
-            left: `calc(${centerPercent}% - ${LAYOUT.weatherBlockW / 2}px)`,
-            top: "0px",
-            width: `${LAYOUT.weatherBlockW}px`,
+            left: `calc(${center}% - ${LAYOUT.weatherBlockW / 2}px)`,
+            top: `${bandTop}px`,
             height: `${bandHeight}px`,
-            overflow: "hidden",
+            width: `${LAYOUT.weatherBlockW}px`,
           }}
         >
           <div className="relative w-full h-full">
             <div
-              className="absolute inset-x-0 text-center"
+              className="absolute inset-x-0 text-center font-semibold text-[#7a869f] leading-none"
               style={{
-                top: `${dayTop}px`,
-                height: `${LAYOUT.weatherDayH}px`,
-                lineHeight: `${LAYOUT.weatherDayH}px`,
-                overflow: "hidden",
+                top: `${LAYOUT.weatherDayTopOffset}px`,
+                fontSize: `${LAYOUT.weatherDayFont}px`,
               }}
             >
-              <span
-                className="font-semibold text-[#7a869f]"
-                style={{
-                  fontSize: `${LAYOUT.weatherDayFont}px`,
-                  lineHeight: `${LAYOUT.weatherDayH}px`,
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {day}
-              </span>
+              {day}
             </div>
 
             <div
-              className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
+              className="absolute inset-x-0 flex items-end justify-center"
               style={{
-                top: `${iconTop}px`,
-                width: `${LAYOUT.weatherIconSize}px`,
+                bottom: `${LAYOUT.weatherIconBottomOffset}px`,
                 height: `${LAYOUT.weatherIconSize}px`,
-                overflow: "hidden",
               }}
             >
               {variant === "sun" ? (
@@ -292,25 +272,6 @@
               )}
             </div>
           </div>
-        </div>
-      );
-    }
-
-    function WeatherBand({ bandHeight }) {
-      return (
-        <div className="absolute inset-0 overflow-hidden">
-          <WeatherBlock
-            day="4/11"
-            variant="sun"
-            centerPercent={LAYOUT.weatherCol2Center}
-            bandHeight={bandHeight}
-          />
-          <WeatherBlock
-            day="4/12"
-            variant="partly"
-            centerPercent={LAYOUT.weatherCol3Center}
-            bandHeight={bandHeight}
-          />
         </div>
       );
     }
@@ -463,13 +424,26 @@
           aria-label="表示切替"
         >
           <div
-            className="absolute inset-x-0 overflow-hidden"
+            className="absolute inset-x-0"
             style={{
               top: `${clockBand.top}px`,
               height: `${clockBand.height}px`,
             }}
           >
-            <WeatherBand bandHeight={clockBand.height} />
+            <WeatherMini
+              day="4/11"
+              variant="sun"
+              center={LAYOUT.weatherCol2Center}
+              bandTop={0}
+              bandHeight={clockBand.height}
+            />
+            <WeatherMini
+              day="4/12"
+              variant="partly"
+              center={LAYOUT.weatherCol3Center}
+              bandTop={0}
+              bandHeight={clockBand.height}
+            />
 
             <div
               className="absolute"
