@@ -109,14 +109,20 @@
       weatherDayFont: 11,
       weatherIconSize: 22,
 
-      // 白カード幅を10分割したときの 2本目・3本目の中心
+      // 白カードを左から10分割した時の2本目・3本目の中心
       weatherCol2Center: 20,
       weatherCol3Center: 30,
 
-      // 天気表示専用の設計
-      weatherDayWidth: 34,
-      weatherDayTopOffset: 5,      // 日付を少し下げて、時計より上に出ないようにする
-      weatherIconBottomOffset: 2,  // アイコンは下基準
+      // 1セットの箱サイズ
+      weatherSetWidth: 34,
+
+      // 帯の中での日付とアイコンの関係
+      weatherDayH: 12,
+      weatherGap: 4,
+
+      // 帯の上下余白
+      weatherTopInset: 3,
+      weatherBottomInset: 2,
     };
 
     function formatMoneyNoYen(value) {
@@ -232,53 +238,72 @@
       );
     }
 
-    function WeatherDay({ day, center }) {
+    function WeatherCluster({ day, variant, centerPercent, bandHeight }) {
+      const rawContentH =
+        LAYOUT.weatherDayH + LAYOUT.weatherGap + LAYOUT.weatherIconSize;
+
+      const availableH = Math.max(
+        0,
+        bandHeight - LAYOUT.weatherTopInset - LAYOUT.weatherBottomInset
+      );
+
+      const topInset = Math.max(
+        LAYOUT.weatherTopInset,
+        Math.floor((bandHeight - Math.min(rawContentH, availableH)) / 2)
+      );
+
       return (
         <div
-          className="absolute text-center"
+          className="absolute"
           style={{
-            left: `calc(${center}% - ${LAYOUT.weatherDayWidth / 2}px)`,
-            top: `${LAYOUT.weatherDayTopOffset}px`,
-            width: `${LAYOUT.weatherDayWidth}px`,
-            height: "12px",
-            lineHeight: "12px",
+            left: `${centerPercent}%`,
+            top: "0px",
+            width: `${LAYOUT.weatherSetWidth}px`,
+            height: `${bandHeight}px`,
+            transform: "translateX(-50%)",
             overflow: "hidden",
           }}
         >
-          <span
-            className="font-semibold text-[#7a869f]"
+          <div
+            className="absolute inset-x-0 flex flex-col items-center"
             style={{
-              fontSize: `${LAYOUT.weatherDayFont}px`,
-              lineHeight: "12px",
-              whiteSpace: "nowrap",
+              top: `${topInset}px`,
+              gap: `${LAYOUT.weatherGap}px`,
             }}
           >
-            {day}
-          </span>
-        </div>
-      );
-    }
+            <div
+              className="w-full text-center overflow-hidden"
+              style={{
+                height: `${LAYOUT.weatherDayH}px`,
+                lineHeight: `${LAYOUT.weatherDayH}px`,
+              }}
+            >
+              <span
+                className="font-semibold text-[#7a869f]"
+                style={{
+                  fontSize: `${LAYOUT.weatherDayFont}px`,
+                  lineHeight: `${LAYOUT.weatherDayH}px`,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {day}
+              </span>
+            </div>
 
-    function WeatherIcon({ variant, center, bandHeight }) {
-      const bottom = LAYOUT.weatherIconBottomOffset;
-      const top = Math.max(0, bandHeight - bottom - LAYOUT.weatherIconSize);
-
-      return (
-        <div
-          className="absolute flex items-center justify-center"
-          style={{
-            left: `calc(${center}% - ${LAYOUT.weatherIconSize / 2}px)`,
-            top: `${top}px`,
-            width: `${LAYOUT.weatherIconSize}px`,
-            height: `${LAYOUT.weatherIconSize}px`,
-            overflow: "hidden",
-          }}
-        >
-          {variant === "sun" ? (
-            <SunWeatherIcon size={LAYOUT.weatherIconSize} />
-          ) : (
-            <PartlyCloudyWeatherIcon size={LAYOUT.weatherIconSize} />
-          )}
+            <div
+              className="flex items-center justify-center overflow-hidden"
+              style={{
+                width: `${LAYOUT.weatherIconSize}px`,
+                height: `${LAYOUT.weatherIconSize}px`,
+              }}
+            >
+              {variant === "sun" ? (
+                <SunWeatherIcon size={LAYOUT.weatherIconSize} />
+              ) : (
+                <PartlyCloudyWeatherIcon size={LAYOUT.weatherIconSize} />
+              )}
+            </div>
+          </div>
         </div>
       );
     }
@@ -286,11 +311,18 @@
     function WeatherBand({ bandHeight }) {
       return (
         <div className="absolute inset-0 overflow-hidden">
-          <WeatherDay day="4/11" center={LAYOUT.weatherCol2Center} />
-          <WeatherDay day="4/12" center={LAYOUT.weatherCol3Center} />
-
-          <WeatherIcon variant="sun" center={LAYOUT.weatherCol2Center} bandHeight={bandHeight} />
-          <WeatherIcon variant="partly" center={LAYOUT.weatherCol3Center} bandHeight={bandHeight} />
+          <WeatherCluster
+            day="4/11"
+            variant="sun"
+            centerPercent={LAYOUT.weatherCol2Center}
+            bandHeight={bandHeight}
+          />
+          <WeatherCluster
+            day="4/12"
+            variant="partly"
+            centerPercent={LAYOUT.weatherCol3Center}
+            bandHeight={bandHeight}
+          />
         </div>
       );
     }
