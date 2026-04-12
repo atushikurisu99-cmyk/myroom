@@ -110,6 +110,7 @@
 
       weatherDayFont: 11,
       weatherIconSize: 22,
+      weatherDayTopOffset: 2,
     };
 
     function formatMoneyNoYen(value) {
@@ -240,7 +241,7 @@
             <div
               className="font-semibold text-[#7a869f] leading-none absolute left-0"
               style={{
-                top: "0px",
+                top: `${LAYOUT.weatherDayTopOffset}px`,
                 fontSize: `${LAYOUT.weatherDayFont}px`,
               }}
             >
