@@ -86,8 +86,9 @@
       shellW: 430,
       navH: 112,
 
-      // 確定済みライン
       side: 20,
+
+      // 確定済みライン
       line1ClockTop: 40,
       line2HeaderBottom: 180,
       line3ButtonTop: 196,
@@ -111,8 +112,8 @@
       clockRight: 12,
     };
 
-    function formatMoney(value) {
-      return "¥" + Number(value || 0).toLocaleString("ja-JP");
+    function formatMoneyNoYen(value) {
+      return Number(value || 0).toLocaleString("ja-JP");
     }
 
     function Clock({ color = "#1f2a44" }) {
@@ -196,7 +197,7 @@
     }
 
     function HeaderSwitchContent({ mode, data }) {
-      const baseLabelStyle = {
+      const labelStyle = {
         position: "absolute",
         left: `${LAYOUT.headerInnerX}px`,
         top: "8px",
@@ -207,27 +208,43 @@
         whiteSpace: "nowrap",
       };
 
-      const baseMainStyle = {
+      const mainMoneyWrapStyle = {
         position: "absolute",
         left: `${LAYOUT.headerInnerX}px`,
-        bottom: "6px",
+        right: `${LAYOUT.headerInnerX}px`,
+        bottom: "4px",
+        height: "26px",
+      };
+
+      const mainMoneyDigitsStyle = {
+        position: "absolute",
+        right: "18px",
+        bottom: "0px",
+        fontSize: "26px",
+        color: COLORS.text,
         lineHeight: "1",
+      };
+
+      const mainMoneyYenStyle = {
+        position: "absolute",
+        right: "0px",
+        bottom: "1px",
+        fontSize: "20px",
+        color: COLORS.text,
+        lineHeight: "1",
+        fontWeight: 700,
         whiteSpace: "nowrap",
       };
 
       if (mode === "total") {
         return (
           <>
-            <div style={baseLabelStyle}>合計</div>
-            <div
-              className="num-bold"
-              style={{
-                ...baseMainStyle,
-                fontSize: "26px",
-                color: COLORS.text,
-              }}
-            >
-              {formatMoney(data.total)}
+            <div style={labelStyle}>合計</div>
+            <div style={mainMoneyWrapStyle}>
+              <div className="num-bold" style={mainMoneyDigitsStyle}>
+                {formatMoneyNoYen(data.total)}
+              </div>
+              <div style={mainMoneyYenStyle}>円</div>
             </div>
           </>
         );
@@ -236,16 +253,12 @@
       if (mode === "one") {
         return (
           <>
-            <div style={baseLabelStyle}>①</div>
-            <div
-              className="num-bold"
-              style={{
-                ...baseMainStyle,
-                fontSize: "26px",
-                color: COLORS.text,
-              }}
-            >
-              {formatMoney(data.one)}
+            <div style={labelStyle}>①</div>
+            <div style={mainMoneyWrapStyle}>
+              <div className="num-bold" style={mainMoneyDigitsStyle}>
+                {formatMoneyNoYen(data.one)}
+              </div>
+              <div style={mainMoneyYenStyle}>円</div>
             </div>
           </>
         );
@@ -254,16 +267,12 @@
       if (mode === "two") {
         return (
           <>
-            <div style={baseLabelStyle}>②</div>
-            <div
-              className="num-bold"
-              style={{
-                ...baseMainStyle,
-                fontSize: "26px",
-                color: COLORS.text,
-              }}
-            >
-              {formatMoney(data.two)}
+            <div style={labelStyle}>②</div>
+            <div style={mainMoneyWrapStyle}>
+              <div className="num-bold" style={mainMoneyDigitsStyle}>
+                {formatMoneyNoYen(data.two)}
+              </div>
+              <div style={mainMoneyYenStyle}>円</div>
             </div>
           </>
         );
@@ -273,7 +282,7 @@
         <>
           <div
             style={{
-              ...baseLabelStyle,
+              ...labelStyle,
               left: `${LAYOUT.headerInnerX}px`,
             }}
           >
@@ -283,7 +292,7 @@
           <div
             style={{
               position: "absolute",
-              top: "7px",
+              top: "10px",
               right: LAYOUT.dotCol4RightAnchor,
               width: "10px",
               height: "10px",
@@ -295,9 +304,13 @@
           <div
             className="num-bold"
             style={{
-              ...baseMainStyle,
+              position: "absolute",
+              left: `${LAYOUT.headerInnerX}px`,
+              bottom: "5px",
               fontSize: "22px",
               color: COLORS.good,
+              lineHeight: "1",
+              whiteSpace: "nowrap",
             }}
           >
             良好
@@ -349,6 +362,66 @@
       );
     }
 
+    function TopHeaderMoney({ value }) {
+      return (
+        <div
+          className="absolute left-0 right-0 flex items-start justify-between"
+          style={{
+            top: `${LAYOUT.lowerBandTop}px`,
+            height: `${LAYOUT.lowerBandH}px`,
+            paddingLeft: `${LAYOUT.headerInnerX}px`,
+            paddingRight: `${LAYOUT.headerInnerX}px`,
+          }}
+        >
+          <div className="relative h-full flex-1">
+            <div className="text-[13px] font-semibold text-white leading-none">累計+未確認</div>
+
+            <div
+              className="absolute left-0 right-0"
+              style={{
+                bottom: "4px",
+                height: "26px",
+              }}
+            >
+              <div
+                className="num-bold"
+                style={{
+                  position: "absolute",
+                  right: "18px",
+                  bottom: "0px",
+                  fontSize: "26px",
+                  color: "#ffffff",
+                  lineHeight: "1",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {formatMoneyNoYen(value)}
+              </div>
+
+              <div
+                style={{
+                  position: "absolute",
+                  right: "0px",
+                  bottom: "1px",
+                  fontSize: "20px",
+                  color: "#ffffff",
+                  lineHeight: "1",
+                  fontWeight: 700,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                円
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-[2px]">
+            <EyeIcon />
+          </div>
+        </div>
+      );
+    }
+
     function TopHeaderZone() {
       const headerTop = LAYOUT.line2HeaderBottom - LAYOUT.headerH;
 
@@ -389,23 +462,7 @@
               <Clock color="#ffffff" />
             </div>
 
-            <div
-              className="absolute left-0 right-0 flex items-start justify-between"
-              style={{
-                top: `${LAYOUT.lowerBandTop}px`,
-                height: `${LAYOUT.lowerBandH}px`,
-                paddingLeft: `${LAYOUT.headerInnerX}px`,
-                paddingRight: `${LAYOUT.headerInnerX}px`,
-              }}
-            >
-              <div>
-                <div className="text-[13px] font-semibold text-white leading-none">当月達成売上</div>
-                <div className="mt-[8px] text-[24px] text-white leading-none num-bold">¥0</div>
-              </div>
-              <div className="pt-[2px]">
-                <EyeIcon />
-              </div>
-            </div>
+            <TopHeaderMoney value={0} />
           </div>
         </div>
       );
@@ -519,9 +576,8 @@
       return (
         <div className="bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]" style={{ borderRadius: "8px" }}>
           <div className="flex items-center justify-between gap-4">
-            <div className="text-[16px] text-slate-400">¥</div>
             <div className="flex-1 text-[34px] leading-none num-bold tracking-[-0.04em] text-slate-800">
-              1,200
+              1,200円
             </div>
             <div className="text-right">
               <div className="text-[12px] font-semibold text-slate-400">乗車人員</div>
