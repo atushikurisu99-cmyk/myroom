@@ -108,11 +108,19 @@
 
       weatherDayFont: 11,
       weatherIconSize: 22,
-      weatherGap: 3,
 
+      // 白カードを左から10分割したときの2本目・3本目の中心
       weatherColumn2Center: 20,
       weatherColumn3Center: 30,
-      weatherSetWidth: 34,
+
+      // 天気1セットの幅
+      weatherSetWidth: 36,
+
+      // 今回の主調整
+      weatherDayLineH: 12,
+      weatherDayIconGap: 6,   // ← 隙間を広げる
+      weatherTopPadMin: 3,
+      weatherBottomPadMin: 3,
     };
 
     function formatMoneyNoYen(value) {
@@ -229,10 +237,27 @@
     }
 
     function WeatherRail({ bandHeight }) {
-      const dayLineHeight = 12;
-      const totalHeight =
-        dayLineHeight + LAYOUT.weatherGap + LAYOUT.weatherIconSize;
-      const topInset = Math.max(0, Math.floor((bandHeight - totalHeight) / 2));
+      const rawContentH =
+        LAYOUT.weatherDayLineH +
+        LAYOUT.weatherDayIconGap +
+        LAYOUT.weatherIconSize;
+
+      const maxContentH = Math.max(
+        0,
+        bandHeight - LAYOUT.weatherTopPadMin - LAYOUT.weatherBottomPadMin
+      );
+
+      const contentH = Math.min(rawContentH, maxContentH);
+
+      const actualGap = Math.max(
+        2,
+        contentH - LAYOUT.weatherDayLineH - LAYOUT.weatherIconSize
+      );
+
+      const topInset = Math.max(
+        LAYOUT.weatherTopPadMin,
+        Math.floor((bandHeight - (LAYOUT.weatherDayLineH + actualGap + LAYOUT.weatherIconSize)) / 2)
+      );
 
       function WeatherSet({ day, variant, centerPercent }) {
         return (
@@ -251,15 +276,15 @@
                 className="absolute inset-x-0 text-center overflow-hidden"
                 style={{
                   top: `${topInset}px`,
-                  height: `${dayLineHeight}px`,
-                  lineHeight: `${dayLineHeight}px`,
+                  height: `${LAYOUT.weatherDayLineH}px`,
+                  lineHeight: `${LAYOUT.weatherDayLineH}px`,
                 }}
               >
                 <span
                   className="font-semibold text-[#7a869f]"
                   style={{
                     fontSize: `${LAYOUT.weatherDayFont}px`,
-                    lineHeight: `${dayLineHeight}px`,
+                    lineHeight: `${LAYOUT.weatherDayLineH}px`,
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -270,7 +295,7 @@
               <div
                 className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden"
                 style={{
-                  top: `${topInset + dayLineHeight + LAYOUT.weatherGap}px`,
+                  top: `${topInset + LAYOUT.weatherDayLineH + actualGap}px`,
                   width: `${LAYOUT.weatherIconSize}px`,
                   height: `${LAYOUT.weatherIconSize}px`,
                 }}
