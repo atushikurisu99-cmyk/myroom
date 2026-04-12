@@ -1,43 +1,998 @@
-function WeatherRail({ bandHeight }) {
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Taxi UI Fixed Lines</title>
 
-  function DayLabel({ day, centerPercent }) {
-    return (
-      <div
-        className="absolute text-center"
-        style={{
-          left: `calc(${centerPercent}% - 18px)`,
-          top: "2px",
-          width: "36px",
-        }}
-      >
-        <span style={{ fontSize: "11px" }}>{day}</span>
-      </div>
-    );
-  }
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  function IconMark({ variant, centerPercent }) {
-    return (
-      <div
-        className="absolute flex items-center justify-center"
-        style={{
-          left: `calc(${centerPercent}% - 11px)`,
-          bottom: "2px",
-          width: "22px",
-          height: "22px",
-        }}
-      >
-        {variant === "sun" ? <SunWeatherIcon /> : <PartlyCloudyWeatherIcon />}
-      </div>
-    );
-  }
+  <style>
+    html,
+    body,
+    #root {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #dfe5ee;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        "Hiragino Sans",
+        "Hiragino Kaku Gothic ProN",
+        "Yu Gothic",
+        Meiryo,
+        sans-serif;
+    }
 
-  return (
-    <div className="absolute inset-0">
-      <DayLabel day="4/11" centerPercent={20} />
-      <DayLabel day="4/12" centerPercent={30} />
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-      <IconMark variant="sun" centerPercent={20} />
-      <IconMark variant="partly" centerPercent={30} />
-    </div>
-  );
-}
+    button,
+    input {
+      font: inherit;
+    }
+
+    .num-bold {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useEffect, useMemo, useRef, useState } = React;
+
+    const COLORS = {
+      bg: "#dfe5ee",
+      green: "#32CD32",
+      navActive: "#33CC6D",
+      card: "#ffffff",
+      text: "#1f2a44",
+      sub: "#6e7a93",
+      good: "#28a26b",
+      graphText: "#445673",
+      graphSub: "#98a6bc",
+    };
+
+    const LAYOUT = {
+      shellW: 430,
+      navH: 112,
+
+      side: 20,
+
+      line1ClockTop: 40,
+      line2HeaderBottom: 180,
+      line3ButtonTop: 196,
+      line4ButtonBottom: 338,
+      line5GreenBottom: 346,
+      line6ContentTop: 354,
+
+      headerH: 180,
+      buttonH: 142,
+      contentPlaceholderH: 124,
+
+      headerInnerX: 16,
+      topBandTop: 40,
+      lowerBandTop: 118,
+      lowerBandH: 50,
+
+      clockRight: 12,
+
+      switchLabelTop: 8,
+      switchMainBottom: 4,
+      paceDotSize: 10,
+
+      weatherDayFont: 11,
+      weatherIconSize: 22,
+
+      // 白カードを左から10分割した時の 2本目・3本目の中心
+      weatherCol2Center: 20,
+      weatherCol3Center: 30,
+
+      // 天気1セットの描画幅
+      weatherBlockW: 36,
+
+      // 帯の中での縦設計
+      weatherTopInset: 2,
+      weatherDayH: 12,
+      weatherGap: 4,
+      weatherBottomInset: 2,
+    };
+
+    function formatMoneyNoYen(value) {
+      return Number(value || 0).toLocaleString("ja-JP");
+    }
+
+    function Clock({ color = "#1f2a44", measureRef = null }) {
+      const [now, setNow] = useState(new Date());
+
+      useEffect(() => {
+        const id = setInterval(() => setNow(new Date()), 1000);
+        return () => clearInterval(id);
+      }, []);
+
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+
+      return (
+        <div
+          ref={measureRef}
+          className="num-bold leading-none tracking-[-0.05em]"
+          style={{ color, fontSize: "68px" }}
+        >
+          {hh}：{mm}
+        </div>
+      );
+    }
+
+    function EyeIcon() {
+      return (
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M2.2 12C4.1 8.7 7.7 6.6 12 6.6C16.3 6.6 19.9 8.7 21.8 12C19.9 15.3 16.3 17.4 12 17.4C7.7 17.4 4.1 15.3 2.2 12Z"
+            stroke="white"
+            strokeWidth="1.8"
+          />
+          <circle cx="12" cy="12" r="3.1" fill="white" />
+        </svg>
+      );
+    }
+
+    function HomeIcon() {
+      return (
+        <svg width="30" height="30" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path
+            d="M12 29.5L32 12L52 29.5"
+            stroke="white"
+            strokeWidth="5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path d="M19 28.5V51H29V39H35V51H45V28.5" fill="white" />
+        </svg>
+      );
+    }
+
+    function GridIcon() {
+      const dots = [10, 24, 38];
+      return (
+        <svg width="24" height="24" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          {dots.map((x) =>
+            dots.map((y) => (
+              <circle key={`${x}-${y}`} cx={x} cy={y} r="3.2" fill="white" />
+            ))
+          )}
+        </svg>
+      );
+    }
+
+    function SunWeatherIcon({ size = 22 }) {
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="5.2" fill="#F7B500" stroke="#E28A00" strokeWidth="1" />
+          <g stroke="#F7B500" strokeWidth="1.6" strokeLinecap="round">
+            <line x1="12" y1="1.8" x2="12" y2="4.5" />
+            <line x1="12" y1="19.5" x2="12" y2="22.2" />
+            <line x1="1.8" y1="12" x2="4.5" y2="12" />
+            <line x1="19.5" y1="12" x2="22.2" y2="12" />
+            <line x1="4.6" y1="4.6" x2="6.6" y2="6.6" />
+            <line x1="17.4" y1="17.4" x2="19.4" y2="19.4" />
+            <line x1="17.4" y1="6.6" x2="19.4" y2="4.6" />
+            <line x1="4.6" y1="19.4" x2="6.6" y2="17.4" />
+          </g>
+        </svg>
+      );
+    }
+
+    function PartlyCloudyWeatherIcon({ size = 22 }) {
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
+          <g transform="translate(1,1)">
+            <circle cx="8" cy="8" r="4.2" fill="#F7B500" stroke="#E28A00" strokeWidth="1" />
+            <g stroke="#F7B500" strokeWidth="1.4" strokeLinecap="round">
+              <line x1="8" y1="1.2" x2="8" y2="3.2" />
+              <line x1="8" y1="12.8" x2="8" y2="14.8" />
+              <line x1="1.2" y1="8" x2="3.2" y2="8" />
+              <line x1="12.8" y1="8" x2="14.8" y2="8" />
+              <line x1="3.4" y1="3.4" x2="4.9" y2="4.9" />
+              <line x1="11.1" y1="11.1" x2="12.6" y2="12.6" />
+              <line x1="11.1" y1="4.9" x2="12.6" y2="3.4" />
+              <line x1="3.4" y1="12.6" x2="4.9" y2="11.1" />
+            </g>
+          </g>
+          <g transform="translate(7,9)">
+            <path
+              d="M3.2 8.8H11.6C14 8.8 15.6 7.4 15.6 5.4C15.6 3.6 14.2 2.2 12.4 2.2C12 2.2 11.6 2.3 11.3 2.4C10.7 1 9.4 0 7.8 0C5.6 0 3.8 1.8 3.8 4C1.8 4.2 0.4 5.6 0.4 7.2C0.4 8.2 1.4 8.8 3.2 8.8Z"
+              fill="#F3F5F8"
+              stroke="#C8D0DA"
+              strokeWidth="1"
+            />
+          </g>
+        </svg>
+      );
+    }
+
+    function WeatherBlock({ day, variant, centerPercent, bandHeight }) {
+      const dayTop = LAYOUT.weatherTopInset;
+      const iconTop = Math.max(
+        dayTop + LAYOUT.weatherDayH + LAYOUT.weatherGap,
+        bandHeight - LAYOUT.weatherBottomInset - LAYOUT.weatherIconSize
+      );
+
+      return (
+        <div
+          className="absolute"
+          style={{
+            left: `calc(${centerPercent}% - ${LAYOUT.weatherBlockW / 2}px)`,
+            top: "0px",
+            width: `${LAYOUT.weatherBlockW}px`,
+            height: `${bandHeight}px`,
+            overflow: "hidden",
+          }}
+        >
+          <div className="relative w-full h-full">
+            <div
+              className="absolute inset-x-0 text-center"
+              style={{
+                top: `${dayTop}px`,
+                height: `${LAYOUT.weatherDayH}px`,
+                lineHeight: `${LAYOUT.weatherDayH}px`,
+                overflow: "hidden",
+              }}
+            >
+              <span
+                className="font-semibold text-[#7a869f]"
+                style={{
+                  fontSize: `${LAYOUT.weatherDayFont}px`,
+                  lineHeight: `${LAYOUT.weatherDayH}px`,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {day}
+              </span>
+            </div>
+
+            <div
+              className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
+              style={{
+                top: `${iconTop}px`,
+                width: `${LAYOUT.weatherIconSize}px`,
+                height: `${LAYOUT.weatherIconSize}px`,
+                overflow: "hidden",
+              }}
+            >
+              {variant === "sun" ? (
+                <SunWeatherIcon size={LAYOUT.weatherIconSize} />
+              ) : (
+                <PartlyCloudyWeatherIcon size={LAYOUT.weatherIconSize} />
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function WeatherBand({ bandHeight }) {
+      return (
+        <div className="absolute inset-0 overflow-hidden">
+          <WeatherBlock
+            day="4/11"
+            variant="sun"
+            centerPercent={LAYOUT.weatherCol2Center}
+            bandHeight={bandHeight}
+          />
+          <WeatherBlock
+            day="4/12"
+            variant="partly"
+            centerPercent={LAYOUT.weatherCol3Center}
+            bandHeight={bandHeight}
+          />
+        </div>
+      );
+    }
+
+    function HeaderSwitchContent({ mode, data }) {
+      const labelStyle = {
+        position: "absolute",
+        left: `${LAYOUT.headerInnerX}px`,
+        top: `${LAYOUT.switchLabelTop}px`,
+        fontSize: "13px",
+        lineHeight: "1",
+        color: COLORS.sub,
+        fontWeight: 700,
+        whiteSpace: "nowrap",
+      };
+
+      const moneyWrapStyle = {
+        position: "absolute",
+        left: `${LAYOUT.headerInnerX}px`,
+        right: `${LAYOUT.headerInnerX}px`,
+        bottom: `${LAYOUT.switchMainBottom}px`,
+        height: "26px",
+      };
+
+      const digitsStyle = {
+        position: "absolute",
+        right: "18px",
+        bottom: "0px",
+        fontSize: "26px",
+        color: COLORS.text,
+        lineHeight: "1",
+        whiteSpace: "nowrap",
+      };
+
+      const yenStyle = {
+        position: "absolute",
+        right: "0px",
+        bottom: "1px",
+        fontSize: "20px",
+        color: COLORS.text,
+        lineHeight: "1",
+        fontWeight: 700,
+        whiteSpace: "nowrap",
+      };
+
+      if (mode === "total") {
+        return (
+          <>
+            <div style={labelStyle}>合計</div>
+            <div style={moneyWrapStyle}>
+              <div className="num-bold" style={digitsStyle}>
+                {formatMoneyNoYen(data.total)}
+              </div>
+              <div style={yenStyle}>円</div>
+            </div>
+          </>
+        );
+      }
+
+      if (mode === "one") {
+        return (
+          <>
+            <div style={labelStyle}>①</div>
+            <div style={moneyWrapStyle}>
+              <div className="num-bold" style={digitsStyle}>
+                {formatMoneyNoYen(data.one)}
+              </div>
+              <div style={yenStyle}>円</div>
+            </div>
+          </>
+        );
+      }
+
+      if (mode === "two") {
+        return (
+          <>
+            <div style={labelStyle}>②</div>
+            <div style={moneyWrapStyle}>
+              <div className="num-bold" style={digitsStyle}>
+                {formatMoneyNoYen(data.two)}
+              </div>
+              <div style={yenStyle}>円</div>
+            </div>
+          </>
+        );
+      }
+
+      return (
+        <>
+          <div style={labelStyle}>今日のペース</div>
+
+          <div
+            style={{
+              position: "absolute",
+              left: `${LAYOUT.headerInnerX}px`,
+              bottom: "9px",
+              width: `${LAYOUT.paceDotSize}px`,
+              height: `${LAYOUT.paceDotSize}px`,
+              borderRadius: "999px",
+              background: COLORS.good,
+            }}
+          />
+
+          <div
+            className="num-bold"
+            style={{
+              position: "absolute",
+              left: `${LAYOUT.headerInnerX + 18}px`,
+              bottom: "5px",
+              fontSize: "22px",
+              color: COLORS.good,
+              lineHeight: "1",
+              whiteSpace: "nowrap",
+            }}
+          >
+            良好
+          </div>
+        </>
+      );
+    }
+
+    function StateCard({ mode, onTap, data }) {
+      const clockRef = useRef(null);
+      const [clockBand, setClockBand] = useState({
+        top: LAYOUT.topBandTop,
+        height: 68,
+      });
+
+      useEffect(() => {
+        const updateBand = () => {
+          if (!clockRef.current) return;
+          const h = Math.ceil(clockRef.current.getBoundingClientRect().height);
+          setClockBand({
+            top: LAYOUT.topBandTop,
+            height: h,
+          });
+        };
+
+        updateBand();
+        window.addEventListener("resize", updateBand);
+        return () => window.removeEventListener("resize", updateBand);
+      }, []);
+
+      return (
+        <button
+          type="button"
+          onClick={onTap}
+          className="relative w-full h-full bg-white shadow-[0_8px_22px_rgba(0,0,0,0.08)]"
+          style={{ borderRadius: "8px" }}
+          aria-label="表示切替"
+        >
+          <div
+            className="absolute inset-x-0 overflow-hidden"
+            style={{
+              top: `${clockBand.top}px`,
+              height: `${clockBand.height}px`,
+            }}
+          >
+            <WeatherBand bandHeight={clockBand.height} />
+
+            <div
+              className="absolute"
+              style={{
+                top: "0px",
+                right: `${LAYOUT.clockRight}px`,
+              }}
+            >
+              <Clock color={COLORS.text} measureRef={clockRef} />
+            </div>
+          </div>
+
+          <div
+            className="absolute left-0 right-0"
+            style={{
+              top: `${LAYOUT.lowerBandTop}px`,
+              height: `${LAYOUT.lowerBandH}px`,
+            }}
+          >
+            <HeaderSwitchContent mode={mode} data={data} />
+          </div>
+        </button>
+      );
+    }
+
+    function TopHeaderMoney({ value }) {
+      return (
+        <div
+          className="absolute left-0 right-0 flex items-start justify-between"
+          style={{
+            top: `${LAYOUT.lowerBandTop}px`,
+            height: `${LAYOUT.lowerBandH}px`,
+            paddingLeft: `${LAYOUT.headerInnerX}px`,
+            paddingRight: `${LAYOUT.headerInnerX}px`,
+          }}
+        >
+          <div className="relative h-full flex-1">
+            <div className="text-[13px] font-semibold text-white leading-none">累計+未確認</div>
+
+            <div
+              className="absolute left-0 right-0"
+              style={{
+                bottom: "4px",
+                height: "26px",
+              }}
+            >
+              <div
+                className="num-bold"
+                style={{
+                  position: "absolute",
+                  right: "18px",
+                  bottom: "0px",
+                  fontSize: "26px",
+                  color: "#ffffff",
+                  lineHeight: "1",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {formatMoneyNoYen(value)}
+              </div>
+
+              <div
+                style={{
+                  position: "absolute",
+                  right: "0px",
+                  bottom: "1px",
+                  fontSize: "20px",
+                  color: "#ffffff",
+                  lineHeight: "1",
+                  fontWeight: 700,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                円
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-[2px]">
+            <EyeIcon />
+          </div>
+        </div>
+      );
+    }
+
+    function TopHeaderZone() {
+      const headerTop = LAYOUT.line2HeaderBottom - LAYOUT.headerH;
+
+      return (
+        <div
+          className="absolute"
+          style={{
+            left: `${LAYOUT.side}px`,
+            right: `${LAYOUT.side}px`,
+            top: `${headerTop}px`,
+            height: `${LAYOUT.headerH}px`,
+          }}
+        >
+          <div className="relative w-full h-full">
+            <div
+              className="absolute"
+              style={{
+                top: `${LAYOUT.topBandTop}px`,
+                right: `${LAYOUT.clockRight}px`,
+              }}
+            >
+              <Clock color="#ffffff" />
+            </div>
+
+            <TopHeaderMoney value={1000000} />
+          </div>
+        </div>
+      );
+    }
+
+    function StateHeaderZone({ mode, onTap, data }) {
+      const headerTop = LAYOUT.line2HeaderBottom - LAYOUT.headerH;
+
+      return (
+        <div
+          className="absolute"
+          style={{
+            left: `${LAYOUT.side}px`,
+            right: `${LAYOUT.side}px`,
+            top: `${headerTop}px`,
+            height: `${LAYOUT.headerH}px`,
+          }}
+        >
+          <StateCard mode={mode} onTap={onTap} data={data} />
+        </div>
+      );
+    }
+
+    function MainButton({ label, type = "start", onClick }) {
+      const bg =
+        type === "start"
+          ? "linear-gradient(180deg,#86e0b2 0%, #6dbb99 42%, #50937c 100%)"
+          : type === "standby"
+          ? "linear-gradient(180deg,#88c8f5 0%, #5b9bf0 44%, #3c73d8 100%)"
+          : "linear-gradient(180deg,#f5d85e 0%, #ecb63c 42%, #d49326 100%)";
+
+      return (
+        <button
+          type="button"
+          onClick={onClick}
+          className="relative w-full rounded-[32px] text-white overflow-hidden shadow-[0_10px_22px_rgba(0,0,0,0.14)]"
+          style={{ height: `${LAYOUT.buttonH}px`, background: bg }}
+        >
+          <div className="absolute left-[18px] right-[18px] top-[10px] h-[54px] rounded-[28px] bg-[rgba(255,255,255,0.28)]"></div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-[34px] font-black tracking-[-0.03em]">{label}</span>
+          </div>
+        </button>
+      );
+    }
+
+    function GraphCard({ title, sub }) {
+      return (
+        <div className="h-[118px] rounded-[18px] bg-[rgba(248,250,252,0.56)] px-4 py-4 border border-[rgba(255,255,255,0.14)] overflow-hidden">
+          <div className="text-[18px] font-black" style={{ color: COLORS.graphText }}>
+            {title}
+          </div>
+          <div className="mt-1 text-[12px] font-semibold" style={{ color: COLORS.graphSub }}>
+            {sub}
+          </div>
+        </div>
+      );
+    }
+
+    function TopGraphArea() {
+      return (
+        <div className="grid grid-cols-2 gap-x-[14px] gap-y-[16px]">
+          <GraphCard title="売上" sub="グラフ" />
+          <GraphCard title="本数" sub="推移" />
+          <GraphCard title="時間帯" sub="動き" />
+          <GraphCard title="分析" sub="入口" />
+        </div>
+      );
+    }
+
+    function RideInfoCard() {
+      return (
+        <div className="bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)] h-[124px]" style={{ borderRadius: "8px" }}>
+          <div className="text-[18px] font-black text-[#1f2a44]">取得中...</div>
+
+          <div className="mt-4 flex justify-between items-end gap-4">
+            <div>
+              <div className="text-[12px] font-semibold text-[#6e7a93]">乗車時刻</div>
+              <div className="mt-1 text-[18px] num-bold text-[#1f2a44] leading-none">05:45</div>
+            </div>
+            <div className="text-right">
+              <div className="text-[12px] font-semibold text-[#6e7a93]">経過時間</div>
+              <div className="mt-1 text-[18px] num-bold text-[#1f2a44] leading-none">0分</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function FareInfoTop() {
+      return (
+        <div className="bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]" style={{ borderRadius: "8px" }}>
+          <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-start">
+            <div>
+              <div className="text-[16px] num-bold text-slate-800">05:45</div>
+              <div className="mt-2 text-[14px] font-bold text-slate-700">船越南三丁目</div>
+              <div className="mt-1 text-[12px] font-semibold text-slate-400">精度：55m</div>
+            </div>
+            <div className="pt-[6px] text-[22px] text-slate-300">→</div>
+            <div className="text-right">
+              <div className="text-[16px] num-bold text-slate-800">05:45</div>
+              <div className="mt-2 text-[14px] font-bold text-slate-700">船越南三丁目</div>
+              <div className="mt-1 text-[12px] font-semibold text-slate-400">精度：55m</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function FareAmountCard() {
+      return (
+        <div className="bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]" style={{ borderRadius: "8px" }}>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex-1 text-[34px] leading-none num-bold tracking-[-0.04em] text-slate-800">
+              1,200円
+            </div>
+            <div className="text-right">
+              <div className="text-[12px] font-semibold text-slate-400">乗車人員</div>
+              <div className="mt-1 flex items-end gap-1 justify-end">
+                <span className="text-[12px] font-semibold text-slate-400">1</span>
+                <span className="text-[12px] font-semibold text-slate-400">名</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function PassengerDots() {
+      const items = [1, 2, 3, 4];
+      return (
+        <div className="flex gap-4">
+          {items.map((n) => {
+            const selected = n === 1;
+            return (
+              <button
+                key={n}
+                type="button"
+                className="w-[62px] h-[62px] rounded-full text-[28px] font-black"
+                style={{
+                  background: selected ? "#8e968f" : "#ece8ea",
+                  color: selected ? "#ffffff" : "#6e6e73",
+                }}
+              >
+                {n}
+              </button>
+            );
+          })}
+        </div>
+      );
+    }
+
+    function PayButton({ label, bg, color = "#111827" }) {
+      return (
+        <button
+          type="button"
+          className="w-full h-[72px] rounded-[24px] text-[22px] font-bold shadow-[0_8px_16px_rgba(0,0,0,0.14)]"
+          style={{ background: bg, color }}
+        >
+          {label}
+        </button>
+      );
+    }
+
+    function BottomNav({ active = "home", centerLabel = "履歴" }) {
+      const activeLeft =
+        active === "home" ? "16.6667%" : active === "center" ? "50%" : "83.3333%";
+
+      return (
+        <div
+          className="absolute left-0 right-0 bottom-0"
+          style={{ height: `${LAYOUT.navH}px` }}
+        >
+          <div
+            className="absolute left-0 right-0 bottom-0 h-[70px] rounded-t-[26px]"
+            style={{ background: COLORS.green }}
+          />
+          <div
+            className="absolute top-[8px] w-[92px] h-[92px] rounded-full"
+            style={{
+              left: activeLeft,
+              transform: "translateX(-50%)",
+              background: COLORS.navActive,
+            }}
+          />
+          <div className="absolute inset-0 grid grid-cols-3">
+            <div className="relative">
+              <div className="absolute left-1/2 top-[26px] -translate-x-1/2 flex flex-col items-center">
+                <HomeIcon />
+                <div className="mt-[7px] text-[11px] font-bold text-white whitespace-nowrap">
+                  ホーム
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute left-1/2 top-[38px] -translate-x-1/2 text-[16px] font-black tracking-[0.03em] text-white whitespace-nowrap">
+                {centerLabel}
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute left-1/2 top-[28px] -translate-x-1/2 flex flex-col items-center">
+                <GridIcon />
+                <div className="mt-[8px] text-[11px] font-bold text-white whitespace-nowrap">
+                  メニュー
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function TopScreen({ onNext }) {
+      return (
+        <div className="absolute inset-0 bg-[#dfe5ee] overflow-hidden">
+          <div
+            className="absolute inset-x-0 top-0 bg-[#32CD32]"
+            style={{ height: `${LAYOUT.line5GreenBottom}px` }}
+          />
+
+          <TopHeaderZone />
+
+          <div
+            className="absolute"
+            style={{
+              left: `${LAYOUT.side}px`,
+              right: `${LAYOUT.side}px`,
+              top: `${LAYOUT.line3ButtonTop}px`,
+              height: `${LAYOUT.buttonH}px`,
+            }}
+          >
+            <MainButton label="乗務開始" type="start" onClick={onNext} />
+          </div>
+
+          <div
+            className="absolute"
+            style={{
+              left: `${LAYOUT.side}px`,
+              right: `${LAYOUT.side}px`,
+              top: `${LAYOUT.line6ContentTop}px`,
+            }}
+          >
+            <TopGraphArea />
+          </div>
+
+          <div className="absolute right-[26px] bottom-[118px] text-[28px] font-black text-[#a7adb7] leading-none">
+            ▲
+          </div>
+
+          <BottomNav active="home" centerLabel="経費" />
+        </div>
+      );
+    }
+
+    function StandbyScreen({ onNext, headerMode, onHeaderTap, headerData }) {
+      return (
+        <div className="absolute inset-0 bg-[#dfe5ee] overflow-hidden">
+          <div
+            className="absolute inset-x-0 top-0 bg-[#32CD32]"
+            style={{ height: `${LAYOUT.line5GreenBottom}px` }}
+          />
+
+          <StateHeaderZone mode={headerMode} onTap={onHeaderTap} data={headerData} />
+
+          <div
+            className="absolute"
+            style={{
+              left: `${LAYOUT.side}px`,
+              right: `${LAYOUT.side}px`,
+              top: `${LAYOUT.line3ButtonTop}px`,
+              height: `${LAYOUT.buttonH}px`,
+            }}
+          >
+            <MainButton label="実車" type="standby" onClick={onNext} />
+          </div>
+
+          <div
+            className="absolute"
+            style={{
+              left: `${LAYOUT.side}px`,
+              right: `${LAYOUT.side}px`,
+              top: `${LAYOUT.line6ContentTop}px`,
+            }}
+          >
+            <div style={{ height: `${LAYOUT.contentPlaceholderH}px` }} />
+          </div>
+
+          <BottomNav active="center" centerLabel="履歴" />
+        </div>
+      );
+    }
+
+    function RideScreen({ onNext, headerMode, onHeaderTap, headerData }) {
+      return (
+        <div className="absolute inset-0 bg-[#dfe5ee] overflow-hidden">
+          <div
+            className="absolute inset-x-0 top-0 bg-[#32CD32]"
+            style={{ height: `${LAYOUT.line5GreenBottom}px` }}
+          />
+
+          <StateHeaderZone mode={headerMode} onTap={onHeaderTap} data={headerData} />
+
+          <div
+            className="absolute"
+            style={{
+              left: `${LAYOUT.side}px`,
+              right: `${LAYOUT.side}px`,
+              top: `${LAYOUT.line3ButtonTop}px`,
+              height: `${LAYOUT.buttonH}px`,
+            }}
+          >
+            <MainButton label="降車" type="ride" onClick={onNext} />
+          </div>
+
+          <div
+            className="absolute"
+            style={{
+              left: `${LAYOUT.side}px`,
+              right: `${LAYOUT.side}px`,
+              top: `${LAYOUT.line6ContentTop}px`,
+            }}
+          >
+            <RideInfoCard />
+          </div>
+
+          <BottomNav active="center" centerLabel="履歴" />
+        </div>
+      );
+    }
+
+    function FareScreen() {
+      return (
+        <div className="w-full h-full relative overflow-hidden bg-[#dfe5ee]">
+          <div className="relative h-full px-4 pt-4 pb-[26px] overflow-y-auto hide-scrollbar">
+            <FareInfoTop />
+            <div className="mt-4">
+              <FareAmountCard />
+            </div>
+            <div className="mt-4">
+              <PassengerDots />
+            </div>
+            <div className="mt-5 space-y-4">
+              <PayButton label="現金" bg="#4d4df7" color="#111827" />
+              <PayButton label="カード・QR" bg="#79e883" color="#111827" />
+              <PayButton label="領収証発行" bg="#f0ef47" color="#111827" />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [screen, setScreen] = useState("top");
+      const [headerMode, setHeaderMode] = useState("pace");
+
+      const headerData = useMemo(
+        () => ({
+          total: 50000,
+          one: 21000,
+          two: 29000,
+        }),
+        []
+      );
+
+      const handleHeaderTap = () => {
+        setHeaderMode((prev) => {
+          if (prev === "pace") return "total";
+          if (prev === "total") return "one";
+          if (prev === "one") return "two";
+          return "pace";
+        });
+      };
+
+      const view = useMemo(() => {
+        if (screen === "top") {
+          return <TopScreen onNext={() => setScreen("standby")} />;
+        }
+
+        if (screen === "standby") {
+          return (
+            <StandbyScreen
+              onNext={() => setScreen("ride")}
+              headerMode={headerMode}
+              onHeaderTap={handleHeaderTap}
+              headerData={headerData}
+            />
+          );
+        }
+
+        if (screen === "ride") {
+          return (
+            <RideScreen
+              onNext={() => setScreen("fare")}
+              headerMode={headerMode}
+              onHeaderTap={handleHeaderTap}
+              headerData={headerData}
+            />
+          );
+        }
+
+        return <FareScreen />;
+      }, [screen, headerMode, headerData]);
+
+      return (
+        <div className="w-full h-full flex justify-center bg-[#dfe5ee] overflow-hidden">
+          <div className="w-full max-w-[430px] h-full relative overflow-hidden">
+            {view}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
