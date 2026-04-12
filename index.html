@@ -109,18 +109,15 @@
       weatherDayFont: 11,
       weatherIconSize: 22,
 
-      // 白カードを左から10分割したときの2本目・3本目の中心
+      // 白カード幅を10分割した時の2本目・3本目の中心
       weatherColumn2Center: 20,
       weatherColumn3Center: 30,
 
-      // 天気1セットの幅
-      weatherSetWidth: 36,
+      // 日付は一旦OKの高さを維持
+      weatherDayTop: 0,
 
-      // 今回の主調整
-      weatherDayLineH: 12,
-      weatherDayIconGap: 6,   // ← 隙間を広げる
-      weatherTopPadMin: 3,
-      weatherBottomPadMin: 3,
+      // アイコンだけ下げる
+      weatherIconTopOffset: 6,
     };
 
     function formatMoneyNoYen(value) {
@@ -237,92 +234,70 @@
     }
 
     function WeatherRail({ bandHeight }) {
-      const rawContentH =
-        LAYOUT.weatherDayLineH +
-        LAYOUT.weatherDayIconGap +
-        LAYOUT.weatherIconSize;
+      const dayH = 12;
+      const dayTop = LAYOUT.weatherDayTop;
+      const iconTop = dayTop + dayH + LAYOUT.weatherIconTopOffset;
 
-      const maxContentH = Math.max(
-        0,
-        bandHeight - LAYOUT.weatherTopPadMin - LAYOUT.weatherBottomPadMin
-      );
-
-      const contentH = Math.min(rawContentH, maxContentH);
-
-      const actualGap = Math.max(
-        2,
-        contentH - LAYOUT.weatherDayLineH - LAYOUT.weatherIconSize
-      );
-
-      const topInset = Math.max(
-        LAYOUT.weatherTopPadMin,
-        Math.floor((bandHeight - (LAYOUT.weatherDayLineH + actualGap + LAYOUT.weatherIconSize)) / 2)
-      );
-
-      function WeatherSet({ day, variant, centerPercent }) {
+      function DayLabel({ day, centerPercent }) {
         return (
           <div
-            className="absolute"
+            className="absolute text-center"
             style={{
-              left: `calc(${centerPercent}% - ${LAYOUT.weatherSetWidth / 2}px)`,
-              top: "0px",
-              width: `${LAYOUT.weatherSetWidth}px`,
-              height: `${bandHeight}px`,
+              left: `calc(${centerPercent}% - 18px)`,
+              top: `${dayTop}px`,
+              width: "36px",
+              height: `${dayH}px`,
+              lineHeight: `${dayH}px`,
               overflow: "hidden",
             }}
           >
-            <div className="relative w-full h-full overflow-hidden">
-              <div
-                className="absolute inset-x-0 text-center overflow-hidden"
-                style={{
-                  top: `${topInset}px`,
-                  height: `${LAYOUT.weatherDayLineH}px`,
-                  lineHeight: `${LAYOUT.weatherDayLineH}px`,
-                }}
-              >
-                <span
-                  className="font-semibold text-[#7a869f]"
-                  style={{
-                    fontSize: `${LAYOUT.weatherDayFont}px`,
-                    lineHeight: `${LAYOUT.weatherDayLineH}px`,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {day}
-                </span>
-              </div>
+            <span
+              className="font-semibold text-[#7a869f]"
+              style={{
+                fontSize: `${LAYOUT.weatherDayFont}px`,
+                lineHeight: `${dayH}px`,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {day}
+            </span>
+          </div>
+        );
+      }
 
-              <div
-                className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden"
-                style={{
-                  top: `${topInset + LAYOUT.weatherDayLineH + actualGap}px`,
-                  width: `${LAYOUT.weatherIconSize}px`,
-                  height: `${LAYOUT.weatherIconSize}px`,
-                }}
-              >
-                {variant === "sun" ? (
-                  <SunWeatherIcon size={LAYOUT.weatherIconSize} />
-                ) : (
-                  <PartlyCloudyWeatherIcon size={LAYOUT.weatherIconSize} />
-                )}
-              </div>
-            </div>
+      function IconMark({ variant, centerPercent }) {
+        const clampedTop = Math.min(
+          Math.max(0, iconTop),
+          Math.max(0, bandHeight - LAYOUT.weatherIconSize)
+        );
+
+        return (
+          <div
+            className="absolute flex items-center justify-center"
+            style={{
+              left: `calc(${centerPercent}% - ${LAYOUT.weatherIconSize / 2}px)`,
+              top: `${clampedTop}px`,
+              width: `${LAYOUT.weatherIconSize}px`,
+              height: `${LAYOUT.weatherIconSize}px`,
+              overflow: "hidden",
+            }}
+          >
+            {variant === "sun" ? (
+              <SunWeatherIcon size={LAYOUT.weatherIconSize} />
+            ) : (
+              <PartlyCloudyWeatherIcon size={LAYOUT.weatherIconSize} />
+            )}
           </div>
         );
       }
 
       return (
         <div className="absolute inset-0 overflow-hidden">
-          <WeatherSet
-            day="4/11"
-            variant="sun"
-            centerPercent={LAYOUT.weatherColumn2Center}
-          />
-          <WeatherSet
-            day="4/12"
-            variant="partly"
-            centerPercent={LAYOUT.weatherColumn3Center}
-          />
+          <DayLabel day="4/11" centerPercent={LAYOUT.weatherColumn2Center} />
+          <DayLabel day="4/12" centerPercent={LAYOUT.weatherColumn3Center} />
+
+          <IconMark variant="sun" centerPercent={LAYOUT.weatherColumn2Center} />
+          <IconMark variant="partly" centerPercent={LAYOUT.weatherColumn3Center} />
         </div>
       );
     }
