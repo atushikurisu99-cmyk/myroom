@@ -14,6 +14,18 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
+    @font-face {
+      font-family: "DroidSans";
+      src: url("./DroidSans.ttf") format("truetype");
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "DroidSansBold";
+      src: url("./DroidSans-Bold.ttf") format("truetype");
+      font-display: swap;
+    }
+
     html,
     body,
     #root {
@@ -22,8 +34,8 @@
       height: 100%;
       overflow: hidden;
       background: #dfe5ee;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
-        "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+      font-family: "DroidSans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
     }
 
     * {
@@ -34,6 +46,11 @@
     button,
     input {
       font: inherit;
+    }
+
+    .num-bold {
+      font-family: "DroidSansBold", "DroidSans", sans-serif;
+      font-variant-numeric: tabular-nums;
     }
 
     .hide-scrollbar {
@@ -56,18 +73,21 @@
       bg: "#dfe5ee",
       green: "#32CD32",
       navActive: "#33CC6D",
-      card: "#f8fafc",
+      card: "#ffffff",
       text: "#1f2a44",
-      sub: "#7a869f",
+      sub: "#6e7a93",
       good: "#28a26b",
+      graphBg: "rgba(248,250,252,0.56)",
+      graphText: "#445673",
+      graphSub: "#98a6bc",
     };
 
     const LAYOUT = {
       shellW: 430,
       navH: 112,
 
+      // 確定済みライン
       side: 20,
-
       line1ClockTop: 40,
       line2HeaderBottom: 180,
       line3ButtonTop: 196,
@@ -77,9 +97,23 @@
 
       headerH: 180,
       buttonH: 142,
-      gap: 16,
       contentPlaceholderH: 124,
+
+      // 上カード内部
+      headerInnerX: 16,
+      topBandTop: 40,
+      topBandH: 68,
+      lowerBandTop: 118,
+      lowerBandH: 50,
+      weatherCol2Left: "10%",
+      weatherCol3Left: "20%",
+      dotCol4RightAnchor: "40%",
+      clockRight: 12,
     };
+
+    function formatMoney(value) {
+      return "¥" + Number(value || 0).toLocaleString("ja-JP");
+    }
 
     function Clock({ color = "#1f2a44" }) {
       const [now, setNow] = useState(new Date());
@@ -94,8 +128,8 @@
 
       return (
         <div
+          className="num-bold leading-none tracking-[-0.05em]"
           style={{ color, fontSize: "68px" }}
-          className="font-black tracking-[-0.05em] leading-none"
         >
           {hh}：{mm}
         </div>
@@ -104,7 +138,7 @@
 
     function EyeIcon() {
       return (
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
             d="M2.2 12C4.1 8.7 7.7 6.6 12 6.6C16.3 6.6 19.9 8.7 21.8 12C19.9 15.3 16.3 17.4 12 17.4C7.7 17.4 4.1 15.3 2.2 12Z"
             stroke="white"
@@ -143,25 +177,180 @@
       );
     }
 
-    function WeatherBlock({ hidden = false }) {
+    function WeatherMini({ day, icon, left }) {
       return (
-        <div className={`flex gap-6 items-start ${hidden ? "opacity-0 pointer-events-none" : ""}`}>
-          <div>
-            <div className="text-[12px] font-semibold text-[#7a869f] leading-none">4/11</div>
-            <div className="mt-2 text-[26px] leading-none">🌞</div>
+        <div
+          className="absolute"
+          style={{
+            left,
+            top: `${LAYOUT.topBandTop + 4}px`,
+            width: "10%",
+          }}
+        >
+          <div className="text-[11px] font-semibold text-[#7a869f] leading-none">
+            {day}
           </div>
-          <div>
-            <div className="text-[12px] font-semibold text-[#7a869f] leading-none">4/12</div>
-            <div className="mt-2 text-[26px] leading-none">🌤️</div>
-          </div>
+          <div className="mt-[6px] text-[22px] leading-none">{icon}</div>
         </div>
       );
     }
 
-    function HeaderZone({ screen = "top" }) {
+    function HeaderSwitchContent({ mode, data }) {
+      const baseLabelStyle = {
+        position: "absolute",
+        left: `${LAYOUT.headerInnerX}px`,
+        top: "8px",
+        fontSize: "13px",
+        lineHeight: "1",
+        color: COLORS.sub,
+        fontWeight: 700,
+        whiteSpace: "nowrap",
+      };
+
+      const baseMainStyle = {
+        position: "absolute",
+        left: `${LAYOUT.headerInnerX}px`,
+        bottom: "6px",
+        lineHeight: "1",
+        whiteSpace: "nowrap",
+      };
+
+      if (mode === "total") {
+        return (
+          <>
+            <div style={baseLabelStyle}>合計</div>
+            <div
+              className="num-bold"
+              style={{
+                ...baseMainStyle,
+                fontSize: "26px",
+                color: COLORS.text,
+              }}
+            >
+              {formatMoney(data.total)}
+            </div>
+          </>
+        );
+      }
+
+      if (mode === "one") {
+        return (
+          <>
+            <div style={baseLabelStyle}>①</div>
+            <div
+              className="num-bold"
+              style={{
+                ...baseMainStyle,
+                fontSize: "26px",
+                color: COLORS.text,
+              }}
+            >
+              {formatMoney(data.one)}
+            </div>
+          </>
+        );
+      }
+
+      if (mode === "two") {
+        return (
+          <>
+            <div style={baseLabelStyle}>②</div>
+            <div
+              className="num-bold"
+              style={{
+                ...baseMainStyle,
+                fontSize: "26px",
+                color: COLORS.text,
+              }}
+            >
+              {formatMoney(data.two)}
+            </div>
+          </>
+        );
+      }
+
+      return (
+        <>
+          <div
+            style={{
+              ...baseLabelStyle,
+              left: `${LAYOUT.headerInnerX}px`,
+            }}
+          >
+            今日のペース
+          </div>
+
+          <div
+            style={{
+              position: "absolute",
+              top: "7px",
+              right: LAYOUT.dotCol4RightAnchor,
+              width: "10px",
+              height: "10px",
+              borderRadius: "999px",
+              background: COLORS.good,
+            }}
+          />
+
+          <div
+            className="num-bold"
+            style={{
+              ...baseMainStyle,
+              fontSize: "22px",
+              color: COLORS.good,
+            }}
+          >
+            良好
+          </div>
+        </>
+      );
+    }
+
+    function StateCard({ mode, onTap, data }) {
+      return (
+        <button
+          type="button"
+          onClick={onTap}
+          className="relative w-full h-full bg-white shadow-[0_8px_22px_rgba(0,0,0,0.08)]"
+          style={{ borderRadius: "8px" }}
+          aria-label="表示切替"
+        >
+          <div
+            className="absolute inset-x-0"
+            style={{
+              top: `${LAYOUT.topBandTop}px`,
+              height: `${LAYOUT.topBandH}px`,
+            }}
+          >
+            <WeatherMini day="4/11" icon="🌞" left={LAYOUT.weatherCol2Left} />
+            <WeatherMini day="4/12" icon="🌤️" left={LAYOUT.weatherCol3Left} />
+
+            <div
+              className="absolute"
+              style={{
+                top: "0px",
+                right: `${LAYOUT.clockRight}px`,
+              }}
+            >
+              <Clock color={COLORS.text} />
+            </div>
+          </div>
+
+          <div
+            className="absolute left-0 right-0"
+            style={{
+              top: `${LAYOUT.lowerBandTop}px`,
+              height: `${LAYOUT.lowerBandH}px`,
+            }}
+          >
+            <HeaderSwitchContent mode={mode} data={data} />
+          </div>
+        </button>
+      );
+    }
+
+    function TopHeaderZone() {
       const headerTop = LAYOUT.line2HeaderBottom - LAYOUT.headerH;
-      const clockTopInside = LAYOUT.line1ClockTop - headerTop;
-      const isTop = screen === "top";
 
       return (
         <div
@@ -173,43 +362,69 @@
             height: `${LAYOUT.headerH}px`,
           }}
         >
-          {isTop ? (
-            <div className="relative h-full">
-              <div className="absolute left-0 top-0">
-                <WeatherBlock hidden={true} />
-              </div>
-
-              <div className="absolute left-0 right-0 bottom-0 flex items-start justify-between gap-3">
-                <div>
-                  <div className="text-[15px] font-semibold text-white leading-none">当月達成売上</div>
-                  <div className="mt-3 text-[26px] font-black text-white leading-none">¥0</div>
-                </div>
-                <div className="pt-[18px]">
-                  <EyeIcon />
-                </div>
-              </div>
-            </div>
-          ) : (
+          <div className="relative w-full h-full">
             <div
-              className="relative h-full rounded-[34px] bg-[#f8fafc] shadow-[0_8px_22px_rgba(0,0,0,0.08)] px-5 pt-5 pb-4"
+              className="absolute"
+              style={{ left: "10%", top: `${LAYOUT.topBandTop + 4}px`, width: "10%", opacity: 0 }}
             >
-              <div className="absolute left-5 top-5">
-                <WeatherBlock />
-              </div>
+              <div className="text-[11px] font-semibold leading-none">4/11</div>
+              <div className="mt-[6px] text-[22px] leading-none">🌞</div>
+            </div>
 
-              <div className="absolute left-5 right-5 bottom-4">
-                <div className="text-[14px] font-semibold text-[#6e7a93]">今日のペース</div>
-                <div className="mt-1 text-[16px] font-bold text-[#28a26b] leading-none">良好</div>
+            <div
+              className="absolute"
+              style={{ left: "20%", top: `${LAYOUT.topBandTop + 4}px`, width: "10%", opacity: 0 }}
+            >
+              <div className="text-[11px] font-semibold leading-none">4/12</div>
+              <div className="mt-[6px] text-[22px] leading-none">🌤️</div>
+            </div>
+
+            <div
+              className="absolute"
+              style={{
+                top: `${LAYOUT.topBandTop}px`,
+                right: `${LAYOUT.clockRight}px`,
+              }}
+            >
+              <Clock color="#ffffff" />
+            </div>
+
+            <div
+              className="absolute left-0 right-0 flex items-start justify-between"
+              style={{
+                top: `${LAYOUT.lowerBandTop}px`,
+                height: `${LAYOUT.lowerBandH}px`,
+                paddingLeft: `${LAYOUT.headerInnerX}px`,
+                paddingRight: `${LAYOUT.headerInnerX}px`,
+              }}
+            >
+              <div>
+                <div className="text-[13px] font-semibold text-white leading-none">当月達成売上</div>
+                <div className="mt-[8px] text-[24px] text-white leading-none num-bold">¥0</div>
+              </div>
+              <div className="pt-[2px]">
+                <EyeIcon />
               </div>
             </div>
-          )}
-
-          <div
-            className="absolute right-0"
-            style={{ top: `${clockTopInside}px` }}
-          >
-            <Clock color={isTop ? "#ffffff" : "#1f2a44"} />
           </div>
+        </div>
+      );
+    }
+
+    function StateHeaderZone({ mode, onTap, data }) {
+      const headerTop = LAYOUT.line2HeaderBottom - LAYOUT.headerH;
+
+      return (
+        <div
+          className="absolute"
+          style={{
+            left: `${LAYOUT.side}px`,
+            right: `${LAYOUT.side}px`,
+            top: `${headerTop}px`,
+            height: `${LAYOUT.headerH}px`,
+          }}
+        >
+          <StateCard mode={mode} onTap={onTap} data={data} />
         </div>
       );
     }
@@ -239,9 +454,13 @@
 
     function GraphCard({ title, sub }) {
       return (
-        <div className="h-[118px] rounded-[28px] bg-[rgba(248,250,252,0.56)] px-4 py-4 border border-[rgba(255,255,255,0.14)] overflow-hidden">
-          <div className="text-[18px] font-black text-[#445673]">{title}</div>
-          <div className="mt-1 text-[12px] font-semibold text-[#98a6bc]">{sub}</div>
+        <div className="h-[118px] rounded-[18px] bg-[rgba(248,250,252,0.56)] px-4 py-4 border border-[rgba(255,255,255,0.14)] overflow-hidden">
+          <div className="text-[18px] font-black" style={{ color: COLORS.graphText }}>
+            {title}
+          </div>
+          <div className="mt-1 text-[12px] font-semibold" style={{ color: COLORS.graphSub }}>
+            {sub}
+          </div>
         </div>
       );
     }
@@ -259,17 +478,17 @@
 
     function RideInfoCard() {
       return (
-        <div className="rounded-[28px] bg-[#f8fafc] px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)] h-[124px]">
+        <div className="bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)] h-[124px]" style={{ borderRadius: "8px" }}>
           <div className="text-[18px] font-black text-[#1f2a44]">取得中...</div>
 
           <div className="mt-4 flex justify-between items-end gap-4">
             <div>
               <div className="text-[12px] font-semibold text-[#6e7a93]">乗車時刻</div>
-              <div className="mt-1 text-[18px] font-black text-[#1f2a44] leading-none">05:45</div>
+              <div className="mt-1 text-[18px] num-bold text-[#1f2a44] leading-none">05:45</div>
             </div>
             <div className="text-right">
               <div className="text-[12px] font-semibold text-[#6e7a93]">経過時間</div>
-              <div className="mt-1 text-[18px] font-black text-[#1f2a44] leading-none">0分</div>
+              <div className="mt-1 text-[18px] num-bold text-[#1f2a44] leading-none">0分</div>
             </div>
           </div>
         </div>
@@ -278,16 +497,16 @@
 
     function FareInfoTop() {
       return (
-        <div className="rounded-[28px] bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]">
+        <div className="bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]" style={{ borderRadius: "8px" }}>
           <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-start">
             <div>
-              <div className="text-[16px] font-black text-slate-800">05:45</div>
+              <div className="text-[16px] num-bold text-slate-800">05:45</div>
               <div className="mt-2 text-[14px] font-bold text-slate-700">船越南三丁目</div>
               <div className="mt-1 text-[12px] font-semibold text-slate-400">精度：55m</div>
             </div>
             <div className="pt-[6px] text-[22px] text-slate-300">→</div>
             <div className="text-right">
-              <div className="text-[16px] font-black text-slate-800">05:45</div>
+              <div className="text-[16px] num-bold text-slate-800">05:45</div>
               <div className="mt-2 text-[14px] font-bold text-slate-700">船越南三丁目</div>
               <div className="mt-1 text-[12px] font-semibold text-slate-400">精度：55m</div>
             </div>
@@ -298,10 +517,10 @@
 
     function FareAmountCard() {
       return (
-        <div className="rounded-[28px] bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]">
+        <div className="bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)]" style={{ borderRadius: "8px" }}>
           <div className="flex items-center justify-between gap-4">
             <div className="text-[16px] text-slate-400">¥</div>
-            <div className="flex-1 text-[34px] leading-none font-black tracking-[-0.04em] text-slate-800">
+            <div className="flex-1 text-[34px] leading-none num-bold tracking-[-0.04em] text-slate-800">
               1,200
             </div>
             <div className="text-right">
@@ -400,16 +619,7 @@
       );
     }
 
-    function FixedLinesLayout({
-      screen,
-      buttonLabel,
-      buttonType,
-      onAdvance,
-      centerLabel,
-      navActive,
-      content,
-      showArrow = false,
-    }) {
+    function TopScreen({ onNext }) {
       return (
         <div className="absolute inset-0 bg-[#dfe5ee] overflow-hidden">
           <div
@@ -417,7 +627,7 @@
             style={{ height: `${LAYOUT.line5GreenBottom}px` }}
           />
 
-          <HeaderZone screen={screen} />
+          <TopHeaderZone />
 
           <div
             className="absolute"
@@ -428,7 +638,7 @@
               height: `${LAYOUT.buttonH}px`,
             }}
           >
-            <MainButton label={buttonLabel} type={buttonType} onClick={onAdvance} />
+            <MainButton label="乗務開始" type="start" onClick={onNext} />
           </div>
 
           <div
@@ -439,60 +649,91 @@
               top: `${LAYOUT.line6ContentTop}px`,
             }}
           >
-            {content}
+            <TopGraphArea />
           </div>
 
-          {showArrow ? (
-            <div className="absolute right-[26px] bottom-[118px] text-[28px] font-black text-[#a7adb7] leading-none">
-              ▲
-            </div>
-          ) : null}
+          <div className="absolute right-[26px] bottom-[118px] text-[28px] font-black text-[#a7adb7] leading-none">
+            ▲
+          </div>
 
-          <BottomNav active={navActive} centerLabel={centerLabel} />
+          <BottomNav active="home" centerLabel="経費" />
         </div>
       );
     }
 
-    function TopScreen({ onNext }) {
+    function StandbyScreen({ onNext, headerMode, onHeaderTap, headerData }) {
       return (
-        <FixedLinesLayout
-          screen="top"
-          buttonLabel="乗務開始"
-          buttonType="start"
-          onAdvance={onNext}
-          centerLabel="経費"
-          navActive="home"
-          content={<TopGraphArea />}
-          showArrow={true}
-        />
+        <div className="absolute inset-0 bg-[#dfe5ee] overflow-hidden">
+          <div
+            className="absolute inset-x-0 top-0 bg-[#32CD32]"
+            style={{ height: `${LAYOUT.line5GreenBottom}px` }}
+          />
+
+          <StateHeaderZone mode={headerMode} onTap={onHeaderTap} data={headerData} />
+
+          <div
+            className="absolute"
+            style={{
+              left: `${LAYOUT.side}px`,
+              right: `${LAYOUT.side}px`,
+              top: `${LAYOUT.line3ButtonTop}px`,
+              height: `${LAYOUT.buttonH}px`,
+            }}
+          >
+            <MainButton label="実車" type="standby" onClick={onNext} />
+          </div>
+
+          <div
+            className="absolute"
+            style={{
+              left: `${LAYOUT.side}px`,
+              right: `${LAYOUT.side}px`,
+              top: `${LAYOUT.line6ContentTop}px`,
+            }}
+          >
+            <div style={{ height: `${LAYOUT.contentPlaceholderH}px` }} />
+          </div>
+
+          <BottomNav active="center" centerLabel="履歴" />
+        </div>
       );
     }
 
-    function StandbyScreen({ onNext }) {
+    function RideScreen({ onNext, headerMode, onHeaderTap, headerData }) {
       return (
-        <FixedLinesLayout
-          screen="standby"
-          buttonLabel="実車"
-          buttonType="standby"
-          onAdvance={onNext}
-          centerLabel="履歴"
-          navActive="center"
-          content={<div style={{ height: `${LAYOUT.contentPlaceholderH}px` }} />}
-        />
-      );
-    }
+        <div className="absolute inset-0 bg-[#dfe5ee] overflow-hidden">
+          <div
+            className="absolute inset-x-0 top-0 bg-[#32CD32]"
+            style={{ height: `${LAYOUT.line5GreenBottom}px` }}
+          />
 
-    function RideScreen({ onNext }) {
-      return (
-        <FixedLinesLayout
-          screen="ride"
-          buttonLabel="降車"
-          buttonType="ride"
-          onAdvance={onNext}
-          centerLabel="履歴"
-          navActive="center"
-          content={<RideInfoCard />}
-        />
+          <StateHeaderZone mode={headerMode} onTap={onHeaderTap} data={headerData} />
+
+          <div
+            className="absolute"
+            style={{
+              left: `${LAYOUT.side}px`,
+              right: `${LAYOUT.side}px`,
+              top: `${LAYOUT.line3ButtonTop}px`,
+              height: `${LAYOUT.buttonH}px`,
+            }}
+          >
+            <MainButton label="降車" type="ride" onClick={onNext} />
+          </div>
+
+          <div
+            className="absolute"
+            style={{
+              left: `${LAYOUT.side}px`,
+              right: `${LAYOUT.side}px`,
+              top: `${LAYOUT.line6ContentTop}px`,
+            }}
+          >
+            <RideInfoCard />
+          </div>
+
+          <BottomNav active="center" centerLabel="履歴" />
+        </div>
       );
     }
 
@@ -519,13 +760,55 @@
 
     function App() {
       const [screen, setScreen] = useState("top");
+      const [headerMode, setHeaderMode] = useState("pace");
+
+      const headerData = useMemo(
+        () => ({
+          total: 50000,
+          one: 21000,
+          two: 29000,
+        }),
+        []
+      );
+
+      const handleHeaderTap = () => {
+        setHeaderMode((prev) => {
+          if (prev === "pace") return "total";
+          if (prev === "total") return "one";
+          if (prev === "one") return "two";
+          return "pace";
+        });
+      };
 
       const view = useMemo(() => {
-        if (screen === "top") return <TopScreen onNext={() => setScreen("standby")} />;
-        if (screen === "standby") return <StandbyScreen onNext={() => setScreen("ride")} />;
-        if (screen === "ride") return <RideScreen onNext={() => setScreen("fare")} />;
+        if (screen === "top") {
+          return <TopScreen onNext={() => setScreen("standby")} />;
+        }
+
+        if (screen === "standby") {
+          return (
+            <StandbyScreen
+              onNext={() => setScreen("ride")}
+              headerMode={headerMode}
+              onHeaderTap={handleHeaderTap}
+              headerData={headerData}
+            />
+          );
+        }
+
+        if (screen === "ride") {
+          return (
+            <RideScreen
+              onNext={() => setScreen("fare")}
+              headerMode={headerMode}
+              onHeaderTap={handleHeaderTap}
+              headerData={headerData}
+            />
+          );
+        }
+
         return <FareScreen />;
-      }, [screen]);
+      }, [screen, headerMode, headerData]);
 
       return (
         <div className="w-full h-full flex justify-center bg-[#dfe5ee] overflow-hidden">
