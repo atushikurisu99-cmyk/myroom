@@ -64,7 +64,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useEffect, useMemo, useRef, useState } = React;
+    const { useEffect, useLayoutEffect, useMemo, useRef, useState } = React;
 
     const COLORS = {
       bg: "#dfe5ee",
@@ -108,18 +108,15 @@
 
       weatherDayFont: 11,
       weatherIconSize: 22,
-
-      // 白カードを左から10分割した時の 2本目・3本目の中心
-      weatherCol2Center: 20,
-      weatherCol3Center: 30,
-
-      // 天気1セットの箱
-      weatherSetWidth: 34,
-
-      // 完全固定ロジック
-      weatherDayTopOffset: 5,
       weatherDayHeight: 12,
-      weatherIconBottomOffset: 2,
+
+      // 白カード10分割の 2本目・3本目中心
+      weatherCol2Ratio: 0.2,
+      weatherCol3Ratio: 0.3,
+
+      // 時計帯の上端・下端からのずらし量
+      weatherDayTopInset: 5,
+      weatherIconBottomInset: 2,
     };
 
     function formatMoneyNoYen(value) {
@@ -235,71 +232,49 @@
       );
     }
 
-    function WeatherCluster({ day, variant, centerPercent, bandHeight }) {
-      return (
-        <div
-          className="absolute"
-          style={{
-            left: `${centerPercent}%`,
-            top: "0px",
-            width: `${LAYOUT.weatherSetWidth}px`,
-            height: `${bandHeight}px`,
-            transform: "translateX(-50%)",
-            overflow: "hidden",
-          }}
-        >
-          <div
-            className="absolute inset-x-0 text-center overflow-hidden"
-            style={{
-              top: `${LAYOUT.weatherDayTopOffset}px`,
-              height: `${LAYOUT.weatherDayHeight}px`,
-              lineHeight: `${LAYOUT.weatherDayHeight}px`,
-            }}
-          >
-            <span
-              className="font-semibold text-[#7a869f]"
-              style={{
-                fontSize: `${LAYOUT.weatherDayFont}px`,
-                lineHeight: `${LAYOUT.weatherDayHeight}px`,
-                whiteSpace: "nowrap",
-              }}
-            >
-              {day}
-            </span>
-          </div>
+    function WeatherOverlay({ positions }) {
+      if (!positions) return null;
 
-          <div
-            className="absolute inset-x-0 flex items-end justify-center overflow-hidden"
-            style={{
-              bottom: `${LAYOUT.weatherIconBottomOffset}px`,
-              height: `${LAYOUT.weatherIconSize}px`,
-            }}
-          >
-            {variant === "sun" ? (
-              <SunWeatherIcon size={LAYOUT.weatherIconSize} />
-            ) : (
-              <PartlyCloudyWeatherIcon size={LAYOUT.weatherIconSize} />
-            )}
-          </div>
-        </div>
-      );
-    }
+      const dayStyle = (x, y) => ({
+        position: "absolute",
+        left: `${x}px`,
+        top: `${y}px`,
+        width: "34px",
+        height: `${LAYOUT.weatherDayHeight}px`,
+        lineHeight: `${LAYOUT.weatherDayHeight}px`,
+        transform: "translateX(-50%)",
+        textAlign: "center",
+        overflow: "hidden",
+        fontSize: `${LAYOUT.weatherDayFont}px`,
+        color: "#7a869f",
+        fontWeight: 600,
+        whiteSpace: "nowrap",
+      });
 
-    function WeatherBand({ bandHeight }) {
+      const iconStyle = (x, y) => ({
+        position: "absolute",
+        left: `${x}px`,
+        top: `${y}px`,
+        width: `${LAYOUT.weatherIconSize}px`,
+        height: `${LAYOUT.weatherIconSize}px`,
+        transform: "translateX(-50%)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        overflow: "hidden",
+      });
+
       return (
-        <div className="absolute inset-0 overflow-hidden">
-          <WeatherCluster
-            day="4/11"
-            variant="sun"
-            centerPercent={LAYOUT.weatherCol2Center}
-            bandHeight={bandHeight}
-          />
-          <WeatherCluster
-            day="4/12"
-            variant="partly"
-            centerPercent={LAYOUT.weatherCol3Center}
-            bandHeight={bandHeight}
-          />
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div style={dayStyle(positions.col2X, positions.dayY)}>4/11</div>
+          <div style={dayStyle(positions.col3X, positions.dayY)}>4/12</div>
+
+          <div style={iconStyle(positions.col2X, positions.iconY)}>
+            <SunWeatherIcon size={LAYOUT.weatherIconSize} />
+          </div>
+          <div style={iconStyle(positions.col3X, positions.iconY)}>
+            <PartlyCloudyWeatherIcon size={LAYOUT.weatherIconSize} />
+          </div>
         </div>
       );
     }
@@ -422,53 +397,69 @@
     }
 
     function StateCard({ mode, onTap, data }) {
+      const cardRef = useRef(null);
       const clockRef = useRef(null);
-      const [clockBand, setClockBand] = useState({
-        top: LAYOUT.topBandTop,
-        height: 68,
-      });
+      const [weatherPos, setWeatherPos] = useState(null);
 
-      useEffect(() => {
-        const updateBand = () => {
-          if (!clockRef.current) return;
-          const h = Math.ceil(clockRef.current.getBoundingClientRect().height);
-          setClockBand({
-            top: LAYOUT.topBandTop,
-            height: h,
+      useLayoutEffect(() => {
+        const updateLayout = () => {
+          if (!cardRef.current || !clockRef.current) return;
+
+          const cardRect = cardRef.current.getBoundingClientRect();
+          const clockRect = clockRef.current.getBoundingClientRect();
+
+          const cardWidth = cardRect.width;
+          const clockTop = clockRect.top - cardRect.top;
+          const clockBottom = clockRect.bottom - cardRect.top;
+
+          const col2X = cardWidth * LAYOUT.weatherCol2Ratio;
+          const col3X = cardWidth * LAYOUT.weatherCol3Ratio;
+
+          const dayY = clockTop + LAYOUT.weatherDayTopInset;
+          const iconY =
+            clockBottom - LAYOUT.weatherIconSize - LAYOUT.weatherIconBottomInset;
+
+          setWeatherPos({
+            col2X,
+            col3X,
+            dayY,
+            iconY,
           });
         };
 
-        updateBand();
-        window.addEventListener("resize", updateBand);
-        return () => window.removeEventListener("resize", updateBand);
+        updateLayout();
+
+        const ro = new ResizeObserver(updateLayout);
+        if (cardRef.current) ro.observe(cardRef.current);
+        if (clockRef.current) ro.observe(clockRef.current);
+
+        window.addEventListener("resize", updateLayout);
+
+        return () => {
+          ro.disconnect();
+          window.removeEventListener("resize", updateLayout);
+        };
       }, []);
 
       return (
         <button
+          ref={cardRef}
           type="button"
           onClick={onTap}
           className="relative w-full h-full bg-white shadow-[0_8px_22px_rgba(0,0,0,0.08)]"
           style={{ borderRadius: "8px" }}
           aria-label="表示切替"
         >
+          <WeatherOverlay positions={weatherPos} />
+
           <div
-            className="absolute inset-x-0 overflow-hidden"
+            className="absolute"
             style={{
-              top: `${clockBand.top}px`,
-              height: `${clockBand.height}px`,
+              top: `${LAYOUT.topBandTop}px`,
+              right: `${LAYOUT.clockRight}px`,
             }}
           >
-            <WeatherBand bandHeight={clockBand.height} />
-
-            <div
-              className="absolute"
-              style={{
-                top: "0px",
-                right: `${LAYOUT.clockRight}px`,
-              }}
-            >
-              <Clock color={COLORS.text} measureRef={clockRef} />
-            </div>
+            <Clock color={COLORS.text} measureRef={clockRef} />
           </div>
 
           <div
