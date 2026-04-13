@@ -510,7 +510,6 @@
             height: `${LAYOUT.lowerBandH}px`,
           }}
         >
-          {/* 累計+未確認：今日のペースと同位置 */}
           <div
             style={{
               position: "absolute",
@@ -526,13 +525,12 @@
             累計+未確認
           </div>
 
-          {/* 7本目左側を開始アンカーにする（表示はしない） */}
           <div
             className="num-bold"
             style={{
               position: "absolute",
               left: "60%",
-              right: "58px",
+              right: "calc(10% + 34px)",
               bottom: "5px",
               fontSize: "26px",
               color: "#ffffff",
@@ -545,7 +543,6 @@
             {formatMoneyNoYen(value)}円
           </div>
 
-          {/* 9本目右側の目アイコン */}
           <div
             style={{
               position: "absolute",
