@@ -111,15 +111,12 @@
       weatherDayHeight: 12,
       weatherIconSize: 22,
 
-      // 白カードを10分割したときの 2本目・3本目中心
       weatherCol2Ratio: 0.2,
       weatherCol3Ratio: 0.3,
 
-      // 時計帯の上端・下端からの固定距離
       weatherDayTopInset: 9,
       weatherIconBottomInset: 1,
 
-      // 見た目補正
       weatherAllXAdjust: -31,
       weatherDayXAdjust: 0,
       weatherIconXAdjust: 0,
@@ -513,7 +510,7 @@
             height: `${LAYOUT.lowerBandH}px`,
           }}
         >
-          {/* 左ラベル：今日のペースと同位置 */}
+          {/* 累計+未確認：今日のペースと同位置 */}
           <div
             style={{
               position: "absolute",
@@ -543,17 +540,19 @@
             }}
           />
 
-          {/* 金額：目アイコンと高さを同一にする */}
+          {/* 金額：7〜9の間に収めて右寄せ、目アイコンと高さ同一 */}
           <div
             className="num-bold"
             style={{
               position: "absolute",
-              right: "52px",
+              left: "63%",
+              width: "22%",
               bottom: "5px",
-              fontSize: "22px",
+              fontSize: "26px",
               color: "#ffffff",
               lineHeight: "1",
               whiteSpace: "nowrap",
+              textAlign: "right",
             }}
           >
             {formatMoneyNoYen(value)}円
