@@ -122,6 +122,15 @@
       weatherIconXAdjust: 0,
       weatherDayYAdjust: 0,
       weatherIconYAdjust: 0,
+
+      // Top money area
+      topMoneyNumberFont: 26,
+      topMoneyYenFont: 20,
+      topMoneyEyeLeft: "90%",
+      topMoneyEyeSize: 26,
+      topMoneyEyeBottom: 5,
+      topMoneyYenRight: 46,     // 目アイコンの少し左に固定
+      topMoneyDigitsRight: 62,  // 円のさらに左で右揃え
     };
 
     function formatMoneyNoYen(value) {
@@ -502,6 +511,8 @@
     }
 
     function TopHeaderMoney({ value }) {
+      const digits = formatMoneyNoYen(value);
+
       return (
         <div
           className="absolute left-0 right-0"
@@ -525,14 +536,15 @@
             累計+未確認
           </div>
 
+          {/* 数字：円の左へ右揃えで伸びる */}
           <div
             className="num-bold"
             style={{
               position: "absolute",
               left: "60%",
-              right: "78px",
+              right: `${LAYOUT.topMoneyDigitsRight}px`,
               bottom: "5px",
-              fontSize: "26px",
+              fontSize: `${LAYOUT.topMoneyNumberFont}px`,
               color: "#ffffff",
               lineHeight: "1",
               whiteSpace: "nowrap",
@@ -541,20 +553,37 @@
               overflow: "hidden",
             }}
           >
-            {formatMoneyNoYen(value)}円
+            {digits}
           </div>
 
+          {/* 円：固定 */}
           <div
             style={{
               position: "absolute",
-              left: "90%",
-              bottom: "5px",
+              right: `${LAYOUT.topMoneyYenRight}px`,
+              bottom: "6px",
+              fontSize: `${LAYOUT.topMoneyYenFont}px`,
+              color: "#ffffff",
+              lineHeight: "1",
+              fontWeight: 700,
+              whiteSpace: "nowrap",
+            }}
+          >
+            円
+          </div>
+
+          {/* 目アイコン：今の位置で固定 */}
+          <div
+            style={{
+              position: "absolute",
+              left: LAYOUT.topMoneyEyeLeft,
+              bottom: `${LAYOUT.topMoneyEyeBottom}px`,
               transform: "translateX(-50%)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: "26px",
-              height: "26px",
+              width: `${LAYOUT.topMoneyEyeSize}px`,
+              height: `${LAYOUT.topMoneyEyeSize}px`,
             }}
           >
             <EyeIcon />
