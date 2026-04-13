@@ -123,21 +123,23 @@
       weatherDayYAdjust: 0,
       weatherIconYAdjust: 0,
 
-      // Top money area
       topMoneyNumberFont: 26,
       topMoneyYenFont: 20,
-
-      // 目アイコンは今の位置で固定
       topMoneyEyeLeft: "90%",
       topMoneyEyeSize: 26,
       topMoneyEyeBottom: 5,
-
-      // 円を少し左へ戻して固定
       topMoneyYenRight: 72,
-
-      // 数字は円の左側へ右揃え
       topMoneyDigitsRight: 96,
       topMoneyDigitsWidth: 170,
+
+      // graph cards
+      graphCardH: 72,         // 約60%
+      graphGapY: 16,          // 上下2段の隙間は維持
+      graphGapX: 14,
+      graphTitleFont: 16,
+      graphSubFont: 11,
+      graphPadX: 14,
+      graphPadTop: 12,
     };
 
     function formatMoneyNoYen(value) {
@@ -543,7 +545,6 @@
             累計+未確認
           </div>
 
-          {/* 数字：円の左側へ右揃え */}
           <div
             className="num-bold"
             style={{
@@ -563,7 +564,6 @@
             {digits}
           </div>
 
-          {/* 円：固定 */}
           <div
             style={{
               position: "absolute",
@@ -579,7 +579,6 @@
             円
           </div>
 
-          {/* 目アイコン：固定 */}
           <div
             style={{
               position: "absolute",
@@ -672,11 +671,35 @@
 
     function GraphCard({ title, sub }) {
       return (
-        <div className="h-[118px] rounded-[18px] bg-[rgba(248,250,252,0.56)] px-4 py-4 border border-[rgba(255,255,255,0.14)] overflow-hidden">
-          <div className="text-[18px] font-black" style={{ color: COLORS.graphText }}>
+        <div
+          className="rounded-[18px] bg-[rgba(248,250,252,0.56)] border border-[rgba(255,255,255,0.14)] overflow-hidden"
+          style={{
+            height: `${LAYOUT.graphCardH}px`,
+            paddingLeft: `${LAYOUT.graphPadX}px`,
+            paddingRight: `${LAYOUT.graphPadX}px`,
+            paddingTop: `${LAYOUT.graphPadTop}px`,
+            paddingBottom: "8px",
+          }}
+        >
+          <div
+            style={{
+              fontSize: `${LAYOUT.graphTitleFont}px`,
+              fontWeight: 900,
+              color: COLORS.graphText,
+              lineHeight: "1.1",
+            }}
+          >
             {title}
           </div>
-          <div className="mt-1 text-[12px] font-semibold" style={{ color: COLORS.graphSub }}>
+          <div
+            style={{
+              marginTop: "6px",
+              fontSize: `${LAYOUT.graphSubFont}px`,
+              fontWeight: 700,
+              color: COLORS.graphSub,
+              lineHeight: "1.1",
+            }}
+          >
             {sub}
           </div>
         </div>
@@ -685,7 +708,13 @@
 
     function TopGraphArea() {
       return (
-        <div className="grid grid-cols-2 gap-x-[14px] gap-y-[16px]">
+        <div
+          className="grid grid-cols-2"
+          style={{
+            columnGap: `${LAYOUT.graphGapX}px`,
+            rowGap: `${LAYOUT.graphGapY}px`,
+          }}
+        >
           <GraphCard title="売上" sub="グラフ" />
           <GraphCard title="本数" sub="推移" />
           <GraphCard title="時間帯" sub="動き" />
