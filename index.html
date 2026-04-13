@@ -526,54 +526,47 @@
             累計+未確認
           </div>
 
-          {/* 7本目左側の円 */}
+          {/* 仮想白カード10分割の 7〜9 を使うグループ */}
           <div
             style={{
               position: "absolute",
               left: "60%",
-              bottom: "9px",
-              width: `${LAYOUT.paceDotSize}px`,
-              height: `${LAYOUT.paceDotSize}px`,
-              borderRadius: "999px",
-              background: "#ffffff",
-              transform: "translateX(-50%)",
-              zIndex: 1,
-            }}
-          />
-
-          {/* 金額：円の右から始め、目アイコンの左で止める */}
-          <div
-            className="num-bold"
-            style={{
-              position: "absolute",
-              left: "63%",
-              right: "74px",
+              right: "10%",
               bottom: "5px",
-              fontSize: "26px",
-              color: "#ffffff",
-              lineHeight: "1",
-              whiteSpace: "nowrap",
-              textAlign: "right",
-              zIndex: 1,
-            }}
-          >
-            {formatMoneyNoYen(value)}円
-          </div>
-
-          {/* 9本目右側の目アイコン */}
-          <div
-            style={{
-              position: "absolute",
-              left: "90%",
-              bottom: "5px",
-              transform: "translateX(-50%)",
+              height: "26px",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              zIndex: 2,
+              justifyContent: "space-between",
+              gap: "10px",
             }}
           >
-            <EyeIcon />
+            <div
+              className="num-bold"
+              style={{
+                flex: "1 1 auto",
+                minWidth: 0,
+                fontSize: "26px",
+                color: "#ffffff",
+                lineHeight: "1",
+                whiteSpace: "nowrap",
+                textAlign: "right",
+              }}
+            >
+              {formatMoneyNoYen(value)}円
+            </div>
+
+            <div
+              style={{
+                flex: "0 0 auto",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "26px",
+                height: "26px",
+              }}
+            >
+              <EyeIcon />
+            </div>
           </div>
         </div>
       );
