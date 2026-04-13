@@ -116,8 +116,15 @@
       weatherCol3Ratio: 0.3,
 
       // 時計帯の上端・下端からの固定距離
-      weatherDayTopInset: 6,
+      weatherDayTopInset: 9,      // ← 日付を少し下げる
       weatherIconBottomInset: 1,
+
+      // 見た目補正
+      weatherAllXAdjust: -31,     // ← 2日分とも左へ縦線1本分
+      weatherDayXAdjust: 0,
+      weatherIconXAdjust: 0,
+      weatherDayYAdjust: 0,
+      weatherIconYAdjust: 0,
     };
 
     function formatMoneyNoYen(value) {
@@ -263,7 +270,7 @@
 
       return (
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div style={dayStyle(positions.col2X, positions.dayY)}>
+          <div style={dayStyle(positions.col2DayX, positions.dayY)}>
             <span
               className="font-semibold text-[#7a869f]"
               style={{
@@ -276,7 +283,7 @@
             </span>
           </div>
 
-          <div style={dayStyle(positions.col3X, positions.dayY)}>
+          <div style={dayStyle(positions.col3DayX, positions.dayY)}>
             <span
               className="font-semibold text-[#7a869f]"
               style={{
@@ -289,11 +296,11 @@
             </span>
           </div>
 
-          <div style={iconStyle(positions.col2X, positions.iconY)}>
+          <div style={iconStyle(positions.col2IconX, positions.iconY)}>
             <SunWeatherIcon size={LAYOUT.weatherIconSize} />
           </div>
 
-          <div style={iconStyle(positions.col3X, positions.iconY)}>
+          <div style={iconStyle(positions.col3IconX, positions.iconY)}>
             <PartlyCloudyWeatherIcon size={LAYOUT.weatherIconSize} />
           </div>
         </div>
@@ -430,23 +437,21 @@
           const clockRect = clockRef.current.getBoundingClientRect();
 
           const cardWidth = cardRect.width;
-
           const clockTop = clockRect.top - cardRect.top;
           const clockBottom = clockRect.bottom - cardRect.top;
 
-          const col2X = Math.round(cardWidth * LAYOUT.weatherCol2Ratio);
-          const col3X = Math.round(cardWidth * LAYOUT.weatherCol3Ratio);
-
-          const dayY = Math.round(clockTop + LAYOUT.weatherDayTopInset);
-          const iconY = Math.round(
-            clockBottom - LAYOUT.weatherIconSize - LAYOUT.weatherIconBottomInset
-          );
+          const baseCol2X = Math.round(cardWidth * LAYOUT.weatherCol2Ratio);
+          const baseCol3X = Math.round(cardWidth * LAYOUT.weatherCol3Ratio);
 
           setWeatherPos({
-            col2X,
-            col3X,
-            dayY,
-            iconY,
+            col2DayX: baseCol2X + LAYOUT.weatherAllXAdjust + LAYOUT.weatherDayXAdjust,
+            col3DayX: baseCol3X + LAYOUT.weatherAllXAdjust + LAYOUT.weatherDayXAdjust,
+            col2IconX: baseCol2X + LAYOUT.weatherAllXAdjust + LAYOUT.weatherIconXAdjust,
+            col3IconX: baseCol3X + LAYOUT.weatherAllXAdjust + LAYOUT.weatherIconXAdjust,
+            dayY: Math.round(clockTop + LAYOUT.weatherDayTopInset + LAYOUT.weatherDayYAdjust),
+            iconY: Math.round(
+              clockBottom - LAYOUT.weatherIconSize - LAYOUT.weatherIconBottomInset + LAYOUT.weatherIconYAdjust
+            ),
           });
         };
 
