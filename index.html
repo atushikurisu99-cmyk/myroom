@@ -116,11 +116,11 @@
       weatherCol3Ratio: 0.3,
 
       // 時計帯の上端・下端からの固定距離
-      weatherDayTopInset: 9,      // ← 日付を少し下げる
+      weatherDayTopInset: 9,
       weatherIconBottomInset: 1,
 
       // 見た目補正
-      weatherAllXAdjust: -31,     // ← 2日分とも左へ縦線1本分
+      weatherAllXAdjust: -31,
       weatherDayXAdjust: 0,
       weatherIconXAdjust: 0,
       weatherDayYAdjust: 0,
@@ -412,7 +412,7 @@
               position: "absolute",
               left: `${LAYOUT.headerInnerX + 18}px`,
               bottom: "5px",
-              fontSize: "22px",
+              fontSize: "18px",
               color: COLORS.good,
               lineHeight: "1",
               whiteSpace: "nowrap",
@@ -444,9 +444,9 @@
           const baseCol3X = Math.round(cardWidth * LAYOUT.weatherCol3Ratio);
 
           setWeatherPos({
-            col2DayX: baseCol2X + LAYOUT.weatherAllXAdjust + LAYOUT.weatherDayXAdjust- 4,
+            col2DayX: baseCol2X + LAYOUT.weatherAllXAdjust + LAYOUT.weatherDayXAdjust,
             col3DayX: baseCol3X + LAYOUT.weatherAllXAdjust + LAYOUT.weatherDayXAdjust,
-            col2IconX: baseCol2X + LAYOUT.weatherAllXAdjust + LAYOUT.weatherIconXAdjust- 4,
+            col2IconX: baseCol2X + LAYOUT.weatherAllXAdjust + LAYOUT.weatherIconXAdjust,
             col3IconX: baseCol3X + LAYOUT.weatherAllXAdjust + LAYOUT.weatherIconXAdjust,
             dayY: Math.round(clockTop + LAYOUT.weatherDayTopInset + LAYOUT.weatherDayYAdjust),
             iconY: Math.round(
