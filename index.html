@@ -107,16 +107,17 @@
       paceDotSize: 10,
 
       weatherDayFont: 11,
-      weatherIconSize: 22,
+      weatherDayWidth: 40,
       weatherDayHeight: 12,
+      weatherIconSize: 22,
 
-      // 白カード10分割の 2本目・3本目中心
+      // 白カードを10分割したときの 2本目・3本目中心
       weatherCol2Ratio: 0.2,
       weatherCol3Ratio: 0.3,
 
-      // 時計帯の上端・下端からのずらし量
-      weatherDayTopInset: 5,
-      weatherIconBottomInset: 2,
+      // 時計帯の上端・下端からの固定距離
+      weatherDayTopInset: 6,
+      weatherIconBottomInset: 1,
     };
 
     function formatMoneyNoYen(value) {
@@ -239,16 +240,12 @@
         position: "absolute",
         left: `${x}px`,
         top: `${y}px`,
-        width: "34px",
+        width: `${LAYOUT.weatherDayWidth}px`,
         height: `${LAYOUT.weatherDayHeight}px`,
         lineHeight: `${LAYOUT.weatherDayHeight}px`,
         transform: "translateX(-50%)",
         textAlign: "center",
         overflow: "hidden",
-        fontSize: `${LAYOUT.weatherDayFont}px`,
-        color: "#7a869f",
-        fontWeight: 600,
-        whiteSpace: "nowrap",
       });
 
       const iconStyle = (x, y) => ({
@@ -266,12 +263,36 @@
 
       return (
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div style={dayStyle(positions.col2X, positions.dayY)}>4/11</div>
-          <div style={dayStyle(positions.col3X, positions.dayY)}>4/12</div>
+          <div style={dayStyle(positions.col2X, positions.dayY)}>
+            <span
+              className="font-semibold text-[#7a869f]"
+              style={{
+                fontSize: `${LAYOUT.weatherDayFont}px`,
+                lineHeight: `${LAYOUT.weatherDayHeight}px`,
+                whiteSpace: "nowrap",
+              }}
+            >
+              4/11
+            </span>
+          </div>
+
+          <div style={dayStyle(positions.col3X, positions.dayY)}>
+            <span
+              className="font-semibold text-[#7a869f]"
+              style={{
+                fontSize: `${LAYOUT.weatherDayFont}px`,
+                lineHeight: `${LAYOUT.weatherDayHeight}px`,
+                whiteSpace: "nowrap",
+              }}
+            >
+              4/12
+            </span>
+          </div>
 
           <div style={iconStyle(positions.col2X, positions.iconY)}>
             <SunWeatherIcon size={LAYOUT.weatherIconSize} />
           </div>
+
           <div style={iconStyle(positions.col3X, positions.iconY)}>
             <PartlyCloudyWeatherIcon size={LAYOUT.weatherIconSize} />
           </div>
@@ -409,15 +430,17 @@
           const clockRect = clockRef.current.getBoundingClientRect();
 
           const cardWidth = cardRect.width;
+
           const clockTop = clockRect.top - cardRect.top;
           const clockBottom = clockRect.bottom - cardRect.top;
 
-          const col2X = cardWidth * LAYOUT.weatherCol2Ratio;
-          const col3X = cardWidth * LAYOUT.weatherCol3Ratio;
+          const col2X = Math.round(cardWidth * LAYOUT.weatherCol2Ratio);
+          const col3X = Math.round(cardWidth * LAYOUT.weatherCol3Ratio);
 
-          const dayY = clockTop + LAYOUT.weatherDayTopInset;
-          const iconY =
-            clockBottom - LAYOUT.weatherIconSize - LAYOUT.weatherIconBottomInset;
+          const dayY = Math.round(clockTop + LAYOUT.weatherDayTopInset);
+          const iconY = Math.round(
+            clockBottom - LAYOUT.weatherIconSize - LAYOUT.weatherIconBottomInset
+          );
 
           setWeatherPos({
             col2X,
@@ -427,16 +450,17 @@
           });
         };
 
-        updateLayout();
+        const raf = requestAnimationFrame(updateLayout);
+        const resizeObserver = new ResizeObserver(updateLayout);
 
-        const ro = new ResizeObserver(updateLayout);
-        if (cardRef.current) ro.observe(cardRef.current);
-        if (clockRef.current) ro.observe(clockRef.current);
+        if (cardRef.current) resizeObserver.observe(cardRef.current);
+        if (clockRef.current) resizeObserver.observe(clockRef.current);
 
         window.addEventListener("resize", updateLayout);
 
         return () => {
-          ro.disconnect();
+          cancelAnimationFrame(raf);
+          resizeObserver.disconnect();
           window.removeEventListener("resize", updateLayout);
         };
       }, []);
