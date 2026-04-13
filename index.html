@@ -123,16 +123,21 @@
       weatherDayYAdjust: 0,
       weatherIconYAdjust: 0,
 
+      // Top money area
       topMoneyNumberFont: 26,
       topMoneyYenFont: 20,
+
+      // 目アイコンは今の位置で固定
       topMoneyEyeLeft: "90%",
       topMoneyEyeSize: 26,
       topMoneyEyeBottom: 5,
 
-      /* ここが今回の固定値 */
-      topMoneyYenRight: 46,       // 円の固定位置
-      topMoneyDigitsRight: 72,    // 数字の右端（円の左で止める）
-      topMoneyDigitsWidth: 138,   // 1,000,000 までを想定した数字箱
+      // 円を少し左へ戻して固定
+      topMoneyYenRight: 72,
+
+      // 数字は円の左側へ右揃え
+      topMoneyDigitsRight: 96,
+      topMoneyDigitsWidth: 170,
     };
 
     function formatMoneyNoYen(value) {
@@ -538,6 +543,7 @@
             累計+未確認
           </div>
 
+          {/* 数字：円の左側へ右揃え */}
           <div
             className="num-bold"
             style={{
@@ -557,6 +563,7 @@
             {digits}
           </div>
 
+          {/* 円：固定 */}
           <div
             style={{
               position: "absolute",
@@ -572,6 +579,7 @@
             円
           </div>
 
+          {/* 目アイコン：固定 */}
           <div
             style={{
               position: "absolute",
