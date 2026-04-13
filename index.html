@@ -513,12 +513,12 @@
             height: `${LAYOUT.lowerBandH}px`,
           }}
         >
-          {/* ラベルは左に残す */}
+          {/* 左ラベル：今日のペースと同位置 */}
           <div
             style={{
               position: "absolute",
               left: `${LAYOUT.headerInnerX}px`,
-              top: "8px",
+              top: `${LAYOUT.switchLabelTop}px`,
               fontSize: "13px",
               lineHeight: "1",
               color: "#ffffff",
@@ -529,51 +529,49 @@
             累計+未確認
           </div>
 
-          {/* 7本目左側の円 */}
+          {/* 7本目の左側に円を固定 */}
           <div
             style={{
               position: "absolute",
               left: "60%",
-              top: "34px",
-              transform: "translate(-50%, -50%)",
-              width: "10px",
-              height: "10px",
+              bottom: "9px",
+              width: `${LAYOUT.paceDotSize}px`,
+              height: `${LAYOUT.paceDotSize}px`,
               borderRadius: "999px",
               background: "#ffffff",
-              opacity: 0.95,
+              transform: "translateX(-50%)",
             }}
           />
 
-          {/* 9本目右側の目アイコン */}
-          <div
-            style={{
-              position: "absolute",
-              left: "90%",
-              top: "34px",
-              transform: "translate(-50%, -50%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <EyeIcon />
-          </div>
-
-          {/* 金額は目アイコンと高さを完全一致 */}
+          {/* 金額：目アイコンと高さを同一にする */}
           <div
             className="num-bold"
             style={{
               position: "absolute",
               right: "52px",
-              top: "34px",
-              transform: "translateY(-50%)",
-              fontSize: "26px",
+              bottom: "5px",
+              fontSize: "22px",
               color: "#ffffff",
               lineHeight: "1",
               whiteSpace: "nowrap",
             }}
           >
             {formatMoneyNoYen(value)}円
+          </div>
+
+          {/* 9本目の右側に目アイコン */}
+          <div
+            style={{
+              position: "absolute",
+              left: "90%",
+              bottom: "5px",
+              transform: "translateX(-50%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <EyeIcon />
           </div>
         </div>
       );
