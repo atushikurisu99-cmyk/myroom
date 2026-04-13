@@ -513,12 +513,28 @@
             height: `${LAYOUT.lowerBandH}px`,
           }}
         >
-          {/* 左の円：7本目の左側 */}
+          {/* ラベルは左に残す */}
+          <div
+            style={{
+              position: "absolute",
+              left: `${LAYOUT.headerInnerX}px`,
+              top: "8px",
+              fontSize: "13px",
+              lineHeight: "1",
+              color: "#ffffff",
+              fontWeight: 700,
+              whiteSpace: "nowrap",
+            }}
+          >
+            累計+未確認
+          </div>
+
+          {/* 7本目左側の円 */}
           <div
             style={{
               position: "absolute",
               left: "60%",
-              top: "50%",
+              top: "34px",
               transform: "translate(-50%, -50%)",
               width: "10px",
               height: "10px",
@@ -528,12 +544,12 @@
             }}
           />
 
-          {/* 右の目アイコン：9本目の右側 */}
+          {/* 9本目右側の目アイコン */}
           <div
             style={{
               position: "absolute",
               left: "90%",
-              top: "50%",
+              top: "34px",
               transform: "translate(-50%, -50%)",
               display: "flex",
               alignItems: "center",
@@ -543,13 +559,13 @@
             <EyeIcon />
           </div>
 
-          {/* 金額：目アイコンと高さを揃えて配置 */}
+          {/* 金額は目アイコンと高さを完全一致 */}
           <div
             className="num-bold"
             style={{
               position: "absolute",
-              right: "54px",
-              top: "50%",
+              right: "52px",
+              top: "34px",
               transform: "translateY(-50%)",
               fontSize: "26px",
               color: "#ffffff",
