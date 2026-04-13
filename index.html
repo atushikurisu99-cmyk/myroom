@@ -526,11 +526,11 @@
             累計+未確認
           </div>
 
-          {/* 7本目の左側に円を固定 */}
+          {/* 7本目左側の円：金額と重ならないよう少し左へ補正 */}
           <div
             style={{
               position: "absolute",
-              left: "60%",
+              left: "58.5%",
               bottom: "9px",
               width: `${LAYOUT.paceDotSize}px`,
               height: `${LAYOUT.paceDotSize}px`,
@@ -540,13 +540,12 @@
             }}
           />
 
-          {/* 金額：7〜9の間に収めて右寄せ、目アイコンと高さ同一 */}
+          {/* 金額：目アイコンより左で止める */}
           <div
             className="num-bold"
             style={{
               position: "absolute",
-              left: "63%",
-              width: "22%",
+              right: "54px",
               bottom: "5px",
               fontSize: "26px",
               color: "#ffffff",
@@ -558,7 +557,7 @@
             {formatMoneyNoYen(value)}円
           </div>
 
-          {/* 9本目の右側に目アイコン */}
+          {/* 9本目右側の目アイコン */}
           <div
             style={{
               position: "absolute",
