@@ -69,7 +69,7 @@
     const COLORS = {
       bg: "#dfe5ee",
       green: "#32CD32",
-      navActive: "#33CC6D",
+      navActive: "#7BCB5C",
       card: "#ffffff",
       text: "#1f2a44",
       sub: "#6e7a93",
@@ -132,14 +132,29 @@
       topMoneyDigitsRight: 96,
       topMoneyDigitsWidth: 170,
 
-      // graph cards
-      graphCardH: 72,         // 約60%
-      graphGapY: 16,          // 上下2段の隙間は維持
+      graphCardH: 72,
+      graphGapY: 16,
       graphGapX: 14,
       graphTitleFont: 16,
       graphSubFont: 11,
       graphPadX: 14,
       graphPadTop: 12,
+
+      // bottom nav
+      bottomBandH: 70,
+      bottomBandRadius: 26,
+      bottomBandBottom: 0,
+      navCircleSize: 92,
+      navCircleTop: 8,
+
+      navBlockTop: 22,
+      navBlockHeight: 34,
+      navBlockGap: 3,
+
+      navCenterTextSize: 16,
+      navSideTextSize: 11,
+      navSideIconSize: 22,
+      navMenuIconSize: 22,
     };
 
     function formatMoneyNoYen(value) {
@@ -183,26 +198,29 @@
 
     function HomeIcon() {
       return (
-        <svg width="30" height="30" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <svg width={LAYOUT.navSideIconSize} height={LAYOUT.navSideIconSize} viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
-            d="M12 29.5L32 12L52 29.5"
+            d="M4.2 10.3L12 3.9L19.8 10.3"
             stroke="white"
-            strokeWidth="5"
+            strokeWidth="2.2"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-          <path d="M19 28.5V51H29V39H35V51H45V28.5" fill="white" />
+          <path
+            d="M6.8 9.7V19.2H10.5V14.4H13.5V19.2H17.2V9.7"
+            fill="white"
+          />
         </svg>
       );
     }
 
-    function GridIcon() {
-      const dots = [10, 24, 38];
+    function MenuDotsIcon() {
+      const dots = [5, 12, 19];
       return (
-        <svg width="24" height="24" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <svg width={LAYOUT.navMenuIconSize} height={LAYOUT.navMenuIconSize} viewBox="0 0 24 24" fill="none" aria-hidden="true">
           {dots.map((x) =>
             dots.map((y) => (
-              <circle key={`${x}-${y}`} cx={x} cy={y} r="3.2" fill="white" />
+              <circle key={`${x}-${y}`} cx={x} cy={y} r="1.9" fill="white" />
             ))
           )}
         </svg>
@@ -817,6 +835,88 @@
       );
     }
 
+    function BottomNavBlock({ type, label }) {
+      if (type === "home") {
+        return (
+          <div
+            style={{
+              height: `${LAYOUT.navBlockHeight}px`,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: `${LAYOUT.navBlockGap}px`,
+            }}
+          >
+            <HomeIcon />
+            <div
+              style={{
+                fontSize: `${LAYOUT.navSideTextSize}px`,
+                fontWeight: 700,
+                lineHeight: "1",
+                color: "#ffffff",
+                whiteSpace: "nowrap",
+              }}
+            >
+              ホーム
+            </div>
+          </div>
+        );
+      }
+
+      if (type === "menu") {
+        return (
+          <div
+            style={{
+              height: `${LAYOUT.navBlockHeight}px`,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: `${LAYOUT.navBlockGap}px`,
+            }}
+          >
+            <MenuDotsIcon />
+            <div
+              style={{
+                fontSize: `${LAYOUT.navSideTextSize}px`,
+                fontWeight: 700,
+                lineHeight: "1",
+                color: "#ffffff",
+                whiteSpace: "nowrap",
+              }}
+            >
+              メニュー
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div
+          style={{
+            height: `${LAYOUT.navBlockHeight}px`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              fontSize: `${LAYOUT.navCenterTextSize}px`,
+              fontWeight: 900,
+              lineHeight: "1",
+              color: "#ffffff",
+              whiteSpace: "nowrap",
+              letterSpacing: "0.02em",
+            }}
+          >
+            {label}
+          </div>
+        </div>
+      );
+    }
+
     function BottomNav({ active = "home", centerLabel = "履歴" }) {
       const activeLeft =
         active === "home" ? "16.6667%" : active === "center" ? "50%" : "83.3333%";
@@ -827,40 +927,58 @@
           style={{ height: `${LAYOUT.navH}px` }}
         >
           <div
-            className="absolute left-0 right-0 bottom-0 h-[70px] rounded-t-[26px]"
-            style={{ background: COLORS.green }}
-          />
-          <div
-            className="absolute top-[8px] w-[92px] h-[92px] rounded-full"
+            className="absolute left-0 right-0"
             style={{
-              left: activeLeft,
-              transform: "translateX(-50%)",
-              background: COLORS.navActive,
+              bottom: `${LAYOUT.bottomBandBottom}px`,
+              height: `${LAYOUT.bottomBandH}px`,
+              background: COLORS.green,
+              borderTopLeftRadius: `${LAYOUT.bottomBandRadius}px`,
+              borderTopRightRadius: `${LAYOUT.bottomBandRadius}px`,
+              overflow: "hidden",
             }}
-          />
-          <div className="absolute inset-0 grid grid-cols-3">
-            <div className="relative">
-              <div className="absolute left-1/2 top-[26px] -translate-x-1/2 flex flex-col items-center">
-                <HomeIcon />
-                <div className="mt-[7px] text-[11px] font-bold text-white whitespace-nowrap">
-                  ホーム
+          >
+            <div className="absolute inset-0 grid grid-cols-3">
+              <div className="relative">
+                <div
+                  className="absolute left-1/2 -translate-x-1/2"
+                  style={{ top: `${LAYOUT.navBlockTop}px` }}
+                >
+                  <BottomNavBlock type="home" />
                 </div>
               </div>
-            </div>
-            <div className="relative">
-              <div className="absolute left-1/2 top-[38px] -translate-x-1/2 text-[16px] font-black tracking-[0.03em] text-white whitespace-nowrap">
-                {centerLabel}
+
+              <div className="relative">
+                <div
+                  className="absolute left-1/2 -translate-x-1/2"
+                  style={{ top: `${LAYOUT.navBlockTop}px` }}
+                >
+                  <BottomNavBlock type="center" label={centerLabel} />
+                </div>
               </div>
-            </div>
-            <div className="relative">
-              <div className="absolute left-1/2 top-[28px] -translate-x-1/2 flex flex-col items-center">
-                <GridIcon />
-                <div className="mt-[8px] text-[11px] font-bold text-white whitespace-nowrap">
-                  メニュー
+
+              <div className="relative">
+                <div
+                  className="absolute left-1/2 -translate-x-1/2"
+                  style={{ top: `${LAYOUT.navBlockTop}px` }}
+                >
+                  <BottomNavBlock type="menu" />
                 </div>
               </div>
             </div>
           </div>
+
+          <div
+            className="absolute"
+            style={{
+              left: activeLeft,
+              top: `${LAYOUT.navCircleTop}px`,
+              transform: "translateX(-50%)",
+              width: `${LAYOUT.navCircleSize}px`,
+              height: `${LAYOUT.navCircleSize}px`,
+              borderRadius: "999px",
+              background: COLORS.navActive,
+            }}
+          />
         </div>
       );
     }
