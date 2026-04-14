@@ -163,52 +163,46 @@ window.AppComponents = (() => {
     const hh = timeParts?.hh || "00";
     const mm = timeParts?.mm || "00";
 
+    const labelBase = {
+      position: "absolute",
+      left: `${L.HEADER_INNER_X}px`,
+      top: `${L.SWITCH_LABEL_TOP}px`,
+      fontSize: "13px",
+      lineHeight: "1",
+      color: C.SUB,
+      fontWeight: 700,
+      whiteSpace: "nowrap",
+    };
+
+    const digitsBase = {
+      position: "absolute",
+      right: "18px",
+      bottom: "0px",
+      fontSize: "26px",
+      color: C.TEXT,
+      lineHeight: "1",
+      whiteSpace: "nowrap",
+      fontWeight: 700,
+    };
+
+    const yenBase = {
+      position: "absolute",
+      right: "0px",
+      bottom: "1px",
+      fontSize: "20px",
+      color: C.TEXT,
+      lineHeight: "1",
+      fontWeight: 700,
+      whiteSpace: "nowrap",
+    };
+
     const renderBottom = () => {
       if (cardMode === 1) {
         return (
           <>
-            <div
-              style={{
-                position: "absolute",
-                left: `${L.HEADER_INNER_X}px`,
-                top: `${L.SWITCH_LABEL_TOP}px`,
-                fontSize: "13px",
-                lineHeight: "1",
-                color: C.SUB,
-                fontWeight: 700,
-                whiteSpace: "nowrap",
-              }}
-            >
-              合計
-            </div>
-            <div
-              className="font-bold"
-              style={{
-                position: "absolute",
-                right: "18px",
-                bottom: "0px",
-                fontSize: "26px",
-                color: C.TEXT,
-                lineHeight: "1",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {Number(totalAmount || 0).toLocaleString("ja-JP")}
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                right: "0px",
-                bottom: "1px",
-                fontSize: "20px",
-                color: C.TEXT,
-                lineHeight: "1",
-                fontWeight: 700,
-                whiteSpace: "nowrap",
-              }}
-            >
-              円
-            </div>
+            <div style={labelBase}>合計</div>
+            <div style={digitsBase}>{Number(totalAmount || 0).toLocaleString("ja-JP")}</div>
+            <div style={yenBase}>円</div>
           </>
         );
       }
@@ -216,48 +210,9 @@ window.AppComponents = (() => {
       if (cardMode === 4) {
         return (
           <>
-            <div
-              style={{
-                position: "absolute",
-                left: `${L.HEADER_INNER_X}px`,
-                top: `${L.SWITCH_LABEL_TOP}px`,
-                fontSize: "13px",
-                lineHeight: "1",
-                color: C.SUB,
-                fontWeight: 700,
-                whiteSpace: "nowrap",
-              }}
-            >
-              ①
-            </div>
-            <div
-              className="font-bold"
-              style={{
-                position: "absolute",
-                right: "18px",
-                bottom: "0px",
-                fontSize: "26px",
-                color: C.TEXT,
-                lineHeight: "1",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {Number(amount1 || 0).toLocaleString("ja-JP")}
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                right: "0px",
-                bottom: "1px",
-                fontSize: "20px",
-                color: C.TEXT,
-                lineHeight: "1",
-                fontWeight: 700,
-                whiteSpace: "nowrap",
-              }}
-            >
-              円
-            </div>
+            <div style={labelBase}>①</div>
+            <div style={digitsBase}>{Number(amount1 || 0).toLocaleString("ja-JP")}</div>
+            <div style={yenBase}>円</div>
           </>
         );
       }
@@ -265,90 +220,37 @@ window.AppComponents = (() => {
       if (cardMode === 5) {
         return (
           <>
-            <div
-              style={{
-                position: "absolute",
-                left: `${L.HEADER_INNER_X}px`,
-                top: `${L.SWITCH_LABEL_TOP}px`,
-                fontSize: "13px",
-                lineHeight: "1",
-                color: C.SUB,
-                fontWeight: 700,
-                whiteSpace: "nowrap",
-              }}
-            >
-              ②
-            </div>
-            <div
-              className="font-bold"
-              style={{
-                position: "absolute",
-                right: "18px",
-                bottom: "0px",
-                fontSize: "26px",
-                color: C.TEXT,
-                lineHeight: "1",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {Number(amount2 || 0).toLocaleString("ja-JP")}
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                right: "0px",
-                bottom: "1px",
-                fontSize: "20px",
-                color: C.TEXT,
-                lineHeight: "1",
-                fontWeight: 700,
-                whiteSpace: "nowrap",
-              }}
-            >
-              円
-            </div>
+            <div style={labelBase}>②</div>
+            <div style={digitsBase}>{Number(amount2 || 0).toLocaleString("ja-JP")}</div>
+            <div style={yenBase}>円</div>
           </>
         );
       }
 
       return (
         <>
-          <div
-            style={{
-              position: "absolute",
-              left: `${L.HEADER_INNER_X}px`,
-              top: `${L.SWITCH_LABEL_TOP}px`,
-              fontSize: "13px",
-              lineHeight: "1",
-              color: C.SUB,
-              fontWeight: 700,
-              whiteSpace: "nowrap",
-            }}
-          >
-            今日のペース
-          </div>
+          <div style={labelBase}>今日のペース</div>
 
           <div
             style={{
               position: "absolute",
               left: `${L.HEADER_INNER_X}px`,
-              bottom: "9px",
-              width: `${L.PACE_DOT_SIZE}px`,
-              height: `${L.PACE_DOT_SIZE}px`,
+              bottom: "8px",
+              width: "10px",
+              height: "10px",
               borderRadius: "999px",
               background: C.GOOD,
             }}
           />
-
           <div
-            className="font-bold"
             style={{
               position: "absolute",
-              left: `${L.HEADER_INNER_X + 18}px`,
-              bottom: "5px",
+              left: `${L.HEADER_INNER_X + 16}px`,
+              bottom: "2px",
               fontSize: "18px",
-              color: C.GOOD,
               lineHeight: "1",
+              color: C.GOOD,
+              fontWeight: 700,
               whiteSpace: "nowrap",
             }}
           >
@@ -398,7 +300,7 @@ window.AppComponents = (() => {
               left: `${L.HEADER_INNER_X}px`,
               right: `${L.HEADER_INNER_X}px`,
               bottom: `${L.SWITCH_MAIN_BOTTOM}px`,
-              height: "26px",
+              height: "28px",
             }}
           >
             {renderBottom()}
@@ -739,42 +641,6 @@ window.AppComponents = (() => {
     );
   }
 
-  function HomeEndDutySheet({ open, dutyStarted, onFinishTap }) {
-    const sheetHeight = C.HOME_END_SHEET_HEIGHT;
-    const hiddenTranslate = sheetHeight + 24;
-
-    return (
-      <div
-        className="absolute left-0 right-0 bottom-0 pointer-events-none"
-        style={{ height: `${sheetHeight}px` }}
-      >
-        <div
-          className="h-full rounded-t-[28px] bg-white border border-slate-200 shadow-[0_-10px_20px_rgba(0,0,0,0.12)] flex items-center justify-center px-5 pointer-events-auto"
-          style={{
-            transform: `translateY(${open ? 0 : hiddenTranslate}px)`,
-            transition: "transform 260ms cubic-bezier(0.22,1,0.36,1)",
-            willChange: "transform",
-          }}
-        >
-          <button
-            type="button"
-            onClick={onFinishTap}
-            disabled={!dutyStarted}
-            className={`${C.endDutyButtonClass} ${dutyStarted ? "opacity-100" : "opacity-45"}`}
-            style={{
-              width: "268px",
-              height: "46px",
-            }}
-          >
-            <span className="text-[17px] font-bold tracking-[-0.02em]">
-              本日の乗務を終了
-            </span>
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   function OtherSheet({ show, onClose, openHistoryFull, onShowSoon }) {
     if (!show) return null;
 
@@ -948,7 +814,6 @@ window.AppComponents = (() => {
     TopGraphArea,
     BottomNav,
     MainButton,
-    HomeEndDutySheet,
     OtherSheet,
     PaymentDialog,
     ViaDialog,
