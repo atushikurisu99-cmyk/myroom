@@ -55,77 +55,69 @@ window.AppScreens.TopScreen = (() => {
             ...(startupOtherStyle || {}),
           }}
         >
-          <div
-            className="relative w-full h-full bg-white shadow-[0_8px_22px_rgba(0,0,0,0.08)]"
-            style={{ borderRadius: "8px" }}
-          >
-            {!homeEndSheetOpen ? (
-              <>
-                <div className="absolute inset-0 p-[12px]">
-                  <TopGraphArea />
-                </div>
-
-                <div
-                  className="absolute z-20"
+          {!homeEndSheetOpen ? (
+            <>
+              <TopGraphArea />
+              <div
+                className="absolute z-20"
+                style={{
+                  right: "6px",
+                  bottom: "-6px",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={toggleHomeEndSheet}
+                  className="flex items-center justify-center w-[40px] h-[36px] active:opacity-80"
+                  aria-label="終了ボタンを表示"
+                >
+                  <span className="text-[28px] font-black text-[#a7adb7] leading-none">
+                    ▲
+                  </span>
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <button
+                  type="button"
+                  onClick={handleFinishTap}
+                  disabled={!dutyStarted}
+                  className={`${C.endDutyButtonClass} ${
+                    dutyStarted ? "opacity-100" : "opacity-45"
+                  }`}
                   style={{
-                    right: "6px",
-                    bottom: "6px",
+                    width: "268px",
+                    height: "46px",
                   }}
                 >
-                  <button
-                    type="button"
-                    onClick={toggleHomeEndSheet}
-                    className="flex items-center justify-center w-[40px] h-[36px] active:opacity-80"
-                    aria-label="終了ボタンを表示"
-                  >
-                    <span className="text-[28px] font-black text-[#a7adb7] leading-none">
-                      ▲
-                    </span>
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="absolute inset-0 flex items-center justify-center px-5">
-                  <button
-                    type="button"
-                    onClick={handleFinishTap}
-                    disabled={!dutyStarted}
-                    className={`${C.endDutyButtonClass} ${
-                      dutyStarted ? "opacity-100" : "opacity-45"
-                    }`}
-                    style={{
-                      width: "268px",
-                      height: "46px",
-                    }}
-                  >
-                    <span className="text-[17px] font-bold tracking-[-0.02em]">
-                      本日の乗務を終了
-                    </span>
-                  </button>
-                </div>
+                  <span className="text-[17px] font-bold tracking-[-0.02em]">
+                    本日の乗務を終了
+                  </span>
+                </button>
+              </div>
 
-                <div
-                  className="absolute z-20"
-                  style={{
-                    right: "6px",
-                    bottom: "6px",
-                  }}
+              <div
+                className="absolute z-20"
+                style={{
+                  right: "6px",
+                  bottom: "-6px",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={toggleHomeEndSheet}
+                  className="flex items-center justify-center w-[40px] h-[36px] active:opacity-80"
+                  aria-label="グラフ表示に戻す"
                 >
-                  <button
-                    type="button"
-                    onClick={toggleHomeEndSheet}
-                    className="flex items-center justify-center w-[40px] h-[36px] active:opacity-80"
-                    aria-label="グラフ表示に戻す"
-                  >
-                    <span className="text-[28px] font-black text-[#a7adb7] leading-none">
-                      ▼
-                    </span>
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+                  <span className="text-[28px] font-black text-[#a7adb7] leading-none">
+                    ▼
+                  </span>
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     );
