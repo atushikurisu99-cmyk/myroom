@@ -69,7 +69,7 @@
     const COLORS = {
       bg: "#dfe5ee",
       green: "#32CD32",
-      navActive: "rgba(127, 200, 78, 0.88)",
+      navActive: "#8CC765",
       card: "#ffffff",
       text: "#1f2a44",
       sub: "#6e7a93",
@@ -146,18 +146,18 @@
       bottomBandBottom: 0,
 
       navCircleSize: 96,
-      navCircleTop: 10,
+      navCircleTop: 8,
 
-      // ブロック自体の中心合わせ用
-      navBlockTop: 16,
-      navBlockHeight: 44,
+      navBlockTop: 18,
+      navBlockHeight: 40,
       navBlockGap: 4,
 
       navCenterTextSize: 18,
       navSideTextSize: 12,
 
-      navSideIconSize: 31.2,
-      navMenuIconSize: 30.8,
+      // 指定倍率
+      navSideIconSize: 31.2, // 家アイコン 1.3倍
+      navMenuIconSize: 30.8, // 9点アイコン 1.1倍
     };
 
     function formatMoneyNoYen(value) {
@@ -199,6 +199,7 @@
       );
     }
 
+    // 安全な塗りベースの家アイコン
     function HomeIcon() {
       return (
         <div
@@ -973,40 +974,32 @@
 
                 return (
                   <div key={key} className="relative">
+                    {isActive && (
+                      <div
+                        className="absolute left-1/2"
+                        style={{
+                          top: `${LAYOUT.navCircleTop}px`,
+                          transform: "translateX(-50%)",
+                          width: `${LAYOUT.navCircleSize}px`,
+                          height: `${LAYOUT.navCircleSize}px`,
+                          borderRadius: "999px",
+                          background: COLORS.navActive,
+                          zIndex: 2,
+                        }}
+                      />
+                    )}
+
                     <div
                       className="absolute left-1/2 -translate-x-1/2"
                       style={{
                         top: `${LAYOUT.navBlockTop}px`,
-                        width: `${LAYOUT.navCircleSize}px`,
-                        height: `${LAYOUT.navCircleSize}px`,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
                         zIndex: 4,
                       }}
                     >
-                      {isActive && (
-                        <div
-                          style={{
-                            position: "absolute",
-                            left: "50%",
-                            top: "50%",
-                            transform: "translate(-50%, -50%)",
-                            width: `${LAYOUT.navCircleSize}px`,
-                            height: `${LAYOUT.navCircleSize}px`,
-                            borderRadius: "999px",
-                            background: COLORS.navActive,
-                            zIndex: 2,
-                          }}
-                        />
-                      )}
-
-                      <div style={{ position: "relative", zIndex: 4 }}>
-                        <BottomNavBlock
-                          type={blockType}
-                          label={blockLabel}
-                        />
-                      </div>
+                      <BottomNavBlock
+                        type={blockType}
+                        label={blockLabel}
+                      />
                     </div>
                   </div>
                 );
