@@ -12,17 +12,13 @@ window.AppScreens.StandbyScreen = (() => {
     return (
       <div className="absolute inset-0 bg-[#dfe5ee] overflow-hidden">
         <div
-          className="absolute inset-x-0 top-0 bg-[#32CD32]"
-          style={{ height: `${L.LINE_5_GREEN_BOTTOM}px` }}
-        />
-
-        <div
           className="absolute"
           style={{
             left: `${L.SIDE}px`,
             right: `${L.SIDE}px`,
             top: `${L.LINE_3_BUTTON_TOP}px`,
             height: `${L.BUTTON_H}px`,
+            zIndex: 6,
           }}
         >
           <MainButton
@@ -38,9 +34,11 @@ window.AppScreens.StandbyScreen = (() => {
             left: `${L.SIDE}px`,
             right: `${L.SIDE}px`,
             top: `${L.LINE_6_CONTENT_TOP}px`,
+            height: `${L.CONTENT_PLACEHOLDER_H}px`,
+            zIndex: 4,
           }}
         >
-          <div style={{ height: `${L.CONTENT_PLACEHOLDER_H}px` }} />
+          <div style={{ height: "100%" }} />
         </div>
       </div>
     );
