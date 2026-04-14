@@ -38,7 +38,7 @@ window.AppScreens.TopScreen = (() => {
 
     const hh = timeParts?.hh || "00";
     const mm = timeParts?.mm || "00";
-    const digits = formatMoneyNoYen(totalAmount ?? 1000000);
+    const digits = formatMoneyNoYen(totalAmount ?? 0);
 
     const buttonType =
       topMainLabel === "乗務開始"
@@ -174,13 +174,13 @@ window.AppScreens.TopScreen = (() => {
           }}
         >
           {!homeEndSheetOpen ? (
-            <div className="relative">
+            <>
               <TopGraphArea />
               <div
                 className="absolute"
                 style={{
-                  right: "6px",
-                  bottom: "-8px",
+                  right: "26px",
+                  bottom: "118px",
                   zIndex: 20,
                 }}
               >
@@ -195,7 +195,7 @@ window.AppScreens.TopScreen = (() => {
                   </span>
                 </button>
               </div>
-            </div>
+            </>
           ) : (
             <div
               className="relative"
@@ -223,8 +223,8 @@ window.AppScreens.TopScreen = (() => {
               <div
                 className="absolute"
                 style={{
-                  right: "6px",
-                  bottom: "-8px",
+                  right: "26px",
+                  bottom: "118px",
                   zIndex: 20,
                 }}
               >
