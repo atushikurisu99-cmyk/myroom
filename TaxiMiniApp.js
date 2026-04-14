@@ -18,7 +18,6 @@ const HistoryModal = window.AppScreens.HistoryModal;
 function TaxiMiniApp() {
   const { refs, state, derived, actions } = useTaxiAppState();
   const C = window.AppConstants;
-  const L = C.TOP_LAYOUT;
 
   const startupAudioRef = useRef(null);
   const startupTimersRef = useRef([]);
@@ -28,8 +27,10 @@ function TaxiMiniApp() {
 
   useEffect(() => {
     const timers = [];
+
     const t1 = setTimeout(() => setStartupPhase("logoFade"), 1500);
     const t2 = setTimeout(() => setStartupPhase("tap"), 2250);
+
     timers.push(t1, t2);
     startupTimersRef.current = timers;
 
@@ -65,12 +66,21 @@ function TaxiMiniApp() {
         startupAudioRef.current.currentTime = 0;
         startupAudioRef.current.play().catch(() => {});
       } catch (_) {}
+
       setStartupStage(1);
     }, 500);
 
-    const t2 = setTimeout(() => setStartupStage(2), 1000);
-    const t3 = setTimeout(() => setStartupStage(3), 1500);
-    const t4 = setTimeout(() => setStartupPhase("done"), 2050);
+    const t2 = setTimeout(() => {
+      setStartupStage(2);
+    }, 1000);
+
+    const t3 = setTimeout(() => {
+      setStartupStage(3);
+    }, 1500);
+
+    const t4 = setTimeout(() => {
+      setStartupPhase("done");
+    }, 2050);
 
     timers.push(t0, t1, t2, t3, t4);
     startupTimersRef.current = timers;
@@ -80,6 +90,7 @@ function TaxiMiniApp() {
 
   const headerStyle = useMemo(() => {
     if (state.screen !== "top" || startupPhase === "done") return {};
+
     return {
       transform: startupStage >= 1 ? "translateX(0)" : "translateX(-140%)",
       opacity: startupStage >= 1 ? 1 : 0,
@@ -91,6 +102,7 @@ function TaxiMiniApp() {
 
   const mainStyle = useMemo(() => {
     if (state.screen !== "top" || startupPhase === "done") return {};
+
     return {
       transform:
         startupStage >= 2
@@ -105,6 +117,7 @@ function TaxiMiniApp() {
 
   const otherStyle = useMemo(() => {
     if (state.screen !== "top" || startupPhase === "done") return {};
+
     return {
       transform: startupStage >= 3 ? "translateX(0)" : "translateX(-72px)",
       opacity: startupStage >= 3 ? 1 : 0,
@@ -126,6 +139,7 @@ function TaxiMiniApp() {
         pointerEvents: "none",
       };
     }
+
     return {
       opacity: 1,
       transition: "opacity 180ms ease-out",
@@ -221,14 +235,14 @@ function TaxiMiniApp() {
           setEditingRecord={actions.setEditingRecord}
         />
 
-        {state.screen !== "fare" && (
+        {(state.screen === "standby" || state.screen === "ride") && (
           <>
             <div
               className="absolute inset-x-0 top-0 bg-[#32CD32]"
-              style={{ height: `${L.LINE_5_GREEN_BOTTOM}px`, zIndex: 1 }}
+              style={{ height: `${C.TOP_LAYOUT.LINE_5_GREEN_BOTTOM}px`, zIndex: 1 }}
             />
 
-            <div style={headerStyle} onClick={actions.handleCardModeNext}>
+            <div onClick={actions.handleCardModeNext}>
               <HeaderCard
                 timeParts={derived.timeParts}
                 cardMode={state.cardMode}
@@ -252,6 +266,8 @@ function TaxiMiniApp() {
             toggleHomeEndSheet={actions.toggleHomeEndSheet}
             handleFinishTap={actions.handleFinishTap}
             dutyStarted={state.dutyStarted}
+            timeParts={derived.timeParts}
+            totalAmount={derived.totalAmount}
           />
         )}
 
