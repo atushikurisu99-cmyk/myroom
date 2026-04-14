@@ -155,9 +155,9 @@
       navCenterTextSize: 18,
       navSideTextSize: 12,
 
-      // ここだけ今回調整
-      navSideIconSize: 31.2,   // 元24px × 1.3
-      navMenuIconSize: 30.8,   // 元28px × 1.1
+      // 指定倍率
+      navSideIconSize: 31.2, // 家アイコン 1.3倍
+      navMenuIconSize: 30.8, // 9点アイコン 1.1倍
     };
 
     function formatMoneyNoYen(value) {
@@ -199,30 +199,27 @@
       );
     }
 
+    // 安全な塗りベースの家アイコン
     function HomeIcon() {
       return (
-        <svg
-          width={LAYOUT.navSideIconSize}
-          height={LAYOUT.navSideIconSize}
-          viewBox="0 0 24 24"
-          fill="none"
+        <div
+          style={{
+            width: `${LAYOUT.navSideIconSize}px`,
+            height: `${LAYOUT.navSideIconSize}px`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
           aria-hidden="true"
         >
-          <path
-            d="M4.2 10.5L12 4L19.8 10.5"
-            stroke="white"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M6.6 10.1V19H10.2V14.6H13.8V19H17.4V10.1"
-            fill="white"
-            stroke="white"
-            strokeWidth="0.6"
-            strokeLinejoin="round"
-          />
-        </svg>
+          <svg
+            viewBox="0 0 24 24"
+            style={{ width: "100%", height: "100%", display: "block", fill: "#ffffff" }}
+          >
+            <path d="M3 11L12 3L21 11V20C21 20.5523 20.5523 21 20 21H14V14H10V21H4C3.44772 21 3 20.5523 3 20V11Z" />
+          </svg>
+        </div>
       );
     }
 
@@ -235,6 +232,7 @@
           viewBox="0 0 24 24"
           fill="none"
           aria-hidden="true"
+          style={{ display: "block", flexShrink: 0 }}
         >
           {dots.map((x) =>
             dots.map((y) => (
