@@ -18,6 +18,7 @@ const HistoryModal = window.AppScreens.HistoryModal;
 function TaxiMiniApp() {
   const { refs, state, derived, actions } = useTaxiAppState();
   const C = window.AppConstants;
+  const L = C.TOP_LAYOUT;
 
   const startupAudioRef = useRef(null);
   const startupTimersRef = useRef([]);
@@ -155,7 +156,7 @@ function TaxiMiniApp() {
   const navCenterLabel = state.screen === "top" ? "経費" : "履歴";
 
   return (
-    <div className="w-full h-full bg-[linear-gradient(180deg,#eef3f9,#e2e8f0)] flex justify-center overflow-hidden">
+    <div className="w-full h-full flex justify-center bg-[#dfe5ee] overflow-hidden">
       <audio
         ref={startupAudioRef}
         src="./goanzen.wav"
@@ -163,7 +164,7 @@ function TaxiMiniApp() {
         style={{ display: "none" }}
       />
 
-      <div className="w-full max-w-sm h-full px-4 pt-4 pb-0 relative overflow-hidden">
+      <div className="w-full max-w-[430px] h-full relative overflow-hidden bg-[#dfe5ee]">
         {state.showSaved && startupPhase === "done" && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-5 py-2.5 shadow-lg">
             保存しました
@@ -235,14 +236,17 @@ function TaxiMiniApp() {
           setEditingRecord={actions.setEditingRecord}
         />
 
-        <div
-          className="h-full flex flex-col overflow-hidden relative"
-          style={{
-            paddingBottom: showBottomNav ? `${C.BOTTOM_NAV_HEIGHT + 8}px` : 0,
-          }}
-        >
-          {state.screen !== "fare" && (
-            <div style={headerStyle} onClick={actions.handleCardModeNext}>
+        {state.screen !== "fare" && (
+          <>
+            <div
+              className="absolute inset-x-0 top-0 bg-[#32CD32]"
+              style={{ height: `${L.LINE_5_GREEN_BOTTOM}px` }}
+            />
+
+            <div
+              style={headerStyle}
+              onClick={actions.handleCardModeNext}
+            >
               <HeaderCard
                 timeParts={derived.timeParts}
                 cardMode={state.cardMode}
@@ -253,99 +257,68 @@ function TaxiMiniApp() {
                 amount2={derived.amount2}
               />
             </div>
-          )}
+          </>
+        )}
 
-          {state.screen === "top" && (
-            <TopScreen
-              topMainLabel={derived.topMainLabel}
-              topMainButtonDisabled={derived.topMainButtonDisabled || startupLock}
-              handleTopMain={actions.handleTopMain}
-              startupMainStyle={mainStyle}
-              startupOtherStyle={otherStyle}
-              homeEndSheetOpen={state.homeEndSheetOpen}
-              toggleHomeEndSheet={actions.toggleHomeEndSheet}
-              handleFinishTap={actions.handleFinishTap}
-              dutyStarted={state.dutyStarted}
-            />
-          )}
+        {state.screen === "top" && (
+          <TopScreen
+            topMainLabel={derived.topMainLabel}
+            topMainButtonDisabled={derived.topMainButtonDisabled || startupLock}
+            handleTopMain={actions.handleTopMain}
+            startupMainStyle={mainStyle}
+            startupOtherStyle={otherStyle}
+            homeEndSheetOpen={state.homeEndSheetOpen}
+            toggleHomeEndSheet={actions.toggleHomeEndSheet}
+            handleFinishTap={actions.handleFinishTap}
+            dutyStarted={state.dutyStarted}
+          />
+        )}
 
-          {state.screen === "standby" && (
-            <StandbyScreen
-              screen={state.screen}
-              timeParts={derived.timeParts}
-              cardMode={state.cardMode}
-              weather={state.weather}
-              totalAmount={derived.totalAmount}
-              recordCount={derived.recordCount}
-              amount1={derived.amount1}
-              amount2={derived.amount2}
-              handleStartRide={actions.handleStartRide}
-              navCenterLabel={navCenterLabel}
-              navActiveArea="center"
-              onHome={actions.goHome}
-              onCenter={actions.openHistorySimple}
-              onMenu={actions.openMenu}
-            />
-          )}
+        {state.screen === "standby" && (
+          <StandbyScreen
+            handleStartRide={actions.handleStartRide}
+          />
+        )}
 
-          {state.screen === "ride" && (
-            <RideScreen
-              screen={state.screen}
-              timeParts={derived.timeParts}
-              cardMode={state.cardMode}
-              weather={state.weather}
-              totalAmount={derived.totalAmount}
-              recordCount={derived.recordCount}
-              amount1={derived.amount1}
-              amount2={derived.amount2}
-              pickup={state.pickup}
-              rideStartAt={state.rideStartAt}
-              elapsedText={derived.elapsedText}
-              viaStops={state.viaStops}
-              handleDropOffTap={actions.handleDropOffTap}
-              navCenterLabel={navCenterLabel}
-              navActiveArea="center"
-              onHome={actions.goHome}
-              onCenter={actions.openHistorySimple}
-              onMenu={actions.openMenu}
-            />
-          )}
+        {state.screen === "ride" && (
+          <RideScreen
+            pickup={state.pickup}
+            rideStartAt={state.rideStartAt}
+            elapsedText={derived.elapsedText}
+            viaStops={state.viaStops}
+            handleDropOffTap={actions.handleDropOffTap}
+          />
+        )}
 
-          {state.screen === "fare" && (
-            <FareScreen
-              rideStartAt={state.rideStartAt}
-              pickup={state.pickup}
-              pickupMeta={state.pickupMeta}
-              rideEndAt={state.rideEndAt}
-              dropoff={state.dropoff}
-              dropoffMeta={state.dropoffMeta}
-              amountInputRef={refs.amountInputRef}
-              formattedAmount={derived.formattedAmount}
-              handleAmountChange={actions.handleAmountChange}
-              selectedPassengers={state.selectedPassengers}
-              handlePassengerSelect={actions.handlePassengerSelect}
-              openPaymentDialog={actions.openPaymentDialog}
-            />
-          )}
-        </div>
+        {state.screen === "fare" && (
+          <FareScreen
+            rideStartAt={state.rideStartAt}
+            pickup={state.pickup}
+            pickupMeta={state.pickupMeta}
+            rideEndAt={state.rideEndAt}
+            dropoff={state.dropoff}
+            dropoffMeta={state.dropoffMeta}
+            amountInputRef={refs.amountInputRef}
+            formattedAmount={derived.formattedAmount}
+            handleAmountChange={actions.handleAmountChange}
+            selectedPassengers={state.selectedPassengers}
+            handlePassengerSelect={actions.handlePassengerSelect}
+            openPaymentDialog={actions.openPaymentDialog}
+          />
+        )}
 
         {showBottomNav && startupPhase !== "tapFade" && (
-          <div
-            className="absolute left-0 right-0 bottom-0 z-20"
-            style={{ height: `${C.BOTTOM_NAV_HEIGHT}px` }}
-          >
-            <BottomNav
-              centerLabel={navCenterLabel}
-              onHome={actions.goHome}
-              onCenter={
-                state.screen === "top"
-                  ? actions.openExpenseSoon
-                  : actions.openHistorySimple
-              }
-              onMenu={actions.openMenu}
-              active={state.screen === "top" ? "home" : ""}
-            />
-          </div>
+          <BottomNav
+            centerLabel={navCenterLabel}
+            onHome={actions.goHome}
+            onCenter={
+              state.screen === "top"
+                ? actions.openExpenseSoon
+                : actions.openHistorySimple
+            }
+            onMenu={actions.openMenu}
+            active={state.screen === "top" ? "home" : "center"}
+          />
         )}
 
         {showSplash && (
