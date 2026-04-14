@@ -69,7 +69,7 @@
     const COLORS = {
       bg: "#dfe5ee",
       green: "#32CD32",
-      navActive: "#7BCB5C",
+      navActive: "#8CC765",
       card: "#ffffff",
       text: "#1f2a44",
       sub: "#6e7a93",
@@ -144,17 +144,18 @@
       bottomBandH: 70,
       bottomBandRadius: 26,
       bottomBandBottom: 0,
-      navCircleSize: 92,
+
+      navCircleSize: 96,
       navCircleTop: 8,
 
-      navBlockTop: 22,
-      navBlockHeight: 34,
-      navBlockGap: 3,
+      navBlockTop: 18,
+      navBlockHeight: 40,
+      navBlockGap: 4,
 
-      navCenterTextSize: 16,
-      navSideTextSize: 11,
-      navSideIconSize: 22,
-      navMenuIconSize: 22,
+      navCenterTextSize: 18,
+      navSideTextSize: 12,
+      navSideIconSize: 24,
+      navMenuIconSize: 24,
     };
 
     function formatMoneyNoYen(value) {
@@ -198,17 +199,26 @@
 
     function HomeIcon() {
       return (
-        <svg width={LAYOUT.navSideIconSize} height={LAYOUT.navSideIconSize} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <svg
+          width={LAYOUT.navSideIconSize}
+          height={LAYOUT.navSideIconSize}
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
           <path
-            d="M4.2 10.3L12 3.9L19.8 10.3"
+            d="M4.2 10.5L12 4L19.8 10.5"
             stroke="white"
             strokeWidth="2.2"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
           <path
-            d="M6.8 9.7V19.2H10.5V14.4H13.5V19.2H17.2V9.7"
+            d="M6.6 10.1V19H10.2V14.6H13.8V19H17.4V10.1"
             fill="white"
+            stroke="white"
+            strokeWidth="0.6"
+            strokeLinejoin="round"
           />
         </svg>
       );
@@ -217,7 +227,13 @@
     function MenuDotsIcon() {
       const dots = [5, 12, 19];
       return (
-        <svg width={LAYOUT.navMenuIconSize} height={LAYOUT.navMenuIconSize} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <svg
+          width={LAYOUT.navMenuIconSize}
+          height={LAYOUT.navMenuIconSize}
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
           {dots.map((x) =>
             dots.map((y) => (
               <circle key={`${x}-${y}`} cx={x} cy={y} r="1.9" fill="white" />
@@ -852,7 +868,7 @@
             <div
               style={{
                 fontSize: `${LAYOUT.navSideTextSize}px`,
-                fontWeight: 700,
+                fontWeight: 800,
                 lineHeight: "1",
                 color: "#ffffff",
                 whiteSpace: "nowrap",
@@ -880,7 +896,7 @@
             <div
               style={{
                 fontSize: `${LAYOUT.navSideTextSize}px`,
-                fontWeight: 700,
+                fontWeight: 800,
                 lineHeight: "1",
                 color: "#ffffff",
                 whiteSpace: "nowrap",
@@ -934,7 +950,31 @@
               background: COLORS.green,
               borderTopLeftRadius: `${LAYOUT.bottomBandRadius}px`,
               borderTopRightRadius: `${LAYOUT.bottomBandRadius}px`,
-              overflow: "hidden",
+              overflow: "visible",
+              zIndex: 1,
+            }}
+          />
+
+          <div
+            className="absolute"
+            style={{
+              left: activeLeft,
+              top: `${LAYOUT.navCircleTop}px`,
+              transform: "translateX(-50%)",
+              width: `${LAYOUT.navCircleSize}px`,
+              height: `${LAYOUT.navCircleSize}px`,
+              borderRadius: "999px",
+              background: COLORS.navActive,
+              zIndex: 2,
+            }}
+          />
+
+          <div
+            className="absolute inset-x-0"
+            style={{
+              bottom: `${LAYOUT.bottomBandBottom}px`,
+              height: `${LAYOUT.bottomBandH}px`,
+              zIndex: 3,
             }}
           >
             <div className="absolute inset-0 grid grid-cols-3">
@@ -966,19 +1006,6 @@
               </div>
             </div>
           </div>
-
-          <div
-            className="absolute"
-            style={{
-              left: activeLeft,
-              top: `${LAYOUT.navCircleTop}px`,
-              transform: "translateX(-50%)",
-              width: `${LAYOUT.navCircleSize}px`,
-              height: `${LAYOUT.navCircleSize}px`,
-              borderRadius: "999px",
-              background: COLORS.navActive,
-            }}
-          />
         </div>
       );
     }
