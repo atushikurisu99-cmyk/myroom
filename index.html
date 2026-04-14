@@ -154,8 +154,10 @@
 
       navCenterTextSize: 18,
       navSideTextSize: 12,
-      navSideIconSize: 28,
-      navMenuIconSize: 28,
+
+      // ここだけ今回調整
+      navSideIconSize: 31.2,   // 元24px × 1.3
+      navMenuIconSize: 30.8,   // 元28px × 1.1
     };
 
     function formatMoneyNoYen(value) {
@@ -851,7 +853,7 @@
       );
     }
 
-    function BottomNavBlock({ type, label, isActive }) {
+    function BottomNavBlock({ type, label }) {
       if (type === "home") {
         return (
           <div
@@ -967,7 +969,7 @@
             }}
           >
             <div className="absolute inset-0 grid grid-cols-3">
-              {["home", "center", "menu"].map((key, i) => {
+              {["home", "center", "menu"].map((key) => {
                 const blockType = key === "center" ? "center" : key;
                 const blockLabel = key === "center" ? centerLabel : "";
                 const isActive = active === key;
@@ -999,7 +1001,6 @@
                       <BottomNavBlock
                         type={blockType}
                         label={blockLabel}
-                        isActive={isActive}
                       />
                     </div>
                   </div>
