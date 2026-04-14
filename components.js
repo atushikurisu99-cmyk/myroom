@@ -107,10 +107,10 @@ window.AppComponents = (() => {
     const nowIcon = getWeatherIcon(weather?.nowKind || "unknown");
     const tomorrowIcon = getWeatherIcon(weather?.tomorrowKind || "unknown");
 
-    const iconNode = (icon, size = 22) => {
-      if (icon === "☀️") return <SunWeatherIcon size={size} />;
-      if (icon === "⛅") return <PartlyCloudyWeatherIcon size={size} />;
-      return <span style={{ fontSize: `${size}px`, lineHeight: 1 }}>{icon}</span>;
+    const renderIcon = (icon) => {
+      if (icon === "☀️") return <SunWeatherIcon size={22} />;
+      if (icon === "⛅") return <PartlyCloudyWeatherIcon size={22} />;
+      return <span style={{ fontSize: "22px", lineHeight: 1 }}>{icon}</span>;
     };
 
     return (
@@ -128,7 +128,7 @@ window.AppComponents = (() => {
             {`${base.getMonth() + 1}/${base.getDate()}`}
           </div>
           <div className="mt-[8px] flex items-center justify-center">
-            {iconNode(nowIcon)}
+            {renderIcon(nowIcon)}
           </div>
         </div>
 
@@ -145,7 +145,7 @@ window.AppComponents = (() => {
             {`${tomorrow.getMonth() + 1}/${tomorrow.getDate()}`}
           </div>
           <div className="mt-[8px] flex items-center justify-center">
-            {iconNode(tomorrowIcon)}
+            {renderIcon(tomorrowIcon)}
           </div>
         </div>
       </>
@@ -157,12 +157,11 @@ window.AppComponents = (() => {
     cardMode,
     weather,
     totalAmount,
-    recordCount,
     amount1,
     amount2,
   }) {
-    const hh = timeParts?.hh || "05";
-    const mm = timeParts?.mm || "45";
+    const hh = timeParts?.hh || "00";
+    const mm = timeParts?.mm || "00";
 
     const renderBottom = () => {
       if (cardMode === 1) {
@@ -369,6 +368,7 @@ window.AppComponents = (() => {
           top: "0px",
           height: `${L.HEADER_H}px`,
           borderRadius: "8px",
+          zIndex: 5,
         }}
       >
         <WeatherMiniPair weather={weather} />
@@ -670,7 +670,7 @@ window.AppComponents = (() => {
     return (
       <div
         className="absolute left-0 right-0 bottom-0"
-        style={{ height: `${L.NAV_H}px` }}
+        style={{ height: `${L.NAV_H}px`, zIndex: 20 }}
       >
         <div
           className="absolute left-0 right-0"
@@ -739,11 +739,7 @@ window.AppComponents = (() => {
     );
   }
 
-  function HomeEndDutySheet({
-    open,
-    dutyStarted,
-    onFinishTap,
-  }) {
+  function HomeEndDutySheet({ open, dutyStarted, onFinishTap }) {
     const sheetHeight = C.HOME_END_SHEET_HEIGHT;
     const hiddenTranslate = sheetHeight + 24;
 
@@ -764,9 +760,7 @@ window.AppComponents = (() => {
             type="button"
             onClick={onFinishTap}
             disabled={!dutyStarted}
-            className={`${C.endDutyButtonClass} ${
-              dutyStarted ? "opacity-100" : "opacity-45"
-            }`}
+            className={`${C.endDutyButtonClass} ${dutyStarted ? "opacity-100" : "opacity-45"}`}
             style={{
               width: "268px",
               height: "46px",
