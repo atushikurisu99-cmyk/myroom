@@ -29,7 +29,6 @@ window.AppScreens.TopScreen = (() => {
       startupMainStyle,
       startupOtherStyle,
       homeEndSheetOpen,
-      toggleHomeEndSheet,
       handleFinishTap,
       dutyStarted,
       timeParts,
@@ -174,28 +173,7 @@ window.AppScreens.TopScreen = (() => {
           }}
         >
           {!homeEndSheetOpen ? (
-            <>
-              <TopGraphArea />
-              <div
-                className="absolute"
-                style={{
-                  right: "26px",
-                  bottom: "118px",
-                  zIndex: 20,
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={toggleHomeEndSheet}
-                  className="flex items-center justify-center w-[40px] h-[36px] active:opacity-80"
-                  aria-label="終了ボタンを表示"
-                >
-                  <span className="text-[28px] font-black text-[#a7adb7] leading-none">
-                    ▲
-                  </span>
-                </button>
-              </div>
-            </>
+            <TopGraphArea />
           ) : (
             <div
               className="relative"
@@ -216,26 +194,6 @@ window.AppScreens.TopScreen = (() => {
                 >
                   <span className="text-[17px] font-bold tracking-[-0.02em]">
                     本日の乗務を終了
-                  </span>
-                </button>
-              </div>
-
-              <div
-                className="absolute"
-                style={{
-                  right: "26px",
-                  bottom: "118px",
-                  zIndex: 20,
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={toggleHomeEndSheet}
-                  className="flex items-center justify-center w-[40px] h-[36px] active:opacity-80"
-                  aria-label="グラフ表示に戻す"
-                >
-                  <span className="text-[28px] font-black text-[#a7adb7] leading-none">
-                    ▼
                   </span>
                 </button>
               </div>

@@ -1,18 +1,13 @@
 window.AppScreens = window.AppScreens || {};
 window.AppScreens.StandbyScreen = (() => {
-  const { MainButton, BottomNav } = window.AppComponents;
-  const C = window.AppConstants;
-  const L = C.TOP_LAYOUT;
+  const { MainButton } = window.AppComponents;
+  const L = window.AppConstants.TOP_LAYOUT;
 
   return function StandbyScreen(props) {
     const {
       handleStartRide,
       homeEndSheetOpen = false,
-      toggleHomeEndSheet = () => {},
       handleFinishTap = () => {},
-      goHome = () => {},
-      openMenu = () => {},
-      openHistorySimple = () => {},
     } = props;
 
     const endSheetHeight = 88;
@@ -93,16 +88,6 @@ window.AppScreens.StandbyScreen = (() => {
             </button>
           </div>
         </div>
-
-        <BottomNav
-          centerLabel="履歴"
-          onHome={goHome}
-          onCenter={openHistorySimple}
-          onMenu={openMenu}
-          active="home"
-          isOpen={homeEndSheetOpen}
-          onToggle={toggleHomeEndSheet}
-        />
       </div>
     );
   };
