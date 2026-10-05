@@ -1,6 +1,9 @@
 name: Update event data
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "scripts/update-events.mjs"
   schedule:
     - cron: "25 19 * * *"
 
