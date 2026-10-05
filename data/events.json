@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T15:45:46.426Z",
+  "generatedAt": "2026-10-05T15:46:57.119Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -92,7 +92,12 @@
     "official": 13,
     "playguideBased": 44
   },
-  "errors": [],
+  "errors": [
+    {
+      "source": "eplus-ueno",
+      "error": "503 https://eplus.jp/sf/venue/7300130/events"
+    }
+  ],
   "events": [
     {
       "id": "live-20261009-1330-e3839ee383b3e383",
@@ -109,7 +114,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -205,7 +210,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -277,7 +282,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -298,7 +303,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -334,7 +339,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -370,7 +375,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -391,7 +396,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -412,7 +417,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -514,7 +519,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -535,7 +540,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -652,7 +657,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -673,7 +678,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -730,7 +735,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -751,7 +756,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -787,7 +792,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -859,7 +864,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -895,7 +900,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -946,7 +951,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -967,7 +972,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -988,7 +993,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1039,7 +1044,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1105,7 +1110,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1223,7 +1228,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1274,7 +1279,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1295,7 +1300,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1346,7 +1351,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1397,7 +1402,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1418,7 +1423,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1439,7 +1444,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1460,7 +1465,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1481,7 +1486,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1502,7 +1507,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1523,7 +1528,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1544,7 +1549,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1565,7 +1570,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1586,7 +1591,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1674,7 +1679,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1710,7 +1715,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
@@ -1826,7 +1831,7 @@
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
