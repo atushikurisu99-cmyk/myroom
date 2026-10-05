@@ -15,6 +15,11 @@ const SOURCES = [
 
   // 主催者・別プレイガイド・会場は裏取り候補。
   { id:"candy", type:"promoter", role:"verify", category:"live", url:"https://www.candy-p.com/schedule/" },
+  { id:"lawson-green", type:"playguide", role:"verify", category:"live", venue:"広島グリーンアリーナ", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%A2%E3%83%AA%E3%83%BC%E3%83%8A" },
+  { id:"lawson-sunplaza", type:"playguide", role:"verify", category:"live", venue:"広島サンプラザホール", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%B5%E3%83%B3%E3%83%97%E3%83%A9%E3%82%B6" },
+  { id:"lawson-jms", type:"playguide", role:"verify", category:"live", venue:"JMSアステールプラザ", url:"https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6" },
+  { id:"lawson-hbg", type:"playguide", role:"verify", category:"live", venue:"広島文化学園HBGホール", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB" },
+  { id:"lawson-quattro", type:"playguide", role:"verify", category:"live", venue:"広島クラブクアトロ", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD" },
   { id:"lawson-ueno", type:"playguide", role:"verify", category:"live", venue:"上野学園ホール", url:"https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92" },
   { id:"venue-ueno", type:"venue", role:"verify", category:"live", venue:"上野学園ホール", url:"https://www.rcchall.jp/" },
 
@@ -282,9 +287,6 @@ function endEstimate(e) {
 async function main() {
   const now=new Date();
   const year=now.getUTCFullYear();
-  let existing={events:[]};
-  try { existing=JSON.parse(await readFile("data/events.json","utf8")); } catch {}
-
   const discovered=[];
   const evidenceTexts=new Map();
   const errors=[];
@@ -307,15 +309,10 @@ async function main() {
 
   const fresh=mergeAndVerify(discovered,evidenceTexts);
   const horizon=new Date(now.getTime()+62*86400000);
-  const previous=(existing.events||[]).filter(e=>{
-    const d=new Date(`${e.date}T23:59:59+09:00`);
-    return d>=new Date(now.getTime()-86400000) && d<=horizon && e.area==="広島市";
-  });
 
-  // 全ソース取得に成功した回は新ロジックだけで再構築する。
-  // どこか取得失敗があった時だけ前回データを保険として残す。
-  const fallbackPrevious=errors.length ? previous : [];
-  const keep=[...fallbackPrevious,...fresh]
+  // 片方のプレイガイドが落ちても、別ソースで取れた新データだけで組み直す。
+  // 旧方式の会場ベース/壊れた解析結果を復活させない。
+  const keep=[...fresh]
     .filter(e=>{
       const d=new Date(`${e.date}T23:59:59+09:00`);
       return d>=new Date(now.getTime()-86400000) && d<=horizon && e.area==="広島市";
