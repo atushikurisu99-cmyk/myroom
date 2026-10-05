@@ -193,14 +193,18 @@ function extractStartFromEvidence(text,e) {
     if (short.length>=4) pos=t.indexOf(short);
   }
   if (pos<0) return null;
-  const around=t.slice(Math.max(0,pos-220),Math.min(t.length,pos+520));
+
   const [y,m,d]=e.date.split("-").map(Number);
+  const before=t.slice(Math.max(0,pos-180),pos);
   const dateHit=[
     `${y}/${m}/${d}`,`${y}/${pad(m)}/${pad(d)}`,
     `${m}/${d}`,`${pad(m)}/${pad(d)}`
-  ].some(x=>around.includes(x));
+  ].some(x=>before.includes(x));
   if (!dateHit) return null;
-  const tm=around.match(/(?:開演|開始)[^0-9]{0,12}(\d{1,2}:\d{2})/);
+
+  // 同じ公演タイトルの後ろ側だけを見る。前後の別公演時刻を拾わない。
+  const after=t.slice(pos,Math.min(t.length,pos+260));
+  const tm=after.match(/(?:開演|開始)[^0-9]{0,12}(\d{1,2}:\d{2})/);
   return tm ? tm[1] : null;
 }
 
