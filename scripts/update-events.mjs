@@ -334,7 +334,12 @@ async function main() {
       evidenceTexts.set(s.id,{text,source:s});
 
       if (s.role!=="discovery") continue;
-      if (s.id.startsWith("eplus-")) discovered.push(...parseEplusVenue(html,s));
+      if (s.id.startsWith("eplus-")) {
+        const parsed=parseEplusVenue(html,s);
+        console.log("eplus source",s.id,"html",html.length,"visible",clean(html).length,"all",cleanAll(html).length,"parsed",parsed.length,
+          "markers",html.includes("STU48"),html.includes("GRe4N"),html.includes("BUMP OF CHICKEN"),html.includes("After the Rain"));
+        discovered.push(...parsed);
+      }
       else if (s.id==="seven-ueno") discovered.push(...parseSevenUeno(html,year,s));
       else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
