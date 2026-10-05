@@ -57,10 +57,23 @@ function clean(s="") {
 function pad(v){ return String(v).padStart(2,"0"); }
 function isoDate(y,m,d){ return `${y}-${pad(m)}-${pad(d)}`; }
 
+function sleep(ms){ return new Promise(resolve=>setTimeout(resolve,ms)); }
+
 async function fetchText(url) {
-  const res = await fetch(url,{headers:{"user-agent":"TaxiSalesNavigator/0.2 (+event collector)"}});
-  if (!res.ok) throw new Error(`${res.status} ${url}`);
-  return await res.text();
+  let lastStatus=0;
+  for (let attempt=0; attempt<3; attempt++) {
+    if (attempt>0) await sleep(1800*attempt);
+    const res = await fetch(url,{
+      headers:{
+        "user-agent":"Mozilla/5.0 (compatible; TaxiSalesNavigator/0.2)",
+        "accept-language":"ja-JP,ja;q=0.9,en;q=0.6"
+      }
+    });
+    lastStatus=res.status;
+    if (res.ok) return await res.text();
+    if (![429,500,502,503,504].includes(res.status)) throw new Error(`${res.status} ${url}`);
+  }
+  throw new Error(`${lastStatus} ${url}`);
 }
 
 function canonicalVenue(v="") {
@@ -291,8 +304,10 @@ async function main() {
   const evidenceTexts=new Map();
   const errors=[];
 
+  let previousType="";
   for (const s of SOURCES) {
     try {
+      if (s.type==="playguide" && previousType==="playguide") await sleep(900);
       const html=await fetchText(s.url);
       const text=clean(html);
       evidenceTexts.set(s.id,{text,source:s});
@@ -305,6 +320,7 @@ async function main() {
     } catch (err) {
       errors.push({source:s.id,error:String(err.message||err)});
     }
+    previousType=s.type;
   }
 
   const fresh=mergeAndVerify(discovered,evidenceTexts);
