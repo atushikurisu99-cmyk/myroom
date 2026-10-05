@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T16:00:52.135Z",
+  "generatedAt": "2026-10-05T16:02:27.300Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -346,8 +346,8 @@
     {
       "category": "live",
       "date": "2026-10-12",
-      "start": "22:45",
-      "endEstimate": "01:05",
+      "start": "17:30",
+      "endEstimate": "19:50",
       "title": "SHE’S",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
@@ -481,8 +481,8 @@
     {
       "category": "live",
       "date": "2026-10-17",
-      "start": "17:00",
-      "endEstimate": "19:20",
+      "start": "16:00",
+      "endEstimate": "18:20",
       "title": "葉加瀬太郎",
       "venue": "広島文化学園HBGホール",
       "area": "広島市",
@@ -522,8 +522,8 @@
     {
       "category": "live",
       "date": "2026-10-17",
-      "start": "22:45",
-      "endEstimate": "01:05",
+      "start": "18:00",
+      "endEstimate": "20:20",
       "title": "Penthouse",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
@@ -756,27 +756,8 @@
     {
       "category": "live",
       "date": "2026-10-24",
-      "start": "17:30",
-      "endEstimate": "20:05",
-      "title": "マンマ・ミーア！",
-      "venue": "上野学園ホール",
-      "area": "広島市",
-      "sourceIds": [
-        "seven-ueno"
-      ],
-      "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261024-1730-e3839ee383b3e383",
-      "verifiedBy": 1
-    },
-    {
-      "category": "live",
-      "date": "2026-10-24",
-      "start": "17:30",
-      "endEstimate": "19:50",
+      "start": "17:00",
+      "endEstimate": "19:20",
       "title": "フラワーカンパニーズ",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
@@ -793,6 +774,25 @@
       "confidence": "confirmed",
       "id": "live-20261024-0000-e38395e383a9e383",
       "verifiedBy": 3
+    },
+    {
+      "category": "live",
+      "date": "2026-10-24",
+      "start": "17:30",
+      "endEstimate": "20:05",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "seven-ueno"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261024-1730-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -835,8 +835,8 @@
     {
       "category": "live",
       "date": "2026-10-25",
-      "start": "19:00",
-      "endEstimate": "21:20",
+      "start": "18:00",
+      "endEstimate": "20:20",
       "title": "YONA YONA WEEKENDERS",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
@@ -971,8 +971,27 @@
     {
       "category": "live",
       "date": "2026-10-31",
-      "start": "17:00",
-      "endEstimate": "19:20",
+      "start": "17:30",
+      "endEstimate": "20:05",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "seven-ueno"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261031-1730-e3839ee383b3e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-10-31",
+      "start": "17:30",
+      "endEstimate": "19:50",
       "title": "リーガルリリー",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
@@ -990,22 +1009,23 @@
     },
     {
       "category": "live",
-      "date": "2026-10-31",
-      "start": "17:30",
-      "endEstimate": "20:05",
-      "title": "マンマ・ミーア！",
-      "venue": "上野学園ホール",
+      "date": "2026-11-01",
+      "start": "10:30",
+      "endEstimate": "12:50",
+      "title": "名探偵プリキュア! ドリームステージ♪",
+      "venue": "広島文化学園HBGホール",
       "area": "広島市",
       "sourceIds": [
-        "seven-ueno"
+        "lawson-hbg",
+        "eplus-hbg"
       ],
-      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
       "sourceTypes": [
         "playguide"
       ],
-      "confidence": "candidate",
-      "id": "live-20261031-1730-e3839ee383b3e383",
-      "verifiedBy": 1
+      "confidence": "confirmed",
+      "id": "live-20261101-0000-e5908de68ea2e581",
+      "verifiedBy": 2
     },
     {
       "category": "live",
@@ -1030,28 +1050,8 @@
     {
       "category": "live",
       "date": "2026-11-01",
-      "start": "17:00",
-      "endEstimate": "19:20",
-      "title": "名探偵プリキュア! ドリームステージ♪",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-hbg",
-        "eplus-hbg"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "confirmed",
-      "id": "live-20261101-0000-e5908de68ea2e581",
-      "verifiedBy": 2
-    },
-    {
-      "category": "live",
-      "date": "2026-11-01",
-      "start": "18:00",
-      "endEstimate": "20:20",
+      "start": "17:30",
+      "endEstimate": "19:50",
       "title": "木村カエラ",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
@@ -1298,26 +1298,6 @@
     {
       "category": "live",
       "date": "2026-11-12",
-      "start": "10:30",
-      "endEstimate": "12:50",
-      "title": "CANDY TUNE",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-hbg",
-        "eplus-hbg"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "confirmed",
-      "id": "live-20261112-0000-63616e647974756e",
-      "verifiedBy": 2
-    },
-    {
-      "category": "live",
-      "date": "2026-11-12",
       "start": "13:30",
       "endEstimate": "16:05",
       "title": "マンマ・ミーア！",
@@ -1333,6 +1313,26 @@
       "confidence": "candidate",
       "id": "live-20261112-1330-e3839ee383b3e383",
       "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-11-12",
+      "start": "18:30",
+      "endEstimate": "20:50",
+      "title": "CANDY TUNE",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg",
+        "eplus-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261112-0000-63616e647974756e",
+      "verifiedBy": 2
     },
     {
       "category": "live",
@@ -1356,8 +1356,8 @@
     {
       "category": "live",
       "date": "2026-11-13",
-      "start": "14:00",
-      "endEstimate": "16:20",
+      "start": "18:00",
+      "endEstimate": "20:20",
       "title": "俺たちの旅 スペシャルコンサート",
       "venue": "広島文化学園HBGホール",
       "area": "広島市",
@@ -1414,8 +1414,8 @@
     {
       "category": "live",
       "date": "2026-11-14",
-      "start": "17:30",
-      "endEstimate": "19:50",
+      "start": "18:00",
+      "endEstimate": "20:20",
       "title": "Chilli Beans.",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
@@ -1491,8 +1491,8 @@
     {
       "category": "live",
       "date": "2026-11-16",
-      "start": "18:00",
-      "endEstimate": "20:20",
+      "start": "15:30",
+      "endEstimate": "17:50",
       "title": "広島歌謡コンサート",
       "venue": "JMSアステールプラザ",
       "area": "広島市",
@@ -1569,8 +1569,8 @@
     {
       "category": "live",
       "date": "2026-11-20",
-      "start": "18:30",
-      "endEstimate": "20:50",
+      "start": "19:00",
+      "endEstimate": "21:20",
       "title": "ナナヲアカリ",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
@@ -1668,8 +1668,8 @@
     {
       "category": "live",
       "date": "2026-11-21",
-      "start": "19:00",
-      "endEstimate": "21:20",
+      "start": "18:00",
+      "endEstimate": "20:20",
       "title": "山中さわお & ELPIS",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
@@ -1784,8 +1784,8 @@
     {
       "category": "live",
       "date": "2026-11-26",
-      "start": "12:00",
-      "endEstimate": "14:20",
+      "start": "18:30",
+      "endEstimate": "20:50",
       "title": "竜馬四重奏",
       "venue": "JMSアステールプラザ",
       "area": "広島市",
@@ -1804,8 +1804,8 @@
     {
       "category": "live",
       "date": "2026-11-26",
-      "start": "18:00",
-      "endEstimate": "20:20",
+      "start": "19:00",
+      "endEstimate": "21:20",
       "title": "Michael Monroe",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
@@ -1824,8 +1824,8 @@
     {
       "category": "live",
       "date": "2026-11-28",
-      "start": "17:30",
-      "endEstimate": "19:50",
+      "start": "17:00",
+      "endEstimate": "19:20",
       "title": "ゴスペラーズ",
       "venue": "広島文化学園HBGホール",
       "area": "広島市",
@@ -1844,8 +1844,8 @@
     {
       "category": "live",
       "date": "2026-11-29",
-      "start": "15:30",
-      "endEstimate": "17:50",
+      "start": "17:00",
+      "endEstimate": "19:20",
       "title": "Omoinotake",
       "venue": "JMSアステールプラザ",
       "area": "広島市",
@@ -1883,8 +1883,8 @@
     {
       "category": "live",
       "date": "2026-12-03",
-      "start": "17:30",
-      "endEstimate": "19:50",
+      "start": "19:00",
+      "endEstimate": "21:20",
       "title": "打首獄門同好会",
       "venue": "JMSアステールプラザ",
       "area": "広島市",
@@ -1923,8 +1923,8 @@
     {
       "category": "live",
       "date": "2026-12-05",
-      "start": "18:00",
-      "endEstimate": "20:20",
+      "start": "11:00",
+      "endEstimate": "13:20",
       "title": "HIROSHIMA CONTI-NeW FeS 2026",
       "venue": "広島グリーンアリーナ",
       "area": "広島市",
@@ -1982,8 +1982,8 @@
     {
       "category": "live",
       "date": "2026-12-06",
-      "start": "17:30",
-      "endEstimate": "19:50",
+      "start": "16:00",
+      "endEstimate": "18:20",
       "title": "清水ミチコ",
       "venue": "広島文化学園HBGホール",
       "area": "広島市",
