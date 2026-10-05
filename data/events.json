@@ -1,0 +1,134 @@
+{
+  "generatedAt": "2026-10-05T22:02:00+09:00",
+  "area": "hiroshima",
+  "sources": [
+    {
+      "id": "candy",
+      "name": "CANDY PROMOTION",
+      "url": "https://www.candy-p.com/schedule/"
+    },
+    {
+      "id": "dragonflies",
+      "name": "広島ドラゴンフライズ",
+      "url": "https://hiroshimadragonflies.com/schedule/calendar/?month=10&year=2026"
+    },
+    {
+      "id": "sanfrecce",
+      "name": "サンフレッチェ広島",
+      "url": "https://www.sanfrecce.co.jp/matches/results"
+    }
+  ],
+  "events": [
+    {
+      "id": "live-20261009-personz",
+      "category": "live",
+      "date": "2026-10-09",
+      "start": "18:30",
+      "endEstimate": "20:50",
+      "title": "PERSONZ",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/event/1917/",
+      "confidence": "official"
+    },
+    {
+      "id": "sport-20261010-dragonflies-shiga",
+      "category": "sport",
+      "sport": "basketball",
+      "date": "2026-10-10",
+      "start": "14:05",
+      "endEstimate": "16:30",
+      "title": "広島×滋賀",
+      "venue": "広島サンプラザホール",
+      "area": "広島市",
+      "sourceIds": [
+        "dragonflies"
+      ],
+      "sourceUrl": "https://hiroshimadragonflies.com/lp/game_20261010/",
+      "confidence": "official"
+    },
+    {
+      "id": "sport-20261017-sanfrecce-kyoto",
+      "category": "sport",
+      "sport": "soccer",
+      "date": "2026-10-17",
+      "start": "14:00",
+      "endEstimate": "16:00",
+      "title": "広島×京都",
+      "venue": "Eピース",
+      "area": "広島市",
+      "sourceIds": [
+        "sanfrecce"
+      ],
+      "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
+      "confidence": "official"
+    },
+    {
+      "id": "sport-20261019-dragonflies-san-en",
+      "category": "sport",
+      "sport": "basketball",
+      "date": "2026-10-19",
+      "start": "19:05",
+      "endEstimate": "21:30",
+      "title": "広島×三遠",
+      "venue": "広島グリーンアリーナ",
+      "area": "広島市",
+      "sourceIds": [
+        "dragonflies"
+      ],
+      "sourceUrl": "https://hiroshimadragonflies.com/schedule/calendar/?month=10&year=2026",
+      "confidence": "official"
+    },
+    {
+      "id": "sport-20261021-dragonflies-akita",
+      "category": "sport",
+      "sport": "basketball",
+      "date": "2026-10-21",
+      "start": "19:05",
+      "endEstimate": "21:30",
+      "title": "広島×秋田",
+      "venue": "広島グリーンアリーナ",
+      "area": "広島市",
+      "sourceIds": [
+        "dragonflies"
+      ],
+      "sourceUrl": "https://hiroshimadragonflies.com/schedule/calendar/?month=10&year=2026",
+      "confidence": "official"
+    },
+    {
+      "id": "sport-20261024-sanfrecce-shimizu",
+      "category": "sport",
+      "sport": "soccer",
+      "date": "2026-10-24",
+      "start": "14:00",
+      "endEstimate": "16:00",
+      "title": "広島×清水",
+      "venue": "Eピース",
+      "area": "広島市",
+      "sourceIds": [
+        "sanfrecce"
+      ],
+      "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
+      "confidence": "official"
+    },
+    {
+      "id": "sport-20261121-sanfrecce-yokohamafm",
+      "category": "sport",
+      "sport": "soccer",
+      "date": "2026-11-21",
+      "start": "14:00",
+      "endEstimate": "16:00",
+      "title": "広島×横浜FM",
+      "venue": "Eピース",
+      "area": "広島市",
+      "sourceIds": [
+        "sanfrecce"
+      ],
+      "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
+      "confidence": "official"
+    }
+  ]
+}
