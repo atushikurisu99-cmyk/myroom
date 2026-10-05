@@ -54,6 +54,20 @@ function clean(s="") {
     .trim();
 }
 
+function cleanAll(s="") {
+  return s
+    .replace(/<[^>]+>/g," ")
+    .replace(/&nbsp;|&#160;/g," ")
+    .replace(/&amp;/g,"&")
+    .replace(/&#x2F;|&#47;/g,"/")
+    .replace(/&#8217;|&#039;|&apos;/g,"'")
+    .replace(/\\u([0-9a-fA-F]{4})/g,(_,h)=>String.fromCharCode(parseInt(h,16)))
+    .replace(/\\n|\\r|\\t/g," ")
+    .replace(/\\\"/g,'"')
+    .replace(/\s+/g," ")
+    .trim();
+}
+
 function pad(v){ return String(v).padStart(2,"0"); }
 function isoDate(y,m,d){ return `${y}-${pad(m)}-${pad(d)}`; }
 
@@ -117,11 +131,15 @@ function makeId(e) {
 }
 
 function parseEplusVenue(html, source) {
-  const text=clean(html);
   const out=[];
-  const re=/(20\d{2})\/(\d{1,2})\/(\d{1,2})\([^)]*\)\s*(?:先着|抽選)?\s*([\s\S]{1,180}?)\s*(?:開演|開始)：(\d{1,2}:\d{2})～/g;
-  let m;
-  while ((m=re.exec(text))) {
+  const texts=[clean(html),cleanAll(html)];
+  const seenText=new Set();
+  for (const text of texts) {
+    if (!text || seenText.has(text)) continue;
+    seenText.add(text);
+    const re=/(20\d{2})\/(\d{1,2})\/(\d{1,2})\([^)]*\)\s*(?:先着|抽選)?\s*([\s\S]{1,180}?)\s*(?:開演|開始)：(\d{1,2}:\d{2})～/g;
+    let m;
+    while ((m=re.exec(text))) {
     let title=m[4]
       .replace(/(?:受付中|受付終了|受付前|予定枚数終了).*$/,"")
       .replace(/^\s*(?:先着|抽選)\s*/,"")
@@ -135,8 +153,11 @@ function parseEplusVenue(html, source) {
     };
     e.id=makeId(e);
     out.push(e);
+    }
   }
-  return out;
+  const unique=new Map();
+  for (const e of out) unique.set(normalizeKey(e),e);
+  return [...unique.values()];
 }
 
 function parseSevenUeno(html, year, source) {
