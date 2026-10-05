@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T15:48:23.692Z",
+  "generatedAt": "2026-10-05T15:49:44.007Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -127,20 +127,7 @@
     "official": 13,
     "playguideBased": 44
   },
-  "errors": [
-    {
-      "source": "eplus-sunplaza",
-      "error": "503 https://eplus.jp/sf/venue/7330010/events"
-    },
-    {
-      "source": "eplus-jms",
-      "error": "503 https://eplus.jp/sf/venue/7300010/events"
-    },
-    {
-      "source": "eplus-hbg",
-      "error": "503 https://eplus.jp/sf/venue/7300050/events"
-    }
-  ],
+  "errors": [],
   "events": [
     {
       "category": "live",
