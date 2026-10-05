@@ -181,7 +181,7 @@ function verifyUenoEvents(events, evidenceIds) {
 }
 
 function normalizeKey(e) {
-  return [e.date,e.venue,e.title].join("|").replace(/\s/g,"").toLowerCase();
+  return [e.date,e.start||"",e.venue,e.title].join("|").replace(/\s/g,"").toLowerCase();
 }
 
 function mergeEvents(events) {
@@ -197,7 +197,7 @@ function mergeEvents(events) {
 
 function endEstimate(e) {
   if (e.endEstimate) return e;
-  const mins = e.sport==="soccer" ? 120 : e.sport==="basketball" ? 145 : 140;
+  const mins = normalizeTitle(e.title||"").includes("マンマミーア") ? 155 : e.sport==="soccer" ? 120 : e.sport==="basketball" ? 145 : 140;
   const [h,m] = (e.start||"18:00").split(":").map(Number);
   const total = h*60+m+mins;
   return {...e,endEstimate:`${pad(Math.floor(total/60)%24)}:${pad(total%60)}`};
