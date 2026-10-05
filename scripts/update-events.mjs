@@ -383,7 +383,12 @@ async function main() {
 
       if (s.role!=="discovery") continue;
       if (s.id.startsWith("eplus-")) discovered.push(...parseEplusVenue(html,s));
-      else if (s.id.startsWith("lawson-")) discovered.push(...parseLawsonVenue(html,s));
+      else if (s.id.startsWith("lawson-")) {
+        const parsed=parseLawsonVenue(html,s);
+        console.log("lawson source",s.id,"html",html.length,"visible",clean(html).length,"all",cleanAll(html).length,"parsed",parsed.length,
+          "markers",html.includes("公演日"),html.includes("会場"),html.includes("ＳＨＥ"),html.includes("PERSONZ"));
+        discovered.push(...parsed);
+      }
       else if (s.id==="seven-ueno") discovered.push(...parseSevenUeno(html,year,s));
       else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
