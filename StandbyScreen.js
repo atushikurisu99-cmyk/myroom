@@ -1,7 +1,80 @@
 window.AppScreens = window.AppScreens || {};
 window.AppScreens.StandbyScreen = (() => {
+  const { useEffect, useMemo, useState } = React;
   const { MainButton } = window.AppComponents;
   const L = window.AppConstants.TOP_LAYOUT;
+
+  function toDateTime(event) {
+    return new Date(`${event.date}T${event.start || "00:00"}:00+09:00`);
+  }
+
+  function pickUpcoming(events, category) {
+    const now = new Date();
+    const cutoff = new Date(now.getTime() - 60 * 60 * 1000);
+    return (events || [])
+      .filter((e) => e.category === category && toDateTime(e) >= cutoff)
+      .sort((a, b) => toDateTime(a) - toDateTime(b))[0] || null;
+  }
+
+  function EventMiniCard({ type, event }) {
+    const isLive = type === "live";
+    const label = isLive ? "ライブ" : "スポーツ";
+    const fallback = isLive ? "予定なし" : "予定なし";
+    const title = event?.title || fallback;
+    const time = event ? `${event.start || "--:--"}｜${event.endEstimate ? `～${event.endEstimate}` : ""}` : "—";
+    const venue = event?.venue || "—";
+
+    return (
+      <div
+        style={{
+          height: "124px",
+          borderRadius: "12px",
+          background: "#ffffff",
+          boxShadow: "0 7px 18px rgba(0,0,0,0.08)",
+          padding: "12px 13px 10px",
+          overflow: "hidden",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "8px" }}>
+          <div style={{ fontSize: "13px", fontWeight: 900, color: "#334155", whiteSpace: "nowrap" }}>{label}</div>
+          <div style={{ fontSize: "11px", fontWeight: 800, color: "#7a869f", whiteSpace: "nowrap" }}>
+            {event ? event.date.slice(5).replace("-", "/") : ""}
+          </div>
+        </div>
+        <div
+          style={{
+            marginTop: "12px",
+            fontSize: "17px",
+            lineHeight: 1.05,
+            fontWeight: 900,
+            color: "#1f2a44",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "clip",
+          }}
+        >
+          {title}
+        </div>
+        <div
+          style={{
+            marginTop: "9px",
+            fontSize: "11px",
+            lineHeight: 1.1,
+            fontWeight: 700,
+            color: "#6e7a93",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "clip",
+          }}
+        >
+          {venue}
+        </div>
+        <div style={{ marginTop: "8px", fontSize: "12px", fontWeight: 900, color: "#445673", whiteSpace: "nowrap" }}>
+          {time}
+        </div>
+      </div>
+    );
+  }
 
   return function StandbyScreen(props) {
     const {
@@ -9,6 +82,20 @@ window.AppScreens.StandbyScreen = (() => {
       homeEndSheetOpen = false,
       handleFinishTap = () => {},
     } = props;
+
+    const [events, setEvents] = useState([]);
+
+    useEffect(() => {
+      let alive = true;
+      fetch(`./data/events.json?v=${Date.now()}`, { cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error("events fetch failed"))))
+        .then((data) => { if (alive) setEvents(Array.isArray(data?.events) ? data.events : []); })
+        .catch(() => { if (alive) setEvents([]); });
+      return () => { alive = false; };
+    }, []);
+
+    const liveEvent = useMemo(() => pickUpcoming(events, "live"), [events]);
+    const sportEvent = useMemo(() => pickUpcoming(events, "sport"), [events]);
 
     const endSheetHeight = 88;
     const endSheetBottom = L.NAV_H - 6;
@@ -27,11 +114,7 @@ window.AppScreens.StandbyScreen = (() => {
             zIndex: 6,
           }}
         >
-          <MainButton
-            label="実車"
-            type="standby"
-            onClick={handleStartRide}
-          />
+          <MainButton label="実車" type="standby" onClick={handleStartRide} />
         </div>
 
         <div
@@ -44,7 +127,10 @@ window.AppScreens.StandbyScreen = (() => {
             zIndex: 4,
           }}
         >
-          <div style={{ height: "100%" }} />
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", height: "100%" }}>
+            <EventMiniCard type="live" event={liveEvent} />
+            <EventMiniCard type="sport" event={sportEvent} />
+          </div>
         </div>
 
         <div
@@ -64,8 +150,7 @@ window.AppScreens.StandbyScreen = (() => {
               bottom: "0px",
               transform: `translateY(${homeEndSheetOpen ? endSheetVisibleY : endSheetHiddenY}px)`,
               opacity: homeEndSheetOpen ? 1 : 0,
-              transition:
-                "transform 260ms cubic-bezier(0.22,1,0.36,1), opacity 180ms ease",
+              transition: "transform 260ms cubic-bezier(0.22,1,0.36,1), opacity 180ms ease",
             }}
           >
             <button
