@@ -118,12 +118,18 @@ function sameEvent(a,b) {
 
 function parseUeno7Ticket(html, year) {
   const text=clean(html);
-  if (!/上野学園ホール/.test(text) || !/マンマ.?ミーア/.test(text)) return [];
+  if (!text.includes("上野学園ホール") || !text.includes("マンマ")) return [];
+  const from=text.indexOf("公演日・開演時間");
+  if (from < 0) return [];
+  const schedule=text.slice(from);
+  const found=[...schedule.matchAll(/(\d{1,2})\/(\d{1,2})/g)];
   const out=[];
-  const re=/(\d{1,2})\/(\d{1,2})[\s\S]{0,90}?(\d{1,2}:\d{2})(?:[\s\S]{0,28}?(\d{1,2}:\d{2}))?/g;
-  let m;
-  while ((m=re.exec(text))) {
-    for (const start of [m[3],m[4]].filter(Boolean)) {
+  for (let i=0;i<found.length;i++) {
+    const m=found[i];
+    const next=i+1<found.length ? found[i+1].index : schedule.length;
+    const segment=schedule.slice(m.index + m[0].length,next);
+    const times=[...segment.matchAll(/(\d{1,2}:\d{2})/g)].map(x=>x[1]);
+    for (const start of [...new Set(times)]) {
       out.push({
         id:"live-"+year+pad(m[1])+pad(m[2])+"-mammamia-"+start.replace(":",""),
         category:"live", date:isoDate(year,m[1],m[2]), start, endEstimate:null,
