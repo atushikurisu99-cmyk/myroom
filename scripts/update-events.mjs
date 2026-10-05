@@ -416,6 +416,22 @@ function endEstimate(e) {
   return {...e,endEstimate:`${pad(Math.floor(total/60)%24)}:${pad(total%60)}`};
 }
 
+function withCalendarDisplay(e) {
+  if (e.category !== "live") return e;
+  const artist = (e.artist || e.title || "").trim();
+  return {
+    ...e,
+    artist,
+    calendarDisplay: {
+      date: e.date,
+      artist,
+      venue: e.venue,
+      start: e.start || null,
+      endEstimate: e.endEstimate || null
+    }
+  };
+}
+
 async function main() {
   const now=new Date();
   const year=now.getUTCFullYear();
@@ -455,7 +471,7 @@ async function main() {
     })
     .map(endEstimate);
 
-  const events=dedupe(keep);
+  const events=dedupe(keep).map(withCalendarDisplay);
   const stats={
     discovered:fresh.length,
     confirmed:fresh.filter(e=>e.confidence==="confirmed").length,
