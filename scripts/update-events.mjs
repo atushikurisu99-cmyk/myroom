@@ -387,6 +387,11 @@ async function main() {
         const parsed=parseLawsonVenue(html,s);
         console.log("lawson source",s.id,"html",html.length,"visible",clean(html).length,"all",cleanAll(html).length,"parsed",parsed.length,
           "markers",html.includes("公演日"),html.includes("会場"),html.includes("ＳＨＥ"),html.includes("PERSONZ"));
+        if (s.id==="lawson-quattro" || s.id==="lawson-jms") {
+          const t=cleanAll(html).normalize("NFKC");
+          const p=Math.max(0,t.indexOf(s.id==="lawson-quattro" ? "SHE" : "PERSONZ"));
+          console.log("lawson snippet",s.id,t.slice(Math.max(0,p-120),p+520));
+        }
         discovered.push(...parsed);
       }
       else if (s.id==="seven-ueno") discovered.push(...parseSevenUeno(html,year,s));
