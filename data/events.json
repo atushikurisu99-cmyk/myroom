@@ -1,23 +1,37 @@
 {
-  "generatedAt": "2026-10-05T22:02:00+09:00",
+  "generatedAt": "2026-10-05T15:30:17.215Z",
   "area": "hiroshima",
   "sources": [
     {
       "id": "candy",
-      "name": "CANDY PROMOTION",
       "url": "https://www.candy-p.com/schedule/"
     },
     {
       "id": "dragonflies",
-      "name": "広島ドラゴンフライズ",
-      "url": "https://hiroshimadragonflies.com/schedule/calendar/?month=10&year=2026"
+      "url": "https://hiroshimadragonflies.com/schedule/list/"
     },
     {
       "id": "sanfrecce",
-      "name": "サンフレッチェ広島",
       "url": "https://www.sanfrecce.co.jp/matches/results"
+    },
+    {
+      "id": "ueno-7ticket",
+      "url": "https://7ticket.jp/s/116553/d"
+    },
+    {
+      "id": "ueno-lawson",
+      "url": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92"
+    },
+    {
+      "id": "ueno-hall",
+      "url": "https://www.rcchall.jp/"
+    },
+    {
+      "id": "ueno-eplus",
+      "url": "https://eplus.jp/sf/venue/7300130/events"
     }
   ],
+  "errors": [],
   "events": [
     {
       "id": "live-20261009-personz",
@@ -33,6 +47,66 @@
       ],
       "sourceUrl": "https://www.candy-p.com/event/1917/",
       "confidence": "official"
+    },
+    {
+      "id": "live-20261009-32e69c882032",
+      "category": "live",
+      "date": "2026-10-09",
+      "start": "18:30",
+      "endEstimate": "20:50",
+      "title": "2月 2027 01月 02月 03月 04月 2026年10月 PERSONZ",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261009-e38383e38381",
+      "category": "live",
+      "date": "2026-10-09",
+      "start": "18:30",
+      "endEstimate": "20:50",
+      "title": "ッチ 18:30/19:00 発売中 ▼ Rin音・クボタカイ・asmi・キズナ",
+      "venue": "広島セカンド・クラッチ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261009-e5b1b1e58fa3",
+      "category": "live",
+      "date": "2026-10-09",
+      "start": "19:00",
+      "endEstimate": "21:20",
+      "title": "山口市民会館 小ホール 16:00/16:30 SOLD OUT ▼ 眞名子 新",
+      "venue": "広島セカンド・クラッチ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261009-766520737061",
+      "category": "live",
+      "date": "2026-10-09",
+      "start": "19:00",
+      "endEstimate": "21:20",
+      "title": "ve space Reed 18:00/18:30 発売中 ▼ TENDOUJI",
+      "venue": "広島Live space Reed",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
     },
     {
       "id": "sport-20261010-dragonflies-shiga",
@@ -51,6 +125,67 @@
       "confidence": "official"
     },
     {
+      "id": "sport-20261010-dragonflies",
+      "category": "sport",
+      "sport": "basketball",
+      "date": "2026-10-10",
+      "start": "14:05",
+      "endEstimate": "16:30",
+      "title": "広島×10/10",
+      "venue": "広島サンプラザホール",
+      "area": "広島市",
+      "sourceIds": [
+        "dragonflies"
+      ],
+      "sourceUrl": "https://hiroshimadragonflies.com/schedule/list/",
+      "confidence": "official"
+    },
+    {
+      "id": "live-20261010-e5b3b6342e31",
+      "category": "live",
+      "date": "2026-10-10",
+      "start": "15:30",
+      "endEstimate": "17:50",
+      "title": "島4.14 16:30/17:00 発売中 ▼ モーニング娘。&#8217;26",
+      "venue": "広島4.14",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261011-e5b3b64a4d53",
+      "category": "live",
+      "date": "2026-10-11",
+      "start": "16:30",
+      "endEstimate": "18:50",
+      "title": "島JMSアステールプラザ 中ホール 18:00/18:30 SOLD OUT ▼",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261012-e4bc9ae5a082",
+      "category": "live",
+      "date": "2026-10-12",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "会堂 in KOTYAE 17:15/17:45 発売中 ▼ WILD BLUE",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
       "id": "sport-20261017-sanfrecce-kyoto",
       "category": "sport",
       "sport": "soccer",
@@ -67,6 +202,127 @@
       "confidence": "official"
     },
     {
+      "id": "sport-20261017-sanfrecce",
+      "category": "sport",
+      "sport": "soccer",
+      "date": "2026-10-17",
+      "start": "14:00",
+      "endEstimate": "16:00",
+      "title": "広島×対戦",
+      "venue": "Eピース",
+      "area": "広島市",
+      "sourceIds": [
+        "sanfrecce"
+      ],
+      "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
+      "confidence": "official"
+    },
+    {
+      "id": "live-20261017-e382a6e38383",
+      "category": "live",
+      "date": "2026-10-17",
+      "start": "16:00",
+      "endEstimate": "18:20",
+      "title": "ウッドワンさくらぴあ 大ホール 17:00/18:00 発売中 ▼ 葉加瀬太郎",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261017-efbc88e697a5",
+      "category": "live",
+      "date": "2026-10-17",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "（日） 倉敷市民会館 15:00/16:00 SOLD OUT ▼ 浜崎貴司",
+      "venue": "広島グリーンアリーナ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261017-e5b2a1e5b1b1",
+      "category": "live",
+      "date": "2026-10-17",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "岡山城下公会堂 in KOTYAE 17:00/17:30 発売中 ▼ NEWS",
+      "venue": "広島グリーンアリーナ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261018-efbc8920e5ba",
+      "category": "live",
+      "date": "2026-10-18",
+      "start": "14:00",
+      "endEstimate": "16:20",
+      "title": "） 広島グリーンアリーナ 15:00/16:00 SOLD OUT ▼ 吉田兄弟",
+      "venue": "広島グリーンアリーナ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261018-efbc88e59c9f",
+      "category": "live",
+      "date": "2026-10-18",
+      "start": "16:00",
+      "endEstimate": "18:20",
+      "title": "（土） 広島文化学園HBGホール 15:00/16:00 SOLD OUT ▼",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261018-efbc88e59c9f",
+      "category": "live",
+      "date": "2026-10-18",
+      "start": "16:00",
+      "endEstimate": "18:20",
+      "title": "（土） 広島グリーンアリーナ 16:00/17:00 SOLD OUT ▼",
+      "venue": "広島グリーンアリーナ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261018-efbc88e59c9f",
+      "category": "live",
+      "date": "2026-10-18",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "（土） 松江NU 16:30/17:00 発売中 ▼",
+      "venue": "広島グリーンアリーナ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
       "id": "sport-20261019-dragonflies-san-en",
       "category": "sport",
       "sport": "basketball",
@@ -80,6 +336,22 @@
         "dragonflies"
       ],
       "sourceUrl": "https://hiroshimadragonflies.com/schedule/calendar/?month=10&year=2026",
+      "confidence": "official"
+    },
+    {
+      "id": "sport-20261019-dragonflies",
+      "category": "sport",
+      "sport": "basketball",
+      "date": "2026-10-19",
+      "start": "19:05",
+      "endEstimate": "21:30",
+      "title": "広島×10/19",
+      "venue": "広島グリーンアリーナ",
+      "area": "広島市",
+      "sourceIds": [
+        "dragonflies"
+      ],
+      "sourceUrl": "https://hiroshimadragonflies.com/schedule/list/",
       "confidence": "official"
     },
     {
@@ -99,6 +371,37 @@
       "confidence": "official"
     },
     {
+      "id": "sport-20261021-dragonflies",
+      "category": "sport",
+      "sport": "basketball",
+      "date": "2026-10-21",
+      "start": "19:05",
+      "endEstimate": "21:30",
+      "title": "広島×10/21",
+      "venue": "広島グリーンアリーナ",
+      "area": "広島市",
+      "sourceIds": [
+        "dragonflies"
+      ],
+      "sourceUrl": "https://hiroshimadragonflies.com/schedule/list/",
+      "confidence": "official"
+    },
+    {
+      "id": "live-20261023-e5b3b6434156",
+      "category": "live",
+      "date": "2026-10-23",
+      "start": "19:00",
+      "endEstimate": "21:20",
+      "title": "島CAVE-BE 15:30/16:00 発売中 ▼ indigo la End",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
       "id": "sport-20261024-sanfrecce-shimizu",
       "category": "sport",
       "sport": "soccer",
@@ -115,6 +418,397 @@
       "confidence": "official"
     },
     {
+      "id": "sport-20261024-sanfrecce",
+      "category": "sport",
+      "sport": "soccer",
+      "date": "2026-10-24",
+      "start": "14:00",
+      "endEstimate": "16:00",
+      "title": "広島×対戦",
+      "venue": "Eピース",
+      "area": "広島市",
+      "sourceIds": [
+        "sanfrecce"
+      ],
+      "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
+      "confidence": "official"
+    },
+    {
+      "id": "live-20261024-e58089e695b7",
+      "category": "live",
+      "date": "2026-10-24",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "倉敷市芸文館 18:00/19:00 SOLD OUT ▼ フラワーカンパニーズ",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261024-efbc88e59c9f",
+      "category": "live",
+      "date": "2026-10-24",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "（土） 広島クラブクアトロ 16:15/17:00 発売中 ▼ THE MODS",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261025-4c44204f5554",
+      "category": "live",
+      "date": "2026-10-25",
+      "start": "14:00",
+      "endEstimate": "16:20",
+      "title": "LD OUT ▼ 高嶋ちさ子​ ​1​2​人​の​ヴ​ァ​イ​オ​リ​ニ​ス​ト",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261025-31352f31343a",
+      "category": "live",
+      "date": "2026-10-25",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "15/14:00 SOLD OUT ▼ YONA YONA WEEKENDERS",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261030-efbc88e697a5",
+      "category": "live",
+      "date": "2026-10-30",
+      "start": "19:00",
+      "endEstimate": "21:20",
+      "title": "（日） 広島クラブクアトロ 17:00/18:00 発売中 ▼ 丈青生誕祭",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261030-efbc88e98791",
+      "category": "live",
+      "date": "2026-10-30",
+      "start": "19:00",
+      "endEstimate": "21:20",
+      "title": "（金） 広島クラブクアトロ 18:00/19:00 発売中 ▼ 反転する六音",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261031-efbc8920e5b2",
+      "category": "live",
+      "date": "2026-10-31",
+      "start": "16:00",
+      "endEstimate": "18:20",
+      "title": "） 岡山CRAZYMAMA 2nd Room 15:30/16:00 発売中 ▼",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261031-e59c9fefbc89",
+      "category": "live",
+      "date": "2026-10-31",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "土） 広島文化学園HBGホール 17:00/18:00 SOLD OUT ▼ 鶴",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261031-efbc88e59c9f",
+      "category": "live",
+      "date": "2026-10-31",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "（土） 広島セカンド・クラッチ 17:00/18:00 発売中 ▼ IS:SUE",
+      "venue": "広島セカンド・クラッチ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261031-4e45204c6976",
+      "category": "live",
+      "date": "2026-10-31",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "NE Live STAR 18:30/19:00 9/27（日）発売 ▼ なとり",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261031-43206c617567",
+      "category": "live",
+      "date": "2026-10-31",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "C laughs 16:30/17:00 発売中 ▼ Laughing Hick",
+      "venue": "広島セカンド・クラッチ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261031-3a33302f3138",
+      "category": "live",
+      "date": "2026-10-31",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": ":30/18:00 発売中 ▼ Survive Said The Prophet",
+      "venue": "広島セカンド・クラッチ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261101-e383b3e38195",
+      "category": "live",
+      "date": "2026-11-01",
+      "start": "16:00",
+      "endEstimate": "18:20",
+      "title": "ンさくらぴあ 大ホール 16:00/17:00 発売中 ▼ 2026年11月 鶴",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261101-efbc88e781ab",
+      "category": "live",
+      "date": "2026-11-01",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "（火・祝） 広島CAVE-BE 15:30/16:00 発売中 ▼ 水谷千重子",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261103-efbc88e697a5",
+      "category": "live",
+      "date": "2026-11-03",
+      "start": "16:00",
+      "endEstimate": "18:20",
+      "title": "（日） 松江AZTiC canova 15:30/16:00 発売中 ▼",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261103-5353e38386e3",
+      "category": "live",
+      "date": "2026-11-03",
+      "start": "16:00",
+      "endEstimate": "18:20",
+      "title": "SSテレビ新広島 別館9F スタジオ 16:30/17:00 発売中 ▼ 奥華子",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261105-3a303020534f",
+      "category": "live",
+      "date": "2026-11-05",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": ":00 SOLD OUT ▼ PARCO PRODUCE 2026 髪結いの亭主",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261106-efbc88e69ca8",
+      "category": "live",
+      "date": "2026-11-06",
+      "start": "12:00",
+      "endEstimate": "14:20",
+      "title": "（木） 広島JMSアステールプラザ 大ホール 17:15/18:00 発売中 ▼",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261106-efbc88e98791",
+      "category": "live",
+      "date": "2026-11-06",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "（金） 広島JMSアステールプラザ 大ホール 11:15/12:00 発売中 ▼",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261106-e382a2e382b9",
+      "category": "live",
+      "date": "2026-11-06",
+      "start": "19:00",
+      "endEstimate": "21:20",
+      "title": "アステールプラザ 大ホール 16:15/17:00 発売中 ▼ LINDBERG",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261115-e591a8e58d97",
+      "category": "live",
+      "date": "2026-11-15",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "周南RISING HALL 16:45/17:30 発売中 ▼ PassCode",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261116-efbc8920e5ba",
+      "category": "live",
+      "date": "2026-11-16",
+      "start": "18:30",
+      "endEstimate": "20:50",
+      "title": "） 広島LIVE VANQUISH 17:30/18:00 詳細 ▼ 松任谷由実",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261117-e5ada6e59c92",
+      "category": "live",
+      "date": "2026-11-17",
+      "start": "15:30",
+      "endEstimate": "17:50",
+      "title": "学園HBGホール 17:30/18:30 SOLD OUT ▼ DRUM TAO",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261119-efbc88e69c88",
+      "category": "live",
+      "date": "2026-11-19",
+      "start": "18:30",
+      "endEstimate": "20:50",
+      "title": "（月） 倉敷市民会館 17:30/18:30 SOLD OUT ▼",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261120-efbc88e69ca8",
+      "category": "live",
+      "date": "2026-11-20",
+      "start": "18:30",
+      "endEstimate": "20:50",
+      "title": "（木） 広島文化学園HBGホール 17:30/18:30 SOLD OUT ▼",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
       "id": "sport-20261121-sanfrecce-yokohamafm",
       "category": "sport",
       "sport": "soccer",
@@ -129,6 +823,113 @@
       ],
       "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
       "confidence": "official"
+    },
+    {
+      "id": "sport-20261121-sanfrecce",
+      "category": "sport",
+      "sport": "soccer",
+      "date": "2026-11-21",
+      "start": "14:00",
+      "endEstimate": "16:00",
+      "title": "広島×対戦",
+      "venue": "Eピース",
+      "area": "広島市",
+      "sourceIds": [
+        "sanfrecce"
+      ],
+      "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
+      "confidence": "official"
+    },
+    {
+      "id": "live-20261129-4958204f4e45",
+      "category": "live",
+      "date": "2026-11-29",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "IX ONE Live STAR 16:30/17:00 11/7（土）発売 ▼",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261129-45204c697665",
+      "category": "live",
+      "date": "2026-11-29",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "E Live STAR 16:30/17:00 11/7（土）発売 ▼ コレサワ",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "sport-20261206-sanfrecce",
+      "category": "sport",
+      "sport": "soccer",
+      "date": "2026-12-06",
+      "start": "14:00",
+      "endEstimate": "16:00",
+      "title": "広島×対戦",
+      "venue": "Eピース",
+      "area": "広島市",
+      "sourceIds": [
+        "sanfrecce"
+      ],
+      "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
+      "confidence": "official"
+    },
+    {
+      "id": "live-20261206-302f31363a30",
+      "category": "live",
+      "date": "2026-12-06",
+      "start": "15:00",
+      "endEstimate": "17:20",
+      "title": "0/16:00 10/10（土）発売 ▼ Back to the Holiday",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261206-e5ba83e5b3b6",
+      "category": "live",
+      "date": "2026-12-06",
+      "start": "16:00",
+      "endEstimate": "18:20",
+      "title": "広島クラブクアトロ 17:15/18:00 10/10（土）発売 ▼ 清⽔ミチコ",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
+    },
+    {
+      "id": "live-20261206-e383bce383ab",
+      "category": "live",
+      "date": "2026-12-06",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "ール 16:15/17:00 SOLD OUT ▼ TK from 凛として時雨",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "candy"
+      ],
+      "sourceUrl": "https://www.candy-p.com/schedule/",
+      "confidence": "source"
     }
   ]
 }
