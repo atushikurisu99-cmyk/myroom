@@ -1,21 +1,39 @@
-// collector-version: ueno-2of3
+// collector-version: playguide-first-2ofN
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 
 const SOURCES = [
-  { id: "candy", category: "live", url: "https://www.candy-p.com/schedule/" },
-  { id: "dragonflies", category: "sport", url: "https://hiroshimadragonflies.com/schedule/list/" },
-  { id: "sanfrecce", category: "sport", url: "https://www.sanfrecce.co.jp/matches/results" },
-  { id: "ueno-7ticket", category: "live", url: "https://7ticket.jp/s/116553/d" },
-  { id: "ueno-lawson", category: "live", url: "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92" },
-  { id: "ueno-hall", category: "live", url: "https://www.rcchall.jp/" },
-  { id: "ueno-eplus", category: "live", url: "https://eplus.jp/sf/venue/7300130/events" },
+  // ライブ系はプレイガイドを入口にする。会場・主催者は裏取り側。
+  { id:"eplus-green", type:"playguide", role:"discovery", category:"live", venue:"広島グリーンアリーナ", url:"https://eplus.jp/sf/venue/7300060/events" },
+  { id:"eplus-sunplaza", type:"playguide", role:"discovery", category:"live", venue:"広島サンプラザホール", url:"https://eplus.jp/sf/venue/7330010/events" },
+  { id:"eplus-jms", type:"playguide", role:"discovery", category:"live", venue:"JMSアステールプラザ", url:"https://eplus.jp/sf/venue/7300010/events" },
+  { id:"eplus-hbg", type:"playguide", role:"discovery", category:"live", venue:"広島文化学園HBGホール", url:"https://eplus.jp/sf/venue/7300050/events" },
+  { id:"eplus-quattro", type:"playguide", role:"discovery", category:"live", venue:"広島クラブクアトロ", url:"https://eplus.jp/sf/venue/7300090/events" },
+  { id:"eplus-ueno", type:"playguide", role:"discovery", category:"live", venue:"上野学園ホール", url:"https://eplus.jp/sf/venue/7300130/events" },
+
+  // 上野学園ホールはセブンチケットも取得元として使えるため、同格の発見元にする。
+  { id:"seven-ueno", type:"playguide", role:"discovery", category:"live", venue:"上野学園ホール", url:"https://7ticket.jp/s/116553/d" },
+
+  // 主催者・別プレイガイド・会場は裏取り候補。
+  { id:"candy", type:"promoter", role:"verify", category:"live", url:"https://www.candy-p.com/schedule/" },
+  { id:"lawson-ueno", type:"playguide", role:"verify", category:"live", venue:"上野学園ホール", url:"https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92" },
+  { id:"venue-ueno", type:"venue", role:"verify", category:"live", venue:"上野学園ホール", url:"https://www.rcchall.jp/" },
+
+  // スポーツはチケット情報より試合公式情報の方が強いので従来通り公式を入口にする。
+  { id:"dragonflies", type:"team", role:"discovery", category:"sport", url:"https://hiroshimadragonflies.com/schedule/list/" },
+  { id:"sanfrecce", type:"team", role:"discovery", category:"sport", url:"https://www.sanfrecce.co.jp/matches/results" },
 ];
 
-const HIROSHIMA_VENUES = [
-  "広島グリーンアリーナ","広島サンプラザ","JMSアステールプラザ","アステールプラザ",
-  "広島文化学園HBGホール","広島国際会議場","エディオンピースウイング広島","Eピース",
-  "上野学園ホール","広島上野学園ホール","広島県立文化芸術ホール",
-  "広島クラブクアトロ","広島セカンド・クラッチ","広島Live space Reed","広島4.14"
+const VENUE_ALIASES = [
+  ["広島グリーンアリーナ",["広島グリーンアリーナ","広島県立総合体育館"]],
+  ["広島サンプラザホール",["広島サンプラザホール","広島サンプラザ"]],
+  ["JMSアステールプラザ",["広島JMSアステールプラザ","JMSアステールプラザ","アステールプラザ"]],
+  ["広島文化学園HBGホール",["広島文化学園HBGホール","広島市文化交流会館"]],
+  ["上野学園ホール",["上野学園ホール","広島上野学園ホール","広島県立文化芸術ホール"]],
+  ["広島クラブクアトロ",["広島クラブクアトロ","クラブクアトロ"]],
+  ["広島セカンド・クラッチ",["広島セカンド・クラッチ","SECOND CRUTCH","セカンド・クラッチ"]],
+  ["広島Live space Reed",["広島Live space Reed","Live space Reed"]],
+  ["広島4.14",["広島4.14","4.14"]],
+  ["Eピース",["エディオンピースウイング広島","Eピース"]],
 ];
 
 function clean(s="") {
@@ -26,6 +44,7 @@ function clean(s="") {
     .replace(/&nbsp;|&#160;/g," ")
     .replace(/&amp;/g,"&")
     .replace(/&#x2F;|&#47;/g,"/")
+    .replace(/&#8217;|&#039;|&apos;/g,"'")
     .replace(/\s+/g," ")
     .trim();
 }
@@ -34,89 +53,75 @@ function pad(v){ return String(v).padStart(2,"0"); }
 function isoDate(y,m,d){ return `${y}-${pad(m)}-${pad(d)}`; }
 
 async function fetchText(url) {
-  const res = await fetch(url,{headers:{"user-agent":"TaxiSalesNavigator/0.1 (+event collector)"}});
+  const res = await fetch(url,{headers:{"user-agent":"TaxiSalesNavigator/0.2 (+event collector)"}});
   if (!res.ok) throw new Error(`${res.status} ${url}`);
   return await res.text();
 }
 
-function pickVenue(text) {
-  return HIROSHIMA_VENUES.find(v => text.includes(v)) || "";
-}
-
-function parseCandy(html, year) {
-  const text = clean(html);
-  const out = [];
-  const re = /(20\d{2})\/(\d{1,2})\/(\d{1,2})[^0-9]{0,8}([^0-9]{0,80}?)(\d{1,2}:\d{2})\/(\d{1,2}:\d{2})/g;
-  let m;
-  while ((m = re.exec(text))) {
-    const around = text.slice(Math.max(0,m.index-90), Math.min(text.length,re.lastIndex+100));
-    const venue = pickVenue(around);
-    if (!venue) continue;
-    const titleChunk = text.slice(Math.max(0,m.index-120),m.index).trim();
-    const title = titleChunk.split(/20\d{2}\/\d{1,2}\/\d{1,2}/).pop().slice(-40).trim() || "ライブ";
-    out.push({
-      id:`live-${m[1]}${pad(m[2])}${pad(m[3])}-${Buffer.from(title).toString("hex").slice(0,12)}`,
-      category:"live", date:isoDate(m[1],m[2],m[3]), start:m[6], endEstimate:null,
-      title, venue, area:"広島市", sourceIds:["candy"], sourceUrl:SOURCES[0].url, confidence:"source"
-    });
-  }
-  return out;
-}
-
-function parseDragonflies(html, year) {
-  const text = clean(html);
-  const out = [];
-  const re = /(HOME|AWAY)[\s\S]{0,100}?(\d{1,2})\/(\d{1,2})[^0-9]{0,12}(\d{1,2}:\d{2})[\s\S]{0,120}?(広島グリーンアリーナ|広島サンプラザホール|エフピコアリーナふくやま)/g;
-  let m;
-  while ((m = re.exec(text))) {
-    if (m[1] !== "HOME") continue;
-    const around = text.slice(m.index, Math.min(text.length,re.lastIndex+100));
-    const opponent = (around.match(/(?:広島\s*){1,2}([^ ]{1,12})/)||[])[1] || "対戦";
-    out.push({
-      id:`sport-${year}${pad(m[2])}${pad(m[3])}-dragonflies`,
-      category:"sport", sport:"basketball", date:isoDate(year,m[2],m[3]), start:m[4], endEstimate:null,
-      title:`広島×${opponent}`, venue:m[5], area:m[5].includes("ふくやま")?"福山市":"広島市",
-      sourceIds:["dragonflies"], sourceUrl:SOURCES[1].url, confidence:"official"
-    });
-  }
-  return out;
-}
-
-function parseSanfrecce(html, year) {
-  const text = clean(html);
-  const out = [];
-  const re = /HOME\s+エディオンピースウイング広島[\s\S]{0,120}?(\d{1,2})\.(\d{1,2})[^0-9]{0,8}(\d{1,2}:\d{2})/g;
-  let m;
-  while ((m = re.exec(text))) {
-    const around = text.slice(m.index, Math.min(text.length,re.lastIndex+160));
-    const opponent = (around.match(/Image\s*([^ ]{1,16})/)||[])[1] || "対戦";
-    out.push({
-      id:`sport-${year}${pad(m[1])}${pad(m[2])}-sanfrecce`,
-      category:"sport", sport:"soccer", date:isoDate(year,m[1],m[2]), start:m[3], endEstimate:null,
-      title:`広島×${opponent}`, venue:"Eピース", area:"広島市",
-      sourceIds:["sanfrecce"], sourceUrl:SOURCES[2].url, confidence:"official"
-    });
-  }
-  return out;
-}
-
 function canonicalVenue(v="") {
-  if (/上野学園ホール|広島県立文化芸術ホール/.test(v)) return "上野学園ホール";
-  return v;
+  for (const [canonical,aliases] of VENUE_ALIASES) {
+    if (aliases.some(x => v.includes(x))) return canonical;
+  }
+  return v.trim();
+}
+
+function pickVenue(text) {
+  for (const [canonical,aliases] of VENUE_ALIASES) {
+    if (aliases.some(x => text.includes(x))) return canonical;
+  }
+  return "";
 }
 
 function normalizeTitle(s="") {
-  return s.replace(/劇団四季|ミュージカル|広島公演|一般発売|先着|★|☆|【[^】]*】|［[^］]*］/g,"")
-    .replace(/[「」『』（）()！!・･\s]/g,"").toLowerCase();
+  return s
+    .replace(/劇団四季|ミュージカル|広島公演|一般発売|先着|抽選|受付中|受付終了|受付前|予定枚数終了|SOLD OUT/gi,"")
+    .replace(/[「」『』【】［］（）()！!・･★☆~〜～\s]/g,"")
+    .toLowerCase();
+}
+
+function titleMatches(a,b) {
+  const x=normalizeTitle(a), y=normalizeTitle(b);
+  if (!x || !y) return false;
+  if (x===y) return true;
+  if (x.length>=5 && y.length>=5 && (x.includes(y) || y.includes(x))) return true;
+  return false;
 }
 
 function sameEvent(a,b) {
-  if (a.date !== b.date || canonicalVenue(a.venue) !== canonicalVenue(b.venue)) return false;
-  const x=normalizeTitle(a.title), y=normalizeTitle(b.title);
-  return x && y && (x.includes(y) || y.includes(x) || (x.includes("マンマミーア") && y.includes("マンマミーア")));
+  return a.date===b.date &&
+    canonicalVenue(a.venue)===canonicalVenue(b.venue) &&
+    titleMatches(a.title,b.title);
 }
 
-function parseUeno7Ticket(html, year) {
+function makeId(e) {
+  const stem=Buffer.from(normalizeTitle(e.title)||e.title).toString("hex").slice(0,16);
+  return `${e.category}-${e.date.replaceAll("-","")}-${(e.start||"0000").replace(":","")}-${stem}`;
+}
+
+function parseEplusVenue(html, source) {
+  const text=clean(html);
+  const out=[];
+  const re=/(20\d{2})\/(\d{1,2})\/(\d{1,2})\([^)]*\)\s*(?:先着|抽選)?\s*([\s\S]{1,180}?)\s*(?:開演|開始)：(\d{1,2}:\d{2})～/g;
+  let m;
+  while ((m=re.exec(text))) {
+    let title=m[4]
+      .replace(/(?:受付中|受付終了|受付前|予定枚数終了).*$/,"")
+      .replace(/^\s*(?:先着|抽選)\s*/,"")
+      .trim();
+    if (!title || /公演一覧|会場情報/.test(title)) continue;
+    title=title.slice(0,100);
+    const e={
+      category:"live", date:isoDate(m[1],m[2],m[3]), start:m[5], endEstimate:null,
+      title, venue:canonicalVenue(source.venue), area:"広島市",
+      sourceIds:[source.id], sourceUrl:source.url, sourceTypes:["playguide"], confidence:"candidate"
+    };
+    e.id=makeId(e);
+    out.push(e);
+  }
+  return out;
+}
+
+function parseSevenUeno(html, year, source) {
   const text=clean(html);
   if (!text.includes("上野学園ホール") || !text.includes("マンマ")) return [];
   const from=text.indexOf("公演日・開演時間");
@@ -127,123 +132,211 @@ function parseUeno7Ticket(html, year) {
   for (let i=0;i<found.length;i++) {
     const m=found[i];
     const next=i+1<found.length ? found[i+1].index : schedule.length;
-    const segment=schedule.slice(m.index + m[0].length,next);
+    const segment=schedule.slice(m.index+m[0].length,next);
     const times=[...segment.matchAll(/(\d{1,2}:\d{2})/g)].map(x=>x[1]);
     for (const start of [...new Set(times)]) {
-      out.push({
-        id:"live-"+year+pad(m[1])+pad(m[2])+"-mammamia-"+start.replace(":",""),
+      const e={
         category:"live", date:isoDate(year,m[1],m[2]), start, endEstimate:null,
         title:"マンマ・ミーア！", venue:"上野学園ホール", area:"広島市",
-        sourceIds:["ueno-7ticket"], sourceUrl:"https://7ticket.jp/s/116553/d", confidence:"candidate"
-      });
+        sourceIds:[source.id], sourceUrl:source.url, sourceTypes:["playguide"], confidence:"candidate"
+      };
+      e.id=makeId(e);
+      out.push(e);
     }
   }
   return out;
 }
 
-function parseUenoEplus(html) {
+function parseDragonflies(html, year, source) {
   const text=clean(html);
   const out=[];
-  const re=/(20\d{2})\/\s*(\d{1,2})\/(\d{1,2})\([^)]*\)\s*(?:先着|抽選)?\s*([\s\S]{1,100}?)\s*開演：(\d{1,2}:\d{2})～[\s\S]{0,120}?上野学園ホール/g;
+  const re=/(HOME|AWAY)[\s\S]{0,100}?(\d{1,2})\/(\d{1,2})[^0-9]{0,12}(\d{1,2}:\d{2})[\s\S]{0,120}?(広島グリーンアリーナ|広島サンプラザホール|エフピコアリーナふくやま)/g;
   let m;
   while ((m=re.exec(text))) {
-    const title=m[4].replace(/予定枚数終了|受付中|受付終了/g,"").trim().slice(0,80);
-    if (!title) continue;
-    out.push({
-      id:"live-"+m[1]+pad(m[2])+pad(m[3])+"-ueno-"+Buffer.from(title).toString("hex").slice(0,12),
-      category:"live", date:isoDate(m[1],m[2],m[3]), start:m[5], endEstimate:null,
-      title, venue:"上野学園ホール", area:"広島市",
-      sourceIds:["ueno-eplus"], sourceUrl:"https://eplus.jp/sf/venue/7300130/events", confidence:"candidate"
-    });
+    if (m[1]!=="HOME") continue;
+    const around=text.slice(m.index,Math.min(text.length,re.lastIndex+100));
+    const opponent=(around.match(/(?:広島\s*){1,2}([^ ]{1,12})/)||[])[1]||"対戦";
+    const e={
+      category:"sport", sport:"basketball", date:isoDate(year,m[2],m[3]), start:m[4], endEstimate:null,
+      title:`広島×${opponent}`, venue:canonicalVenue(m[5]), area:m[5].includes("ふくやま")?"福山市":"広島市",
+      sourceIds:[source.id], sourceUrl:source.url, sourceTypes:["team"], confidence:"official"
+    };
+    e.id=makeId(e);
+    out.push(e);
   }
   return out;
 }
 
-function uenoRunEvidence(sourceId,text) {
-  const hit=/マンマ.?ミーア/.test(text) && /上野学園ホール|広島県立文化芸術ホール/.test(text);
-  return hit ? sourceId : null;
+function parseSanfrecce(html, year, source) {
+  const text=clean(html);
+  const out=[];
+  const re=/HOME\s+エディオンピースウイング広島[\s\S]{0,120}?(\d{1,2})\.(\d{1,2})[^0-9]{0,8}(\d{1,2}:\d{2})/g;
+  let m;
+  while ((m=re.exec(text))) {
+    const around=text.slice(m.index,Math.min(text.length,re.lastIndex+160));
+    const opponent=(around.match(/Image\s*([^ ]{1,16})/)||[])[1]||"対戦";
+    const e={
+      category:"sport", sport:"soccer", date:isoDate(year,m[1],m[2]), start:m[3], endEstimate:null,
+      title:`広島×${opponent}`, venue:"Eピース", area:"広島市",
+      sourceIds:[source.id], sourceUrl:source.url, sourceTypes:["team"], confidence:"official"
+    };
+    e.id=makeId(e);
+    out.push(e);
+  }
+  return out;
 }
 
-function verifyUenoEvents(events, evidenceIds) {
-  const ueno=events.filter(e=>canonicalVenue(e.venue)==="上野学園ホール");
-  const other=events.filter(e=>canonicalVenue(e.venue)!=="上野学園ホール");
-  const verified=[];
-  for (const e of ueno) {
-    const matches=ueno.filter(x=>sameEvent(e,x));
-    const sourceIds=[...new Set(matches.flatMap(x=>x.sourceIds||[]))];
-    if (normalizeTitle(e.title).includes("マンマミーア")) {
-      for (const id of evidenceIds) if (id && !sourceIds.includes(id)) sourceIds.push(id);
+function sourceConfirmsEvent(text,e,source) {
+  if (!text) return false;
+  if (source.venue && canonicalVenue(source.venue)!==canonicalVenue(e.venue)) return false;
+
+  const normalizedText=normalizeTitle(text);
+  const title=normalizeTitle(e.title);
+  const titleHit=title.length>=5 && normalizedText.includes(title);
+  if (!titleHit) return false;
+
+  const [y,m,d]=e.date.split("-").map(Number);
+  const dateForms=[
+    `${y}/${m}/${d}`, `${y}/${pad(m)}/${pad(d)}`,
+    `${m}/${d}`, `${pad(m)}/${pad(d)}`,
+    `${m}月${d}日`
+  ];
+  const dateHit=dateForms.some(x=>text.includes(x));
+  if (!dateHit) return false;
+
+  if (source.venue) return true;
+  const venueAliases=VENUE_ALIASES.find(([v])=>v===canonicalVenue(e.venue))?.[1]||[e.venue];
+  return venueAliases.some(v=>text.includes(v));
+}
+
+function mergeAndVerify(discovered, evidenceTexts) {
+  const groups=[];
+  for (const e of discovered) {
+    let g=groups.find(x=>sameEvent(x.base,e) && (!x.base.start || !e.start || x.base.start===e.start));
+    if (!g) {
+      g={base:{...e,venue:canonicalVenue(e.venue)},members:[]};
+      groups.push(g);
     }
-    if (sourceIds.length < 2) continue;
-    verified.push({...e,venue:"上野学園ホール",sourceIds,confidence:"confirmed",verifiedBy:sourceIds.length});
+    g.members.push(e);
   }
-  return [...other,...verified];
+
+  return groups.map(g=>{
+    const sourceIds=[...new Set(g.members.flatMap(x=>x.sourceIds||[]))];
+    const sourceTypes=[...new Set(g.members.flatMap(x=>x.sourceTypes||[]))];
+
+    for (const [sourceId,payload] of evidenceTexts) {
+      if (sourceIds.includes(sourceId)) continue;
+      if (sourceConfirmsEvent(payload.text,g.base,payload.source)) {
+        sourceIds.push(sourceId);
+        sourceTypes.push(payload.source.type);
+      }
+    }
+
+    const distinctSources=new Set(sourceIds).size;
+    const confidence=g.base.category==="sport" && sourceTypes.includes("team")
+      ? "official"
+      : distinctSources>=2 ? "confirmed" : "candidate";
+
+    return {
+      ...g.base,
+      sourceIds,
+      sourceTypes:[...new Set(sourceTypes)],
+      confidence,
+      verifiedBy:distinctSources
+    };
+  });
 }
 
 function normalizeKey(e) {
-  return [e.date,e.start||"",e.venue,e.title].join("|").replace(/\s/g,"").toLowerCase();
+  return [e.date,e.start||"",canonicalVenue(e.venue),normalizeTitle(e.title)].join("|");
 }
 
-function mergeEvents(events) {
-  const map = new Map();
+function dedupe(events) {
+  const map=new Map();
   for (const e of events) {
-    const key = normalizeKey(e);
-    const prev = map.get(key);
+    const key=normalizeKey(e);
+    const prev=map.get(key);
     if (!prev) map.set(key,e);
-    else map.set(key,{...prev,...e,sourceIds:[...new Set([...(prev.sourceIds||[]),...(e.sourceIds||[])])]});
+    else map.set(key,{
+      ...prev,...e,
+      sourceIds:[...new Set([...(prev.sourceIds||[]),...(e.sourceIds||[])])],
+      sourceTypes:[...new Set([...(prev.sourceTypes||[]),...(e.sourceTypes||[])])],
+      verifiedBy:new Set([...(prev.sourceIds||[]),...(e.sourceIds||[])]).size
+    });
   }
   return [...map.values()].sort((a,b)=>`${a.date}T${a.start||"00:00"}`.localeCompare(`${b.date}T${b.start||"00:00"}`));
 }
 
 function endEstimate(e) {
   if (e.endEstimate) return e;
-  const mins = normalizeTitle(e.title||"").includes("マンマミーア") ? 155 : e.sport==="soccer" ? 120 : e.sport==="basketball" ? 145 : 140;
-  const [h,m] = (e.start||"18:00").split(":").map(Number);
-  const total = h*60+m+mins;
+  const mins=normalizeTitle(e.title).includes("マンマミーア") ? 155 :
+    e.sport==="soccer" ? 120 : e.sport==="basketball" ? 145 : 140;
+  const [h,m]=(e.start||"18:00").split(":").map(Number);
+  const total=h*60+m+mins;
   return {...e,endEstimate:`${pad(Math.floor(total/60)%24)}:${pad(total%60)}`};
 }
 
 async function main() {
-  const now = new Date();
-  const year = now.getUTCFullYear();
+  const now=new Date();
+  const year=now.getUTCFullYear();
   let existing={events:[]};
   try { existing=JSON.parse(await readFile("data/events.json","utf8")); } catch {}
-  const fetched=[];
+
+  const discovered=[];
+  const evidenceTexts=new Map();
   const errors=[];
+
   for (const s of SOURCES) {
     try {
       const html=await fetchText(s.url);
-      if (s.id==="candy") fetched.push(...parseCandy(html,year));
-      if (s.id==="dragonflies") fetched.push(...parseDragonflies(html,year));
-      if (s.id==="sanfrecce") fetched.push(...parseSanfrecce(html,year));
-      if (s.id==="ueno-7ticket") { console.log("ueno-7ticket markers:",html.length,html.includes("マンマ"),html.includes("10/4"),html.includes("13:00")); const x=parseUeno7Ticket(html,year); console.log("ueno-7ticket parsed:",x.length); fetched.push(...x); }
-      if (s.id==="ueno-eplus") { console.log("ueno-eplus markers:",html.length,html.includes("上野学園"),html.includes("REBECCA"),html.includes("12/4")); const x=parseUenoEplus(html); console.log("ueno-eplus parsed:",x.length); fetched.push(...x); }
-    } catch (err) { errors.push({source:s.id,error:String(err.message||err)}); }
-  }
-  const uenoEvidence=[];
-  for (const s of SOURCES.filter(x=>x.id==="ueno-lawson" || x.id==="ueno-hall")) {
-    try {
-      const t=clean(await fetchText(s.url));
-      const hit=uenoRunEvidence(s.id,t);
-      if (hit) uenoEvidence.push(hit);
+      const text=clean(html);
+      evidenceTexts.set(s.id,{text,source:s});
+
+      if (s.role!=="discovery") continue;
+      if (s.id.startsWith("eplus-")) discovered.push(...parseEplusVenue(html,s));
+      else if (s.id==="seven-ueno") discovered.push(...parseSevenUeno(html,year,s));
+      else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
+      else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
     } catch (err) {
-      if (!errors.some(x=>x.source===s.id)) errors.push({source:s.id,error:String(err.message||err)});
+      errors.push({source:s.id,error:String(err.message||err)});
     }
   }
-  console.log("ueno evidence:",uenoEvidence.join(",") || "none");
-  const horizon = new Date(now.getTime()+62*86400000);
-  const keep = verifyUenoEvents([...existing.events,...fetched],uenoEvidence)
-    .filter(e => {
+
+  const fresh=mergeAndVerify(discovered,evidenceTexts);
+  const horizon=new Date(now.getTime()+62*86400000);
+  const previous=(existing.events||[]).filter(e=>{
+    const d=new Date(`${e.date}T23:59:59+09:00`);
+    return d>=new Date(now.getTime()-86400000) && d<=horizon && e.area==="広島市";
+  });
+
+  // 取得できた新データを優先しつつ、過去データは取りこぼし保険として残す。
+  const keep=[...previous,...fresh]
+    .filter(e=>{
       const d=new Date(`${e.date}T23:59:59+09:00`);
-      return d >= new Date(now.getTime()-86400000) && d <= horizon && e.area==="広島市";
+      return d>=new Date(now.getTime()-86400000) && d<=horizon && e.area==="広島市";
     })
     .map(endEstimate);
-  const events=mergeEvents(keep);
+
+  const events=dedupe(keep);
+  const stats={
+    discovered:fresh.length,
+    confirmed:fresh.filter(e=>e.confidence==="confirmed").length,
+    candidate:fresh.filter(e=>e.confidence==="candidate").length,
+    official:fresh.filter(e=>e.confidence==="official").length,
+    playguideBased:fresh.filter(e=>(e.sourceTypes||[]).includes("playguide")).length
+  };
+
   await mkdir("data",{recursive:true});
   await writeFile("data/events.json",JSON.stringify({
-    generatedAt:new Date().toISOString(), area:"hiroshima",
-    sources:SOURCES.map(({id,url})=>({id,url})), errors, events
+    generatedAt:new Date().toISOString(),
+    area:"hiroshima",
+    strategy:"playguide-first; verify with any independent second source including venue/promoter/another playguide",
+    sources:SOURCES.map(({id,type,role,url,venue})=>({id,type,role,url,venue})),
+    stats,errors,events
   },null,2)+"\n");
+
+  console.log("event stats:",JSON.stringify(stats));
   console.log(`events: ${events.length}, errors: ${errors.length}`);
 }
+
 main().catch(err=>{ console.error(err); process.exit(1); });
