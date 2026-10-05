@@ -210,8 +210,8 @@ async function main() {
       if (s.id==="candy") fetched.push(...parseCandy(html,year));
       if (s.id==="dragonflies") fetched.push(...parseDragonflies(html,year));
       if (s.id==="sanfrecce") fetched.push(...parseSanfrecce(html,year));
-      if (s.id==="ueno-7ticket") fetched.push(...parseUeno7Ticket(html,year));
-      if (s.id==="ueno-eplus") fetched.push(...parseUenoEplus(html));
+      if (s.id==="ueno-7ticket") { const x=parseUeno7Ticket(html,year); console.log("ueno-7ticket parsed:",x.length); fetched.push(...x); }
+      if (s.id==="ueno-eplus") { const x=parseUenoEplus(html); console.log("ueno-eplus parsed:",x.length); fetched.push(...x); }
     } catch (err) { errors.push({source:s.id,error:String(err.message||err)}); }
   }
   const uenoEvidence=[];
@@ -224,6 +224,7 @@ async function main() {
       if (!errors.some(x=>x.source===s.id)) errors.push({source:s.id,error:String(err.message||err)});
     }
   }
+  console.log("ueno evidence:",uenoEvidence.join(",") || "none");
   const horizon = new Date(now.getTime()+62*86400000);
   const keep = verifyUenoEvents([...existing.events,...fetched],uenoEvidence)
     .filter(e => {
