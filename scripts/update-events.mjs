@@ -137,7 +137,7 @@ function parseEplusVenue(html, source) {
   for (const text of texts) {
     if (!text || seenText.has(text)) continue;
     seenText.add(text);
-    const re=/(20\d{2})\/(\d{1,2})\/(\d{1,2})\([^)]*\)\s*(?:先着|抽選)?\s*([\s\S]{1,180}?)\s*(?:開演|開始)：(\d{1,2}:\d{2})～/g;
+    const re=/(20\d{2})\/(\d{1,2})\/(\d{1,2})[\s\S]{0,48}?(?:先着|抽選)?\s*([\s\S]{1,180}?)\s*(?:開演|開始)[^0-9]{0,10}(\d{1,2}:\d{2})/g;
     let m;
     while ((m=re.exec(text))) {
     let title=m[4]
@@ -334,12 +334,7 @@ async function main() {
       evidenceTexts.set(s.id,{text,source:s});
 
       if (s.role!=="discovery") continue;
-      if (s.id.startsWith("eplus-")) {
-        const parsed=parseEplusVenue(html,s);
-        console.log("eplus source",s.id,"html",html.length,"visible",clean(html).length,"all",cleanAll(html).length,"parsed",parsed.length,
-          "markers",html.includes("STU48"),html.includes("GRe4N"),html.includes("BUMP OF CHICKEN"),html.includes("After the Rain"));
-        discovered.push(...parsed);
-      }
+      if (s.id.startsWith("eplus-")) discovered.push(...parseEplusVenue(html,s));
       else if (s.id==="seven-ueno") discovered.push(...parseSevenUeno(html,year,s));
       else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
