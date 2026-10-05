@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T15:34:38.053Z",
+  "generatedAt": "2026-10-05T15:36:20.920Z",
   "area": "hiroshima",
   "sources": [
     {
@@ -34,11 +34,11 @@
   "errors": [],
   "events": [
     {
-      "id": "live-20261009-mammamia-1300",
+      "id": "live-20261009-mammamia-1330",
       "category": "live",
       "date": "2026-10-09",
-      "start": "13:00",
-      "endEstimate": "15:20",
+      "start": "13:30",
+      "endEstimate": "15:50",
       "title": "マンマ・ミーア！",
       "venue": "上野学園ホール",
       "area": "広島市",
@@ -173,6 +173,23 @@
       "confidence": "source"
     },
     {
+      "id": "live-20261010-mammamia-1730",
+      "category": "live",
+      "date": "2026-10-10",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
       "id": "live-20261011-mammamia-1300",
       "category": "live",
       "date": "2026-10-11",
@@ -205,6 +222,23 @@
       "confidence": "source"
     },
     {
+      "id": "live-20261012-mammamia-1300",
+      "category": "live",
+      "date": "2026-10-12",
+      "start": "13:00",
+      "endEstimate": "15:20",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
       "id": "live-20261012-e4bc9ae5a082",
       "category": "live",
       "date": "2026-10-12",
@@ -220,9 +254,26 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261014-mammamia-1330",
+      "id": "live-20261014-mammamia-1830",
       "category": "live",
       "date": "2026-10-14",
+      "start": "18:30",
+      "endEstimate": "20:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
+      "id": "live-20261015-mammamia-1330",
+      "category": "live",
+      "date": "2026-10-15",
       "start": "13:30",
       "endEstimate": "15:50",
       "title": "マンマ・ミーア！",
@@ -331,6 +382,23 @@
       "verifiedBy": 2
     },
     {
+      "id": "live-20261018-mammamia-1300",
+      "category": "live",
+      "date": "2026-10-18",
+      "start": "13:00",
+      "endEstimate": "15:20",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
       "id": "live-20261018-efbc8920e5ba",
       "category": "live",
       "date": "2026-10-18",
@@ -391,23 +459,6 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261018-mammamia-1830",
-      "category": "live",
-      "date": "2026-10-18",
-      "start": "18:30",
-      "endEstimate": "20:50",
-      "title": "マンマ・ミーア！",
-      "venue": "上野学園ホール",
-      "area": "広島市",
-      "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson"
-      ],
-      "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
-    },
-    {
       "id": "sport-20261019-dragonflies-san-en",
       "category": "sport",
       "sport": "basketball",
@@ -438,6 +489,23 @@
       ],
       "sourceUrl": "https://hiroshimadragonflies.com/schedule/list/",
       "confidence": "official"
+    },
+    {
+      "id": "live-20261020-mammamia-1830",
+      "category": "live",
+      "date": "2026-10-20",
+      "start": "18:30",
+      "endEstimate": "20:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
     },
     {
       "id": "live-20261021-mammamia-1330",
@@ -489,11 +557,28 @@
       "confidence": "official"
     },
     {
-      "id": "live-20261023-mammamia-1300",
+      "id": "live-20261022-mammamia-1330",
+      "category": "live",
+      "date": "2026-10-22",
+      "start": "13:30",
+      "endEstimate": "15:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
+      "id": "live-20261023-mammamia-1330",
       "category": "live",
       "date": "2026-10-23",
-      "start": "13:00",
-      "endEstimate": "15:20",
+      "start": "13:30",
+      "endEstimate": "15:50",
       "title": "マンマ・ミーア！",
       "venue": "上野学園ホール",
       "area": "広島市",
@@ -568,6 +653,23 @@
       "confidence": "source"
     },
     {
+      "id": "live-20261024-mammamia-1730",
+      "category": "live",
+      "date": "2026-10-24",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
       "id": "live-20261024-efbc88e59c9f",
       "category": "live",
       "date": "2026-10-24",
@@ -583,11 +685,11 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261025-mammamia-1330",
+      "id": "live-20261025-mammamia-1300",
       "category": "live",
       "date": "2026-10-25",
-      "start": "13:30",
-      "endEstimate": "15:50",
+      "start": "13:00",
+      "endEstimate": "15:20",
       "title": "マンマ・ミーア！",
       "venue": "上野学園ホール",
       "area": "広島市",
@@ -630,9 +732,43 @@
       "confidence": "source"
     },
     {
+      "id": "live-20261028-mammamia-1330",
+      "category": "live",
+      "date": "2026-10-28",
+      "start": "13:30",
+      "endEstimate": "15:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
       "id": "live-20261029-mammamia-1330",
       "category": "live",
       "date": "2026-10-29",
+      "start": "13:30",
+      "endEstimate": "15:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
+      "id": "live-20261030-mammamia-1330",
+      "category": "live",
+      "date": "2026-10-30",
       "start": "13:30",
       "endEstimate": "15:50",
       "title": "マンマ・ミーア！",
@@ -831,6 +967,23 @@
       "confidence": "source"
     },
     {
+      "id": "live-20261103-mammamia-1300",
+      "category": "live",
+      "date": "2026-11-03",
+      "start": "13:00",
+      "endEstimate": "15:20",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
       "id": "live-20261103-efbc88e697a5",
       "category": "live",
       "date": "2026-11-03",
@@ -878,6 +1031,23 @@
       "verifiedBy": 2
     },
     {
+      "id": "live-20261105-mammamia-1330",
+      "category": "live",
+      "date": "2026-11-05",
+      "start": "13:30",
+      "endEstimate": "15:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
       "id": "live-20261105-3a303020534f",
       "category": "live",
       "date": "2026-11-05",
@@ -908,11 +1078,11 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261106-mammamia-1300",
+      "id": "live-20261106-mammamia-1330",
       "category": "live",
       "date": "2026-11-06",
-      "start": "13:00",
-      "endEstimate": "15:20",
+      "start": "13:30",
+      "endEstimate": "15:50",
       "title": "マンマ・ミーア！",
       "venue": "上野学園ホール",
       "area": "広島市",
@@ -955,9 +1125,43 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261108-mammamia-1830",
+      "id": "live-20261107-mammamia-1730",
+      "category": "live",
+      "date": "2026-11-07",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
+      "id": "live-20261108-mammamia-1300",
       "category": "live",
       "date": "2026-11-08",
+      "start": "13:00",
+      "endEstimate": "15:20",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
+      "id": "live-20261110-mammamia-1830",
+      "category": "live",
+      "date": "2026-11-10",
       "start": "18:30",
       "endEstimate": "20:50",
       "title": "マンマ・ミーア！",
@@ -989,11 +1193,11 @@
       "verifiedBy": 2
     },
     {
-      "id": "live-20261113-mammamia-1300",
+      "id": "live-20261112-mammamia-1330",
       "category": "live",
-      "date": "2026-11-13",
-      "start": "13:00",
-      "endEstimate": "15:20",
+      "date": "2026-11-12",
+      "start": "13:30",
+      "endEstimate": "15:50",
       "title": "マンマ・ミーア！",
       "venue": "上野学園ホール",
       "area": "広島市",
@@ -1006,11 +1210,45 @@
       "verifiedBy": 2
     },
     {
-      "id": "live-20261115-mammamia-1330",
+      "id": "live-20261113-mammamia-1330",
       "category": "live",
-      "date": "2026-11-15",
+      "date": "2026-11-13",
       "start": "13:30",
       "endEstimate": "15:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
+      "id": "live-20261114-mammamia-1730",
+      "category": "live",
+      "date": "2026-11-14",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
+      "id": "live-20261115-mammamia-1300",
+      "category": "live",
+      "date": "2026-11-15",
+      "start": "13:00",
+      "endEstimate": "15:20",
       "title": "マンマ・ミーア！",
       "venue": "上野学園ホール",
       "area": "広島市",
@@ -1068,6 +1306,23 @@
       "confidence": "source"
     },
     {
+      "id": "live-20261118-mammamia-1330",
+      "category": "live",
+      "date": "2026-11-18",
+      "start": "13:30",
+      "endEstimate": "15:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
       "id": "live-20261119-mammamia-1330",
       "category": "live",
       "date": "2026-11-19",
@@ -1098,6 +1353,23 @@
       ],
       "sourceUrl": "https://www.candy-p.com/schedule/",
       "confidence": "source"
+    },
+    {
+      "id": "live-20261120-mammamia-1330",
+      "category": "live",
+      "date": "2026-11-20",
+      "start": "13:30",
+      "endEstimate": "15:50",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
     },
     {
       "id": "live-20261120-efbc88e69ca8",
@@ -1167,6 +1439,23 @@
       "id": "live-20261122-mammamia-1300",
       "category": "live",
       "date": "2026-11-22",
+      "start": "13:00",
+      "endEstimate": "15:20",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "ueno-7ticket",
+        "ueno-lawson"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "confidence": "confirmed",
+      "verifiedBy": 2
+    },
+    {
+      "id": "live-20261123-mammamia-1300",
+      "category": "live",
+      "date": "2026-11-23",
       "start": "13:00",
       "endEstimate": "15:20",
       "title": "マンマ・ミーア！",
