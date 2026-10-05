@@ -2,7 +2,6 @@ window.AppHooks = (() => {
   const { useEffect, useMemo, useRef, useState } = React;
   const Utils = window.AppUtils;
   const Geo = window.AppGeo;
-  const Constants = window.AppConstants;
 
   function useTaxiAppState() {
     const [screen, setScreen] = useState("top");
@@ -167,7 +166,6 @@ window.AppHooks = (() => {
     );
 
     const topMainLabel = !dutyStarted ? "乗務開始" : isRiding ? "降車" : "実車";
-    const topMainButtonDisabled = false;
 
     const formattedAmount = useMemo(
       () => (amount ? Number(amount).toLocaleString("ja-JP") : ""),
@@ -657,7 +655,6 @@ window.AppHooks = (() => {
       state: {
         screen,
         dutyStarted,
-        isRiding,
         rideStartAt,
         rideEndAt,
         pickup,
@@ -666,12 +663,10 @@ window.AppHooks = (() => {
         dropoffMeta,
         amount,
         selectedPassengers,
-        records,
         showSaved,
         showHistoryModal,
         showOtherSheet,
         showPaymentDialog,
-        pendingPaymentType,
         paymentCountdown,
         savingDots,
         showViaDialog,
@@ -680,13 +675,11 @@ window.AppHooks = (() => {
         showFinishDialog,
         historyMode,
         historyFilter,
-        historyBaseDate,
         expandedMonthDays,
         editingRecord,
         cardMode,
         workDate,
         toastMessage,
-        now,
         weather,
         historyUiMode,
         homeEndSheetOpen,
@@ -699,7 +692,6 @@ window.AppHooks = (() => {
         amount1,
         amount2,
         topMainLabel,
-        topMainButtonDisabled,
         formattedAmount,
         filteredHistoryRecords,
         historySummary,
@@ -707,17 +699,11 @@ window.AppHooks = (() => {
         getHistoryPeriodText,
       },
       actions: {
-        setShowOtherSheet,
         setShowFinishDialog,
-        setShowHistoryModal,
         setEditingRecord,
         setHistoryMode,
         setHistoryFilter,
-        setHistoryBaseDate,
-        setExpandedMonthDays,
-        setCardMode,
         handleCardModeNext,
-        handleDutyStart,
         performDutyEnd,
         handleFinishTap,
         handleTopMain,
@@ -730,7 +716,6 @@ window.AppHooks = (() => {
         recordVia,
         cancelViaDialog,
         openHistorySimple,
-        openHistoryFull,
         closeHistoryModal,
         moveHistoryPeriod,
         toggleMonthDay,
@@ -746,10 +731,7 @@ window.AppHooks = (() => {
         openHistoryFullFromMenu,
         showSoonToast,
       },
-      helpers: {
-        confirmPaymentSave,
-        ensureWeatherFresh,
-      },
+
     };
   }
 
