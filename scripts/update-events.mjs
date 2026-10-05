@@ -15,12 +15,12 @@ const SOURCES = [
 
   // 主催者・別プレイガイド・会場は裏取り候補。
   { id:"candy", type:"promoter", role:"verify", category:"live", url:"https://www.candy-p.com/schedule/" },
-  { id:"lawson-green", type:"playguide", role:"verify", category:"live", venue:"広島グリーンアリーナ", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%A2%E3%83%AA%E3%83%BC%E3%83%8A" },
-  { id:"lawson-sunplaza", type:"playguide", role:"verify", category:"live", venue:"広島サンプラザホール", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%B5%E3%83%B3%E3%83%97%E3%83%A9%E3%82%B6" },
-  { id:"lawson-jms", type:"playguide", role:"verify", category:"live", venue:"JMSアステールプラザ", url:"https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6" },
-  { id:"lawson-hbg", type:"playguide", role:"verify", category:"live", venue:"広島文化学園HBGホール", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB" },
-  { id:"lawson-quattro", type:"playguide", role:"verify", category:"live", venue:"広島クラブクアトロ", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD" },
-  { id:"lawson-ueno", type:"playguide", role:"verify", category:"live", venue:"上野学園ホール", url:"https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92" },
+  { id:"lawson-green", type:"playguide", role:"discovery", category:"live", venue:"広島グリーンアリーナ", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%A2%E3%83%AA%E3%83%BC%E3%83%8A" },
+  { id:"lawson-sunplaza", type:"playguide", role:"discovery", category:"live", venue:"広島サンプラザホール", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%B5%E3%83%B3%E3%83%97%E3%83%A9%E3%82%B6" },
+  { id:"lawson-jms", type:"playguide", role:"discovery", category:"live", venue:"JMSアステールプラザ", url:"https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6" },
+  { id:"lawson-hbg", type:"playguide", role:"discovery", category:"live", venue:"広島文化学園HBGホール", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB" },
+  { id:"lawson-quattro", type:"playguide", role:"discovery", category:"live", venue:"広島クラブクアトロ", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD" },
+  { id:"lawson-ueno", type:"playguide", role:"discovery", category:"live", venue:"上野学園ホール", url:"https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92" },
   { id:"venue-ueno", type:"venue", role:"verify", category:"live", venue:"上野学園ホール", url:"https://www.rcchall.jp/" },
 
   // スポーツはチケット情報より試合公式情報の方が強いので従来通り公式を入口にする。
@@ -105,7 +105,7 @@ function pickVenue(text) {
 }
 
 function normalizeTitle(s="") {
-  return s
+  return s.normalize("NFKC")
     .replace(/劇団四季|ミュージカル|広島公演|一般発売|先着|抽選|受付中|受付終了|受付前|予定枚数終了|SOLD OUT/gi,"")
     .replace(/[「」『』【】［］（）()！!・･★☆~〜～\s]/g,"")
     .toLowerCase();
@@ -158,6 +158,50 @@ function parseEplusVenue(html, source) {
   const unique=new Map();
   for (const e of out) unique.set(normalizeKey(e),e);
   return [...unique.values()];
+}
+
+
+function parseLawsonVenue(html, source) {
+  const text=cleanAll(html).normalize("NFKC");
+  const out=[];
+  const re=/(?:コンサート|演劇・ステージ・舞台|クラシック|イベント|スポーツ)\s+([\s\S]{1,140}?)\s+公演日：\s*(20\d{2})\/(\d{1,2})\/(\d{1,2})[^\s]*[\s\S]{0,160}?会場：\s*([\s\S]{1,120}?)(?:\(広島県\)|（広島県）)/g;
+  let m;
+  while ((m=re.exec(text))) {
+    const title=m[1].trim().replace(/\s+/g," ").slice(0,120);
+    const venue=canonicalVenue(m[5].trim());
+    if (!title || venue!==canonicalVenue(source.venue)) continue;
+    const e={
+      category:"live", date:isoDate(m[2],m[3],m[4]), start:null, endEstimate:null,
+      title, venue, area:"広島市",
+      sourceIds:[source.id], sourceUrl:source.url, sourceTypes:["playguide"], confidence:"candidate"
+    };
+    e.id=makeId(e);
+    out.push(e);
+  }
+  const unique=new Map();
+  for (const e of out) unique.set([e.date,e.venue,normalizeTitle(e.title)].join("|"),e);
+  return [...unique.values()];
+}
+
+function extractStartFromEvidence(text,e) {
+  if (!text || e.start) return e.start||null;
+  const t=cleanAll(text).normalize("NFKC");
+  const title=e.title.normalize("NFKC").replace(/\s+/g," ").trim();
+  let pos=t.indexOf(title);
+  if (pos<0) {
+    const short=title.split(/\s{2,}| TOUR | LIVE | 20\d{2}/i)[0].trim();
+    if (short.length>=4) pos=t.indexOf(short);
+  }
+  if (pos<0) return null;
+  const around=t.slice(Math.max(0,pos-220),Math.min(t.length,pos+520));
+  const [y,m,d]=e.date.split("-").map(Number);
+  const dateHit=[
+    `${y}/${m}/${d}`,`${y}/${pad(m)}/${pad(d)}`,
+    `${m}/${d}`,`${pad(m)}/${pad(d)}`
+  ].some(x=>around.includes(x));
+  if (!dateHit) return null;
+  const tm=around.match(/(?:開演|開始)[^0-9]{0,12}(\d{1,2}:\d{2})/);
+  return tm ? tm[1] : null;
 }
 
 function parseSevenUeno(html, year, source) {
@@ -268,6 +312,10 @@ function mergeAndVerify(discovered, evidenceTexts) {
       if (sourceConfirmsEvent(payload.text,g.base,payload.source)) {
         sourceIds.push(sourceId);
         sourceTypes.push(payload.source.type);
+        if (!g.base.start) {
+          const start=extractStartFromEvidence(payload.text,g.base);
+          if (start) g.base.start=start;
+        }
       }
     }
 
@@ -310,10 +358,10 @@ function dedupe(events) {
 }
 
 function endEstimate(e) {
-  if (e.endEstimate) return e;
+  if (e.endEstimate || !e.start) return e;
   const mins=normalizeTitle(e.title).includes("マンマミーア") ? 155 :
     e.sport==="soccer" ? 120 : e.sport==="basketball" ? 145 : 140;
-  const [h,m]=(e.start||"18:00").split(":").map(Number);
+  const [h,m]=e.start.split(":").map(Number);
   const total=h*60+m+mins;
   return {...e,endEstimate:`${pad(Math.floor(total/60)%24)}:${pad(total%60)}`};
 }
@@ -335,6 +383,7 @@ async function main() {
 
       if (s.role!=="discovery") continue;
       if (s.id.startsWith("eplus-")) discovered.push(...parseEplusVenue(html,s));
+      else if (s.id.startsWith("lawson-")) discovered.push(...parseLawsonVenue(html,s));
       else if (s.id==="seven-ueno") discovered.push(...parseSevenUeno(html,year,s));
       else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
