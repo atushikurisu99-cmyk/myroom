@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T15:59:17.448Z",
+  "generatedAt": "2026-10-05T16:00:52.135Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -121,14 +121,54 @@
     }
   ],
   "stats": {
-    "discovered": 57,
-    "confirmed": 5,
-    "candidate": 39,
+    "discovered": 120,
+    "confirmed": 38,
+    "candidate": 69,
     "official": 13,
-    "playguideBased": 44
+    "playguideBased": 107
   },
   "errors": [],
   "events": [
+    {
+      "category": "live",
+      "date": "2026-10-07",
+      "start": null,
+      "endEstimate": null,
+      "title": "劇団四季『マンマ・ミーア!』",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-ueno"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261007-0000-e3839ee383b3e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-10-09",
+      "start": null,
+      "endEstimate": null,
+      "title": "PERSONZ",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms",
+        "candy"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide",
+        "promoter"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261009-0000-706572736f6e7a",
+      "verifiedBy": 2
+    },
     {
       "category": "live",
       "date": "2026-10-09",
@@ -146,6 +186,25 @@
       ],
       "confidence": "candidate",
       "id": "live-20261009-1330-e3839ee383b3e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-10-10",
+      "start": null,
+      "endEstimate": null,
+      "title": "サルゴリラのコントと旅2026",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261010-0000-e382b5e383abe382",
       "verifiedBy": 1
     },
     {
@@ -190,6 +249,26 @@
     {
       "category": "live",
       "date": "2026-10-10",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "GRe4N BOYZ",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms",
+        "eplus-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261010-0000-677265346e626f79",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-10-10",
       "start": "17:30",
       "endEstimate": "20:05",
       "title": "マンマ・ミーア！",
@@ -205,6 +284,26 @@
       "confidence": "candidate",
       "id": "live-20261010-1730-e3839ee383b3e383",
       "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-10-11",
+      "start": null,
+      "endEstimate": null,
+      "title": "兵動大樹のおしゃべり大好き。48",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms",
+        "eplus-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261011-0000-e585b5e58b95e5a4",
+      "verifiedBy": 2
     },
     {
       "category": "live",
@@ -246,6 +345,26 @@
     },
     {
       "category": "live",
+      "date": "2026-10-12",
+      "start": "22:45",
+      "endEstimate": "01:05",
+      "title": "SHE’S",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261012-0000-736865e2809973",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
       "date": "2026-10-14",
       "start": "18:30",
       "endEstimate": "21:05",
@@ -266,6 +385,25 @@
     {
       "category": "live",
       "date": "2026-10-15",
+      "start": null,
+      "endEstimate": null,
+      "title": "大原櫻子",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261015-0000-e5a4a7e58e9fe6ab",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-10-15",
       "start": "13:30",
       "endEstimate": "16:05",
       "title": "マンマ・ミーア！",
@@ -280,6 +418,25 @@
       ],
       "confidence": "candidate",
       "id": "live-20261015-1330-e3839ee383b3e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-10-17",
+      "start": null,
+      "endEstimate": null,
+      "title": "家入レオ",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261017-0000-e5aeb6e585a5e383",
       "verifiedBy": 1
     },
     {
@@ -324,6 +481,28 @@
     {
       "category": "live",
       "date": "2026-10-17",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "葉加瀬太郎",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg",
+        "eplus-hbg",
+        "candy"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide",
+        "promoter"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261017-0000-e89189e58aa0e780",
+      "verifiedBy": 3
+    },
+    {
+      "category": "live",
+      "date": "2026-10-17",
       "start": "17:30",
       "endEstimate": "20:05",
       "title": "マンマ・ミーア！",
@@ -339,6 +518,26 @@
       "confidence": "candidate",
       "id": "live-20261017-1730-e3839ee383b3e383",
       "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-10-17",
+      "start": "22:45",
+      "endEstimate": "01:05",
+      "title": "Penthouse",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261017-0000-70656e74686f7573",
+      "verifiedBy": 2
     },
     {
       "category": "live",
@@ -358,6 +557,46 @@
       "confidence": "candidate",
       "id": "live-20261018-1300-e3839ee383b3e383",
       "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-10-18",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "flumpool",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms",
+        "eplus-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261018-0000-666c756d706f6f6c",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-10-18",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "さだまさし",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg",
+        "eplus-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261018-0000-e38195e381a0e381",
+      "verifiedBy": 2
     },
     {
       "category": "sport",
@@ -535,6 +774,47 @@
     },
     {
       "category": "live",
+      "date": "2026-10-24",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "フラワーカンパニーズ",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro",
+        "candy"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide",
+        "promoter"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261024-0000-e38395e383a9e383",
+      "verifiedBy": 3
+    },
+    {
+      "category": "live",
+      "date": "2026-10-25",
+      "start": null,
+      "endEstimate": null,
+      "title": "センチミリメンタル",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261025-0000-e382bbe383b3e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
       "date": "2026-10-25",
       "start": "13:00",
       "endEstimate": "15:35",
@@ -550,6 +830,47 @@
       ],
       "confidence": "candidate",
       "id": "live-20261025-1300-e3839ee383b3e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-10-25",
+      "start": "19:00",
+      "endEstimate": "21:20",
+      "title": "YONA YONA WEEKENDERS",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro",
+        "candy"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide",
+        "promoter"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261025-0000-796f6e61796f6e61",
+      "verifiedBy": 3
+    },
+    {
+      "category": "live",
+      "date": "2026-10-28",
+      "start": null,
+      "endEstimate": null,
+      "title": "アステールプラザ芸術劇場シリーズ M&Oplaysプロデュース「ブランク」",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261028-0000-e382a2e382b9e383",
       "verifiedBy": 1
     },
     {
@@ -612,6 +933,25 @@
     {
       "category": "live",
       "date": "2026-10-31",
+      "start": null,
+      "endEstimate": null,
+      "title": "なとり",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261031-0000-e381aae381a8e382",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-10-31",
       "start": "13:00",
       "endEstimate": "15:35",
       "title": "マンマ・ミーア！",
@@ -627,6 +967,26 @@
       "confidence": "candidate",
       "id": "live-20261031-1300-e3839ee383b3e383",
       "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-10-31",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "リーガルリリー",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261031-0000-e383aae383bce382",
+      "verifiedBy": 2
     },
     {
       "category": "live",
@@ -669,6 +1029,84 @@
     },
     {
       "category": "live",
+      "date": "2026-11-01",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "名探偵プリキュア! ドリームステージ♪",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg",
+        "eplus-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261101-0000-e5908de68ea2e581",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-11-01",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "木村カエラ",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261101-0000-e69ca8e69d91e382",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-11-03",
+      "start": null,
+      "endEstimate": null,
+      "title": "新日本プロレス 広島",
+      "venue": "広島サンプラザホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-sunplaza"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%B5%E3%83%B3%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261103-0000-e696b0e697a5e69c",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-11-03",
+      "start": null,
+      "endEstimate": null,
+      "title": "マルゲリータ男とキャンパスガール~JARUJARU CONTE TOUR 2026AW~",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261103-0000-e3839ee383abe382",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
       "date": "2026-11-03",
       "start": "13:00",
       "endEstimate": "15:35",
@@ -684,6 +1122,25 @@
       ],
       "confidence": "candidate",
       "id": "live-20261103-1300-e3839ee383b3e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-11-04",
+      "start": null,
+      "endEstimate": null,
+      "title": "アナタ・ボリビア",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261104-0000-e382a2e3838ae382",
       "verifiedBy": 1
     },
     {
@@ -841,6 +1298,26 @@
     {
       "category": "live",
       "date": "2026-11-12",
+      "start": "10:30",
+      "endEstimate": "12:50",
+      "title": "CANDY TUNE",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg",
+        "eplus-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261112-0000-63616e647974756e",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-11-12",
       "start": "13:30",
       "endEstimate": "16:05",
       "title": "マンマ・ミーア！",
@@ -875,6 +1352,26 @@
       "confidence": "candidate",
       "id": "live-20261113-1330-e3839ee383b3e383",
       "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-11-13",
+      "start": "14:00",
+      "endEstimate": "16:20",
+      "title": "俺たちの旅 スペシャルコンサート",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg",
+        "eplus-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261113-0000-e4bfbae3819fe381",
+      "verifiedBy": 2
     },
     {
       "category": "live",
@@ -916,6 +1413,64 @@
     },
     {
       "category": "live",
+      "date": "2026-11-14",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "Chilli Beans.",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261114-0000-6368696c6c696265",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-11-15",
+      "start": null,
+      "endEstimate": null,
+      "title": "第四回 平和の舞<神楽の学校2026in アステールプラザ>",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261115-0000-e7acace59b9be59b",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-11-15",
+      "start": null,
+      "endEstimate": null,
+      "title": "~まほうの夜の音楽会 2026 ★ミステリアス&ダーク・スペシャル",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261115-0000-e381bee381bbe381",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
       "date": "2026-11-15",
       "start": "13:00",
       "endEstimate": "15:35",
@@ -932,6 +1487,26 @@
       "confidence": "candidate",
       "id": "live-20261115-1300-e3839ee383b3e383",
       "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-11-16",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "広島歌謡コンサート",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms",
+        "eplus-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261116-0000-e5ba83e5b3b6e6ad",
+      "verifiedBy": 2
     },
     {
       "category": "live",
@@ -989,6 +1564,45 @@
       ],
       "confidence": "candidate",
       "id": "live-20261120-1330-e3839ee383b3e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-11-20",
+      "start": "18:30",
+      "endEstimate": "20:50",
+      "title": "ナナヲアカリ",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261120-0000-e3838ae3838ae383",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-11-21",
+      "start": null,
+      "endEstimate": null,
+      "title": "公演日: 2026/11/17(火) 会場: 広島文化学園HBGホール(広島県) 販売方法 先着 一般発売 受付期間 発売中 2026/9/11(金) 10:00 ~ 2026/11/9(月) 23:59 申込/詳細 お申し込みはこちら コ",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261121-0000-e585ace6bc94e697",
       "verifiedBy": 1
     },
     {
@@ -1053,6 +1667,45 @@
     },
     {
       "category": "live",
+      "date": "2026-11-21",
+      "start": "19:00",
+      "endEstimate": "21:20",
+      "title": "山中さわお & ELPIS",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261121-0000-e5b1b1e4b8ade381",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-11-22",
+      "start": null,
+      "endEstimate": null,
+      "title": "チャラン・ポ・ランタン",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261122-0000-e38381e383a3e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
       "date": "2026-11-22",
       "start": "13:00",
       "endEstimate": "15:35",
@@ -1068,6 +1721,25 @@
       ],
       "confidence": "candidate",
       "id": "live-20261122-1300-e3839ee383b3e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-11-23",
+      "start": null,
+      "endEstimate": null,
+      "title": "角松敏生",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261123-0000-e8a792e69dbee695",
       "verifiedBy": 1
     },
     {
@@ -1091,6 +1763,203 @@
       "verifiedBy": 2
     },
     {
+      "category": "live",
+      "date": "2026-11-25",
+      "start": null,
+      "endEstimate": null,
+      "title": "島津亜矢",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261125-0000-e5b3b6e6b4a5e4ba",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-11-26",
+      "start": "12:00",
+      "endEstimate": "14:20",
+      "title": "竜馬四重奏",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms",
+        "eplus-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261126-0000-e7ab9ce9a6ace59b",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-11-26",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "Michael Monroe",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261126-0000-6d69636861656c6d",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-11-28",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "ゴスペラーズ",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg",
+        "eplus-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261128-0000-e382b4e382b9e383",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-11-29",
+      "start": "15:30",
+      "endEstimate": "17:50",
+      "title": "Omoinotake",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms",
+        "eplus-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261129-0000-6f6d6f696e6f7461",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-12-02",
+      "start": null,
+      "endEstimate": null,
+      "title": "森山良子",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261202-0000-e6a3aee5b1b1e889",
+      "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-12-03",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "打首獄門同好会",
+      "venue": "JMSアステールプラザ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-jms",
+        "eplus-jms"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261203-0000-e68993e9a696e78d",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-12-04",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "REBECCA",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-ueno",
+        "eplus-ueno"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261204-0000-72656265636361",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-12-05",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "HIROSHIMA CONTI-NeW FeS 2026",
+      "venue": "広島グリーンアリーナ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-green",
+        "eplus-green"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%A2%E3%83%AA%E3%83%BC%E3%83%8A",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261205-0000-6869726f7368696d",
+      "verifiedBy": 2
+    },
+    {
+      "category": "live",
+      "date": "2026-12-06",
+      "start": null,
+      "endEstimate": null,
+      "title": "布袋寅泰",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-ueno"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261206-0000-e5b883e8a28be5af",
+      "verifiedBy": 1
+    },
+    {
       "category": "sport",
       "sport": "soccer",
       "date": "2026-12-06",
@@ -1109,6 +1978,28 @@
       "confidence": "official",
       "id": "sport-20261206-1400-e5ba83e5b3b6c397",
       "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-12-06",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "清水ミチコ",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg",
+        "eplus-hbg",
+        "candy"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide",
+        "promoter"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261206-0000-e6b885e6b0b4e383",
+      "verifiedBy": 3
     }
   ]
 }
