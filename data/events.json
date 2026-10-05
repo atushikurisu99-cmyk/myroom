@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T15:46:57.119Z",
+  "generatedAt": "2026-10-05T15:48:23.692Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -59,6 +59,41 @@
       "url": "https://www.candy-p.com/schedule/"
     },
     {
+      "id": "lawson-green",
+      "type": "playguide",
+      "role": "verify",
+      "url": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%A2%E3%83%AA%E3%83%BC%E3%83%8A",
+      "venue": "広島グリーンアリーナ"
+    },
+    {
+      "id": "lawson-sunplaza",
+      "type": "playguide",
+      "role": "verify",
+      "url": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%B5%E3%83%B3%E3%83%97%E3%83%A9%E3%82%B6",
+      "venue": "広島サンプラザホール"
+    },
+    {
+      "id": "lawson-jms",
+      "type": "playguide",
+      "role": "verify",
+      "url": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
+      "venue": "JMSアステールプラザ"
+    },
+    {
+      "id": "lawson-hbg",
+      "type": "playguide",
+      "role": "verify",
+      "url": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "venue": "広島文化学園HBGホール"
+    },
+    {
+      "id": "lawson-quattro",
+      "type": "playguide",
+      "role": "verify",
+      "url": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "venue": "広島クラブクアトロ"
+    },
+    {
       "id": "lawson-ueno",
       "type": "playguide",
       "role": "verify",
@@ -94,13 +129,20 @@
   },
   "errors": [
     {
-      "source": "eplus-ueno",
-      "error": "503 https://eplus.jp/sf/venue/7300130/events"
+      "source": "eplus-sunplaza",
+      "error": "503 https://eplus.jp/sf/venue/7330010/events"
+    },
+    {
+      "source": "eplus-jms",
+      "error": "503 https://eplus.jp/sf/venue/7300010/events"
+    },
+    {
+      "source": "eplus-hbg",
+      "error": "503 https://eplus.jp/sf/venue/7300050/events"
     }
   ],
   "events": [
     {
-      "id": "live-20261009-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-09",
       "start": "13:30",
@@ -109,94 +151,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261009-personz",
-      "category": "live",
-      "date": "2026-10-09",
-      "start": "18:30",
-      "endEstimate": "20:50",
-      "title": "PERSONZ",
-      "venue": "JMSアステールプラザ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/event/1917/",
-      "confidence": "official"
+      "confidence": "candidate",
+      "id": "live-20261009-1330-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261009-32e69c882032",
-      "category": "live",
-      "date": "2026-10-09",
-      "start": "18:30",
-      "endEstimate": "20:50",
-      "title": "2月 2027 01月 02月 03月 04月 2026年10月 PERSONZ",
-      "venue": "JMSアステールプラザ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261009-e38383e38381",
-      "category": "live",
-      "date": "2026-10-09",
-      "start": "18:30",
-      "endEstimate": "20:50",
-      "title": "ッチ 18:30/19:00 発売中 ▼ Rin音・クボタカイ・asmi・キズナ",
-      "venue": "広島セカンド・クラッチ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261009-e5b1b1e58fa3",
-      "category": "live",
-      "date": "2026-10-09",
-      "start": "19:00",
-      "endEstimate": "21:20",
-      "title": "山口市民会館 小ホール 16:00/16:30 SOLD OUT ▼ 眞名子 新",
-      "venue": "広島セカンド・クラッチ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261009-766520737061",
-      "category": "live",
-      "date": "2026-10-09",
-      "start": "19:00",
-      "endEstimate": "21:20",
-      "title": "ve space Reed 18:00/18:30 発売中 ▼ TENDOUJI",
-      "venue": "広島Live space Reed",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261010-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-10",
       "start": "13:00",
@@ -205,35 +170,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "sport-20261010-dragonflies-shiga",
-      "category": "sport",
-      "sport": "basketball",
-      "date": "2026-10-10",
-      "start": "14:05",
-      "endEstimate": "16:30",
-      "title": "広島×滋賀",
-      "venue": "広島サンプラザホール",
-      "area": "広島市",
-      "sourceIds": [
-        "dragonflies"
       ],
-      "sourceUrl": "https://hiroshimadragonflies.com/lp/game_20261010/",
-      "confidence": "official"
+      "confidence": "candidate",
+      "id": "live-20261010-1300-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "sport-20261010-1405-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "basketball",
       "date": "2026-10-10",
@@ -246,29 +193,14 @@
         "dragonflies"
       ],
       "sourceUrl": "https://hiroshimadragonflies.com/schedule/list/",
-      "confidence": "official",
       "sourceTypes": [
         "team"
       ],
+      "confidence": "official",
+      "id": "sport-20261010-1405-e5ba83e5b3b6c397",
       "verifiedBy": 1
     },
     {
-      "id": "live-20261010-e5b3b6342e31",
-      "category": "live",
-      "date": "2026-10-10",
-      "start": "15:30",
-      "endEstimate": "17:50",
-      "title": "島4.14 16:30/17:00 発売中 ▼ モーニング娘。&#8217;26",
-      "venue": "広島4.14",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261010-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-10",
       "start": "17:30",
@@ -277,91 +209,55 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261010-1730-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
+      "category": "live",
+      "date": "2026-10-11",
+      "start": "13:00",
+      "endEstimate": "15:35",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "seven-ueno"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
       "id": "live-20261011-1300-e3839ee383b3e383",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
-      "date": "2026-10-11",
+      "date": "2026-10-12",
       "start": "13:00",
       "endEstimate": "15:35",
       "title": "マンマ・ミーア！",
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261011-e5b3b64a4d53",
-      "category": "live",
-      "date": "2026-10-11",
-      "start": "16:30",
-      "endEstimate": "18:50",
-      "title": "島JMSアステールプラザ 中ホール 18:00/18:30 SOLD OUT ▼",
-      "venue": "JMSアステールプラザ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
+      "confidence": "candidate",
       "id": "live-20261012-1300-e3839ee383b3e383",
-      "category": "live",
-      "date": "2026-10-12",
-      "start": "13:00",
-      "endEstimate": "15:35",
-      "title": "マンマ・ミーア！",
-      "venue": "上野学園ホール",
-      "area": "広島市",
-      "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
-        "seven-ueno"
-      ],
-      "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
-      "sourceTypes": [
-        "playguide"
-      ]
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261012-e4bc9ae5a082",
-      "category": "live",
-      "date": "2026-10-12",
-      "start": "18:00",
-      "endEstimate": "20:20",
-      "title": "会堂 in KOTYAE 17:15/17:45 発売中 ▼ WILD BLUE",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261014-1830-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-14",
       "start": "18:30",
@@ -370,19 +266,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261014-1830-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261015-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-15",
       "start": "13:30",
@@ -391,19 +285,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261015-1330-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261017-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-17",
       "start": "13:00",
@@ -412,35 +304,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "sport-20261017-sanfrecce-kyoto",
-      "category": "sport",
-      "sport": "soccer",
-      "date": "2026-10-17",
-      "start": "14:00",
-      "endEstimate": "16:00",
-      "title": "広島×京都",
-      "venue": "Eピース",
-      "area": "広島市",
-      "sourceIds": [
-        "sanfrecce"
       ],
-      "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
-      "confidence": "official"
+      "confidence": "candidate",
+      "id": "live-20261017-1300-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "sport-20261017-1400-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "soccer",
       "date": "2026-10-17",
@@ -453,59 +327,14 @@
         "sanfrecce"
       ],
       "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
-      "confidence": "official",
       "sourceTypes": [
         "team"
       ],
+      "confidence": "official",
+      "id": "sport-20261017-1400-e5ba83e5b3b6c397",
       "verifiedBy": 1
     },
     {
-      "id": "live-20261017-e382a6e38383",
-      "category": "live",
-      "date": "2026-10-17",
-      "start": "16:00",
-      "endEstimate": "18:20",
-      "title": "ウッドワンさくらぴあ 大ホール 17:00/18:00 発売中 ▼ 葉加瀬太郎",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261017-efbc88e697a5",
-      "category": "live",
-      "date": "2026-10-17",
-      "start": "17:00",
-      "endEstimate": "19:20",
-      "title": "（日） 倉敷市民会館 15:00/16:00 SOLD OUT ▼ 浜崎貴司",
-      "venue": "広島グリーンアリーナ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261017-e5b2a1e5b1b1",
-      "category": "live",
-      "date": "2026-10-17",
-      "start": "17:00",
-      "endEstimate": "19:20",
-      "title": "岡山城下公会堂 in KOTYAE 17:00/17:30 発売中 ▼ NEWS",
-      "venue": "広島グリーンアリーナ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261017-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-17",
       "start": "17:30",
@@ -514,19 +343,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261017-1730-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261018-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-18",
       "start": "13:00",
@@ -535,95 +362,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261018-efbc8920e5ba",
-      "category": "live",
-      "date": "2026-10-18",
-      "start": "14:00",
-      "endEstimate": "16:20",
-      "title": "） 広島グリーンアリーナ 15:00/16:00 SOLD OUT ▼ 吉田兄弟",
-      "venue": "広島グリーンアリーナ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
+      "confidence": "candidate",
+      "id": "live-20261018-1300-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261018-efbc88e59c9f",
-      "category": "live",
-      "date": "2026-10-18",
-      "start": "16:00",
-      "endEstimate": "18:20",
-      "title": "（土） 広島文化学園HBGホール 15:00/16:00 SOLD OUT ▼",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261018-efbc88e59c9f",
-      "category": "live",
-      "date": "2026-10-18",
-      "start": "16:00",
-      "endEstimate": "18:20",
-      "title": "（土） 広島グリーンアリーナ 16:00/17:00 SOLD OUT ▼",
-      "venue": "広島グリーンアリーナ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261018-efbc88e59c9f",
-      "category": "live",
-      "date": "2026-10-18",
-      "start": "17:30",
-      "endEstimate": "19:50",
-      "title": "（土） 松江NU 16:30/17:00 発売中 ▼",
-      "venue": "広島グリーンアリーナ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "sport-20261019-dragonflies-san-en",
-      "category": "sport",
-      "sport": "basketball",
-      "date": "2026-10-19",
-      "start": "19:05",
-      "endEstimate": "21:30",
-      "title": "広島×三遠",
-      "venue": "広島グリーンアリーナ",
-      "area": "広島市",
-      "sourceIds": [
-        "dragonflies"
-      ],
-      "sourceUrl": "https://hiroshimadragonflies.com/schedule/calendar/?month=10&year=2026",
-      "confidence": "official"
-    },
-    {
-      "id": "sport-20261019-1905-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "basketball",
       "date": "2026-10-19",
@@ -636,14 +385,14 @@
         "dragonflies"
       ],
       "sourceUrl": "https://hiroshimadragonflies.com/schedule/list/",
-      "confidence": "official",
       "sourceTypes": [
         "team"
       ],
+      "confidence": "official",
+      "id": "sport-20261019-1905-e5ba83e5b3b6c397",
       "verifiedBy": 1
     },
     {
-      "id": "live-20261020-1830-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-20",
       "start": "18:30",
@@ -652,19 +401,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261020-1830-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261021-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-21",
       "start": "13:30",
@@ -673,35 +420,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "sport-20261021-dragonflies-akita",
-      "category": "sport",
-      "sport": "basketball",
-      "date": "2026-10-21",
-      "start": "19:05",
-      "endEstimate": "21:30",
-      "title": "広島×秋田",
-      "venue": "広島グリーンアリーナ",
-      "area": "広島市",
-      "sourceIds": [
-        "dragonflies"
       ],
-      "sourceUrl": "https://hiroshimadragonflies.com/schedule/calendar/?month=10&year=2026",
-      "confidence": "official"
+      "confidence": "candidate",
+      "id": "live-20261021-1330-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "sport-20261021-1905-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "basketball",
       "date": "2026-10-21",
@@ -714,14 +443,14 @@
         "dragonflies"
       ],
       "sourceUrl": "https://hiroshimadragonflies.com/schedule/list/",
-      "confidence": "official",
       "sourceTypes": [
         "team"
       ],
+      "confidence": "official",
+      "id": "sport-20261021-1905-e5ba83e5b3b6c397",
       "verifiedBy": 1
     },
     {
-      "id": "live-20261022-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-22",
       "start": "13:30",
@@ -730,19 +459,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261022-1330-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261023-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-23",
       "start": "13:30",
@@ -751,34 +478,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261023-e5b3b6434156",
-      "category": "live",
-      "date": "2026-10-23",
-      "start": "19:00",
-      "endEstimate": "21:20",
-      "title": "島CAVE-BE 15:30/16:00 発売中 ▼ indigo la End",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
+      "confidence": "candidate",
+      "id": "live-20261023-1330-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261024-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-24",
       "start": "13:00",
@@ -787,35 +497,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "sport-20261024-sanfrecce-shimizu",
-      "category": "sport",
-      "sport": "soccer",
-      "date": "2026-10-24",
-      "start": "14:00",
-      "endEstimate": "16:00",
-      "title": "広島×清水",
-      "venue": "Eピース",
-      "area": "広島市",
-      "sourceIds": [
-        "sanfrecce"
       ],
-      "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
-      "confidence": "official"
+      "confidence": "candidate",
+      "id": "live-20261024-1300-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "sport-20261024-1400-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "soccer",
       "date": "2026-10-24",
@@ -828,29 +520,14 @@
         "sanfrecce"
       ],
       "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
-      "confidence": "official",
       "sourceTypes": [
         "team"
       ],
+      "confidence": "official",
+      "id": "sport-20261024-1400-e5ba83e5b3b6c397",
       "verifiedBy": 1
     },
     {
-      "id": "live-20261024-e58089e695b7",
-      "category": "live",
-      "date": "2026-10-24",
-      "start": "17:00",
-      "endEstimate": "19:20",
-      "title": "倉敷市芸文館 18:00/19:00 SOLD OUT ▼ フラワーカンパニーズ",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261024-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-24",
       "start": "17:30",
@@ -859,34 +536,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261024-efbc88e59c9f",
-      "category": "live",
-      "date": "2026-10-24",
-      "start": "18:00",
-      "endEstimate": "20:20",
-      "title": "（土） 広島クラブクアトロ 16:15/17:00 発売中 ▼ THE MODS",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
+      "confidence": "candidate",
+      "id": "live-20261024-1730-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261025-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-25",
       "start": "13:00",
@@ -895,49 +555,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261025-4c44204f5554",
-      "category": "live",
-      "date": "2026-10-25",
-      "start": "14:00",
-      "endEstimate": "16:20",
-      "title": "LD OUT ▼ 高嶋ちさ子​ ​1​2​人​の​ヴ​ァ​イ​オ​リ​ニ​ス​ト",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
+      "confidence": "candidate",
+      "id": "live-20261025-1300-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261025-31352f31343a",
-      "category": "live",
-      "date": "2026-10-25",
-      "start": "18:00",
-      "endEstimate": "20:20",
-      "title": "15/14:00 SOLD OUT ▼ YONA YONA WEEKENDERS",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261028-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-28",
       "start": "13:30",
@@ -946,19 +574,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261028-1330-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261029-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-29",
       "start": "13:30",
@@ -967,19 +593,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261029-1330-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261030-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-30",
       "start": "13:30",
@@ -988,49 +612,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261030-efbc88e697a5",
-      "category": "live",
-      "date": "2026-10-30",
-      "start": "19:00",
-      "endEstimate": "21:20",
-      "title": "（日） 広島クラブクアトロ 17:00/18:00 発売中 ▼ 丈青生誕祭",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
+      "confidence": "candidate",
+      "id": "live-20261030-1330-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261030-efbc88e98791",
-      "category": "live",
-      "date": "2026-10-30",
-      "start": "19:00",
-      "endEstimate": "21:20",
-      "title": "（金） 広島クラブクアトロ 18:00/19:00 発売中 ▼ 反転する六音",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261031-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-31",
       "start": "13:00",
@@ -1039,64 +631,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261031-efbc8920e5b2",
-      "category": "live",
-      "date": "2026-10-31",
-      "start": "16:00",
-      "endEstimate": "18:20",
-      "title": "） 岡山CRAZYMAMA 2nd Room 15:30/16:00 発売中 ▼",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
+      "confidence": "candidate",
+      "id": "live-20261031-1300-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261031-e59c9fefbc89",
-      "category": "live",
-      "date": "2026-10-31",
-      "start": "17:00",
-      "endEstimate": "19:20",
-      "title": "土） 広島文化学園HBGホール 17:00/18:00 SOLD OUT ▼ 鶴",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261031-efbc88e59c9f",
-      "category": "live",
-      "date": "2026-10-31",
-      "start": "17:00",
-      "endEstimate": "19:20",
-      "title": "（土） 広島セカンド・クラッチ 17:00/18:00 発売中 ▼ IS:SUE",
-      "venue": "広島セカンド・クラッチ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261031-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-31",
       "start": "17:30",
@@ -1105,64 +650,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261031-4e45204c6976",
-      "category": "live",
-      "date": "2026-10-31",
-      "start": "18:00",
-      "endEstimate": "20:20",
-      "title": "NE Live STAR 18:30/19:00 9/27（日）発売 ▼ なとり",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
+      "confidence": "candidate",
+      "id": "live-20261031-1730-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261031-43206c617567",
-      "category": "live",
-      "date": "2026-10-31",
-      "start": "18:00",
-      "endEstimate": "20:20",
-      "title": "C laughs 16:30/17:00 発売中 ▼ Laughing Hick",
-      "venue": "広島セカンド・クラッチ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261031-3a33302f3138",
-      "category": "live",
-      "date": "2026-10-31",
-      "start": "18:00",
-      "endEstimate": "20:20",
-      "title": ":30/18:00 発売中 ▼ Survive Said The Prophet",
-      "venue": "広島セカンド・クラッチ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261101-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-01",
       "start": "13:00",
@@ -1171,50 +669,18 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno",
         "lawson-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 4,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261101-e383b3e38195",
-      "category": "live",
-      "date": "2026-11-01",
-      "start": "16:00",
-      "endEstimate": "18:20",
-      "title": "ンさくらぴあ 大ホール 16:00/17:00 発売中 ▼ 2026年11月 鶴",
-      "venue": "広島国際会議場",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
+      "confidence": "confirmed",
+      "id": "live-20261101-1300-e3839ee383b3e383",
+      "verifiedBy": 2
     },
     {
-      "id": "live-20261101-efbc88e781ab",
-      "category": "live",
-      "date": "2026-11-01",
-      "start": "18:00",
-      "endEstimate": "20:20",
-      "title": "（火・祝） 広島CAVE-BE 15:30/16:00 発売中 ▼ 水谷千重子",
-      "venue": "広島国際会議場",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261103-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-03",
       "start": "13:00",
@@ -1223,49 +689,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261103-efbc88e697a5",
-      "category": "live",
-      "date": "2026-11-03",
-      "start": "16:00",
-      "endEstimate": "18:20",
-      "title": "（日） 松江AZTiC canova 15:30/16:00 発売中 ▼",
-      "venue": "広島国際会議場",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
+      "confidence": "candidate",
+      "id": "live-20261103-1300-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261103-5353e38386e3",
-      "category": "live",
-      "date": "2026-11-03",
-      "start": "16:00",
-      "endEstimate": "18:20",
-      "title": "SSテレビ新広島 別館9F スタジオ 16:30/17:00 発売中 ▼ 奥華子",
-      "venue": "JMSアステールプラザ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261104-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-04",
       "start": "13:30",
@@ -1274,121 +708,55 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261104-1330-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
+      "category": "live",
+      "date": "2026-11-05",
+      "start": "13:30",
+      "endEstimate": "16:05",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "seven-ueno"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
       "id": "live-20261105-1330-e3839ee383b3e383",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
-      "date": "2026-11-05",
+      "date": "2026-11-06",
       "start": "13:30",
       "endEstimate": "16:05",
       "title": "マンマ・ミーア！",
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261105-3a303020534f",
-      "category": "live",
-      "date": "2026-11-05",
-      "start": "18:00",
-      "endEstimate": "20:20",
-      "title": ":00 SOLD OUT ▼ PARCO PRODUCE 2026 髪結いの亭主",
-      "venue": "JMSアステールプラザ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261106-efbc88e69ca8",
-      "category": "live",
-      "date": "2026-11-06",
-      "start": "12:00",
-      "endEstimate": "14:20",
-      "title": "（木） 広島JMSアステールプラザ 大ホール 17:15/18:00 発売中 ▼",
-      "venue": "JMSアステールプラザ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
+      "confidence": "candidate",
       "id": "live-20261106-1330-e3839ee383b3e383",
-      "category": "live",
-      "date": "2026-11-06",
-      "start": "13:30",
-      "endEstimate": "16:05",
-      "title": "マンマ・ミーア！",
-      "venue": "上野学園ホール",
-      "area": "広島市",
-      "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
-        "seven-ueno"
-      ],
-      "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
-      "sourceTypes": [
-        "playguide"
-      ]
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261106-efbc88e98791",
-      "category": "live",
-      "date": "2026-11-06",
-      "start": "17:00",
-      "endEstimate": "19:20",
-      "title": "（金） 広島JMSアステールプラザ 大ホール 11:15/12:00 発売中 ▼",
-      "venue": "JMSアステールプラザ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261106-e382a2e382b9",
-      "category": "live",
-      "date": "2026-11-06",
-      "start": "19:00",
-      "endEstimate": "21:20",
-      "title": "アステールプラザ 大ホール 16:15/17:00 発売中 ▼ LINDBERG",
-      "venue": "JMSアステールプラザ",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261107-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-07",
       "start": "13:00",
@@ -1397,19 +765,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261107-1300-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261107-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-07",
       "start": "17:30",
@@ -1418,19 +784,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261107-1730-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261108-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-08",
       "start": "13:00",
@@ -1439,19 +803,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261108-1300-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261110-1830-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-10",
       "start": "18:30",
@@ -1460,19 +822,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261110-1830-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261111-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-11",
       "start": "13:30",
@@ -1481,19 +841,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261111-1330-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261112-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-12",
       "start": "13:30",
@@ -1502,19 +860,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261112-1330-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261113-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-13",
       "start": "13:30",
@@ -1523,19 +879,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261113-1330-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261114-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-14",
       "start": "13:00",
@@ -1544,19 +898,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261114-1300-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261114-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-14",
       "start": "17:30",
@@ -1565,19 +917,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261114-1730-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261115-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-15",
       "start": "13:00",
@@ -1586,64 +936,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261115-e591a8e58d97",
-      "category": "live",
-      "date": "2026-11-15",
-      "start": "18:00",
-      "endEstimate": "20:20",
-      "title": "周南RISING HALL 16:45/17:30 発売中 ▼ PassCode",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
+      "confidence": "candidate",
+      "id": "live-20261115-1300-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261116-efbc8920e5ba",
-      "category": "live",
-      "date": "2026-11-16",
-      "start": "18:30",
-      "endEstimate": "20:50",
-      "title": "） 広島LIVE VANQUISH 17:30/18:00 詳細 ▼ 松任谷由実",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261117-e5ada6e59c92",
-      "category": "live",
-      "date": "2026-11-17",
-      "start": "15:30",
-      "endEstimate": "17:50",
-      "title": "学園HBGホール 17:30/18:30 SOLD OUT ▼ DRUM TAO",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261118-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-18",
       "start": "13:30",
@@ -1652,92 +955,56 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno",
         "lawson-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 4,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261118-1330-e3839ee383b3e383",
+      "verifiedBy": 2
     },
     {
+      "category": "live",
+      "date": "2026-11-19",
+      "start": "13:30",
+      "endEstimate": "16:05",
+      "title": "マンマ・ミーア！",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "seven-ueno"
+      ],
+      "sourceUrl": "https://7ticket.jp/s/116553/d",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
       "id": "live-20261119-1330-e3839ee383b3e383",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
-      "date": "2026-11-19",
+      "date": "2026-11-20",
       "start": "13:30",
       "endEstimate": "16:05",
       "title": "マンマ・ミーア！",
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261119-efbc88e69c88",
-      "category": "live",
-      "date": "2026-11-19",
-      "start": "18:30",
-      "endEstimate": "20:50",
-      "title": "（月） 倉敷市民会館 17:30/18:30 SOLD OUT ▼",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
+      "confidence": "candidate",
       "id": "live-20261120-1330-e3839ee383b3e383",
-      "category": "live",
-      "date": "2026-11-20",
-      "start": "13:30",
-      "endEstimate": "16:05",
-      "title": "マンマ・ミーア！",
-      "venue": "上野学園ホール",
-      "area": "広島市",
-      "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
-        "seven-ueno"
-      ],
-      "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
-      "sourceTypes": [
-        "playguide"
-      ]
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261120-efbc88e69ca8",
-      "category": "live",
-      "date": "2026-11-20",
-      "start": "18:30",
-      "endEstimate": "20:50",
-      "title": "（木） 広島文化学園HBGホール 17:30/18:30 SOLD OUT ▼",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261121-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-21",
       "start": "13:00",
@@ -1746,36 +1013,18 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno",
         "lawson-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 4,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "sport-20261121-sanfrecce-yokohamafm",
-      "category": "sport",
-      "sport": "soccer",
-      "date": "2026-11-21",
-      "start": "14:00",
-      "endEstimate": "16:00",
-      "title": "広島×横浜FM",
-      "venue": "Eピース",
-      "area": "広島市",
-      "sourceIds": [
-        "sanfrecce"
       ],
-      "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
-      "confidence": "official"
+      "confidence": "confirmed",
+      "id": "live-20261121-1300-e3839ee383b3e383",
+      "verifiedBy": 2
     },
     {
-      "id": "sport-20261121-1400-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "soccer",
       "date": "2026-11-21",
@@ -1788,14 +1037,14 @@
         "sanfrecce"
       ],
       "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
-      "confidence": "official",
       "sourceTypes": [
         "team"
       ],
+      "confidence": "official",
+      "id": "sport-20261121-1400-e5ba83e5b3b6c397",
       "verifiedBy": 1
     },
     {
-      "id": "live-20261121-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-21",
       "start": "17:30",
@@ -1804,20 +1053,18 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno",
         "lawson-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 4,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261121-1730-e3839ee383b3e383",
+      "verifiedBy": 2
     },
     {
-      "id": "live-20261122-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-22",
       "start": "13:00",
@@ -1826,19 +1073,17 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 3,
       "sourceTypes": [
         "playguide"
-      ]
+      ],
+      "confidence": "candidate",
+      "id": "live-20261122-1300-e3839ee383b3e383",
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261123-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-23",
       "start": "13:00",
@@ -1847,50 +1092,18 @@
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "ueno-7ticket",
-        "ueno-lawson",
         "seven-ueno",
         "lawson-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 4,
       "sourceTypes": [
         "playguide"
-      ]
-    },
-    {
-      "id": "live-20261129-4958204f4e45",
-      "category": "live",
-      "date": "2026-11-29",
-      "start": "17:00",
-      "endEstimate": "19:20",
-      "title": "IX ONE Live STAR 16:30/17:00 11/7（土）発売 ▼",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
       ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
+      "confidence": "confirmed",
+      "id": "live-20261123-1300-e3839ee383b3e383",
+      "verifiedBy": 2
     },
     {
-      "id": "live-20261129-45204c697665",
-      "category": "live",
-      "date": "2026-11-29",
-      "start": "17:00",
-      "endEstimate": "19:20",
-      "title": "E Live STAR 16:30/17:00 11/7（土）発売 ▼ コレサワ",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "sport-20261206-1400-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "soccer",
       "date": "2026-12-06",
@@ -1903,56 +1116,12 @@
         "sanfrecce"
       ],
       "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
-      "confidence": "official",
       "sourceTypes": [
         "team"
       ],
+      "confidence": "official",
+      "id": "sport-20261206-1400-e5ba83e5b3b6c397",
       "verifiedBy": 1
-    },
-    {
-      "id": "live-20261206-302f31363a30",
-      "category": "live",
-      "date": "2026-12-06",
-      "start": "15:00",
-      "endEstimate": "17:20",
-      "title": "0/16:00 10/10（土）発売 ▼ Back to the Holiday",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261206-e5ba83e5b3b6",
-      "category": "live",
-      "date": "2026-12-06",
-      "start": "16:00",
-      "endEstimate": "18:20",
-      "title": "広島クラブクアトロ 17:15/18:00 10/10（土）発売 ▼ 清⽔ミチコ",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
-    },
-    {
-      "id": "live-20261206-e383bce383ab",
-      "category": "live",
-      "date": "2026-12-06",
-      "start": "18:00",
-      "endEstimate": "20:20",
-      "title": "ール 16:15/17:00 SOLD OUT ▼ TK from 凛として時雨",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "candy"
-      ],
-      "sourceUrl": "https://www.candy-p.com/schedule/",
-      "confidence": "source"
     }
   ]
 }
