@@ -4,11 +4,16 @@ const SOURCES = [
   { id: "candy", category: "live", url: "https://www.candy-p.com/schedule/" },
   { id: "dragonflies", category: "sport", url: "https://hiroshimadragonflies.com/schedule/list/" },
   { id: "sanfrecce", category: "sport", url: "https://www.sanfrecce.co.jp/matches/results" },
+  { id: "ueno-7ticket", category: "live", url: "https://7ticket.jp/s/116553/d" },
+  { id: "ueno-lawson", category: "live", url: "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92" },
+  { id: "ueno-hall", category: "live", url: "https://www.rcchall.jp/" },
+  { id: "ueno-eplus", category: "live", url: "https://eplus.jp/sf/venue/7300130/events" },
 ];
 
 const HIROSHIMA_VENUES = [
   "広島グリーンアリーナ","広島サンプラザ","JMSアステールプラザ","アステールプラザ",
   "広島文化学園HBGホール","広島国際会議場","エディオンピースウイング広島","Eピース",
+  "上野学園ホール","広島上野学園ホール","広島県立文化芸術ホール",
   "広島クラブクアトロ","広島セカンド・クラッチ","広島Live space Reed","広島4.14"
 ];
 
@@ -94,6 +99,80 @@ function parseSanfrecce(html, year) {
   return out;
 }
 
+function canonicalVenue(v="") {
+  if (/上野学園ホール|広島県立文化芸術ホール/.test(v)) return "上野学園ホール";
+  return v;
+}
+
+function normalizeTitle(s="") {
+  return s.replace(/劇団四季|ミュージカル|広島公演|一般発売|先着|★|☆|【[^】]*】|［[^］]*］/g,"")
+    .replace(/[「」『』（）()！!・･\\s]/g,"").toLowerCase();
+}
+
+function sameEvent(a,b) {
+  if (a.date !== b.date || canonicalVenue(a.venue) !== canonicalVenue(b.venue)) return false;
+  const x=normalizeTitle(a.title), y=normalizeTitle(b.title);
+  return x && y && (x.includes(y) || y.includes(x) || (x.includes("マンマミーア") && y.includes("マンマミーア")));
+}
+
+function parseUeno7Ticket(html, year) {
+  const text=clean(html);
+  if (!/上野学園ホール/.test(text) || !/マンマ.?ミーア/.test(text)) return [];
+  const out=[];
+  const re=/(\\d{1,2})\\/(\\d{1,2})（[^）]+）\\s*\\|\\s*(?:[○×△]\\s*)?(\\d{1,2}:\\d{2})(?:\\s*(?:[○×△]\\s*)?(\\d{1,2}:\\d{2}))?/g;
+  let m;
+  while ((m=re.exec(text))) {
+    for (const start of [m[3],m[4]].filter(Boolean)) {
+      out.push({
+        id:"live-"+year+pad(m[1])+pad(m[2])+"-mammamia-"+start.replace(":",""),
+        category:"live", date:isoDate(year,m[1],m[2]), start, endEstimate:null,
+        title:"マンマ・ミーア！", venue:"上野学園ホール", area:"広島市",
+        sourceIds:["ueno-7ticket"], sourceUrl:"https://7ticket.jp/s/116553/d", confidence:"candidate"
+      });
+    }
+  }
+  return out;
+}
+
+function parseUenoEplus(html) {
+  const text=clean(html);
+  const out=[];
+  const re=/(20\\d{2})\\/\\s*(\\d{1,2})\\/(\\d{1,2})\\([^)]*\\)\\s*(?:先着|抽選)?\\s*([\\s\\S]{1,100}?)\\s*開演：(\\d{1,2}:\\d{2})～[\\s\\S]{0,120}?上野学園ホール/g;
+  let m;
+  while ((m=re.exec(text))) {
+    const title=m[4].replace(/予定枚数終了|受付中|受付終了/g,"").trim().slice(0,80);
+    if (!title) continue;
+    out.push({
+      id:"live-"+m[1]+pad(m[2])+pad(m[3])+"-ueno-"+Buffer.from(title).toString("hex").slice(0,12),
+      category:"live", date:isoDate(m[1],m[2],m[3]), start:m[5], endEstimate:null,
+      title, venue:"上野学園ホール", area:"広島市",
+      sourceIds:["ueno-eplus"], sourceUrl:"https://eplus.jp/sf/venue/7300130/events", confidence:"candidate"
+    });
+  }
+  return out;
+}
+
+function uenoRunEvidence(sourceId,text) {
+  const hit=/マンマ.?ミーア/.test(text) && /上野学園ホール|広島県立文化芸術ホール/.test(text);
+  return hit ? sourceId : null;
+}
+
+function verifyUenoEvents(events, evidenceIds) {
+  const ueno=events.filter(e=>canonicalVenue(e.venue)==="上野学園ホール");
+  const other=events.filter(e=>canonicalVenue(e.venue)!=="上野学園ホール");
+  const verified=[];
+  for (const e of ueno) {
+    const matches=ueno.filter(x=>sameEvent(e,x));
+    const sourceIds=[...new Set(matches.flatMap(x=>x.sourceIds||[]))];
+    if (normalizeTitle(e.title).includes("マンマミーア")) {
+      for (const id of evidenceIds) if (id && !sourceIds.includes(id)) sourceIds.push(id);
+    }
+    if (sourceIds.length < 2) continue;
+    verified.push({...e,venue:"上野学園ホール",sourceIds,confidence:"confirmed",verifiedBy:sourceIds.length});
+  }
+  return [...other,...verified];
+}
+
 function normalizeKey(e) {
   return [e.date,e.venue,e.title].join("|").replace(/\\s/g,"").toLowerCase();
 }
@@ -130,10 +209,22 @@ async function main() {
       if (s.id==="candy") fetched.push(...parseCandy(html,year));
       if (s.id==="dragonflies") fetched.push(...parseDragonflies(html,year));
       if (s.id==="sanfrecce") fetched.push(...parseSanfrecce(html,year));
+      if (s.id==="ueno-7ticket") fetched.push(...parseUeno7Ticket(html,year));
+      if (s.id==="ueno-eplus") fetched.push(...parseUenoEplus(html));
     } catch (err) { errors.push({source:s.id,error:String(err.message||err)}); }
   }
+  const uenoEvidence=[];
+  for (const s of SOURCES.filter(x=>x.id==="ueno-lawson" || x.id==="ueno-hall")) {
+    try {
+      const t=clean(await fetchText(s.url));
+      const hit=uenoRunEvidence(s.id,t);
+      if (hit) uenoEvidence.push(hit);
+    } catch (err) {
+      if (!errors.some(x=>x.source===s.id)) errors.push({source:s.id,error:String(err.message||err)});
+    }
+  }
   const horizon = new Date(now.getTime()+62*86400000);
-  const keep = [...existing.events,...fetched]
+  const keep = verifyUenoEvents([...existing.events,...fetched],uenoEvidence)
     .filter(e => {
       const d=new Date(`${e.date}T23:59:59+09:00`);
       return d >= new Date(now.getTime()-86400000) && d <= horizon && e.area==="広島市";
