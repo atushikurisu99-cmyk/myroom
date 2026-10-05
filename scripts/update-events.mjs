@@ -1,3 +1,4 @@
+// collector-version: ueno-2of3
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 
 const SOURCES = [
