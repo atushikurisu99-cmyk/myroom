@@ -20,13 +20,13 @@ const HIROSHIMA_VENUES = [
 
 function clean(s="") {
   return s
-    .replace(/<script[\\s\\S]*?<\\/script>/gi," ")
-    .replace(/<style[\\s\\S]*?<\\/style>/gi," ")
+    .replace(/<script[\s\S]*?<\/script>/gi," ")
+    .replace(/<style[\s\S]*?<\/style>/gi," ")
     .replace(/<[^>]+>/g," ")
     .replace(/&nbsp;|&#160;/g," ")
     .replace(/&amp;/g,"&")
     .replace(/&#x2F;|&#47;/g,"/")
-    .replace(/\\s+/g," ")
+    .replace(/\s+/g," ")
     .trim();
 }
 
@@ -46,14 +46,14 @@ function pickVenue(text) {
 function parseCandy(html, year) {
   const text = clean(html);
   const out = [];
-  const re = /(20\\d{2})\\/(\\d{1,2})\\/(\\d{1,2})[^0-9]{0,8}([^0-9]{0,80}?)(\\d{1,2}:\\d{2})\\/(\\d{1,2}:\\d{2})/g;
+  const re = /(20\d{2})\/(\d{1,2})\/(\d{1,2})[^0-9]{0,8}([^0-9]{0,80}?)(\d{1,2}:\d{2})\/(\d{1,2}:\d{2})/g;
   let m;
   while ((m = re.exec(text))) {
     const around = text.slice(Math.max(0,m.index-90), Math.min(text.length,re.lastIndex+100));
     const venue = pickVenue(around);
     if (!venue) continue;
     const titleChunk = text.slice(Math.max(0,m.index-120),m.index).trim();
-    const title = titleChunk.split(/20\\d{2}\\/\\d{1,2}\\/\\d{1,2}/).pop().slice(-40).trim() || "ライブ";
+    const title = titleChunk.split(/20\d{2}\/\d{1,2}\/\d{1,2}/).pop().slice(-40).trim() || "ライブ";
     out.push({
       id:`live-${m[1]}${pad(m[2])}${pad(m[3])}-${Buffer.from(title).toString("hex").slice(0,12)}`,
       category:"live", date:isoDate(m[1],m[2],m[3]), start:m[6], endEstimate:null,
@@ -66,12 +66,12 @@ function parseCandy(html, year) {
 function parseDragonflies(html, year) {
   const text = clean(html);
   const out = [];
-  const re = /(HOME|AWAY)[\\s\\S]{0,100}?(\\d{1,2})\\/(\\d{1,2})[^0-9]{0,12}(\\d{1,2}:\\d{2})[\\s\\S]{0,120}?(広島グリーンアリーナ|広島サンプラザホール|エフピコアリーナふくやま)/g;
+  const re = /(HOME|AWAY)[\s\S]{0,100}?(\d{1,2})\/(\d{1,2})[^0-9]{0,12}(\d{1,2}:\d{2})[\s\S]{0,120}?(広島グリーンアリーナ|広島サンプラザホール|エフピコアリーナふくやま)/g;
   let m;
   while ((m = re.exec(text))) {
     if (m[1] !== "HOME") continue;
     const around = text.slice(m.index, Math.min(text.length,re.lastIndex+100));
-    const opponent = (around.match(/(?:広島\\s*){1,2}([^ ]{1,12})/)||[])[1] || "対戦";
+    const opponent = (around.match(/(?:広島\s*){1,2}([^ ]{1,12})/)||[])[1] || "対戦";
     out.push({
       id:`sport-${year}${pad(m[2])}${pad(m[3])}-dragonflies`,
       category:"sport", sport:"basketball", date:isoDate(year,m[2],m[3]), start:m[4], endEstimate:null,
@@ -85,11 +85,11 @@ function parseDragonflies(html, year) {
 function parseSanfrecce(html, year) {
   const text = clean(html);
   const out = [];
-  const re = /HOME\\s+エディオンピースウイング広島[\\s\\S]{0,120}?(\\d{1,2})\\.(\\d{1,2})[^0-9]{0,8}(\\d{1,2}:\\d{2})/g;
+  const re = /HOME\s+エディオンピースウイング広島[\s\S]{0,120}?(\d{1,2})\.(\d{1,2})[^0-9]{0,8}(\d{1,2}:\d{2})/g;
   let m;
   while ((m = re.exec(text))) {
     const around = text.slice(m.index, Math.min(text.length,re.lastIndex+160));
-    const opponent = (around.match(/Image\\s*([^ ]{1,16})/)||[])[1] || "対戦";
+    const opponent = (around.match(/Image\s*([^ ]{1,16})/)||[])[1] || "対戦";
     out.push({
       id:`sport-${year}${pad(m[1])}${pad(m[2])}-sanfrecce`,
       category:"sport", sport:"soccer", date:isoDate(year,m[1],m[2]), start:m[3], endEstimate:null,
@@ -107,7 +107,7 @@ function canonicalVenue(v="") {
 
 function normalizeTitle(s="") {
   return s.replace(/劇団四季|ミュージカル|広島公演|一般発売|先着|★|☆|【[^】]*】|［[^］]*］/g,"")
-    .replace(/[「」『』（）()！!・･\\s]/g,"").toLowerCase();
+    .replace(/[「」『』（）()！!・･\s]/g,"").toLowerCase();
 }
 
 function sameEvent(a,b) {
@@ -120,7 +120,7 @@ function parseUeno7Ticket(html, year) {
   const text=clean(html);
   if (!/上野学園ホール/.test(text) || !/マンマ.?ミーア/.test(text)) return [];
   const out=[];
-  const re=/(\\d{1,2})\\/(\\d{1,2})（[^）]+）\\s*\\|\\s*(?:[○×△]\\s*)?(\\d{1,2}:\\d{2})(?:\\s*(?:[○×△]\\s*)?(\\d{1,2}:\\d{2}))?/g;
+  const re=/(\d{1,2})\/(\d{1,2})（[^）]+）\s*\|\s*(?:[○×△]\s*)?(\d{1,2}:\d{2})(?:\s*(?:[○×△]\s*)?(\d{1,2}:\d{2}))?/g;
   let m;
   while ((m=re.exec(text))) {
     for (const start of [m[3],m[4]].filter(Boolean)) {
@@ -138,7 +138,7 @@ function parseUeno7Ticket(html, year) {
 function parseUenoEplus(html) {
   const text=clean(html);
   const out=[];
-  const re=/(20\\d{2})\\/\\s*(\\d{1,2})\\/(\\d{1,2})\\([^)]*\\)\\s*(?:先着|抽選)?\\s*([\\s\\S]{1,100}?)\\s*開演：(\\d{1,2}:\\d{2})～[\\s\\S]{0,120}?上野学園ホール/g;
+  const re=/(20\d{2})\/\s*(\d{1,2})\/(\d{1,2})\([^)]*\)\s*(?:先着|抽選)?\s*([\s\S]{1,100}?)\s*開演：(\d{1,2}:\d{2})～[\s\S]{0,120}?上野学園ホール/g;
   let m;
   while ((m=re.exec(text))) {
     const title=m[4].replace(/予定枚数終了|受付中|受付終了/g,"").trim().slice(0,80);
@@ -175,7 +175,7 @@ function verifyUenoEvents(events, evidenceIds) {
 }
 
 function normalizeKey(e) {
-  return [e.date,e.venue,e.title].join("|").replace(/\\s/g,"").toLowerCase();
+  return [e.date,e.venue,e.title].join("|").replace(/\s/g,"").toLowerCase();
 }
 
 function mergeEvents(events) {
@@ -236,7 +236,7 @@ async function main() {
   await writeFile("data/events.json",JSON.stringify({
     generatedAt:new Date().toISOString(), area:"hiroshima",
     sources:SOURCES.map(({id,url})=>({id,url})), errors, events
-  },null,2)+"\\n");
+  },null,2)+"\n");
   console.log(`events: ${events.length}, errors: ${errors.length}`);
 }
 main().catch(err=>{ console.error(err); process.exit(1); });
