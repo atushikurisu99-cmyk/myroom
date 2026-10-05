@@ -73,24 +73,7 @@ window.AppConstants = {
 
   shadowSub: "shadow-[0_8px_16px_rgba(0,0,0,0.10)]",
 
-  cardClass:
-    "rounded-[8px] bg-white shadow-[0_8px_22px_rgba(0,0,0,0.08)]",
-
-  mainButtonBase:
-    "relative overflow-hidden w-full h-full rounded-[32px] text-white active:scale-[0.985] disabled:opacity-60 disabled:active:scale-100",
-
-  mainButtonShine:
-    "before:content-[''] before:absolute before:top-[10px] before:left-[18px] before:right-[18px] before:h-[54px] before:rounded-[28px] before:bg-[rgba(255,255,255,0.28)]",
-
-  bigButtonText: "text-[34px] font-black tracking-[-0.03em]",
-
-  smallButtonBase:
-    "w-full h-[72px] rounded-[24px] text-[22px] font-bold shadow-[0_8px_16px_rgba(0,0,0,0.14)] active:scale-[0.985]",
-
   endDutyButtonClass:
     "relative overflow-hidden rounded-[18px] border border-[#d8c7c7] text-white font-bold shadow-[inset_0_2px_0_rgba(255,255,255,0.30),inset_0_-2px_6px_rgba(0,0,0,0.15),0_6px_12px_rgba(0,0,0,0.12)] active:scale-[0.985] bg-[linear-gradient(180deg,#8f8787,#7f7777,#706868)]",
 
-  previewHeaderHeight: 32,
-  previewViewportHeight: 156,
-  previewRowHeight: 62,
 };
