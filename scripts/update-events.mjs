@@ -257,12 +257,15 @@ function dedupe(events) {
     const key=normalizeKey(e);
     const prev=map.get(key);
     if (!prev) map.set(key,e);
-    else map.set(key,{
-      ...prev,...e,
-      sourceIds:[...new Set([...(prev.sourceIds||[]),...(e.sourceIds||[])])],
-      sourceTypes:[...new Set([...(prev.sourceTypes||[]),...(e.sourceTypes||[])])],
-      verifiedBy:new Set([...(prev.sourceIds||[]),...(e.sourceIds||[])]).size
-    });
+    else {
+      const sourceIds=[...new Set([...(prev.sourceIds||[]),...(e.sourceIds||[])])];
+      const sourceTypes=[...new Set([...(prev.sourceTypes||[]),...(e.sourceTypes||[])])];
+      const verifiedBy=sourceIds.length;
+      const confidence=(e.category==="sport" && sourceTypes.includes("team"))
+        ? "official"
+        : verifiedBy>=2 ? "confirmed" : "candidate";
+      map.set(key,{...prev,...e,sourceIds,sourceTypes,verifiedBy,confidence});
+    }
   }
   return [...map.values()].sort((a,b)=>`${a.date}T${a.start||"00:00"}`.localeCompare(`${b.date}T${b.start||"00:00"}`));
 }
@@ -309,8 +312,10 @@ async function main() {
     return d>=new Date(now.getTime()-86400000) && d<=horizon && e.area==="広島市";
   });
 
-  // 取得できた新データを優先しつつ、過去データは取りこぼし保険として残す。
-  const keep=[...previous,...fresh]
+  // 全ソース取得に成功した回は新ロジックだけで再構築する。
+  // どこか取得失敗があった時だけ前回データを保険として残す。
+  const fallbackPrevious=errors.length ? previous : [];
+  const keep=[...fallbackPrevious,...fresh]
     .filter(e=>{
       const d=new Date(`${e.date}T23:59:59+09:00`);
       return d>=new Date(now.getTime()-86400000) && d<=horizon && e.area==="広島市";
