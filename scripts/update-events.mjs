@@ -130,36 +130,82 @@ function makeId(e) {
   return `${e.category}-${e.date.replaceAll("-","")}-${(e.start||"0000").replace(":","")}-${stem}`;
 }
 
+function extractAnchors(html="") {
+  const out=[];
+  const re=/<a\b([^>]*)>([\s\S]*?)<\/a>/gi;
+  let m;
+  while ((m=re.exec(html))) {
+    const attrs=m[1]||"";
+    const href=(attrs.match(/\bhref\s*=\s*["']([^"']+)["']/i)||[])[1]||"";
+    out.push({href,text:clean(m[2]),html:m[0]});
+  }
+  return out;
+}
+
+function isBadArtistTitle(title="") {
+  return !title ||
+    /^(?:年間予定|月間予定|公演一覧|イベント一覧|会場情報|チケット情報|詳細|もっと見る|検索結果)$/i.test(title.trim());
+}
+
 function parseEplusVenue(html, source) {
   const out=[];
-  const texts=[clean(html),cleanAll(html)];
-  const seenText=new Set();
-  for (const text of texts) {
-    if (!text || seenText.has(text)) continue;
-    seenText.add(text);
-    const re=/(20\d{2})\/(\d{1,2})\/(\d{1,2})[\s\S]{0,48}?(?:先着|抽選)?\s*([\s\S]{1,180}?)\s*(?:開演|開始)[^0-9]{0,10}(\d{1,2}:\d{2})/g;
-    let m;
-    while ((m=re.exec(text))) {
-    let title=m[4]
+
+  // e+ は「公演一覧の各リンク」自体を1公演のフォーマットとして扱う。
+  // ページ全文を平文化してタイトルを推測しないことで、見出し等の誤取得を防ぐ。
+  const anchors=extractAnchors(html)
+    .filter(a=>/\/sf\/detail\//.test(a.href) || /\/sf\/venue\/.*\/events/.test(a.href));
+
+  for (const a of anchors) {
+    const text=a.text.normalize("NFKC").replace(/\s+/g," ").trim();
+    const dm=text.match(/(20\d{2})\/(\d{1,2})\/(\d{1,2})/);
+    const tm=text.match(/(?:開演|開始)[^0-9]{0,12}(\d{1,2}:\d{2})/);
+    if (!dm || !tm) continue;
+
+    const afterDate=text.slice((dm.index||0)+dm[0].length);
+    let title=afterDate
+      .replace(/^\s*(?:\([^)]*\)|（[^）]*）)?\s*(?:先着|抽選)?\s*/,"")
+      .split(/\s+(?:開演|開始)[:：]?/)[0]
       .replace(/(?:受付中|受付終了|受付前|予定枚数終了).*$/,"")
-      .replace(/^\s*(?:先着|抽選)\s*/,"")
       .trim();
-    if (!title || /公演一覧|会場情報/.test(title)) continue;
-    title=title.slice(0,100);
+
+    if (isBadArtistTitle(title)) continue;
+    title=title.slice(0,120);
+
     const e={
-      category:"live", date:isoDate(m[1],m[2],m[3]), start:m[5], endEstimate:null,
+      category:"live", date:isoDate(dm[1],dm[2],dm[3]), start:tm[1], endEstimate:null,
       title, venue:canonicalVenue(source.venue), area:"広島市",
       sourceIds:[source.id], sourceUrl:source.url, sourceTypes:["playguide"], confidence:"candidate"
     };
     e.id=makeId(e);
     out.push(e);
+  }
+
+  // e+ 側のHTML変更時だけ旧ロジックを保険として使う。
+  if (!out.length) {
+    const text=cleanAll(html).normalize("NFKC");
+    const re=/(20\d{2})\/(\d{1,2})\/(\d{1,2})[\s\S]{0,48}?(?:先着|抽選)?\s*([\s\S]{1,180}?)\s*(?:開演|開始)[^0-9]{0,10}(\d{1,2}:\d{2})/g;
+    let m;
+    while ((m=re.exec(text))) {
+      let title=m[4]
+        .replace(/(?:受付中|受付終了|受付前|予定枚数終了).*$/,"")
+        .replace(/^\s*(?:先着|抽選)\s*/,"")
+        .trim();
+      if (isBadArtistTitle(title)) continue;
+      title=title.slice(0,100);
+      const e={
+        category:"live", date:isoDate(m[1],m[2],m[3]), start:m[5], endEstimate:null,
+        title, venue:canonicalVenue(source.venue), area:"広島市",
+        sourceIds:[source.id], sourceUrl:source.url, sourceTypes:["playguide"], confidence:"candidate"
+      };
+      e.id=makeId(e);
+      out.push(e);
     }
   }
+
   const unique=new Map();
   for (const e of out) unique.set(normalizeKey(e),e);
   return [...unique.values()];
 }
-
 
 function parseLawsonVenue(html, source) {
   const text=cleanAll(html).normalize("NFKC");
