@@ -88,18 +88,6 @@ function TaxiMiniApp() {
 
   const startupLock = state.screen === "top" && startupPhase !== "done";
 
-  const headerStyle = useMemo(() => {
-    if (state.screen !== "top" || startupPhase === "done") return {};
-
-    return {
-      transform: startupStage >= 1 ? "translateX(0)" : "translateX(-140%)",
-      opacity: startupStage >= 1 ? 1 : 0,
-      transition:
-        "transform 460ms cubic-bezier(0.22,1,0.36,1), opacity 460ms ease-out",
-      willChange: "transform, opacity",
-    };
-  }, [state.screen, startupPhase, startupStage]);
-
   const mainStyle = useMemo(() => {
     if (state.screen !== "top" || startupPhase === "done") return {};
 
@@ -258,7 +246,7 @@ function TaxiMiniApp() {
         {state.screen === "top" && (
           <TopScreen
             topMainLabel={derived.topMainLabel}
-            topMainButtonDisabled={derived.topMainButtonDisabled || startupLock}
+            topMainButtonDisabled={startupLock}
             handleTopMain={actions.handleTopMain}
             startupMainStyle={mainStyle}
             startupOtherStyle={otherStyle}
