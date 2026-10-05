@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T15:54:07.602Z",
+  "generatedAt": "2026-10-05T15:56:34.348Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -61,42 +61,42 @@
     {
       "id": "lawson-green",
       "type": "playguide",
-      "role": "verify",
+      "role": "discovery",
       "url": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%A2%E3%83%AA%E3%83%BC%E3%83%8A",
       "venue": "広島グリーンアリーナ"
     },
     {
       "id": "lawson-sunplaza",
       "type": "playguide",
-      "role": "verify",
+      "role": "discovery",
       "url": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%B5%E3%83%B3%E3%83%97%E3%83%A9%E3%82%B6",
       "venue": "広島サンプラザホール"
     },
     {
       "id": "lawson-jms",
       "type": "playguide",
-      "role": "verify",
+      "role": "discovery",
       "url": "https://l-tike.com/search/?keyword=JMS%E3%82%A2%E3%82%B9%E3%83%86%E3%83%BC%E3%83%AB%E3%83%97%E3%83%A9%E3%82%B6",
       "venue": "JMSアステールプラザ"
     },
     {
       "id": "lawson-hbg",
       "type": "playguide",
-      "role": "verify",
+      "role": "discovery",
       "url": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
       "venue": "広島文化学園HBGホール"
     },
     {
       "id": "lawson-quattro",
       "type": "playguide",
-      "role": "verify",
+      "role": "discovery",
       "url": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
       "venue": "広島クラブクアトロ"
     },
     {
       "id": "lawson-ueno",
       "type": "playguide",
-      "role": "verify",
+      "role": "discovery",
       "url": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92",
       "venue": "上野学園ホール"
     },
