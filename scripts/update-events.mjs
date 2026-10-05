@@ -210,8 +210,8 @@ async function main() {
       if (s.id==="candy") fetched.push(...parseCandy(html,year));
       if (s.id==="dragonflies") fetched.push(...parseDragonflies(html,year));
       if (s.id==="sanfrecce") fetched.push(...parseSanfrecce(html,year));
-      if (s.id==="ueno-7ticket") { const x=parseUeno7Ticket(html,year); console.log("ueno-7ticket parsed:",x.length); fetched.push(...x); }
-      if (s.id==="ueno-eplus") { const x=parseUenoEplus(html); console.log("ueno-eplus parsed:",x.length); fetched.push(...x); }
+      if (s.id==="ueno-7ticket") { console.log("ueno-7ticket markers:",html.length,html.includes("マンマ"),html.includes("10/4"),html.includes("13:00")); const x=parseUeno7Ticket(html,year); console.log("ueno-7ticket parsed:",x.length); fetched.push(...x); }
+      if (s.id==="ueno-eplus") { console.log("ueno-eplus markers:",html.length,html.includes("上野学園"),html.includes("REBECCA"),html.includes("12/4")); const x=parseUenoEplus(html); console.log("ueno-eplus parsed:",x.length); fetched.push(...x); }
     } catch (err) { errors.push({source:s.id,error:String(err.message||err)}); }
   }
   const uenoEvidence=[];
