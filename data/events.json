@@ -1,45 +1,101 @@
 {
-  "generatedAt": "2026-10-05T15:37:18.698Z",
+  "generatedAt": "2026-10-05T15:45:46.426Z",
   "area": "hiroshima",
+  "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
     {
+      "id": "eplus-green",
+      "type": "playguide",
+      "role": "discovery",
+      "url": "https://eplus.jp/sf/venue/7300060/events",
+      "venue": "広島グリーンアリーナ"
+    },
+    {
+      "id": "eplus-sunplaza",
+      "type": "playguide",
+      "role": "discovery",
+      "url": "https://eplus.jp/sf/venue/7330010/events",
+      "venue": "広島サンプラザホール"
+    },
+    {
+      "id": "eplus-jms",
+      "type": "playguide",
+      "role": "discovery",
+      "url": "https://eplus.jp/sf/venue/7300010/events",
+      "venue": "JMSアステールプラザ"
+    },
+    {
+      "id": "eplus-hbg",
+      "type": "playguide",
+      "role": "discovery",
+      "url": "https://eplus.jp/sf/venue/7300050/events",
+      "venue": "広島文化学園HBGホール"
+    },
+    {
+      "id": "eplus-quattro",
+      "type": "playguide",
+      "role": "discovery",
+      "url": "https://eplus.jp/sf/venue/7300090/events",
+      "venue": "広島クラブクアトロ"
+    },
+    {
+      "id": "eplus-ueno",
+      "type": "playguide",
+      "role": "discovery",
+      "url": "https://eplus.jp/sf/venue/7300130/events",
+      "venue": "上野学園ホール"
+    },
+    {
+      "id": "seven-ueno",
+      "type": "playguide",
+      "role": "discovery",
+      "url": "https://7ticket.jp/s/116553/d",
+      "venue": "上野学園ホール"
+    },
+    {
       "id": "candy",
+      "type": "promoter",
+      "role": "verify",
       "url": "https://www.candy-p.com/schedule/"
     },
     {
+      "id": "lawson-ueno",
+      "type": "playguide",
+      "role": "verify",
+      "url": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92",
+      "venue": "上野学園ホール"
+    },
+    {
+      "id": "venue-ueno",
+      "type": "venue",
+      "role": "verify",
+      "url": "https://www.rcchall.jp/",
+      "venue": "上野学園ホール"
+    },
+    {
       "id": "dragonflies",
+      "type": "team",
+      "role": "discovery",
       "url": "https://hiroshimadragonflies.com/schedule/list/"
     },
     {
       "id": "sanfrecce",
+      "type": "team",
+      "role": "discovery",
       "url": "https://www.sanfrecce.co.jp/matches/results"
-    },
-    {
-      "id": "ueno-7ticket",
-      "url": "https://7ticket.jp/s/116553/d"
-    },
-    {
-      "id": "ueno-lawson",
-      "url": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92"
-    },
-    {
-      "id": "ueno-hall",
-      "url": "https://www.rcchall.jp/"
-    },
-    {
-      "id": "ueno-eplus",
-      "url": "https://eplus.jp/sf/venue/7300130/events"
     }
   ],
-  "errors": [
-    {
-      "source": "ueno-eplus",
-      "error": "503 https://eplus.jp/sf/venue/7300130/events"
-    }
-  ],
+  "stats": {
+    "discovered": 57,
+    "confirmed": 5,
+    "candidate": 39,
+    "official": 13,
+    "playguideBased": 44
+  },
+  "errors": [],
   "events": [
     {
-      "id": "live-20261009-mammamia-1330",
+      "id": "live-20261009-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-09",
       "start": "13:30",
@@ -49,11 +105,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261009-personz",
@@ -131,7 +191,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261010-mammamia-1300",
+      "id": "live-20261010-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-10",
       "start": "13:00",
@@ -141,11 +201,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "sport-20261010-dragonflies-shiga",
@@ -164,7 +228,7 @@
       "confidence": "official"
     },
     {
-      "id": "sport-20261010-dragonflies",
+      "id": "sport-20261010-1405-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "basketball",
       "date": "2026-10-10",
@@ -177,7 +241,11 @@
         "dragonflies"
       ],
       "sourceUrl": "https://hiroshimadragonflies.com/schedule/list/",
-      "confidence": "official"
+      "confidence": "official",
+      "sourceTypes": [
+        "team"
+      ],
+      "verifiedBy": 1
     },
     {
       "id": "live-20261010-e5b3b6342e31",
@@ -195,7 +263,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261010-mammamia-1730",
+      "id": "live-20261010-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-10",
       "start": "17:30",
@@ -205,14 +273,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261011-mammamia-1300",
+      "id": "live-20261011-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-11",
       "start": "13:00",
@@ -222,11 +294,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261011-e5b3b64a4d53",
@@ -244,7 +320,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261012-mammamia-1300",
+      "id": "live-20261012-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-12",
       "start": "13:00",
@@ -254,11 +330,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261012-e4bc9ae5a082",
@@ -276,7 +356,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261014-mammamia-1830",
+      "id": "live-20261014-1830-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-14",
       "start": "18:30",
@@ -286,14 +366,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261015-mammamia-1330",
+      "id": "live-20261015-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-15",
       "start": "13:30",
@@ -303,14 +387,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261017-mammamia-1300",
+      "id": "live-20261017-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-17",
       "start": "13:00",
@@ -320,11 +408,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "sport-20261017-sanfrecce-kyoto",
@@ -343,7 +435,7 @@
       "confidence": "official"
     },
     {
-      "id": "sport-20261017-sanfrecce",
+      "id": "sport-20261017-1400-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "soccer",
       "date": "2026-10-17",
@@ -356,7 +448,11 @@
         "sanfrecce"
       ],
       "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
-      "confidence": "official"
+      "confidence": "official",
+      "sourceTypes": [
+        "team"
+      ],
+      "verifiedBy": 1
     },
     {
       "id": "live-20261017-e382a6e38383",
@@ -404,7 +500,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261017-mammamia-1730",
+      "id": "live-20261017-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-17",
       "start": "17:30",
@@ -414,14 +510,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261018-mammamia-1300",
+      "id": "live-20261018-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-18",
       "start": "13:00",
@@ -431,11 +531,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261018-efbc8920e5ba",
@@ -514,7 +618,7 @@
       "confidence": "official"
     },
     {
-      "id": "sport-20261019-dragonflies",
+      "id": "sport-20261019-1905-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "basketball",
       "date": "2026-10-19",
@@ -527,10 +631,14 @@
         "dragonflies"
       ],
       "sourceUrl": "https://hiroshimadragonflies.com/schedule/list/",
-      "confidence": "official"
+      "confidence": "official",
+      "sourceTypes": [
+        "team"
+      ],
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261020-mammamia-1830",
+      "id": "live-20261020-1830-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-20",
       "start": "18:30",
@@ -540,14 +648,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261021-mammamia-1330",
+      "id": "live-20261021-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-21",
       "start": "13:30",
@@ -557,11 +669,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "sport-20261021-dragonflies-akita",
@@ -580,7 +696,7 @@
       "confidence": "official"
     },
     {
-      "id": "sport-20261021-dragonflies",
+      "id": "sport-20261021-1905-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "basketball",
       "date": "2026-10-21",
@@ -593,10 +709,14 @@
         "dragonflies"
       ],
       "sourceUrl": "https://hiroshimadragonflies.com/schedule/list/",
-      "confidence": "official"
+      "confidence": "official",
+      "sourceTypes": [
+        "team"
+      ],
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261022-mammamia-1330",
+      "id": "live-20261022-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-22",
       "start": "13:30",
@@ -606,14 +726,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261023-mammamia-1330",
+      "id": "live-20261023-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-23",
       "start": "13:30",
@@ -623,11 +747,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261023-e5b3b6434156",
@@ -645,7 +773,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261024-mammamia-1300",
+      "id": "live-20261024-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-24",
       "start": "13:00",
@@ -655,11 +783,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "sport-20261024-sanfrecce-shimizu",
@@ -678,7 +810,7 @@
       "confidence": "official"
     },
     {
-      "id": "sport-20261024-sanfrecce",
+      "id": "sport-20261024-1400-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "soccer",
       "date": "2026-10-24",
@@ -691,7 +823,11 @@
         "sanfrecce"
       ],
       "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
-      "confidence": "official"
+      "confidence": "official",
+      "sourceTypes": [
+        "team"
+      ],
+      "verifiedBy": 1
     },
     {
       "id": "live-20261024-e58089e695b7",
@@ -709,7 +845,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261024-mammamia-1730",
+      "id": "live-20261024-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-24",
       "start": "17:30",
@@ -719,11 +855,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261024-efbc88e59c9f",
@@ -741,7 +881,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261025-mammamia-1300",
+      "id": "live-20261025-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-25",
       "start": "13:00",
@@ -751,11 +891,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261025-4c44204f5554",
@@ -788,7 +932,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261028-mammamia-1330",
+      "id": "live-20261028-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-28",
       "start": "13:30",
@@ -798,14 +942,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261029-mammamia-1330",
+      "id": "live-20261029-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-29",
       "start": "13:30",
@@ -815,14 +963,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261030-mammamia-1330",
+      "id": "live-20261030-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-30",
       "start": "13:30",
@@ -832,11 +984,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261030-efbc88e697a5",
@@ -869,7 +1025,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261031-mammamia-1300",
+      "id": "live-20261031-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-31",
       "start": "13:00",
@@ -879,11 +1035,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261031-efbc8920e5b2",
@@ -931,7 +1091,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261031-mammamia-1730",
+      "id": "live-20261031-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-10-31",
       "start": "17:30",
@@ -941,11 +1101,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261031-4e45204c6976",
@@ -993,7 +1157,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261101-mammamia-1300",
+      "id": "live-20261101-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-01",
       "start": "13:00",
@@ -1003,11 +1167,16 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno",
+        "lawson-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
       "confidence": "confirmed",
-      "verifiedBy": 2
+      "verifiedBy": 4,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261101-e383b3e38195",
@@ -1040,7 +1209,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261103-mammamia-1300",
+      "id": "live-20261103-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-03",
       "start": "13:00",
@@ -1050,11 +1219,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261103-efbc88e697a5",
@@ -1087,7 +1260,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261104-mammamia-1330",
+      "id": "live-20261104-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-04",
       "start": "13:30",
@@ -1097,14 +1270,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261105-mammamia-1330",
+      "id": "live-20261105-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-05",
       "start": "13:30",
@@ -1114,11 +1291,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261105-3a303020534f",
@@ -1151,7 +1332,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261106-mammamia-1330",
+      "id": "live-20261106-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-06",
       "start": "13:30",
@@ -1161,11 +1342,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261106-efbc88e98791",
@@ -1198,7 +1383,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261107-mammamia-1300",
+      "id": "live-20261107-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-07",
       "start": "13:00",
@@ -1208,14 +1393,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261107-mammamia-1730",
+      "id": "live-20261107-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-07",
       "start": "17:30",
@@ -1225,14 +1414,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261108-mammamia-1300",
+      "id": "live-20261108-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-08",
       "start": "13:00",
@@ -1242,14 +1435,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261110-mammamia-1830",
+      "id": "live-20261110-1830-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-10",
       "start": "18:30",
@@ -1259,14 +1456,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261111-mammamia-1330",
+      "id": "live-20261111-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-11",
       "start": "13:30",
@@ -1276,14 +1477,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261112-mammamia-1330",
+      "id": "live-20261112-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-12",
       "start": "13:30",
@@ -1293,14 +1498,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261113-mammamia-1330",
+      "id": "live-20261113-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-13",
       "start": "13:30",
@@ -1310,14 +1519,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261114-mammamia-1300",
+      "id": "live-20261114-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-14",
       "start": "13:00",
@@ -1327,14 +1540,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261114-mammamia-1730",
+      "id": "live-20261114-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-14",
       "start": "17:30",
@@ -1344,14 +1561,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261115-mammamia-1300",
+      "id": "live-20261115-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-15",
       "start": "13:00",
@@ -1361,11 +1582,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261115-e591a8e58d97",
@@ -1413,7 +1638,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261118-mammamia-1330",
+      "id": "live-20261118-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-18",
       "start": "13:30",
@@ -1423,14 +1648,19 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno",
+        "lawson-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
       "confidence": "confirmed",
-      "verifiedBy": 2
+      "verifiedBy": 4,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261119-mammamia-1330",
+      "id": "live-20261119-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-19",
       "start": "13:30",
@@ -1440,11 +1670,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261119-efbc88e69c88",
@@ -1462,7 +1696,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261120-mammamia-1330",
+      "id": "live-20261120-1330-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-20",
       "start": "13:30",
@@ -1472,11 +1706,15 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261120-efbc88e69ca8",
@@ -1494,7 +1732,7 @@
       "confidence": "source"
     },
     {
-      "id": "live-20261121-mammamia-1300",
+      "id": "live-20261121-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-21",
       "start": "13:00",
@@ -1504,11 +1742,16 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno",
+        "lawson-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
       "confidence": "confirmed",
-      "verifiedBy": 2
+      "verifiedBy": 4,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "sport-20261121-sanfrecce-yokohamafm",
@@ -1527,7 +1770,7 @@
       "confidence": "official"
     },
     {
-      "id": "sport-20261121-sanfrecce",
+      "id": "sport-20261121-1400-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "soccer",
       "date": "2026-11-21",
@@ -1540,10 +1783,14 @@
         "sanfrecce"
       ],
       "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
-      "confidence": "official"
+      "confidence": "official",
+      "sourceTypes": [
+        "team"
+      ],
+      "verifiedBy": 1
     },
     {
-      "id": "live-20261121-mammamia-1730",
+      "id": "live-20261121-1730-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-21",
       "start": "17:30",
@@ -1553,14 +1800,19 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno",
+        "lawson-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
       "confidence": "confirmed",
-      "verifiedBy": 2
+      "verifiedBy": 4,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261122-mammamia-1300",
+      "id": "live-20261122-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-22",
       "start": "13:00",
@@ -1570,14 +1822,18 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "confidence": "confirmed",
-      "verifiedBy": 2
+      "confidence": "candidate",
+      "verifiedBy": 3,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
-      "id": "live-20261123-mammamia-1300",
+      "id": "live-20261123-1300-e3839ee383b3e383",
       "category": "live",
       "date": "2026-11-23",
       "start": "13:00",
@@ -1587,11 +1843,16 @@
       "area": "広島市",
       "sourceIds": [
         "ueno-7ticket",
-        "ueno-lawson"
+        "ueno-lawson",
+        "seven-ueno",
+        "lawson-ueno"
       ],
       "sourceUrl": "https://7ticket.jp/s/116553/d",
       "confidence": "confirmed",
-      "verifiedBy": 2
+      "verifiedBy": 4,
+      "sourceTypes": [
+        "playguide"
+      ]
     },
     {
       "id": "live-20261129-4958204f4e45",
@@ -1624,7 +1885,7 @@
       "confidence": "source"
     },
     {
-      "id": "sport-20261206-sanfrecce",
+      "id": "sport-20261206-1400-e5ba83e5b3b6c397",
       "category": "sport",
       "sport": "soccer",
       "date": "2026-12-06",
@@ -1637,7 +1898,11 @@
         "sanfrecce"
       ],
       "sourceUrl": "https://www.sanfrecce.co.jp/matches/results",
-      "confidence": "official"
+      "confidence": "official",
+      "sourceTypes": [
+        "team"
+      ],
+      "verifiedBy": 1
     },
     {
       "id": "live-20261206-302f31363a30",
