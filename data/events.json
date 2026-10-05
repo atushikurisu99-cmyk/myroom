@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T16:31:11.557Z",
+  "generatedAt": "2026-10-05T16:39:35.109Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -122,12 +122,17 @@
   ],
   "stats": {
     "discovered": 120,
-    "confirmed": 38,
-    "candidate": 69,
+    "confirmed": 36,
+    "candidate": 71,
     "official": 13,
     "playguideBased": 107
   },
-  "errors": [],
+  "errors": [
+    {
+      "source": "eplus-ueno",
+      "error": "503 https://eplus.jp/sf/venue/7300130/events"
+    }
+  ],
   "events": [
     {
       "category": "live",
@@ -146,7 +151,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261007-0000-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "劇団四季『マンマ・ミーア!』",
+      "calendarDisplay": {
+        "date": "2026-10-07",
+        "artist": "劇団四季『マンマ・ミーア!』",
+        "venue": "上野学園ホール",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -167,7 +180,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261009-0000-706572736f6e7a",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "PERSONZ",
+      "calendarDisplay": {
+        "date": "2026-10-09",
+        "artist": "PERSONZ",
+        "venue": "JMSアステールプラザ",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -186,7 +207,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261009-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-09",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -205,7 +234,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261010-0000-e382b5e383abe382",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "サルゴリラのコントと旅2026",
+      "calendarDisplay": {
+        "date": "2026-10-10",
+        "artist": "サルゴリラのコントと旅2026",
+        "venue": "JMSアステールプラザ",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -224,7 +261,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261010-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-10",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "sport",
@@ -264,7 +309,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261010-0000-677265346e626f79",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "GRe4N BOYZ",
+      "calendarDisplay": {
+        "date": "2026-10-10",
+        "artist": "GRe4N BOYZ",
+        "venue": "JMSアステールプラザ",
+        "start": "17:00",
+        "endEstimate": "19:20"
+      }
     },
     {
       "category": "live",
@@ -283,7 +336,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261010-1730-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-10",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "17:30",
+        "endEstimate": "20:05"
+      }
     },
     {
       "category": "live",
@@ -303,7 +364,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261011-0000-e585b5e58b95e5a4",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "兵動大樹のおしゃべり大好き。48",
+      "calendarDisplay": {
+        "date": "2026-10-11",
+        "artist": "兵動大樹のおしゃべり大好き。48",
+        "venue": "JMSアステールプラザ",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -322,7 +391,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261011-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-11",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -341,7 +418,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261012-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-12",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -361,7 +446,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261012-0000-736865e2809973",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "SHE’S",
+      "calendarDisplay": {
+        "date": "2026-10-12",
+        "artist": "SHE’S",
+        "venue": "広島クラブクアトロ",
+        "start": "17:30",
+        "endEstimate": "19:50"
+      }
     },
     {
       "category": "live",
@@ -380,7 +473,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261014-1830-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-14",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "18:30",
+        "endEstimate": "21:05"
+      }
     },
     {
       "category": "live",
@@ -399,7 +500,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261015-0000-e5a4a7e58e9fe6ab",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "大原櫻子",
+      "calendarDisplay": {
+        "date": "2026-10-15",
+        "artist": "大原櫻子",
+        "venue": "広島クラブクアトロ",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -418,7 +527,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261015-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-15",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -437,7 +554,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261017-0000-e5aeb6e585a5e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "家入レオ",
+      "calendarDisplay": {
+        "date": "2026-10-17",
+        "artist": "家入レオ",
+        "venue": "JMSアステールプラザ",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -456,7 +581,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261017-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-17",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "sport",
@@ -498,7 +631,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261017-0000-e89189e58aa0e780",
-      "verifiedBy": 3
+      "verifiedBy": 3,
+      "artist": "葉加瀬太郎",
+      "calendarDisplay": {
+        "date": "2026-10-17",
+        "artist": "葉加瀬太郎",
+        "venue": "広島文化学園HBGホール",
+        "start": "16:00",
+        "endEstimate": "18:20"
+      }
     },
     {
       "category": "live",
@@ -517,7 +658,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261017-1730-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-17",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "17:30",
+        "endEstimate": "20:05"
+      }
     },
     {
       "category": "live",
@@ -537,7 +686,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261017-0000-70656e74686f7573",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "Penthouse",
+      "calendarDisplay": {
+        "date": "2026-10-17",
+        "artist": "Penthouse",
+        "venue": "広島クラブクアトロ",
+        "start": "18:00",
+        "endEstimate": "20:20"
+      }
     },
     {
       "category": "live",
@@ -556,7 +713,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261018-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-18",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -576,7 +741,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261018-0000-666c756d706f6f6c",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "flumpool",
+      "calendarDisplay": {
+        "date": "2026-10-18",
+        "artist": "flumpool",
+        "venue": "JMSアステールプラザ",
+        "start": "17:00",
+        "endEstimate": "19:20"
+      }
     },
     {
       "category": "live",
@@ -596,7 +769,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261018-0000-e38195e381a0e381",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "さだまさし",
+      "calendarDisplay": {
+        "date": "2026-10-18",
+        "artist": "さだまさし",
+        "venue": "広島文化学園HBGホール",
+        "start": "17:00",
+        "endEstimate": "19:20"
+      }
     },
     {
       "category": "sport",
@@ -635,7 +816,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261020-1830-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-20",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "18:30",
+        "endEstimate": "21:05"
+      }
     },
     {
       "category": "live",
@@ -654,7 +843,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261021-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-21",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "sport",
@@ -693,7 +890,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261022-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-22",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -712,7 +917,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261023-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-23",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -731,7 +944,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261024-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-24",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "sport",
@@ -773,7 +994,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261024-0000-e38395e383a9e383",
-      "verifiedBy": 3
+      "verifiedBy": 3,
+      "artist": "フラワーカンパニーズ",
+      "calendarDisplay": {
+        "date": "2026-10-24",
+        "artist": "フラワーカンパニーズ",
+        "venue": "広島クラブクアトロ",
+        "start": "17:00",
+        "endEstimate": "19:20"
+      }
     },
     {
       "category": "live",
@@ -792,7 +1021,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261024-1730-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-24",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "17:30",
+        "endEstimate": "20:05"
+      }
     },
     {
       "category": "live",
@@ -811,7 +1048,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261025-0000-e382bbe383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "センチミリメンタル",
+      "calendarDisplay": {
+        "date": "2026-10-25",
+        "artist": "センチミリメンタル",
+        "venue": "JMSアステールプラザ",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -830,7 +1075,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261025-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-25",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -852,7 +1105,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261025-0000-796f6e61796f6e61",
-      "verifiedBy": 3
+      "verifiedBy": 3,
+      "artist": "YONA YONA WEEKENDERS",
+      "calendarDisplay": {
+        "date": "2026-10-25",
+        "artist": "YONA YONA WEEKENDERS",
+        "venue": "広島クラブクアトロ",
+        "start": "18:00",
+        "endEstimate": "20:20"
+      }
     },
     {
       "category": "live",
@@ -871,7 +1132,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261028-0000-e382a2e382b9e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "アステールプラザ芸術劇場シリーズ M&Oplaysプロデュース「ブランク」",
+      "calendarDisplay": {
+        "date": "2026-10-28",
+        "artist": "アステールプラザ芸術劇場シリーズ M&Oplaysプロデュース「ブランク」",
+        "venue": "JMSアステールプラザ",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -890,7 +1159,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261028-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-28",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -909,7 +1186,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261029-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-29",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -928,7 +1213,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261030-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-30",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -947,7 +1240,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261031-0000-e381aae381a8e382",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "なとり",
+      "calendarDisplay": {
+        "date": "2026-10-31",
+        "artist": "なとり",
+        "venue": "広島文化学園HBGホール",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -966,7 +1267,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261031-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-31",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -985,7 +1294,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261031-1730-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-10-31",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "17:30",
+        "endEstimate": "20:05"
+      }
     },
     {
       "category": "live",
@@ -1005,7 +1322,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261031-0000-e383aae383bce382",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "リーガルリリー",
+      "calendarDisplay": {
+        "date": "2026-10-31",
+        "artist": "リーガルリリー",
+        "venue": "広島クラブクアトロ",
+        "start": "17:30",
+        "endEstimate": "19:50"
+      }
     },
     {
       "category": "live",
@@ -1025,7 +1350,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261101-0000-e5908de68ea2e581",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "名探偵プリキュア! ドリームステージ♪",
+      "calendarDisplay": {
+        "date": "2026-11-01",
+        "artist": "名探偵プリキュア! ドリームステージ♪",
+        "venue": "広島文化学園HBGホール",
+        "start": "10:30",
+        "endEstimate": "12:50"
+      }
     },
     {
       "category": "live",
@@ -1045,7 +1378,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261101-1300-e3839ee383b3e383",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-01",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -1065,7 +1406,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261101-0000-e69ca8e69d91e382",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "木村カエラ",
+      "calendarDisplay": {
+        "date": "2026-11-01",
+        "artist": "木村カエラ",
+        "venue": "広島クラブクアトロ",
+        "start": "17:30",
+        "endEstimate": "19:50"
+      }
     },
     {
       "category": "live",
@@ -1084,7 +1433,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261103-0000-e696b0e697a5e69c",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "新日本プロレス 広島",
+      "calendarDisplay": {
+        "date": "2026-11-03",
+        "artist": "新日本プロレス 広島",
+        "venue": "広島サンプラザホール",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -1103,7 +1460,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261103-0000-e3839ee383abe382",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マルゲリータ男とキャンパスガール~JARUJARU CONTE TOUR 2026AW~",
+      "calendarDisplay": {
+        "date": "2026-11-03",
+        "artist": "マルゲリータ男とキャンパスガール~JARUJARU CONTE TOUR 2026AW~",
+        "venue": "JMSアステールプラザ",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -1122,7 +1487,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261103-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-03",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -1141,7 +1514,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261104-0000-e382a2e3838ae382",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "アナタ・ボリビア",
+      "calendarDisplay": {
+        "date": "2026-11-04",
+        "artist": "アナタ・ボリビア",
+        "venue": "広島文化学園HBGホール",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -1160,7 +1541,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261104-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-04",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -1179,7 +1568,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261105-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-05",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -1198,7 +1595,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261106-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-06",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -1217,7 +1622,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261107-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-07",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -1236,7 +1649,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261107-1730-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-07",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "17:30",
+        "endEstimate": "20:05"
+      }
     },
     {
       "category": "live",
@@ -1255,7 +1676,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261108-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-08",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -1274,7 +1703,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261110-1830-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-10",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "18:30",
+        "endEstimate": "21:05"
+      }
     },
     {
       "category": "live",
@@ -1293,7 +1730,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261111-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-11",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -1312,7 +1757,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261112-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-12",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -1332,7 +1785,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261112-0000-63616e647974756e",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "CANDY TUNE",
+      "calendarDisplay": {
+        "date": "2026-11-12",
+        "artist": "CANDY TUNE",
+        "venue": "広島文化学園HBGホール",
+        "start": "18:30",
+        "endEstimate": "20:50"
+      }
     },
     {
       "category": "live",
@@ -1351,7 +1812,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261113-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-13",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -1371,7 +1840,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261113-0000-e4bfbae3819fe381",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "俺たちの旅 スペシャルコンサート",
+      "calendarDisplay": {
+        "date": "2026-11-13",
+        "artist": "俺たちの旅 スペシャルコンサート",
+        "venue": "広島文化学園HBGホール",
+        "start": "18:00",
+        "endEstimate": "20:20"
+      }
     },
     {
       "category": "live",
@@ -1390,7 +1867,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261114-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-14",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -1409,7 +1894,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261114-1730-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-14",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "17:30",
+        "endEstimate": "20:05"
+      }
     },
     {
       "category": "live",
@@ -1429,7 +1922,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261114-0000-6368696c6c696265",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "Chilli Beans.",
+      "calendarDisplay": {
+        "date": "2026-11-14",
+        "artist": "Chilli Beans.",
+        "venue": "広島クラブクアトロ",
+        "start": "18:00",
+        "endEstimate": "20:20"
+      }
     },
     {
       "category": "live",
@@ -1448,7 +1949,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261115-0000-e7acace59b9be59b",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "第四回 平和の舞<神楽の学校2026in アステールプラザ>",
+      "calendarDisplay": {
+        "date": "2026-11-15",
+        "artist": "第四回 平和の舞<神楽の学校2026in アステールプラザ>",
+        "venue": "JMSアステールプラザ",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -1467,7 +1976,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261115-0000-e381bee381bbe381",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "~まほうの夜の音楽会 2026 ★ミステリアス&ダーク・スペシャル",
+      "calendarDisplay": {
+        "date": "2026-11-15",
+        "artist": "~まほうの夜の音楽会 2026 ★ミステリアス&ダーク・スペシャル",
+        "venue": "広島文化学園HBGホール",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -1486,7 +2003,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261115-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-15",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -1506,7 +2031,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261116-0000-e5ba83e5b3b6e6ad",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "広島歌謡コンサート",
+      "calendarDisplay": {
+        "date": "2026-11-16",
+        "artist": "広島歌謡コンサート",
+        "venue": "JMSアステールプラザ",
+        "start": "15:30",
+        "endEstimate": "17:50"
+      }
     },
     {
       "category": "live",
@@ -1526,7 +2059,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261118-1330-e3839ee383b3e383",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-18",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -1545,7 +2086,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261119-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-19",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -1564,7 +2113,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261120-1330-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-20",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:30",
+        "endEstimate": "16:05"
+      }
     },
     {
       "category": "live",
@@ -1584,7 +2141,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261120-0000-e3838ae3838ae383",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "ナナヲアカリ",
+      "calendarDisplay": {
+        "date": "2026-11-20",
+        "artist": "ナナヲアカリ",
+        "venue": "広島クラブクアトロ",
+        "start": "19:00",
+        "endEstimate": "21:20"
+      }
     },
     {
       "category": "live",
@@ -1603,7 +2168,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261121-0000-e585ace6bc94e697",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "公演日: 2026/11/17(火) 会場: 広島文化学園HBGホール(広島県) 販売方法 先着 一般発売 受付期間 発売中 2026/9/11(金) 10:00 ~ 2026/11/9(月) 23:59 申込/詳細 お申し込みはこちら コ",
+      "calendarDisplay": {
+        "date": "2026-11-21",
+        "artist": "公演日: 2026/11/17(火) 会場: 広島文化学園HBGホール(広島県) 販売方法 先着 一般発売 受付期間 発売中 2026/9/11(金) 10:00 ~ 2026/11/9(月) 23:59 申込/詳細 お申し込みはこちら コ",
+        "venue": "広島文化学園HBGホール",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -1623,7 +2196,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261121-1300-e3839ee383b3e383",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-21",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "sport",
@@ -1663,7 +2244,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261121-1730-e3839ee383b3e383",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-21",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "17:30",
+        "endEstimate": "20:05"
+      }
     },
     {
       "category": "live",
@@ -1683,7 +2272,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261121-0000-e5b1b1e4b8ade381",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "山中さわお & ELPIS",
+      "calendarDisplay": {
+        "date": "2026-11-21",
+        "artist": "山中さわお & ELPIS",
+        "venue": "広島クラブクアトロ",
+        "start": "18:00",
+        "endEstimate": "20:20"
+      }
     },
     {
       "category": "live",
@@ -1702,7 +2299,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261122-0000-e38381e383a3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "チャラン・ポ・ランタン",
+      "calendarDisplay": {
+        "date": "2026-11-22",
+        "artist": "チャラン・ポ・ランタン",
+        "venue": "JMSアステールプラザ",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -1721,7 +2326,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261122-1300-e3839ee383b3e383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-22",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -1740,7 +2353,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261123-0000-e8a792e69dbee695",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "角松敏生",
+      "calendarDisplay": {
+        "date": "2026-11-23",
+        "artist": "角松敏生",
+        "venue": "JMSアステールプラザ",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -1760,7 +2381,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261123-1300-e3839ee383b3e383",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "マンマ・ミーア！",
+      "calendarDisplay": {
+        "date": "2026-11-23",
+        "artist": "マンマ・ミーア！",
+        "venue": "上野学園ホール",
+        "start": "13:00",
+        "endEstimate": "15:35"
+      }
     },
     {
       "category": "live",
@@ -1779,7 +2408,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261125-0000-e5b3b6e6b4a5e4ba",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "島津亜矢",
+      "calendarDisplay": {
+        "date": "2026-11-25",
+        "artist": "島津亜矢",
+        "venue": "広島文化学園HBGホール",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -1799,7 +2436,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261126-0000-e7ab9ce9a6ace59b",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "竜馬四重奏",
+      "calendarDisplay": {
+        "date": "2026-11-26",
+        "artist": "竜馬四重奏",
+        "venue": "JMSアステールプラザ",
+        "start": "18:30",
+        "endEstimate": "20:50"
+      }
     },
     {
       "category": "live",
@@ -1819,7 +2464,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261126-0000-6d69636861656c6d",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "Michael Monroe",
+      "calendarDisplay": {
+        "date": "2026-11-26",
+        "artist": "Michael Monroe",
+        "venue": "広島クラブクアトロ",
+        "start": "19:00",
+        "endEstimate": "21:20"
+      }
     },
     {
       "category": "live",
@@ -1839,7 +2492,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261128-0000-e382b4e382b9e383",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "ゴスペラーズ",
+      "calendarDisplay": {
+        "date": "2026-11-28",
+        "artist": "ゴスペラーズ",
+        "venue": "広島文化学園HBGホール",
+        "start": "17:00",
+        "endEstimate": "19:20"
+      }
     },
     {
       "category": "live",
@@ -1859,7 +2520,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261129-0000-6f6d6f696e6f7461",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "Omoinotake",
+      "calendarDisplay": {
+        "date": "2026-11-29",
+        "artist": "Omoinotake",
+        "venue": "JMSアステールプラザ",
+        "start": "17:00",
+        "endEstimate": "19:20"
+      }
     },
     {
       "category": "live",
@@ -1878,7 +2547,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261202-0000-e6a3aee5b1b1e889",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "森山良子",
+      "calendarDisplay": {
+        "date": "2026-12-02",
+        "artist": "森山良子",
+        "venue": "広島文化学園HBGホール",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -1898,27 +2575,42 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261203-0000-e68993e9a696e78d",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "打首獄門同好会",
+      "calendarDisplay": {
+        "date": "2026-12-03",
+        "artist": "打首獄門同好会",
+        "venue": "JMSアステールプラザ",
+        "start": "19:00",
+        "endEstimate": "21:20"
+      }
     },
     {
       "category": "live",
       "date": "2026-12-04",
-      "start": "18:00",
-      "endEstimate": "20:20",
+      "start": null,
+      "endEstimate": null,
       "title": "REBECCA",
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "lawson-ueno",
-        "eplus-ueno"
+        "lawson-ueno"
       ],
       "sourceUrl": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92",
       "sourceTypes": [
         "playguide"
       ],
-      "confidence": "confirmed",
+      "confidence": "candidate",
       "id": "live-20261204-0000-72656265636361",
-      "verifiedBy": 2
+      "verifiedBy": 1,
+      "artist": "REBECCA",
+      "calendarDisplay": {
+        "date": "2026-12-04",
+        "artist": "REBECCA",
+        "venue": "上野学園ホール",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "live",
@@ -1938,7 +2630,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261205-0000-6869726f7368696d",
-      "verifiedBy": 2
+      "verifiedBy": 2,
+      "artist": "HIROSHIMA CONTI-NeW FeS 2026",
+      "calendarDisplay": {
+        "date": "2026-12-05",
+        "artist": "HIROSHIMA CONTI-NeW FeS 2026",
+        "venue": "広島グリーンアリーナ",
+        "start": "11:00",
+        "endEstimate": "13:20"
+      }
     },
     {
       "category": "live",
@@ -1957,7 +2657,15 @@
       ],
       "confidence": "candidate",
       "id": "live-20261206-0000-e5b883e8a28be5af",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "artist": "布袋寅泰",
+      "calendarDisplay": {
+        "date": "2026-12-06",
+        "artist": "布袋寅泰",
+        "venue": "上野学園ホール",
+        "start": null,
+        "endEstimate": null
+      }
     },
     {
       "category": "sport",
@@ -1999,7 +2707,15 @@
       ],
       "confidence": "confirmed",
       "id": "live-20261206-0000-e6b885e6b0b4e383",
-      "verifiedBy": 3
+      "verifiedBy": 3,
+      "artist": "清水ミチコ",
+      "calendarDisplay": {
+        "date": "2026-12-06",
+        "artist": "清水ミチコ",
+        "venue": "広島文化学園HBGホール",
+        "start": "16:00",
+        "endEstimate": "18:20"
+      }
     }
   ]
 }
