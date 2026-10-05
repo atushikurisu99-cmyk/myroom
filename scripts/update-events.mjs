@@ -164,7 +164,7 @@ function parseEplusVenue(html, source) {
 function parseLawsonVenue(html, source) {
   const text=cleanAll(html).normalize("NFKC");
   const out=[];
-  const re=/(?:コンサート|演劇・ステージ・舞台|クラシック|イベント|スポーツ)\s+([\s\S]{1,140}?)\s+公演日：\s*(20\d{2})\/(\d{1,2})\/(\d{1,2})[^\s]*[\s\S]{0,160}?会場：\s*([\s\S]{1,120}?)(?:\(広島県\)|（広島県）)/g;
+  const re=/(?:コンサート|演劇・ステージ・舞台|クラシック|イベント|スポーツ)\s+([\s\S]{1,140}?)\s+公演日[:：]\s*(20\d{2})\/(\d{1,2})\/(\d{1,2})[^\s]*[\s\S]{0,160}?会場[:：]\s*([\s\S]{1,120}?)(?:\(広島県\)|（広島県）)/g;
   let m;
   while ((m=re.exec(text))) {
     const title=m[1].trim().replace(/\s+/g," ").slice(0,120);
@@ -383,17 +383,7 @@ async function main() {
 
       if (s.role!=="discovery") continue;
       if (s.id.startsWith("eplus-")) discovered.push(...parseEplusVenue(html,s));
-      else if (s.id.startsWith("lawson-")) {
-        const parsed=parseLawsonVenue(html,s);
-        console.log("lawson source",s.id,"html",html.length,"visible",clean(html).length,"all",cleanAll(html).length,"parsed",parsed.length,
-          "markers",html.includes("公演日"),html.includes("会場"),html.includes("ＳＨＥ"),html.includes("PERSONZ"));
-        if (s.id==="lawson-quattro" || s.id==="lawson-jms") {
-          const t=cleanAll(html).normalize("NFKC");
-          const p=Math.max(0,t.indexOf(s.id==="lawson-quattro" ? "SHE" : "PERSONZ"));
-          console.log("lawson snippet",s.id,t.slice(Math.max(0,p-120),p+520));
-        }
-        discovered.push(...parsed);
-      }
+      else if (s.id.startsWith("lawson-")) discovered.push(...parseLawsonVenue(html,s));
       else if (s.id==="seven-ueno") discovered.push(...parseSevenUeno(html,year,s));
       else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
