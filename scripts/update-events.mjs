@@ -154,8 +154,11 @@ function extractAnchors(html="") {
 }
 
 function isBadArtistTitle(title="") {
-  return !title ||
-    /^(?:年間予定|月間予定|公演一覧|イベント一覧|会場情報|チケット情報|詳細|もっと見る|検索結果)$/i.test(title.trim());
+  const t=title.trim();
+  return !t ||
+    /^(?:年間予定|月間予定|公演一覧|イベント一覧|会場情報|チケット情報|詳細|もっと見る|検索結果)$/i.test(t) ||
+    /公演日[:：]|会場[:：]|販売方法|受付期間|申込\/詳細|詳細はこちら/.test(t) ||
+    t.length>120;
 }
 
 function parseEplusVenue(html, source) {
@@ -226,7 +229,7 @@ function parseLawsonVenue(html, source) {
   while ((m=re.exec(text))) {
     const title=m[1].trim().replace(/\s+/g," ").slice(0,120);
     const venue=canonicalVenue(m[5].trim());
-    if (!title || venue!==canonicalVenue(source.venue)) continue;
+    if (isBadArtistTitle(title) || venue!==canonicalVenue(source.venue)) continue;
     const e={
       category:"live", date:isoDate(m[2],m[3],m[4]), start:null, endEstimate:null,
       title, venue, area:"広島市",
