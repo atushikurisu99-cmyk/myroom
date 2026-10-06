@@ -677,6 +677,46 @@ function mergePortMaster(previous, cruiseEvents, seenAt) {
   return [...map.values()].sort((a,b)=>(a.name||"").localeCompare(b.name||"","ja"));
 }
 
+const PORT_MASTER_PATH="data/ports.json";
+
+async function loadPortMaster() {
+  try {
+    const raw=JSON.parse(await readFile(PORT_MASTER_PATH,"utf-8"));
+    return Array.isArray(raw) ? raw : (raw.ports||[]);
+  } catch {
+    return [];
+  }
+}
+
+function portIdentity(venue="") {
+  const v=venue.normalize("NFKC");
+  if (v.includes("宇品")) return {id:"hiroshima-ujina",name:"宇品",port:"広島港"};
+  if (v.includes("五日市")) return {id:"hiroshima-itsukaichi",name:"五日市",port:"広島港"};
+  if (v.includes("廿日市")) return {id:"hatsukaichi",name:"廿日市",port:"廿日市港"};
+  return {id:"port-"+Buffer.from(v||"unknown").toString("hex").slice(0,20),name:v||"名称未設定",port:v||"名称未設定"};
+}
+
+function mergePortMaster(previous, events, seenAt) {
+  const map=new Map((previous||[]).map(p=>[p.id,{...p}]));
+  for (const e of events.filter(x=>x.category==="cruise")) {
+    const key=portIdentity(e.venue);
+    const old=map.get(key.id);
+    map.set(key.id,{
+      id:key.id,
+      name:key.name,
+      port:key.port,
+      venue:e.venue,
+      area:e.area||old?.area||null,
+      sourceIds:[...new Set([...(old?.sourceIds||[]),...(e.sourceIds||[])])],
+      firstSeenAt:old?.firstSeenAt||seenAt,
+      lastSeenAt:seenAt,
+      enabled:old?.enabled!==false,
+      retired:old?.retired===true
+    });
+  }
+  return [...map.values()].sort((a,b)=>(a.name||"").localeCompare(b.name||"","ja"));
+}
+
 function withCalendarDisplay(e) {
   if (e.category !== "live") return e;
   const artist = (e.artist || e.title || "").trim();
