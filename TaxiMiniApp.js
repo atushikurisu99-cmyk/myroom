@@ -15,6 +15,190 @@ const RideScreen = window.AppScreens.RideScreen;
 const FareScreen = window.AppScreens.FareScreen;
 const HistoryModal = window.AppScreens.HistoryModal;
 
+function SalesNotificationLayer() {
+  const [events, setEvents] = useState([]);
+  const [now, setNow] = useState(new Date());
+  const [dismissed, setDismissed] = useState(() => {
+    try { return new Set(JSON.parse(sessionStorage.getItem("salesNavDismissedAlerts") || "[]")); }
+    catch (_) { return new Set(); }
+  });
+
+  useEffect(() => {
+    let alive = true;
+    const load = () => {
+      fetch(`./data/events.json?v=${Date.now()}`, { cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error("events fetch failed"))))
+        .then((data) => {
+          if (alive) setEvents(Array.isArray(data?.events) ? data.events : []);
+        })
+        .catch(() => {});
+    };
+    load();
+    const eventTimer = setInterval(load, 5 * 60 * 1000);
+    const clockTimer = setInterval(() => setNow(new Date()), 60 * 1000);
+    return () => {
+      alive = false;
+      clearInterval(eventTimer);
+      clearInterval(clockTimer);
+    };
+  }, []);
+
+  const dateKey = (d) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+  const toTime = (date, time = "00:00") =>
+    new Date(`${date}T${time || "00:00"}:00+09:00`);
+
+  const alerts = useMemo(() => {
+    const today = dateKey(now);
+    const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    const next48h = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+
+    const conventions = events
+      .filter((e) => e.category === "convention")
+      .filter((e) => e.date === today)
+      .sort((a, b) => toTime(a.date, a.start) - toTime(b.date, b.start));
+
+    let conventionAlert = null;
+    if (conventions.length) {
+      const timed = conventions.find((e) => e.start);
+      const first = timed || conventions[0];
+      const title = conventions.length > 1
+        ? `コンベンション ${conventions.length}件`
+        : "コンベンション";
+      const detail = conventions.length > 1
+        ? `${first.title} ほか`
+        : first.title;
+      const sub = first.start
+        ? `${first.start}${first.endEstimate ? `〜${first.endEstimate}` : ""}｜${first.venue}`
+        : `本日｜${first.venue}`;
+      conventionAlert = {
+        key: `convention-${today}`,
+        kind: "convention",
+        title,
+        detail,
+        sub,
+      };
+    }
+
+    const cruises = events
+      .filter((e) => e.category === "cruise")
+      .map((e) => {
+        const arrive = toTime(e.date, e.start);
+        const depart = toTime(e.departureDate || e.date, e.endEstimate || "23:59");
+        return { e, arrive, depart };
+      })
+      .filter((x) => x.depart >= now)
+      .sort((a, b) => a.arrive - b.arrive);
+
+    let cruiseAlert = null;
+    const active = cruises.find((x) => x.arrive <= now && x.depart >= now);
+    const next = active || cruises.find((x) => x.arrive <= next48h);
+    if (next) {
+      const isActive = next.arrive <= now && next.depart >= now;
+      const e = next.e;
+      cruiseAlert = {
+        key: `cruise-${e.id}-${isActive ? "active" : "upcoming"}`,
+        kind: "cruise",
+        title: isActive ? "大型客船・停泊中" : "大型客船",
+        detail: e.ship || e.title,
+        sub: isActive
+          ? `出港 ${e.departureDate !== e.date ? e.departureDate.slice(5).replace("-", "/") + " " : ""}${e.endEstimate || "--:--"}｜${e.venue}`
+          : `${e.date.slice(5).replace("-", "/")} ${e.start || "--:--"}入港｜${e.venue}`,
+      };
+    }
+
+    return [conventionAlert, cruiseAlert].filter(Boolean);
+  }, [events, now]);
+
+  const visible = alerts.filter((a) => !dismissed.has(a.key)).slice(0, 2);
+
+  const dismiss = (key) => {
+    setDismissed((prev) => {
+      const next = new Set(prev);
+      next.add(key);
+      try { sessionStorage.setItem("salesNavDismissedAlerts", JSON.stringify([...next])); } catch (_) {}
+      return next;
+    });
+  };
+
+  if (!visible.length) return null;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: "12px",
+        right: "12px",
+        top: "8px",
+        zIndex: 36,
+        display: "grid",
+        gap: "7px",
+        pointerEvents: "none",
+      }}
+    >
+      {visible.map((alert) => (
+        <SalesNotificationBanner key={alert.key} alert={alert} onDismiss={() => dismiss(alert.key)} />
+      ))}
+    </div>
+  );
+}
+
+function SalesNotificationBanner({ alert, onDismiss }) {
+  const startX = useRef(null);
+  return (
+    <div
+      onTouchStart={(e) => { startX.current = e.touches?.[0]?.clientX ?? null; }}
+      onTouchEnd={(e) => {
+        const endX = e.changedTouches?.[0]?.clientX ?? null;
+        if (startX.current != null && endX != null && Math.abs(endX - startX.current) >= 58) onDismiss();
+        startX.current = null;
+      }}
+      style={{
+        pointerEvents: "auto",
+        borderRadius: "14px",
+        background: "rgba(255,255,255,0.96)",
+        boxShadow: "0 8px 22px rgba(0,0,0,0.16)",
+        padding: "9px 12px 10px",
+        border: alert.kind === "cruise" ? "1px solid rgba(37,99,235,0.18)" : "1px solid rgba(124,58,237,0.18)",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0 }}>
+        <div style={{ fontSize: "17px", lineHeight: 1 }}>{alert.kind === "cruise" ? "🚢" : "🏢"}</div>
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <div style={{ fontSize: "12px", fontWeight: 900, color: "#24324a", lineHeight: 1.1 }}>
+            {alert.title}
+          </div>
+          <div style={{
+            marginTop: "3px",
+            fontSize: "13px",
+            fontWeight: 900,
+            color: "#172033",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}>
+            {alert.detail}
+          </div>
+          <div style={{
+            marginTop: "2px",
+            fontSize: "11px",
+            fontWeight: 700,
+            color: "#68758a",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}>
+            {alert.sub}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TaxiMiniApp() {
   const { refs, state, derived, actions } = useTaxiAppState();
   const C = window.AppConstants;
@@ -162,6 +346,10 @@ function TaxiMiniApp() {
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-slate-800 text-white text-sm font-semibold px-4 py-2 shadow-lg">
             {state.toastMessage}
           </div>
+        )}
+
+        {startupPhase === "done" && (state.screen === "standby" || state.screen === "ride") && (
+          <SalesNotificationLayer />
         )}
 
         <OtherSheet
