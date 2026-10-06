@@ -11,8 +11,11 @@ window.AppScreens.StandbyScreen = (() => {
   function eventVisibleUntil(event) {
     const start = toDateTime(event);
     if (event.endEstimate) {
-      const end = new Date(`${event.date}T${event.endEstimate}:00+09:00`);
-      if (!Number.isNaN(end.getTime())) return new Date(end.getTime() + 60 * 60 * 1000);
+      let end = new Date(`${event.date}T${event.endEstimate}:00+09:00`);
+      if (!Number.isNaN(end.getTime())) {
+        if (end < start) end = new Date(end.getTime() + 24 * 60 * 60 * 1000);
+        return new Date(end.getTime() + 60 * 60 * 1000);
+      }
     }
 
     // 終了時刻が取れない場合も、開始後すぐ消さない。
@@ -48,7 +51,7 @@ window.AppScreens.StandbyScreen = (() => {
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "8px" }}>
           <div style={{ fontSize: "13px", fontWeight: 900, color: "#334155", whiteSpace: "nowrap" }}>{label}</div>
-          <div style={{ fontSize: "11px", fontWeight: 800, color: "#7a869f", whiteSpace: "nowrap" }}>
+          <div style={{ fontSize: "12px", fontWeight: 800, color: "#7a869f", whiteSpace: "nowrap" }}>
             {event ? event.date.slice(5).replace("-", "/") : ""}
           </div>
         </div>
@@ -69,7 +72,7 @@ window.AppScreens.StandbyScreen = (() => {
         <div
           style={{
             marginTop: "9px",
-            fontSize: "11px",
+            fontSize: "12px",
             lineHeight: 1.1,
             fontWeight: 700,
             color: "#6e7a93",
