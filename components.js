@@ -167,7 +167,7 @@ window.AppComponents = (() => {
       position: "absolute",
       left: `${L.HEADER_INNER_X}px`,
       top: `${L.SWITCH_LABEL_TOP}px`,
-      fontSize: "13px",
+      fontSize: "var(--tx-xs)",
       lineHeight: "1",
       color: C.SUB,
       fontWeight: 700,
@@ -348,7 +348,7 @@ window.AppComponents = (() => {
       >
         <div
           style={{
-            fontSize: `${L.GRAPH_TITLE_FONT}px`,
+            fontSize: "var(--tx-sm)",
             fontWeight: 900,
             color: C.GRAPH_TEXT,
             lineHeight: "1.1",
@@ -359,7 +359,7 @@ window.AppComponents = (() => {
         <div
           style={{
             marginTop: "6px",
-            fontSize: `${L.GRAPH_SUB_FONT}px`,
+            fontSize: "var(--tx-xs)",
             fontWeight: 700,
             color: C.GRAPH_SUB,
             lineHeight: "1.1",
@@ -391,27 +391,27 @@ window.AppComponents = (() => {
   function RideInfoCard({ pickup, rideStartAt, elapsedText, viaStops }) {
     return (
       <div className="bg-white px-5 py-4 shadow-[0_8px_22px_rgba(0,0,0,0.08)] h-[124px]" style={{ borderRadius: "8px" }}>
-        <div className="text-[18px] font-black text-[#1f2a44] truncate">
+        <div className="tx-lg font-black text-[#1f2a44] truncate">
           {pickup || "取得中..."}
         </div>
 
         <div className="mt-4 flex justify-between items-end gap-4">
           <div>
-            <div className="text-[12px] font-semibold text-[#6e7a93]">乗車時刻</div>
-            <div className="mt-1 text-[18px] font-bold text-[#1f2a44] leading-none">
+            <div className="tx-xs font-semibold text-[#6e7a93]">乗車時刻</div>
+            <div className="mt-1 tx-md font-bold text-[#1f2a44] leading-none">
               {formatTime(rideStartAt)}
             </div>
           </div>
           <div className="text-right">
-            <div className="text-[12px] font-semibold text-[#6e7a93]">経過時間</div>
-            <div className="mt-1 text-[18px] font-bold text-[#1f2a44] leading-none">
+            <div className="tx-xs font-semibold text-[#6e7a93]">経過時間</div>
+            <div className="mt-1 tx-md font-bold text-[#1f2a44] leading-none">
               {elapsedText || "0分"}
             </div>
           </div>
         </div>
 
         {viaStops?.length > 0 && (
-          <div className="mt-2 text-[12px] font-semibold text-[#6e7a93] truncate">
+          <div className="mt-2 tx-xs font-semibold text-[#6e7a93] truncate">
             経由あり（{viaStops.length}件）
           </div>
         )}
@@ -488,7 +488,7 @@ window.AppComponents = (() => {
           <HomeIcon />
           <div
             style={{
-              fontSize: `${L.NAV_SIDE_TEXT_SIZE}px`,
+              fontSize: "var(--tx-xs)",
               fontWeight: 800,
               lineHeight: "1",
               color: "#ffffff",
@@ -520,7 +520,7 @@ window.AppComponents = (() => {
           <MenuDotsIcon />
           <div
             style={{
-              fontSize: `${L.NAV_SIDE_TEXT_SIZE}px`,
+              fontSize: "var(--tx-xs)",
               fontWeight: 800,
               lineHeight: "1",
               color: "#ffffff",
@@ -548,7 +548,7 @@ window.AppComponents = (() => {
       >
         <div
           style={{
-            fontSize: `${L.NAV_CENTER_TEXT_SIZE}px`,
+            fontSize: "var(--tx-md)",
             fontWeight: 900,
             lineHeight: "1",
             color: "#ffffff",
@@ -723,7 +723,7 @@ window.AppComponents = (() => {
           <div className="px-4 pt-3 pb-4">
             <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
             <div className="flex items-center justify-between">
-              <div className="text-base font-bold text-slate-800">メニュー</div>
+              <div className="tx-md font-bold text-slate-800">メニュー</div>
               <button
                 type="button"
                 onClick={onClose}
@@ -736,21 +736,21 @@ window.AppComponents = (() => {
               <button
                 type="button"
                 onClick={onShowSoon}
-                className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50"
+                className="w-full px-4 py-4 text-left tx-md font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50"
               >
                 分析
               </button>
               <button
                 type="button"
                 onClick={onOpenSettings}
-                className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50"
+                className="w-full px-4 py-4 text-left tx-md font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50"
               >
                 設定
               </button>
               <button
                 type="button"
                 onClick={openHistoryFull}
-                className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 active:bg-slate-50"
+                className="w-full px-4 py-4 text-left tx-md font-semibold text-slate-800 active:bg-slate-50"
               >
                 履歴
               </button>
