@@ -705,7 +705,7 @@ window.AppComponents = (() => {
     );
   }
 
-  function OtherSheet({ show, onClose, openHistoryFull, onShowSoon }) {
+  function OtherSheet({ show, onClose, openHistoryFull, onShowSoon, onOpenSettings }) {
     if (!show) return null;
 
     return (
@@ -742,7 +742,7 @@ window.AppComponents = (() => {
               </button>
               <button
                 type="button"
-                onClick={onShowSoon}
+                onClick={onOpenSettings}
                 className="w-full px-4 py-4 text-left text-base font-semibold text-slate-800 border-b border-slate-100 active:bg-slate-50"
               >
                 設定
@@ -763,6 +763,106 @@ window.AppComponents = (() => {
               100% { transform: translateY(0); }
             }
           `}</style>
+        </div>
+      </div>
+    );
+  }
+
+
+  function ReportTemplateSettingsSheet({
+    show,
+    onClose,
+    selectedTemplate,
+    onSelectTemplate,
+  }) {
+    if (!show) return null;
+
+    const templates = [
+      {
+        id: "hiroshima-sogo",
+        name: "広島相互組合版",
+        note: "現在の確認用ひな形",
+      },
+    ];
+
+    return (
+      <div
+        className="absolute inset-0 z-40 bg-slate-900/40 flex items-end"
+        onClick={onClose}
+      >
+        <div
+          className="w-full rounded-t-[28px] bg-white shadow-2xl overflow-hidden"
+          onClick={(e) => e.stopPropagation()}
+          style={{ animation: "otherSheetUp 220ms cubic-bezier(0.22,1,0.36,1)" }}
+        >
+          <div className="px-4 pt-3 pb-5">
+            <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-base font-bold text-slate-800">帳票ひな形</div>
+                <div className="mt-1 text-xs text-slate-500">
+                  月報に使う組合バージョンを選択
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={onClose}
+                className="min-h-[44px] px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold"
+              >
+                閉じる
+              </button>
+            </div>
+
+            <div className="mt-4 grid gap-3">
+              {templates.map((template) => {
+                const active = selectedTemplate === template.id;
+                return (
+                  <button
+                    key={template.id}
+                    type="button"
+                    onClick={() => onSelectTemplate(template.id)}
+                    className="w-full min-h-[64px] px-4 py-3 rounded-2xl border text-left active:scale-[0.99]"
+                    style={{
+                      borderColor: active ? "#0f172a" : "#e2e8f0",
+                      background: active ? "#f8fafc" : "#ffffff",
+                    }}
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="text-[16px] font-bold text-slate-800">
+                          {template.name}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-500">
+                          {template.note}
+                        </div>
+                      </div>
+                      <div
+                        className="shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center"
+                        style={{
+                          borderColor: active ? "#0f172a" : "#cbd5e1",
+                          background: active ? "#0f172a" : "#ffffff",
+                        }}
+                        aria-hidden="true"
+                      >
+                        {active && <div className="w-2 h-2 rounded-full bg-white" />}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-4 rounded-2xl bg-slate-50 border border-slate-200 px-4 py-3">
+              <div className="text-sm font-bold text-slate-800">選択中</div>
+              <div className="mt-1 text-sm text-slate-600">
+                {templates.find((t) => t.id === selectedTemplate)?.name || "未選択"}
+              </div>
+              <div className="mt-2 text-xs text-slate-500 leading-relaxed">
+                選択内容はこの端末に保存され、次回も同じひな形を使用します。
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -879,6 +979,7 @@ window.AppComponents = (() => {
     BottomNav,
     MainButton,
     OtherSheet,
+    ReportTemplateSettingsSheet,
     PaymentDialog,
     ViaDialog,
     FinishDialog,
