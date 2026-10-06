@@ -6,6 +6,7 @@ const {
   BottomNav,
   OtherSheet,
   ReportTemplateSettingsSheet,
+  DutyStartDialog,
   PaymentDialog,
   ViaDialog,
   FinishDialog,
@@ -420,6 +421,17 @@ function TaxiMiniApp() {
               localStorage.setItem("taxiReportTemplate", templateId);
             } catch (_) {}
           }}
+        />
+
+        <DutyStartDialog
+          show={state.showDutyStartDialog}
+          date={new Date()}
+          odometer={state.dutyStartOdometer}
+          alcoholChecked={state.alcoholChecked}
+          onOdometerChange={actions.setDutyStartOdometer}
+          onAlcoholToggle={() => actions.setAlcoholChecked(!state.alcoholChecked)}
+          onCancel={actions.cancelDutyStartDialog}
+          onConfirm={actions.confirmDutyStart}
         />
 
         {state.showPaymentDialog && (
