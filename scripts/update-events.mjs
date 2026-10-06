@@ -27,6 +27,9 @@ const SOURCES = [
   { id:"dragonflies", type:"team", role:"discovery", category:"sport", url:"https://hiroshimadragonflies.com/schedule/list/" },
   { id:"sanfrecce", type:"team", role:"discovery", category:"sport", url:"https://www.sanfrecce.co.jp/matches/results" },
   { id:"thunders", type:"team", role:"discovery", category:"sport", url:"https://www.hiroshima-thunders.com/game/score/2026/index.html" },
+
+  // コンベンション系は会場公式の催事表を直接取得する。
+  { id:"icch", type:"venue", role:"discovery", category:"convention", venue:"広島国際会議場", url:"https://www.pcf.city.hiroshima.jp/icch/event.cgi" },
 ];
 
 const VENUE_ALIASES = [
@@ -39,6 +42,7 @@ const VENUE_ALIASES = [
   ["広島セカンド・クラッチ",["広島セカンド・クラッチ","SECOND CRUTCH","セカンド・クラッチ"]],
   ["広島Live space Reed",["広島Live space Reed","Live space Reed"]],
   ["広島4.14",["広島4.14","4.14"]],
+  ["広島国際会議場",["広島国際会議場","国際会議場","フェニックスホール"]],
   ["Eピース",["エディオンピースウイング広島","Eピース"]],
 ];
 
@@ -343,6 +347,41 @@ function parseThunders(html, now, source) {
   return out;
 }
 
+function parseIcch(html, source) {
+  const out=[];
+  const tableRe=/<table\b[\s\S]*?<\/table>/gi;
+  let tm;
+  while ((tm=tableRe.exec(html))) {
+    const prefix=clean(html.slice(Math.max(0,tm.index-1800),tm.index)).normalize("NFKC");
+    const heads=[...prefix.matchAll(/令和\s*(\d+)年\s*(\d+)月のイベント/g)];
+    if (!heads.length) continue;
+    const h=heads[heads.length-1];
+    const year=2018+Number(h[1]);
+    const month=Number(h[2]);
+    const rowRe=/<tr\b[\s\S]*?<\/tr>/gi;
+    let rm;
+    while ((rm=rowRe.exec(tm[0]))) {
+      const cells=[...rm[0].matchAll(/<(?:td|th)\b[^>]*>([\s\S]*?)<\/(?:td|th)>/gi)].map(x=>clean(x[1]).normalize("NFKC"));
+      if (cells.length<3) continue;
+      const day=(cells[0].match(/^\s*(\d{1,2})\s*$/)||[])[1];
+      const title=(cells[2]||"").trim().replace(/\s+/g," ");
+      if (!day || !title || /イベント名/.test(title)) continue;
+      const start=((cells[5]||"").match(/(\d{1,2}:\d{2})/)||[])[1]||null;
+      const end=((cells[6]||"").match(/(\d{1,2}:\d{2})/)||[])[1]||null;
+      const liveLike=/コンサート|独演会|公演|ライブ|演奏会|音楽|落語|舞台|ショー/i.test(title);
+      const e={
+        category:liveLike?"live":"convention",
+        date:isoDate(year,month,day), start, endEstimate:end,
+        title, venue:"広島国際会議場", area:"広島市",
+        sourceIds:[source.id], sourceUrl:source.url, sourceTypes:["venue"], confidence:"official"
+      };
+      e.id=makeId(e);
+      out.push(e);
+    }
+  }
+  return out;
+}
+
 function sourceConfirmsEvent(text,e,source) {
   if (!text) return false;
   if (source.venue && canonicalVenue(source.venue)!==canonicalVenue(e.venue)) return false;
@@ -478,6 +517,7 @@ async function main() {
       else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
       else if (s.id==="thunders") discovered.push(...parseThunders(html,now,s));
+      else if (s.id==="icch") discovered.push(...parseIcch(html,s));
     } catch (err) {
       errors.push({source:s.id,error:String(err.message||err)});
     }
