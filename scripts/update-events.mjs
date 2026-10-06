@@ -30,6 +30,7 @@ const SOURCES = [
 
   // コンベンション系は会場公式の催事表を直接取得する。
   { id:"icch", type:"venue", role:"discovery", category:"convention", venue:"広島国際会議場", encoding:"shift_jis", url:"https://www.pcf.city.hiroshima.jp/icch/event.cgi" },
+  { id:"sangyo", type:"venue", role:"discovery", category:"convention", venue:"広島県立広島産業会館", url:"https://sangyoukaikan.jp/event/" },
 ];
 
 const VENUE_ALIASES = [
@@ -43,6 +44,7 @@ const VENUE_ALIASES = [
   ["広島Live space Reed",["広島Live space Reed","Live space Reed"]],
   ["広島4.14",["広島4.14","4.14"]],
   ["広島国際会議場",["広島国際会議場","国際会議場","フェニックスホール"]],
+  ["広島県立広島産業会館",["広島県立広島産業会館","広島産業会館","産業会館"]],
   ["Eピース",["エディオンピースウイング広島","Eピース"]],
 ];
 
@@ -522,6 +524,7 @@ async function main() {
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
       else if (s.id==="thunders") discovered.push(...parseThunders(html,now,s));
       else if (s.id==="icch") discovered.push(...parseIcch(html,s));
+      else if (s.id==="sangyo") console.log("SANGYO_DEBUG_START", clean(html).slice(-12000), "SANGYO_DEBUG_END");
     } catch (err) {
       errors.push({source:s.id,error:String(err.message||err)});
     }
