@@ -100,6 +100,14 @@ window.AppHooks = (() => {
     const clockTimerRef = useRef(null);
     const dropTapRef = useRef({ lastTapAt: 0 });
     const paymentTypeRef = useRef(null);
+    const latestPickupRef = useRef({
+      label: persisted.pickup || "",
+      meta: persisted.pickupMeta || null,
+    });
+    const latestDropoffRef = useRef({
+      label: persisted.dropoff || "",
+      meta: persisted.dropoffMeta || null,
+    });
 
     const ensureWeatherFresh = async (coords = null) => {
       if (!Geo.shouldRefreshWeather(weather.fetchedAt, weather.dateKey)) return;
@@ -532,12 +540,16 @@ window.AppHooks = (() => {
       setDropoff("");
       setPickupMeta(null);
       setDropoffMeta(null);
+      latestPickupRef.current = { label: "取得中…", meta: null };
+      latestDropoffRef.current = { label: "", meta: null };
       setSelectedPassengers(null);
       setViaStops([]);
       setScreen("ride");
 
       const best = await Geo.getBestCurrentPlace();
-      setPickup(best.label || "未取得");
+      const pickupLabel = best.label || "未取得";
+      latestPickupRef.current = { label: pickupLabel, meta: best };
+      setPickup(pickupLabel);
       setPickupMeta(best);
       ensureWeatherFresh(best);
     };
@@ -550,10 +562,13 @@ window.AppHooks = (() => {
       setAmount("");
       setDropoff("取得中…");
       setDropoffMeta(null);
+      latestDropoffRef.current = { label: "取得中…", meta: null };
       setScreen("fare");
 
       const best = await Geo.getBestCurrentPlace();
-      setDropoff(best.label || "未取得");
+      const dropoffLabel = best.label || "未取得";
+      latestDropoffRef.current = { label: dropoffLabel, meta: best };
+      setDropoff(dropoffLabel);
       setDropoffMeta(best);
     };
 
@@ -608,13 +623,23 @@ window.AppHooks = (() => {
       }
 
       const viaText = viaStops.length > 0 ? `経由：${viaStops.join(" → ")}` : "";
+      const latestPickup = latestPickupRef.current || {};
+      const latestDropoff = latestDropoffRef.current || {};
+      const pickupForSave = latestPickup.label || pickup || "未取得";
+      const dropoffForSave =
+        latestDropoff.label && latestDropoff.label !== "取得中…"
+          ? latestDropoff.label
+          : (dropoff && dropoff !== "取得中…" ? dropoff : "未取得");
+      const pickupMetaForSave = latestPickup.meta || pickupMeta;
+      const dropoffMetaForSave = latestDropoff.meta || dropoffMeta;
+
       const newRecord = {
         id: Date.now(),
         乗務日: workDate,
         乗車時刻: rideStartAt,
         降車時刻: rideEndAt,
-        乗車地: pickup.trim() || "未取得",
-        降車地: dropoff.trim() || "未取得",
+        乗車地: pickupForSave.trim() || "未取得",
+        降車地: dropoffForSave.trim() || "未取得",
         人数: finalPassengers,
         金額: numericAmount,
         決済方法: payment,
@@ -622,12 +647,12 @@ window.AppHooks = (() => {
         領収証: receipt,
         receipt,
         天気: weather.nowKind || "",
-        乗車位置精度: pickupMeta?.accuracy ?? null,
-        降車位置精度: dropoffMeta?.accuracy ?? null,
-        乗車緯度: pickupMeta?.latitude ?? null,
-        乗車経度: pickupMeta?.longitude ?? null,
-        降車緯度: dropoffMeta?.latitude ?? null,
-        降車経度: dropoffMeta?.longitude ?? null,
+        乗車位置精度: pickupMetaForSave?.accuracy ?? null,
+        降車位置精度: dropoffMetaForSave?.accuracy ?? null,
+        乗車緯度: pickupMetaForSave?.latitude ?? null,
+        乗車経度: pickupMetaForSave?.longitude ?? null,
+        降車緯度: dropoffMetaForSave?.latitude ?? null,
+        降車経度: dropoffMetaForSave?.longitude ?? null,
         備考: viaText,
       };
 
