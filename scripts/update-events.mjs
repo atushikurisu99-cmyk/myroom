@@ -784,6 +784,9 @@ async function main() {
     .filter(e=>e.facilityVerification!=="verified")
     .map(e=>({category:e.category,venue:e.venue,title:e.title,date:e.date,sourceIds:e.sourceIds||[]}));
 
+  // 未確認施設は監査用に保持するだけで、ユーザー表示・通知には出さない。
+  const publishedEvents=events.filter(e=>e.publishable===true);
+
   const stats={
     discovered:fresh.length,
     confirmed:fresh.filter(e=>e.confidence==="confirmed").length,
@@ -806,11 +809,11 @@ async function main() {
     pendingFacilities,
     strategy:"playguide-first; verify with any independent second source including venue/promoter/another playguide",
     sources:SOURCES.map(({id,type,role,url,venue})=>({id,type,role,url,venue})),
-    stats,errors,events
+    stats,errors,events:publishedEvents
   },null,2)+"\n");
 
   console.log("event stats:",JSON.stringify(stats));
-  console.log(`events: ${events.length}, errors: ${errors.length}`);
+  console.log(`events: ${publishedEvents.length}, pending facilities: ${pendingFacilities.length}, errors: ${errors.length}`);
 }
 
 main().catch(err=>{ console.error(err); process.exit(1); });
