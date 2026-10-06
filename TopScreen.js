@@ -81,7 +81,7 @@ window.AppScreens.TopScreen = (() => {
                 position: "absolute",
                 left: `${L.HEADER_INNER_X}px`,
                 top: `${L.LOWER_BAND_TOP + L.SWITCH_LABEL_TOP}px`,
-                fontSize: "13px",
+                fontSize: "var(--tx-xs)",
                 lineHeight: "1",
                 color: "#ffffff",
                 fontWeight: 700,
