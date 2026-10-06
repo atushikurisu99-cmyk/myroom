@@ -29,7 +29,7 @@ const SOURCES = [
   { id:"thunders", type:"team", role:"discovery", category:"sport", url:"https://www.hiroshima-thunders.com/game/score/2026/index.html" },
 
   // コンベンション系は会場公式の催事表を直接取得する。
-  { id:"icch", type:"venue", role:"discovery", category:"convention", venue:"広島国際会議場", url:"https://www.pcf.city.hiroshima.jp/icch/event.cgi" },
+  { id:"icch", type:"venue", role:"discovery", category:"convention", venue:"広島国際会議場", encoding:"shift_jis", url:"https://www.pcf.city.hiroshima.jp/icch/event.cgi" },
 ];
 
 const VENUE_ALIASES = [
@@ -78,7 +78,7 @@ function isoDate(y,m,d){ return `${y}-${pad(m)}-${pad(d)}`; }
 
 function sleep(ms){ return new Promise(resolve=>setTimeout(resolve,ms)); }
 
-async function fetchText(url) {
+async function fetchText(url, encoding="utf-8") {
   let lastStatus=0;
   for (let attempt=0; attempt<3; attempt++) {
     if (attempt>0) await sleep(1800*attempt);
@@ -89,7 +89,11 @@ async function fetchText(url) {
       }
     });
     lastStatus=res.status;
-    if (res.ok) return await res.text();
+    if (res.ok) {
+      if (encoding==="utf-8") return await res.text();
+      const buf=await res.arrayBuffer();
+      return new TextDecoder(encoding).decode(buf);
+    }
     if (![429,500,502,503,504].includes(res.status)) throw new Error(`${res.status} ${url}`);
   }
   throw new Error(`${lastStatus} ${url}`);
@@ -506,7 +510,7 @@ async function main() {
   for (const s of SOURCES) {
     try {
       if (s.type==="playguide" && previousType==="playguide") await sleep(900);
-      const html=await fetchText(s.url);
+      const html=await fetchText(s.url,s.encoding||"utf-8");
       const text=clean(html);
       evidenceTexts.set(s.id,{text,source:s});
 
@@ -517,7 +521,7 @@ async function main() {
       else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
       else if (s.id==="thunders") discovered.push(...parseThunders(html,now,s));
-      else if (s.id==="icch") { console.log("ICCH_DEBUG_START", clean(html).slice(0,7000), "ICCH_DEBUG_END"); discovered.push(...parseIcch(html,s)); }
+      else if (s.id==="icch") discovered.push(...parseIcch(html,s));
     } catch (err) {
       errors.push({source:s.id,error:String(err.message||err)});
     }
