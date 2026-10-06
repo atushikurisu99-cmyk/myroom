@@ -440,7 +440,7 @@ window.AppComponents = (() => {
 
           <div className="shrink-0 text-right">
             <div
-              className={`inline-flex min-w-[34px] justify-center rounded-full px-2.5 py-1 text-xs font-bold ${
+              className={`inline-flex min-w-[34px] justify-center rounded-full px-2.5 py-1 tx-xs font-bold ${
                 type === "1"
                   ? "bg-sky-100 text-sky-700"
                   : "bg-emerald-100 text-emerald-700"
@@ -460,7 +460,7 @@ window.AppComponents = (() => {
           {record.備考 ? (
             <div className="truncate tx-xs text-slate-500">備考：{record.備考}</div>
           ) : null}
-          <div className="truncate text-xs text-slate-400">
+          <div className="truncate tx-xs text-slate-400">
             乗務日：{formatFullDate(record.乗務日 || record.乗車時刻)}
           </div>
         </div>
@@ -727,7 +727,7 @@ window.AppComponents = (() => {
               <button
                 type="button"
                 onClick={onClose}
-                className="min-h-[44px] px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold"
+                className="ui-tap px-3 py-2 rounded-xl bg-slate-100 text-slate-700 tx-sm font-semibold"
               >
                 閉じる
               </button>
@@ -796,7 +796,7 @@ window.AppComponents = (() => {
         onClick={onClose}
       >
         <div
-          className="w-full rounded-t-[28px] bg-white shadow-2xl overflow-hidden"
+          className="w-full max-h-[90vh] rounded-t-[28px] bg-white shadow-2xl overflow-y-auto"
           onClick={(e) => e.stopPropagation()}
           style={{ animation: "otherSheetUp 220ms cubic-bezier(0.22,1,0.36,1)" }}
         >
@@ -813,7 +813,7 @@ window.AppComponents = (() => {
               <button
                 type="button"
                 onClick={onClose}
-                className="min-h-[44px] px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold"
+                className="ui-tap px-3 py-2 rounded-xl bg-slate-100 text-slate-700 tx-sm font-semibold"
               >
                 閉じる
               </button>
@@ -863,7 +863,7 @@ window.AppComponents = (() => {
                     type="text"
                     value={businessProfile.registrationNumber || ""}
                     onChange={(e) => onBusinessProfileChange?.("registrationNumber", e.target.value)}
-                    className="h-[44px] rounded-xl border border-slate-300 px-3 text-base outline-none"
+                    className="h-[48px] rounded-xl border border-slate-300 px-3 tx-md outline-none"
                     placeholder="登録番号"
                   />
                 </label>
@@ -873,7 +873,7 @@ window.AppComponents = (() => {
                     type="text"
                     value={businessProfile.name || ""}
                     onChange={(e) => onBusinessProfileChange?.("name", e.target.value)}
-                    className="h-[44px] rounded-xl border border-slate-300 px-3 text-base outline-none"
+                    className="h-[48px] rounded-xl border border-slate-300 px-3 tx-md outline-none"
                     placeholder="氏名または名称"
                   />
                 </label>
@@ -883,7 +883,7 @@ window.AppComponents = (() => {
                     type="text"
                     value={businessProfile.businessName || ""}
                     onChange={(e) => onBusinessProfileChange?.("businessName", e.target.value)}
-                    className="h-[44px] rounded-xl border border-slate-300 px-3 text-base outline-none"
+                    className="h-[48px] rounded-xl border border-slate-300 px-3 tx-md outline-none"
                     placeholder="事業者名"
                   />
                 </label>
@@ -962,7 +962,7 @@ window.AppComponents = (() => {
                         <div className="tx-sm font-bold text-slate-800">
                           {index + 1}件目
                         </div>
-                        <div className="text-sm font-black text-slate-800">
+                        <div className="tx-sm font-black text-slate-800">
                           ¥{Number(record.金額 || record.amount || 0).toLocaleString("ja-JP")}
                         </div>
                       </div>
@@ -1059,7 +1059,7 @@ window.AppComponents = (() => {
                     placeholder="例 123456"
                     className="w-full h-[52px] rounded-xl border border-slate-300 px-4 text-[20px] font-black outline-none"
                   />
-                  <span className="text-sm font-bold text-slate-500">km</span>
+                  <span className="tx-sm font-bold text-slate-500">km</span>
                 </div>
               </div>
             </div>
@@ -1114,7 +1114,7 @@ window.AppComponents = (() => {
             <button
               type="button"
               onClick={onCancel}
-              className="min-w-[92px] h-[44px] rounded-2xl bg-slate-100 text-slate-700 text-sm font-bold"
+              className="min-w-[92px] h-[48px] rounded-2xl bg-slate-100 text-slate-700 tx-sm font-bold"
             >
               戻る
             </button>
