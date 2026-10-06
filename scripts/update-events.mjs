@@ -632,6 +632,51 @@ function endEstimate(e) {
   return {...e,endEstimate:`${pad(Math.floor(total/60)%24)}:${pad(total%60)}`};
 }
 
+const PORT_MASTER_PATH="data/ports.json";
+
+function portKeyFromVenue(venue="") {
+  const v=venue.normalize("NFKC");
+  if (/宇品/.test(v)) return {id:"hiroshima-ujina",name:"宇品",port:"広島港"};
+  if (/五日市/.test(v)) return {id:"hiroshima-itsukaichi",name:"五日市",port:"広島港"};
+  if (/廿日市/.test(v)) return {id:"hatsukaichi",name:"廿日市",port:"廿日市港"};
+  const stem=Buffer.from(v||"unknown").toString("hex").slice(0,20);
+  return {id:`port-${stem}`,name:v||"名称未設定",port:v||"名称未設定"};
+}
+
+async function loadPortMaster() {
+  try {
+    const raw=JSON.parse(await readFile(PORT_MASTER_PATH,"utf-8"));
+    return Array.isArray(raw) ? raw : (raw.ports||[]);
+  } catch {
+    return [];
+  }
+}
+
+function mergePortMaster(previous, cruiseEvents, seenAt) {
+  const map=new Map((previous||[]).map(p=>[p.id,{...p}]));
+
+  for (const e of cruiseEvents.filter(x=>x.category==="cruise")) {
+    const key=portKeyFromVenue(e.venue);
+    const prev=map.get(key.id);
+    const sourceIds=[...new Set([...(prev?.sourceIds||[]),...(e.sourceIds||[])])];
+    map.set(key.id,{
+      id:key.id,
+      name:key.name,
+      port:key.port,
+      venue:e.venue,
+      area:e.area||prev?.area||null,
+      sourceIds,
+      firstSeenAt:prev?.firstSeenAt||seenAt,
+      lastSeenAt:seenAt,
+      enabled:prev?.enabled!==false,
+      retired:prev?.retired===true
+    });
+  }
+
+  // 取得結果に無い港も保持する。削除は管理側で retired=true にした時だけ。
+  return [...map.values()].sort((a,b)=>(a.name||"").localeCompare(b.name||"","ja"));
+}
+
 function withCalendarDisplay(e) {
   if (e.category !== "live") return e;
   const artist = (e.artist || e.title || "").trim();
@@ -693,6 +738,12 @@ async function main() {
     .map(endEstimate);
 
   const events=dedupe(keep).map(withCalendarDisplay);
+
+  // 港マスターは寄港予定とは別管理。今回0件の港も消さず、新しい港だけ追加する。
+  const previousPorts=await loadPortMaster();
+  const seenAt=new Date().toISOString();
+  const ports=mergePortMaster(previousPorts,events,seenAt);
+
   const stats={
     discovered:fresh.length,
     confirmed:fresh.filter(e=>e.confidence==="confirmed").length,
@@ -702,9 +753,16 @@ async function main() {
   };
 
   await mkdir("data",{recursive:true});
+  await writeFile(PORT_MASTER_PATH,JSON.stringify({
+    generatedAt:seenAt,
+    policy:"append-only discovery; missing from latest cruise schedule does not delete port; retire only by explicit admin action",
+    ports
+  },null,2)+"\n");
+
   await writeFile("data/events.json",JSON.stringify({
-    generatedAt:new Date().toISOString(),
+    generatedAt:seenAt,
     area:"hiroshima",
+    ports,
     strategy:"playguide-first; verify with any independent second source including venue/promoter/another playguide",
     sources:SOURCES.map(({id,type,role,url,venue})=>({id,type,role,url,venue})),
     stats,errors,events
