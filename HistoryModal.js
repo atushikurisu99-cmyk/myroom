@@ -51,7 +51,7 @@ window.AppScreens.HistoryModal = (() => {
                 <button
                   type="button"
                   onClick={closeHistoryModal}
-                  className="min-h-[44px] px-3 py-2 rounded-xl bg-slate-100 text-slate-700 tx-sm font-semibold"
+                  className="ui-tap px-3 py-2 rounded-xl bg-slate-100 text-slate-700 tx-sm font-semibold"
                 >
                   閉じる
                 </button>
@@ -65,7 +65,7 @@ window.AppScreens.HistoryModal = (() => {
                         key={mode}
                         type="button"
                         onClick={() => setHistoryMode(mode)}
-                        className={`h-[44px] rounded-2xl tx-sm font-bold border ${
+                        className={`h-[48px] rounded-2xl tx-sm font-bold border ${
                           historyMode === mode
                             ? "bg-slate-800 text-white border-slate-800"
                             : "bg-slate-100 text-slate-700 border-slate-200"
@@ -81,17 +81,17 @@ window.AppScreens.HistoryModal = (() => {
                   <button
                     type="button"
                     onClick={() => moveHistoryPeriod(-1)}
-                    className="h-[44px] rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 tx-lg font-bold"
+                    className="h-[48px] rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 tx-lg font-bold"
                   >
                     ←
                   </button>
-                  <div className="h-[44px] rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center px-3 tx-sm font-bold text-slate-800">
+                  <div className="h-[48px] rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center px-3 tx-sm font-bold text-slate-800">
                     {getHistoryPeriodText()}
                   </div>
                   <button
                     type="button"
                     onClick={() => moveHistoryPeriod(1)}
-                    className="h-[44px] rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 tx-lg font-bold"
+                    className="h-[48px] rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 tx-lg font-bold"
                   >
                     →
                   </button>
@@ -103,7 +103,7 @@ window.AppScreens.HistoryModal = (() => {
                       key={value}
                       type="button"
                       onClick={() => setHistoryFilter(value)}
-                      className={`h-[44px] rounded-2xl tx-sm font-bold border ${
+                      className={`h-[48px] rounded-2xl tx-sm font-bold border ${
                         historyFilter === value
                           ? "bg-sky-500 text-white border-sky-500"
                           : "bg-white text-slate-700 border-slate-200"
@@ -208,7 +208,7 @@ window.AppScreens.HistoryModal = (() => {
                 <button
                   type="button"
                   onClick={closeEditRecord}
-                  className="min-h-[44px] px-3 py-2 rounded-xl bg-slate-100 text-slate-700 tx-sm font-semibold"
+                  className="ui-tap px-3 py-2 rounded-xl bg-slate-100 text-slate-700 tx-sm font-semibold"
                 >
                   戻る
                 </button>
@@ -216,7 +216,7 @@ window.AppScreens.HistoryModal = (() => {
                 <button
                   type="button"
                   onClick={saveEditedRecord}
-                  className="min-h-[44px] px-3 py-2 rounded-xl bg-sky-500 text-white tx-sm font-bold"
+                  className="ui-tap px-3 py-2 rounded-xl bg-sky-500 text-white tx-sm font-bold"
                 >
                   保存
                 </button>
