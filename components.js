@@ -714,7 +714,7 @@ window.AppComponents = (() => {
         onClick={onClose}
       >
         <div
-          className="w-full rounded-t-[28px] bg-white shadow-2xl overflow-hidden"
+          className="w-full max-h-[88vh] rounded-t-[28px] bg-white shadow-2xl overflow-y-auto"
           onClick={(e) => e.stopPropagation()}
           style={{
             animation: "otherSheetUp 220ms cubic-bezier(0.22,1,0.36,1)",
@@ -775,6 +775,8 @@ window.AppComponents = (() => {
     selectedTemplate,
     onSelectTemplate,
     records = [],
+    businessProfile = {},
+    onBusinessProfileChange,
   }) {
     if (!show) return null;
 
@@ -813,6 +815,45 @@ window.AppComponents = (() => {
               >
                 閉じる
               </button>
+            </div>
+
+            <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
+              <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
+                <div className="text-sm font-bold text-slate-800">日報の固定情報</div>
+                <div className="mt-1 text-xs text-slate-500">一度登録すれば毎日の日報へ自動反映</div>
+              </div>
+              <div className="p-4 grid gap-3">
+                <label className="grid gap-1">
+                  <span className="text-xs font-bold text-slate-600">登録番号</span>
+                  <input
+                    type="text"
+                    value={businessProfile.registrationNumber || ""}
+                    onChange={(e) => onBusinessProfileChange?.("registrationNumber", e.target.value)}
+                    className="h-[44px] rounded-xl border border-slate-300 px-3 text-base outline-none"
+                    placeholder="登録番号"
+                  />
+                </label>
+                <label className="grid gap-1">
+                  <span className="text-xs font-bold text-slate-600">氏名または名称</span>
+                  <input
+                    type="text"
+                    value={businessProfile.name || ""}
+                    onChange={(e) => onBusinessProfileChange?.("name", e.target.value)}
+                    className="h-[44px] rounded-xl border border-slate-300 px-3 text-base outline-none"
+                    placeholder="氏名または名称"
+                  />
+                </label>
+                <label className="grid gap-1">
+                  <span className="text-xs font-bold text-slate-600">事業者名</span>
+                  <input
+                    type="text"
+                    value={businessProfile.businessName || ""}
+                    onChange={(e) => onBusinessProfileChange?.("businessName", e.target.value)}
+                    className="h-[44px] rounded-xl border border-slate-300 px-3 text-base outline-none"
+                    placeholder="事業者名"
+                  />
+                </label>
+              </div>
             </div>
 
             <div className="mt-4 grid gap-3">
