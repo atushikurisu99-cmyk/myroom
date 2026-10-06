@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T00:52:38.073Z",
+  "generatedAt": "2026-10-06T10:15:09.878Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -118,13 +118,26 @@
       "type": "team",
       "role": "discovery",
       "url": "https://www.sanfrecce.co.jp/matches/results"
+    },
+    {
+      "id": "thunders",
+      "type": "team",
+      "role": "discovery",
+      "url": "https://www.hiroshima-thunders.com/game/score/2026/index.html"
+    },
+    {
+      "id": "icch",
+      "type": "venue",
+      "role": "discovery",
+      "url": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "venue": "広島国際会議場"
     }
   ],
   "stats": {
-    "discovered": 120,
+    "discovered": 138,
     "confirmed": 38,
     "candidate": 69,
-    "official": 13,
+    "official": 31,
     "playguideBased": 107
   },
   "errors": [],
@@ -1273,6 +1286,26 @@
       }
     },
     {
+      "category": "sport",
+      "sport": "volleyball",
+      "date": "2026-10-31",
+      "start": "14:05",
+      "endEstimate": "16:35",
+      "title": "広島×東京GB",
+      "venue": "広島グリーンアリーナ",
+      "area": "広島市",
+      "sourceIds": [
+        "thunders"
+      ],
+      "sourceUrl": "https://www.hiroshima-thunders.com/game/score/2026/index.html",
+      "sourceTypes": [
+        "team"
+      ],
+      "confidence": "official",
+      "id": "sport-20261031-1405-e5ba83e5b3b6c397",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-10-31",
       "start": "17:30",
@@ -1382,6 +1415,26 @@
         "start": "13:00",
         "endEstimate": "15:35"
       }
+    },
+    {
+      "category": "sport",
+      "sport": "volleyball",
+      "date": "2026-11-01",
+      "start": "13:05",
+      "endEstimate": "15:35",
+      "title": "広島×東京GB",
+      "venue": "広島グリーンアリーナ",
+      "area": "広島市",
+      "sourceIds": [
+        "thunders"
+      ],
+      "sourceUrl": "https://www.hiroshima-thunders.com/game/score/2026/index.html",
+      "sourceTypes": [
+        "team"
+      ],
+      "confidence": "official",
+      "id": "sport-20261101-1305-e5ba83e5b3b6c397",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -2151,7 +2204,7 @@
       "date": "2026-11-21",
       "start": null,
       "endEstimate": null,
-      "title": "公演日: 2026/11/17(火) 会場: 広島文化学園HBGホール(広島県) 販売方法 先着 一般発売 受付期間 発売中 2026/9/11(金) 10:00 ~ 2026/11/9(月) 23:59 申込/詳細 お申し込みはこちら コ",
+      "title": "公演日: 2026/11/17(火) 会場: 広島文化学園HBGホール(広島県) 販売方法 先着 一般発売 受付期間 予定枚数終了 2026/9/11(金) 10:00 ~ 2026/11/9(月) 23:59 申込/詳細 詳細はこちら コ",
       "venue": "広島文化学園HBGホール",
       "area": "広島市",
       "sourceIds": [
@@ -2164,10 +2217,10 @@
       "confidence": "candidate",
       "id": "live-20261121-0000-e585ace6bc94e697",
       "verifiedBy": 1,
-      "artist": "公演日: 2026/11/17(火) 会場: 広島文化学園HBGホール(広島県) 販売方法 先着 一般発売 受付期間 発売中 2026/9/11(金) 10:00 ~ 2026/11/9(月) 23:59 申込/詳細 お申し込みはこちら コ",
+      "artist": "公演日: 2026/11/17(火) 会場: 広島文化学園HBGホール(広島県) 販売方法 先着 一般発売 受付期間 予定枚数終了 2026/9/11(金) 10:00 ~ 2026/11/9(月) 23:59 申込/詳細 詳細はこちら コ",
       "calendarDisplay": {
         "date": "2026-11-21",
-        "artist": "公演日: 2026/11/17(火) 会場: 広島文化学園HBGホール(広島県) 販売方法 先着 一般発売 受付期間 発売中 2026/9/11(金) 10:00 ~ 2026/11/9(月) 23:59 申込/詳細 お申し込みはこちら コ",
+        "artist": "公演日: 2026/11/17(火) 会場: 広島文化学園HBGホール(広島県) 販売方法 先着 一般発売 受付期間 予定枚数終了 2026/9/11(金) 10:00 ~ 2026/11/9(月) 23:59 申込/詳細 詳細はこちら コ",
         "venue": "広島文化学園HBGホール",
         "start": null,
         "endEstimate": null
@@ -2219,6 +2272,26 @@
       ],
       "confidence": "official",
       "id": "sport-20261121-1400-e5ba83e5b3b6c397",
+      "verifiedBy": 1
+    },
+    {
+      "category": "sport",
+      "sport": "volleyball",
+      "date": "2026-11-21",
+      "start": "14:05",
+      "endEstimate": "16:35",
+      "title": "広島×ヴォレアス",
+      "venue": "広島サンプラザホール",
+      "area": "広島市",
+      "sourceIds": [
+        "thunders"
+      ],
+      "sourceUrl": "https://www.hiroshima-thunders.com/game/score/2026/index.html",
+      "sourceTypes": [
+        "team"
+      ],
+      "confidence": "official",
+      "id": "sport-20261121-1405-e5ba83e5b3b6c397",
       "verifiedBy": 1
     },
     {
@@ -2330,6 +2403,26 @@
         "start": "13:00",
         "endEstimate": "15:35"
       }
+    },
+    {
+      "category": "sport",
+      "sport": "volleyball",
+      "date": "2026-11-22",
+      "start": "14:05",
+      "endEstimate": "16:35",
+      "title": "広島×ヴォレアス",
+      "venue": "広島サンプラザホール",
+      "area": "広島市",
+      "sourceIds": [
+        "thunders"
+      ],
+      "sourceUrl": "https://www.hiroshima-thunders.com/game/score/2026/index.html",
+      "sourceTypes": [
+        "team"
+      ],
+      "confidence": "official",
+      "id": "sport-20261122-1405-e5ba83e5b3b6c397",
+      "verifiedBy": 1
     },
     {
       "category": "live",
