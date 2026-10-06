@@ -41,7 +41,7 @@ window.AppScreens.StandbyScreen = (() => {
     return (
       <div
         style={{
-          height: "124px",
+          height: "136px",
           borderRadius: "12px",
           background: "#ffffff",
           boxShadow: "0 7px 18px rgba(0,0,0,0.08)",
@@ -50,15 +50,15 @@ window.AppScreens.StandbyScreen = (() => {
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "8px" }}>
-          <div style={{ fontSize: "13px", fontWeight: 900, color: "#334155", whiteSpace: "nowrap" }}>{label}</div>
-          <div style={{ fontSize: "12px", fontWeight: 800, color: "#7a869f", whiteSpace: "nowrap" }}>
+          <div style={{ fontSize: "var(--tx-xs)", fontWeight: 900, color: "#334155", whiteSpace: "nowrap" }}>{label}</div>
+          <div style={{ fontSize: "var(--tx-xs)", fontWeight: 800, color: "#7a869f", whiteSpace: "nowrap" }}>
             {event ? event.date.slice(5).replace("-", "/") : ""}
           </div>
         </div>
         <div
           style={{
             marginTop: "12px",
-            fontSize: "17px",
+            fontSize: "var(--tx-md)",
             lineHeight: 1.05,
             fontWeight: 900,
             color: "#1f2a44",
@@ -72,7 +72,7 @@ window.AppScreens.StandbyScreen = (() => {
         <div
           style={{
             marginTop: "9px",
-            fontSize: "12px",
+            fontSize: "var(--tx-xs)",
             lineHeight: 1.1,
             fontWeight: 700,
             color: "#6e7a93",
@@ -83,7 +83,7 @@ window.AppScreens.StandbyScreen = (() => {
         >
           {venue}
         </div>
-        <div style={{ marginTop: "8px", fontSize: "12px", fontWeight: 900, color: "#445673", whiteSpace: "nowrap" }}>
+        <div style={{ marginTop: "8px", fontSize: "var(--tx-xs)", fontWeight: 900, color: "#445673", whiteSpace: "nowrap" }}>
           {time}
         </div>
       </div>
