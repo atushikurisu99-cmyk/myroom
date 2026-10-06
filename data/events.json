@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T10:30:58.693Z",
+  "generatedAt": "2026-10-06T10:32:57.212Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -138,17 +138,47 @@
       "role": "discovery",
       "url": "https://sangyoukaikan.jp/event/",
       "venue": "広島県立広島産業会館"
+    },
+    {
+      "id": "hiroshima-port-cruise",
+      "type": "port",
+      "role": "discovery",
+      "url": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "venue": "広島港"
     }
   ],
   "stats": {
-    "discovered": 232,
+    "discovered": 247,
     "confirmed": 38,
     "candidate": 74,
-    "official": 120,
+    "official": 135,
     "playguideBased": 106
   },
   "errors": [],
   "events": [
+    {
+      "category": "cruise",
+      "date": "2026-10-05",
+      "start": "09:00",
+      "endEstimate": "19:00",
+      "departureDate": "2026-10-05",
+      "title": "Diamond Princess",
+      "ship": "Diamond Princess",
+      "venue": "広島港・宇品外貿第5バース",
+      "area": "広島市",
+      "previousPort": "高知",
+      "nextPort": "釜山",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261005-0900-6469616d6f6e6470",
+      "verifiedBy": 1
+    },
     {
       "category": "convention",
       "date": "2026-10-06",
@@ -196,6 +226,29 @@
         "start": null,
         "endEstimate": null
       }
+    },
+    {
+      "category": "cruise",
+      "date": "2026-10-08",
+      "start": "08:00",
+      "endEstimate": "17:00",
+      "departureDate": "2026-10-08",
+      "title": "Silver Moon",
+      "ship": "Silver Moon",
+      "venue": "広島港・五日市岸壁",
+      "area": "広島市",
+      "previousPort": "高知",
+      "nextPort": "釜山",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261008-0800-73696c7665726d6f",
+      "verifiedBy": 1
     },
     {
       "category": "convention",
@@ -317,6 +370,29 @@
         "start": null,
         "endEstimate": null
       }
+    },
+    {
+      "category": "cruise",
+      "date": "2026-10-10",
+      "start": "09:30",
+      "endEstimate": "21:00",
+      "departureDate": "2026-10-10",
+      "title": "Celebrity Millennium",
+      "ship": "Celebrity Millennium",
+      "venue": "広島港・宇品外貿第5バース",
+      "area": "広島市",
+      "previousPort": "鹿児島",
+      "nextPort": "京都",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261010-0930-63656c6562726974",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -569,6 +645,52 @@
         "start": "17:30",
         "endEstimate": "19:50"
       }
+    },
+    {
+      "category": "cruise",
+      "date": "2026-10-13",
+      "start": "08:00",
+      "endEstimate": "18:00",
+      "departureDate": "2026-10-13",
+      "title": "Luminara",
+      "ship": "Luminara",
+      "venue": "広島港・宇品外貿第5バース",
+      "area": "広島市",
+      "previousPort": "神戸",
+      "nextPort": "福岡",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261013-0800-6c756d696e617261",
+      "verifiedBy": 1
+    },
+    {
+      "category": "cruise",
+      "date": "2026-10-14",
+      "start": "10:00",
+      "endEstimate": "19:00",
+      "departureDate": "2026-10-14",
+      "title": "Star Seeker",
+      "ship": "Star Seeker",
+      "venue": "広島港・宇品外貿第5バース",
+      "area": "広島市",
+      "previousPort": "唐津",
+      "nextPort": "高松",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261014-1000-737461727365656b",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -877,7 +999,7 @@
       "date": "2026-10-17",
       "start": "14:00",
       "endEstimate": "16:00",
-      "title": "広島×対戦",
+      "title": "広島×京都サンガF.C.",
       "venue": "Eピース",
       "area": "広島市",
       "sourceIds": [
@@ -1059,6 +1181,29 @@
       "verifiedBy": 1
     },
     {
+      "category": "cruise",
+      "date": "2026-10-18",
+      "start": "08:00",
+      "endEstimate": "17:00",
+      "departureDate": "2026-10-18",
+      "title": "Star Seeker",
+      "ship": "Star Seeker",
+      "venue": "広島港・宇品外貿第5バース",
+      "area": "広島市",
+      "previousPort": "高松",
+      "nextPort": "唐津",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261018-0800-737461727365656b",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-10-18",
       "start": "13:00",
@@ -1210,6 +1355,29 @@
       "verifiedBy": 1
     },
     {
+      "category": "cruise",
+      "date": "2026-10-20",
+      "start": "08:00",
+      "endEstimate": "17:00",
+      "departureDate": "2026-10-20",
+      "title": "Silver Moon",
+      "ship": "Silver Moon",
+      "venue": "広島港・宇品外貿第5バース",
+      "area": "広島市",
+      "previousPort": "高知",
+      "nextPort": "福岡",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261020-0800-73696c7665726d6f",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-10-20",
       "start": "18:30",
@@ -1285,6 +1453,29 @@
       }
     },
     {
+      "category": "cruise",
+      "date": "2026-10-21",
+      "start": "14:00",
+      "endEstimate": "18:00",
+      "departureDate": "2026-10-22",
+      "title": "Viking Orion",
+      "ship": "Viking Orion",
+      "venue": "広島港・五日市岸壁",
+      "area": "広島市",
+      "previousPort": "大坂",
+      "nextPort": "別府",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261021-1400-76696b696e676f72",
+      "verifiedBy": 1
+    },
+    {
       "category": "sport",
       "sport": "basketball",
       "date": "2026-10-21",
@@ -1302,6 +1493,29 @@
       ],
       "confidence": "official",
       "id": "sport-20261021-1905-e5ba83e5b3b6c397",
+      "verifiedBy": 1
+    },
+    {
+      "category": "cruise",
+      "date": "2026-10-22",
+      "start": "09:00",
+      "endEstimate": "18:00",
+      "departureDate": "2026-10-22",
+      "title": "Celebrity Millennium",
+      "ship": "Celebrity Millennium",
+      "venue": "広島港・宇品外貿第5バース",
+      "area": "広島市",
+      "previousPort": "高知",
+      "nextPort": "釜山",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261022-0900-63656c6562726974",
       "verifiedBy": 1
     },
     {
@@ -1350,6 +1564,29 @@
       ],
       "confidence": "official",
       "id": "convention-20261023-0000-e8ada6e58299e593",
+      "verifiedBy": 1
+    },
+    {
+      "category": "cruise",
+      "date": "2026-10-23",
+      "start": "08:30",
+      "endEstimate": "18:00",
+      "departureDate": "2026-10-23",
+      "title": "Luminara",
+      "ship": "Luminara",
+      "venue": "広島港・五日市岸壁",
+      "area": "広島市",
+      "previousPort": "神戸",
+      "nextPort": "福岡",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261023-0830-6c756d696e617261",
       "verifiedBy": 1
     },
     {
@@ -1464,6 +1701,29 @@
       "verifiedBy": 1
     },
     {
+      "category": "cruise",
+      "date": "2026-10-24",
+      "start": "08:00",
+      "endEstimate": "17:00",
+      "departureDate": "2026-10-24",
+      "title": "Diamond Princess",
+      "ship": "Diamond Princess",
+      "venue": "広島港・宇品外貿第5バース",
+      "area": "広島市",
+      "previousPort": "釜山",
+      "nextPort": "油津",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261024-0800-6469616d6f6e6470",
+      "verifiedBy": 1
+    },
+    {
       "category": "convention",
       "date": "2026-10-24",
       "start": "11:30",
@@ -1515,7 +1775,7 @@
       "date": "2026-10-24",
       "start": "14:00",
       "endEstimate": "16:00",
-      "title": "広島×対戦",
+      "title": "広島×清水エスパルス",
       "venue": "Eピース",
       "area": "広島市",
       "sourceIds": [
@@ -1656,6 +1916,29 @@
       "verifiedBy": 1
     },
     {
+      "category": "cruise",
+      "date": "2026-10-25",
+      "start": "07:00",
+      "endEstimate": "16:00",
+      "departureDate": "2026-10-25",
+      "title": "Seven Seas Explorer",
+      "ship": "Seven Seas Explorer",
+      "venue": "広島港・宇品外貿第5バース",
+      "area": "広島市",
+      "previousPort": "高知",
+      "nextPort": "釜山",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261025-0700-736576656e736561",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-10-25",
       "start": "13:00",
@@ -1752,6 +2035,29 @@
       ],
       "confidence": "official",
       "id": "convention-20261026-0000-696374e38381e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "cruise",
+      "date": "2026-10-27",
+      "start": "18:00",
+      "endEstimate": "15:00",
+      "departureDate": "2026-10-28",
+      "title": "飛鳥 3",
+      "ship": "飛鳥 3",
+      "venue": "広島港・宇品外貿第5バース",
+      "area": "広島市",
+      "previousPort": "神戸",
+      "nextPort": "博多",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
+      "sourceTypes": [
+        "port"
+      ],
+      "confidence": "official",
+      "id": "cruise-20261027-1800-e9a39be9b3a533",
       "verifiedBy": 1
     },
     {
@@ -3449,7 +3755,7 @@
       "date": "2026-11-21",
       "start": "14:00",
       "endEstimate": "16:00",
-      "title": "広島×対戦",
+      "title": "広島×横浜F・マリノス",
       "venue": "Eピース",
       "area": "広島市",
       "sourceIds": [
@@ -4285,7 +4591,7 @@
       "date": "2026-12-06",
       "start": "14:00",
       "endEstimate": "16:00",
-      "title": "広島×対戦",
+      "title": "広島×ヴィッセル神戸",
       "venue": "Eピース",
       "area": "広島市",
       "sourceIds": [
