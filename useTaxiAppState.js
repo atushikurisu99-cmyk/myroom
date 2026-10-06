@@ -72,6 +72,12 @@ window.AppHooks = (() => {
 
     const [showFinishDialog, setShowFinishDialog] = useState(false);
     const [homeEndSheetOpen, setHomeEndSheetOpen] = useState(false);
+    const [showDutyStartDialog, setShowDutyStartDialog] = useState(false);
+    const [dutyStartOdometer, setDutyStartOdometer] = useState("");
+    const [alcoholChecked, setAlcoholChecked] = useState(false);
+    const [dailyInspections, setDailyInspections] = useState(
+      Array.isArray(persisted.dailyInspections) ? persisted.dailyInspections : []
+    );
 
     const [historyMode, setHistoryMode] = useState("day");
     const [historyFilter, setHistoryFilter] = useState("all");
@@ -153,6 +159,7 @@ window.AppHooks = (() => {
             records,
             viaStops,
             workDate,
+            dailyInspections,
           })
         );
       } catch (_) {}
@@ -171,6 +178,7 @@ window.AppHooks = (() => {
       records,
       viaStops,
       workDate,
+      dailyInspections,
     ]);
 
     useEffect(() => {
@@ -460,9 +468,41 @@ window.AppHooks = (() => {
 
     const handleCardModeNext = () => setCardMode((prev) => (prev >= 5 ? 1 : prev + 1));
 
-    const handleDutyStart = async () => {
+    const openDutyStartDialog = () => {
+      vibrateTap();
+      setDutyStartOdometer("");
+      setAlcoholChecked(false);
+      setShowDutyStartDialog(true);
+    };
+
+    const cancelDutyStartDialog = () => {
+      setShowDutyStartDialog(false);
+      setDutyStartOdometer("");
+      setAlcoholChecked(false);
+    };
+
+    const confirmDutyStart = async () => {
+      const numericOdometer = Number(dutyStartOdometer);
+      if (!numericOdometer || numericOdometer <= 0) return alert("出庫時距離を入力してください");
+      if (!alcoholChecked) return alert("アルコールチェックを確認してください");
+
       vibrateTap();
       const startDutyDate = new Date();
+      const dateKey = `${startDutyDate.getFullYear()}-${String(startDutyDate.getMonth()+1).padStart(2,"0")}-${String(startDutyDate.getDate()).padStart(2,"0")}`;
+
+      const inspection = {
+        id: dateKey,
+        date: startDutyDate,
+        odometerStart: numericOdometer,
+        alcoholChecked: true,
+        basicInspection: "ok",
+        updatedAt: new Date(),
+      };
+
+      setDailyInspections((prev) => [
+        inspection,
+        ...prev.filter((item) => item.id !== dateKey),
+      ]);
 
       setDutyStarted(true);
       setIsRiding(false);
@@ -477,6 +517,9 @@ window.AppHooks = (() => {
       setViaStops([]);
       setScreen("standby");
       setWorkDate(startDutyDate);
+      setShowDutyStartDialog(false);
+      setDutyStartOdometer("");
+      setAlcoholChecked(false);
 
       ensureWeatherFresh();
     };
@@ -512,7 +555,7 @@ window.AppHooks = (() => {
 
     const handleTopMain = () => {
       if (!dutyStarted) {
-        handleDutyStart();
+        openDutyStartDialog();
         return;
       }
 
@@ -791,6 +834,10 @@ window.AppHooks = (() => {
         historyUiMode,
         homeEndSheetOpen,
         records,
+        showDutyStartDialog,
+        dutyStartOdometer,
+        alcoholChecked,
+        dailyInspections,
       },
       derived: {
         timeParts,
@@ -815,6 +862,11 @@ window.AppHooks = (() => {
         performDutyEnd,
         handleFinishTap,
         handleTopMain,
+        openDutyStartDialog,
+        cancelDutyStartDialog,
+        confirmDutyStart,
+        setDutyStartOdometer,
+        setAlcoholChecked,
         handleStartRide,
         handleDropOffTap,
         handleAmountChange,
