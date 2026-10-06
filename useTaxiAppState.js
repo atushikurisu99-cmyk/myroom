@@ -790,6 +790,7 @@ window.AppHooks = (() => {
         weather,
         historyUiMode,
         homeEndSheetOpen,
+        records,
       },
       derived: {
         timeParts,
