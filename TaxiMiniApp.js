@@ -448,7 +448,6 @@ function TaxiMiniApp() {
           alcoholChecked={state.alcoholChecked}
           onOdometerChange={actions.setDutyStartOdometer}
           onAlcoholToggle={() => actions.setAlcoholChecked(!state.alcoholChecked)}
-          onCancel={actions.cancelDutyStartDialog}
           onConfirm={actions.confirmDutyStart}
         />
 
