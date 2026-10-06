@@ -10,6 +10,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: update-event-data
+  cancel-in-progress: true
+
 jobs:
   update-events:
     runs-on: ubuntu-latest
@@ -30,4 +34,5 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add data/events.json
           git commit -m "Update Hiroshima event data"
+          git pull --rebase origin main
           git push
