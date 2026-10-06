@@ -908,6 +908,94 @@ window.AppComponents = (() => {
     );
   }
 
+
+  function DutyStartDialog({
+    show,
+    date,
+    odometer,
+    alcoholChecked,
+    onOdometerChange,
+    onAlcoholToggle,
+    onCancel,
+    onConfirm,
+  }) {
+    if (!show) return null;
+
+    const weekdays = ["日","月","火","水","木","金","土"];
+    const d = date ? new Date(date) : new Date();
+    const dateLabel = `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${weekdays[d.getDay()]}）`;
+    const ready = Boolean(String(odometer || "").trim()) && alcoholChecked;
+
+    return (
+      <div className="absolute inset-0 z-50 bg-slate-900/45 flex items-end">
+        <div className="w-full rounded-t-[28px] bg-white shadow-2xl px-4 pt-3 pb-5">
+          <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
+
+          <div className="text-[18px] font-black text-slate-800">乗務開始前の確認</div>
+          <div className="mt-1 text-sm font-semibold text-slate-500">{dateLabel}</div>
+
+          <div className="mt-4 rounded-2xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
+              <div className="text-sm font-bold text-slate-800">日常点検</div>
+              <div className="mt-1 text-xs text-slate-500">基本項目はすべて「異常なし」で記録します</div>
+            </div>
+
+            <div className="px-4 py-3 flex items-center justify-between gap-3 border-b border-slate-100">
+              <div>
+                <div className="text-sm font-bold text-slate-800">アルコールチェック</div>
+                <div className="mt-1 text-xs text-slate-500">ここだけ毎回本人確認</div>
+              </div>
+              <button
+                type="button"
+                onClick={onAlcoholToggle}
+                className="min-w-[96px] h-[44px] rounded-xl font-bold"
+                style={{
+                  background: alcoholChecked ? "#0f172a" : "#f1f5f9",
+                  color: alcoholChecked ? "#fff" : "#475569",
+                }}
+              >
+                {alcoholChecked ? "確認済み" : "確認する"}
+              </button>
+            </div>
+
+            <div className="px-4 py-3">
+              <label className="text-sm font-bold text-slate-800">出庫時距離</label>
+              <div className="mt-2 flex items-center gap-2">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={odometer}
+                  onChange={(e) => onOdometerChange(e.target.value.replace(/[^\d]/g, ""))}
+                  placeholder="例 123456"
+                  className="w-full h-[48px] rounded-xl border border-slate-300 px-4 text-[18px] font-bold outline-none"
+                />
+                <span className="text-sm font-bold text-slate-500">km</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="h-[48px] rounded-2xl bg-slate-100 text-slate-700 font-bold"
+            >
+              戻る
+            </button>
+            <button
+              type="button"
+              onClick={onConfirm}
+              disabled={!ready}
+              className="h-[48px] rounded-2xl bg-slate-800 text-white font-bold disabled:opacity-40"
+            >
+              乗務開始
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   function PaymentDialog({
     amount,
     pickupMeta,
@@ -1020,6 +1108,7 @@ window.AppComponents = (() => {
     MainButton,
     OtherSheet,
     ReportTemplateSettingsSheet,
+    DutyStartDialog,
     PaymentDialog,
     ViaDialog,
     FinishDialog,
