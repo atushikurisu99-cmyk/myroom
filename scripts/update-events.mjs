@@ -295,17 +295,25 @@ function parseSevenUeno(html, year, source) {
 }
 
 function parseDragonflies(html, year, source) {
-  const text=clean(html);
   const out=[];
-  const re=/(HOME|AWAY)[\s\S]{0,100}?(\d{1,2})\/(\d{1,2})[^0-9]{0,12}(\d{1,2}:\d{2})[\s\S]{0,120}?(広島グリーンアリーナ|広島サンプラザホール|エフピコアリーナふくやま)/g;
-  let m;
-  while ((m=re.exec(text))) {
-    if (m[1]!=="HOME") continue;
-    const around=text.slice(m.index,Math.min(text.length,re.lastIndex+100));
-    const opponent=(around.match(/(?:広島\s*){1,2}([^ ]{1,12})/)||[])[1]||"対戦";
+  const itemRe=/<li\b[^>]*class="[^"]*p-schedule__item[^"]*"[^>]*>([\s\S]*?)<\/li>/gi;
+  let im;
+  while ((im=itemRe.exec(html))) {
+    const block=im[1];
+    if (!/>HOME<\/span>/.test(block)) continue;
+
+    const dm=(block.match(/p-schedule__date[^>]*>\s*(\d{1,2})\/(\d{1,2})[\s\S]{0,80}?(\d{1,2}:\d{2})<\/div>/i)||[]);
+    const venue=clean((block.match(/p-schedule__venue[\s\S]*?<p>([\s\S]*?)<\/p>/i)||[])[1]||"");
+    const clubs=[...block.matchAll(/<div class="p-schedule__club">[\s\S]*?<p>([^<]+)<\/p>/gi)]
+      .map(x=>clean(x[1])).filter(Boolean);
+    if (!dm[1] || !dm[2] || !dm[3] || !venue) continue;
+
+    const opponent=clubs.find(x=>x!=="広島")||"";
+    if (!opponent) continue;
+
     const e={
-      category:"sport", sport:"basketball", date:isoDate(year,m[2],m[3]), start:m[4], endEstimate:null,
-      title:`広島×${opponent}`, venue:canonicalVenue(m[5]), area:m[5].includes("ふくやま")?"福山市":"広島市",
+      category:"sport", sport:"basketball", date:isoDate(year,dm[1],dm[2]), start:dm[3], endEstimate:null,
+      title:`広島×${opponent}`, venue:canonicalVenue(venue), area:venue.includes("ふくやま")?"福山市":"広島市",
       sourceIds:[source.id], sourceUrl:source.url, sourceTypes:["team"], confidence:"official"
     };
     e.id=makeId(e);
@@ -568,7 +576,7 @@ async function main() {
       if (s.id.startsWith("eplus-")) discovered.push(...parseEplusVenue(html,s));
       else if (s.id.startsWith("lawson-")) discovered.push(...parseLawsonVenue(html,s));
       else if (s.id==="seven-ueno") discovered.push(...parseSevenUeno(html,year,s));
-      else if (s.id==="dragonflies") { const p=html.indexOf("10/10"); console.log("DRAGON_HTML_START", p>=0?html.slice(Math.max(0,p-3500),p+7000):html.slice(0,12000), "DRAGON_HTML_END"); discovered.push(...parseDragonflies(html,year,s)); }
+      else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
       else if (s.id==="thunders") discovered.push(...parseThunders(html,now,s));
       else if (s.id==="icch") discovered.push(...parseIcch(html,s));
