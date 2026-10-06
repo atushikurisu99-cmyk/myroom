@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T10:16:56.614Z",
+  "generatedAt": "2026-10-06T10:18:25.992Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -134,9 +134,9 @@
     }
   ],
   "stats": {
-    "discovered": 138,
+    "discovered": 167,
     "confirmed": 38,
-    "candidate": 69,
+    "candidate": 98,
     "official": 31,
     "playguideBased": 107
   },
@@ -168,6 +168,25 @@
         "start": null,
         "endEstimate": null
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-08",
+      "start": "9:00",
+      "endEstimate": "19:00",
+      "title": "第65回日本鼻科学会総会・学術講演会",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261008-900-e7acac3635e59b9e",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -224,6 +243,25 @@
         "start": "13:30",
         "endEstimate": "16:05"
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-09",
+      "start": "9:00",
+      "endEstimate": "19:00",
+      "title": "第65回日本鼻科学会総会・学術講演会",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261009-900-e7acac3635e59b9e",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -353,6 +391,25 @@
         "start": "17:30",
         "endEstimate": "20:05"
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-10",
+      "start": "9:00",
+      "endEstimate": "19:00",
+      "title": "第65回日本鼻科学会総会・学術講演会",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261010-900-e7acac3635e59b9e",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -546,6 +603,25 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-10-16",
+      "start": "8:30",
+      "endEstimate": "17:30",
+      "title": "第69回秋季日本歯周病学会学術大会",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261016-830-e7acac3639e59b9e",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-10-17",
       "start": null,
@@ -705,6 +781,25 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-10-17",
+      "start": "8:30",
+      "endEstimate": "17:30",
+      "title": "第69回秋季日本歯周病学会学術大会",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261017-830-e7acac3639e59b9e",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-10-18",
       "start": "13:00",
@@ -729,6 +824,33 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
+      }
+    },
+    {
+      "category": "live",
+      "date": "2026-10-18",
+      "start": "16:00",
+      "endEstimate": "19:00",
+      "title": "イケ・ポノ・マ・イアパナ 2026 広島公演",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261018-1600-e382a4e382b1e383",
+      "verifiedBy": 1,
+      "artist": "イケ・ポノ・マ・イアパナ 2026 広島公演",
+      "calendarDisplay": {
+        "date": "2026-10-18",
+        "artist": "イケ・ポノ・マ・イアパナ 2026 広島公演",
+        "venue": "広島国際会議場",
+        "start": "16:00",
+        "endEstimate": "19:00"
       }
     },
     {
@@ -934,6 +1056,25 @@
         "start": "13:30",
         "endEstimate": "16:05"
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-24",
+      "start": "11:30",
+      "endEstimate": "15:00",
+      "title": "合同企業説明会 広島適職フェア",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261024-1130-e59088e5908ce4bc",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -1233,6 +1374,33 @@
     },
     {
       "category": "live",
+      "date": "2026-10-30",
+      "start": "18:00",
+      "endEstimate": "20:00",
+      "title": "2026 平和文化月間オープニングイベント「未来へ響け 平和文化」 ~山下一史氏の指揮による東京混声合唱団・広島大学吹奏楽団コンサート~",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261030-1800-32303236e5b9b3e5",
+      "verifiedBy": 1,
+      "artist": "2026 平和文化月間オープニングイベント「未来へ響け 平和文化」 ~山下一史氏の指揮による東京混声合唱団・広島大学吹奏楽団コンサート~",
+      "calendarDisplay": {
+        "date": "2026-10-30",
+        "artist": "2026 平和文化月間オープニングイベント「未来へ響け 平和文化」 ~山下一史氏の指揮による東京混声合唱団・広島大学吹奏楽団コンサート~",
+        "venue": "広島国際会議場",
+        "start": "18:00",
+        "endEstimate": "20:00"
+      }
+    },
+    {
+      "category": "live",
       "date": "2026-10-31",
       "start": null,
       "endEstimate": null,
@@ -1304,6 +1472,33 @@
       "confidence": "official",
       "id": "sport-20261031-1405-e5ba83e5b3b6c397",
       "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-10-31",
+      "start": "15:00",
+      "endEstimate": "17:00",
+      "title": "音楽の花束〈秋〉~広響名曲コンサート",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261031-1500-e99fb3e6a5bde381",
+      "verifiedBy": 1,
+      "artist": "音楽の花束〈秋〉~広響名曲コンサート",
+      "calendarDisplay": {
+        "date": "2026-10-31",
+        "artist": "音楽の花束〈秋〉~広響名曲コンサート",
+        "venue": "広島国際会議場",
+        "start": "15:00",
+        "endEstimate": "17:00"
+      }
     },
     {
       "category": "live",
@@ -1462,6 +1657,33 @@
         "venue": "広島クラブクアトロ",
         "start": "17:30",
         "endEstimate": "19:50"
+      }
+    },
+    {
+      "category": "live",
+      "date": "2026-11-01",
+      "start": "18:00",
+      "endEstimate": "20:00",
+      "title": "水谷千重子の宴ジョインコンサート2026",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261101-1800-e6b0b4e8b0b7e58d",
+      "verifiedBy": 1,
+      "artist": "水谷千重子の宴ジョインコンサート2026",
+      "calendarDisplay": {
+        "date": "2026-11-01",
+        "artist": "水谷千重子の宴ジョインコンサート2026",
+        "venue": "広島国際会議場",
+        "start": "18:00",
+        "endEstimate": "20:00"
       }
     },
     {
@@ -1678,6 +1900,33 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
+      }
+    },
+    {
+      "category": "live",
+      "date": "2026-11-07",
+      "start": "13:00",
+      "endEstimate": "15:30",
+      "title": "HOME爆笑スペシャル 桂文珍独演会",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261107-1300-686f6d65e78886e7",
+      "verifiedBy": 1,
+      "artist": "HOME爆笑スペシャル 桂文珍独演会",
+      "calendarDisplay": {
+        "date": "2026-11-07",
+        "artist": "HOME爆笑スペシャル 桂文珍独演会",
+        "venue": "広島国際会議場",
+        "start": "13:00",
+        "endEstimate": "15:30"
       }
     },
     {
@@ -2035,6 +2284,25 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-11-15",
+      "start": "10:00",
+      "endEstimate": "16:00",
+      "title": "国際フェスタ2026",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261115-1000-e59bbde99a9be383",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-11-15",
       "start": "13:00",
@@ -2118,6 +2386,25 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-11-19",
+      "start": null,
+      "endEstimate": null,
+      "title": "プラスチック成形加工学会 第34回秋季大会 成形加工シンポジア ’26",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261119-0000-e38397e383a9e382",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-11-19",
       "start": "13:30",
@@ -2143,6 +2430,25 @@
         "start": "13:30",
         "endEstimate": "16:05"
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-20",
+      "start": null,
+      "endEstimate": null,
+      "title": "プラスチック成形加工学会 第34回秋季大会 成形加工シンポジア ’26",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261120-0000-e38397e383a9e382",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -2405,6 +2711,33 @@
       }
     },
     {
+      "category": "live",
+      "date": "2026-11-22",
+      "start": "14:00",
+      "endEstimate": "16:00",
+      "title": "広島市民オーケストラ 第30回記念定期演奏会",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261122-1400-e5ba83e5b3b6e5b8",
+      "verifiedBy": 1,
+      "artist": "広島市民オーケストラ 第30回記念定期演奏会",
+      "calendarDisplay": {
+        "date": "2026-11-22",
+        "artist": "広島市民オーケストラ 第30回記念定期演奏会",
+        "venue": "広島国際会議場",
+        "start": "14:00",
+        "endEstimate": "16:00"
+      }
+    },
+    {
       "category": "sport",
       "sport": "volleyball",
       "date": "2026-11-22",
@@ -2591,6 +2924,25 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-11-29",
+      "start": "10:00",
+      "endEstimate": "13:00",
+      "title": "日本整形外科学会100周年記念事業 市民公開講座in広島",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261129-1000-e697a5e69cace695",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-11-29",
       "start": "17:00",
@@ -2619,6 +2971,44 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-11-30",
+      "start": "9:20",
+      "endEstimate": "18:00",
+      "title": "応用物理学会 先進パワー半導体分科会第13回講演会",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261130-920-e5bf9ce794a8e789",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-12-01",
+      "start": "9:20",
+      "endEstimate": "18:00",
+      "title": "応用物理学会 先進パワー半導体分科会第13回講演会",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261201-920-e5bf9ce794a8e789",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-12-02",
       "start": null,
@@ -2644,6 +3034,25 @@
         "start": null,
         "endEstimate": null
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-12-02",
+      "start": "9:20",
+      "endEstimate": "18:00",
+      "title": "応用物理学会 先進パワー半導体分科会第13回講演会",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "candidate",
+      "id": "convention-20261202-920-e5bf9ce794a8e789",
+      "verifiedBy": 1
     },
     {
       "category": "live",
