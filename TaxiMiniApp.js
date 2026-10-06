@@ -15,8 +15,7 @@ const RideScreen = window.AppScreens.RideScreen;
 const FareScreen = window.AppScreens.FareScreen;
 const HistoryModal = window.AppScreens.HistoryModal;
 
-function SalesNotificationLayer() {
-  const [events, setEvents] = useState([]);
+function SalesNotificationLayer({ events = [] }) {
   const [now, setNow] = useState(new Date());
   const [dismissed, setDismissed] = useState(() => {
     try { return new Set(JSON.parse(sessionStorage.getItem("salesNavDismissedAlerts") || "[]")); }
@@ -24,23 +23,8 @@ function SalesNotificationLayer() {
   });
 
   useEffect(() => {
-    let alive = true;
-    const load = () => {
-      fetch(`./data/events.json?v=${Date.now()}`, { cache: "no-store" })
-        .then((r) => (r.ok ? r.json() : Promise.reject(new Error("events fetch failed"))))
-        .then((data) => {
-          if (alive) setEvents(Array.isArray(data?.events) ? data.events : []);
-        })
-        .catch(() => {});
-    };
-    load();
-    const eventTimer = setInterval(load, 5 * 60 * 1000);
     const clockTimer = setInterval(() => setNow(new Date()), 60 * 1000);
-    return () => {
-      alive = false;
-      clearInterval(eventTimer);
-      clearInterval(clockTimer);
-    };
+    return () => clearInterval(clockTimer);
   }, []);
 
   const dateKey = (d) =>
@@ -209,6 +193,47 @@ function TaxiMiniApp() {
   const [startupPhase, setStartupPhase] = useState("logo");
   const [startupStage, setStartupStage] = useState(0);
 
+  const [eventFeed, setEventFeed] = useState(() => {
+    try {
+      const cached = JSON.parse(localStorage.getItem("taxiSalesEventFeed") || "null");
+      return Array.isArray(cached?.events) ? cached.events : [];
+    } catch (_) {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    let alive = true;
+
+    const loadEventFeed = () => {
+      fetch("./data/events.json", { cache: "no-cache" })
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error("events fetch failed"))))
+        .then((data) => {
+          if (!alive) return;
+          const next = Array.isArray(data?.events) ? data.events : [];
+          setEventFeed(next);
+          try {
+            localStorage.setItem("taxiSalesEventFeed", JSON.stringify({
+              generatedAt: data?.generatedAt || null,
+              savedAt: Date.now(),
+              events: next,
+            }));
+          } catch (_) {}
+        })
+        .catch(() => {});
+    };
+
+    // 起動画面を見ている間に先読み。前回キャッシュがあれば即時表示し、
+    // 最新データだけバックグラウンドで差し替える。
+    loadEventFeed();
+    const timer = setInterval(loadEventFeed, 5 * 60 * 1000);
+
+    return () => {
+      alive = false;
+      clearInterval(timer);
+    };
+  }, []);
+
   useEffect(() => {
     const timers = [];
 
@@ -349,7 +374,7 @@ function TaxiMiniApp() {
         )}
 
         {startupPhase === "done" && (state.screen === "standby" || state.screen === "ride") && (
-          <SalesNotificationLayer />
+          <SalesNotificationLayer events={eventFeed} />
         )}
 
         <OtherSheet
@@ -449,6 +474,7 @@ function TaxiMiniApp() {
 
         {state.screen === "standby" && (
           <StandbyScreen
+            events={eventFeed}
             handleStartRide={actions.handleStartRide}
             homeEndSheetOpen={state.homeEndSheetOpen}
             handleFinishTap={actions.handleFinishTap}
