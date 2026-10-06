@@ -5,6 +5,7 @@ const {
   HeaderCard,
   BottomNav,
   OtherSheet,
+  ReportTemplateSettingsSheet,
   PaymentDialog,
   ViaDialog,
   FinishDialog,
@@ -192,6 +193,14 @@ function TaxiMiniApp() {
 
   const [startupPhase, setStartupPhase] = useState("logo");
   const [startupStage, setStartupStage] = useState(0);
+  const [showReportTemplateSettings, setShowReportTemplateSettings] = useState(false);
+  const [reportTemplate, setReportTemplate] = useState(() => {
+    try {
+      return localStorage.getItem("taxiReportTemplate") || "hiroshima-sogo";
+    } catch (_) {
+      return "hiroshima-sogo";
+    }
+  });
 
   const [eventFeed, setEventFeed] = useState(() => {
     try {
@@ -395,6 +404,22 @@ function TaxiMiniApp() {
           onClose={actions.closeOtherSheet}
           openHistoryFull={actions.openHistoryFullFromMenu}
           onShowSoon={actions.showSoonToast}
+          onOpenSettings={() => {
+            actions.closeOtherSheet();
+            setShowReportTemplateSettings(true);
+          }}
+        />
+
+        <ReportTemplateSettingsSheet
+          show={showReportTemplateSettings}
+          onClose={() => setShowReportTemplateSettings(false)}
+          selectedTemplate={reportTemplate}
+          onSelectTemplate={(templateId) => {
+            setReportTemplate(templateId);
+            try {
+              localStorage.setItem("taxiReportTemplate", templateId);
+            } catch (_) {}
+          }}
         />
 
         {state.showPaymentDialog && (
