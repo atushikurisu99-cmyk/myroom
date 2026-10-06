@@ -388,6 +388,49 @@ function parseIcch(html, source) {
   return out;
 }
 
+function parseSangyo(html, source) {
+  const out=[];
+  const blockRe=/<div class="event__list__item[^"]*"[^>]*>([\s\S]*?)(?=<div class="event__list__item|$)/gi;
+  let bm;
+  while ((bm=blockRe.exec(html))) {
+    const block=bm[1];
+    const title=clean((block.match(/<h2\b[^>]*class="event__ttl"[^>]*>([\s\S]*?)<\/h2>/i)||[])[1]||"")
+      .normalize("NFKC").replace(/\s+/g," ").trim();
+    const period=clean((block.match(/<p\b[^>]*class="event__period"[^>]*>([\s\S]*?)<\/p>/i)||[])[1]||"")
+      .normalize("NFKC").replace(/\s+/g," ").trim();
+    const href=(block.match(/<a\b[^>]*href=["']([^"']+)["']/i)||[])[1]||source.url;
+    const genre=clean((block.match(/<p\b[^>]*class="event__category genre[^"]*"[^>]*>([\s\S]*?)<\/p>/i)||[])[1]||"")
+      .normalize("NFKC").trim();
+    const places=[...block.matchAll(/<p\b[^>]*class="event__category place"[^>]*>([\s\S]*?)<\/p>/gi)]
+      .map(x=>clean(x[1]).normalize("NFKC").trim()).filter(Boolean);
+
+    const dates=[...period.matchAll(/(20\d{2})年(\d{1,2})月(\d{1,2})日/g)];
+    if (!title || !dates.length) continue;
+
+    const first=new Date(Date.UTC(Number(dates[0][1]),Number(dates[0][2])-1,Number(dates[0][3])));
+    const last=dates[1]
+      ? new Date(Date.UTC(Number(dates[1][1]),Number(dates[1][2])-1,Number(dates[1][3])))
+      : first;
+
+    for (let d=new Date(first); d<=last; d=new Date(d.getTime()+86400000)) {
+      const e={
+        category:"convention",
+        date:isoDate(d.getUTCFullYear(),d.getUTCMonth()+1,d.getUTCDate()),
+        start:null, endEstimate:null,
+        title, venue:"広島県立広島産業会館", subVenue:places.join("・")||null,
+        eventType:genre||null, area:"広島市",
+        sourceIds:[source.id], sourceUrl:href, sourceTypes:["venue"], confidence:"official"
+      };
+      e.id=makeId(e);
+      out.push(e);
+    }
+  }
+
+  const unique=new Map();
+  for (const e of out) unique.set([e.date,e.venue,normalizeTitle(e.title)].join("|"),e);
+  return [...unique.values()];
+}
+
 function sourceConfirmsEvent(text,e,source) {
   if (!text) return false;
   if (source.venue && canonicalVenue(source.venue)!==canonicalVenue(e.venue)) return false;
@@ -439,7 +482,8 @@ function mergeAndVerify(discovered, evidenceTexts) {
     }
 
     const distinctSources=new Set(sourceIds).size;
-    const confidence=g.base.category==="sport" && sourceTypes.includes("team")
+    const confidence=(g.base.category==="sport" && sourceTypes.includes("team")) ||
+      (g.base.category==="convention" && sourceTypes.includes("venue"))
       ? "official"
       : distinctSources>=2 ? "confirmed" : "candidate";
 
@@ -467,7 +511,8 @@ function dedupe(events) {
       const sourceIds=[...new Set([...(prev.sourceIds||[]),...(e.sourceIds||[])])];
       const sourceTypes=[...new Set([...(prev.sourceTypes||[]),...(e.sourceTypes||[])])];
       const verifiedBy=sourceIds.length;
-      const confidence=(e.category==="sport" && sourceTypes.includes("team"))
+      const confidence=(e.category==="sport" && sourceTypes.includes("team")) ||
+        (e.category==="convention" && sourceTypes.includes("venue"))
         ? "official"
         : verifiedBy>=2 ? "confirmed" : "candidate";
       map.set(key,{...prev,...e,sourceIds,sourceTypes,verifiedBy,confidence});
@@ -524,7 +569,7 @@ async function main() {
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
       else if (s.id==="thunders") discovered.push(...parseThunders(html,now,s));
       else if (s.id==="icch") discovered.push(...parseIcch(html,s));
-      else if (s.id==="sangyo") { const p=html.indexOf("IT総合展2026"); console.log("SANGYO_HTML_START", p>=0?html.slice(Math.max(0,p-2200),p+4200):html.slice(-9000), "SANGYO_HTML_END"); }
+      else if (s.id==="sangyo") discovered.push(...parseSangyo(html,s));
     } catch (err) {
       errors.push({source:s.id,error:String(err.message||err)});
     }
