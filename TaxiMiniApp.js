@@ -209,6 +209,14 @@ function TaxiMiniApp() {
       return {};
     }
   });
+  const [uiSize, setUiSize] = useState(() => {
+    try {
+      const saved = localStorage.getItem("taxiUiSize");
+      return ["small", "medium", "large"].includes(saved) ? saved : "medium";
+    } catch (_) {
+      return "medium";
+    }
+  });
 
   const [eventFeed, setEventFeed] = useState(() => {
     try {
@@ -382,7 +390,10 @@ function TaxiMiniApp() {
   const navCenterLabel = state.screen === "top" ? "経費" : "履歴";
 
   return (
-    <div className="w-full h-full flex justify-center bg-[#dfe5ee] overflow-hidden">
+    <div
+      className="w-full h-full flex justify-center bg-[#dfe5ee] overflow-hidden"
+      data-ui-size={uiSize}
+    >
       <audio
         ref={startupAudioRef}
         src="./goanzen.wav"
@@ -424,6 +435,12 @@ function TaxiMiniApp() {
           selectedTemplate={reportTemplate}
           records={state.records}
           businessProfile={businessProfile}
+          uiSize={uiSize}
+          onUiSizeChange={(nextSize) => {
+            if (!["small", "medium", "large"].includes(nextSize)) return;
+            setUiSize(nextSize);
+            try { localStorage.setItem("taxiUiSize", nextSize); } catch (_) {}
+          }}
           onBusinessProfileChange={(key, value) => {
             setBusinessProfile((prev) => {
               const next = { ...prev, [key]: value };
