@@ -25,6 +25,9 @@ const SOURCES = [
   { id:"lawson-bluelive", type:"playguide", role:"discovery", category:"live", venue:"BLUE LIVE 広島", url:"https://l-tike.com/search/?keyword=BLUE%20LIVE%20%E5%BA%83%E5%B3%B6" },
   { id:"venue-ueno", type:"venue", role:"verify", category:"live", venue:"上野学園ホール", url:"https://www.rcchall.jp/" },
 
+  // プレイガイドで売切れ・FC限定公演が消える場合の取りこぼし防止。会場別の公演一覧を補助発見元にする。
+  { id:"livefans-green", type:"eventguide", role:"discovery", category:"live", venue:"広島グリーンアリーナ", url:"https://www.livefans.jp/search/venue/2971?year=after" },
+
   // スポーツはチケット情報より試合公式情報の方が強いので従来通り公式を入口にする。
   { id:"dragonflies", type:"team", role:"discovery", category:"sport", url:"https://hiroshimadragonflies.com/schedule/list/" },
   { id:"sanfrecce", type:"team", role:"discovery", category:"sport", url:"https://www.sanfrecce.co.jp/matches/results" },
@@ -242,6 +245,44 @@ function parseLawsonVenue(html, source) {
     e.id=makeId(e);
     out.push(e);
   }
+  const unique=new Map();
+  for (const e of out) unique.set([e.date,e.venue,normalizeTitle(e.title)].join("|"),e);
+  return [...unique.values()];
+}
+
+function parseLiveFansVenue(html, source) {
+  const text=cleanAll(html).normalize("NFKC").replace(/\s+/g," ");
+  const out=[];
+
+  // LiveFans会場ページ: アーティスト名 → YYYY/MM/DD (曜) HH:MM → @会場名
+  const re=/([^|]{1,120}?)\s+(20\d{2})\/(\d{1,2})\/(\d{1,2})\s*\([^)]*\)\s*(\d{1,2}:\d{2})\s*[＠@]\s*([^|]{2,100}?)(?=\s+(?:\[出演\]|レビュー|\d{2}\s|$))/g;
+  let m;
+  while ((m=re.exec(text))) {
+    let title=m[1].trim().replace(/^(?:開催予定[,、]?\s*)/,"").replace(/\s+/g," ");
+    const venue=canonicalVenue(m[6].trim());
+    if (venue!==canonicalVenue(source.venue) || isBadArtistTitle(title)) continue;
+
+    // 直前の見出しや番号が混ざった時は、最後のまとまった名称を優先。
+    title=title.replace(/^.*?(?:公演一覧[:：]?\s*\d+件\s*)/,"").trim().slice(-120).trim();
+    if (isBadArtistTitle(title)) continue;
+
+    const e={
+      category:"live",
+      date:isoDate(m[2],m[3],m[4]),
+      start:m[5],
+      endEstimate:null,
+      title,
+      venue,
+      area:"広島市",
+      sourceIds:[source.id],
+      sourceUrl:source.url,
+      sourceTypes:["eventguide"],
+      confidence:"candidate"
+    };
+    e.id=makeId(e);
+    out.push(e);
+  }
+
   const unique=new Map();
   for (const e of out) unique.set([e.date,e.venue,normalizeTitle(e.title)].join("|"),e);
   return [...unique.values()];
@@ -625,6 +666,7 @@ async function main() {
       if (s.role!=="discovery") continue;
       if (s.id.startsWith("eplus-")) discovered.push(...parseEplusVenue(html,s));
       else if (s.id.startsWith("lawson-")) discovered.push(...parseLawsonVenue(html,s));
+      else if (s.id.startsWith("livefans-")) discovered.push(...parseLiveFansVenue(html,s));
       else if (s.id==="seven-ueno") discovered.push(...parseSevenUeno(html,year,s));
       else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
