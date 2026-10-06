@@ -517,7 +517,7 @@ async function main() {
       else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
       else if (s.id==="thunders") discovered.push(...parseThunders(html,now,s));
-      else if (s.id==="icch") discovered.push(...parseIcch(html,s));
+      else if (s.id==="icch") { console.log("ICCH_DEBUG_START", clean(html).slice(0,7000), "ICCH_DEBUG_END"); discovered.push(...parseIcch(html,s)); }
     } catch (err) {
       errors.push({source:s.id,error:String(err.message||err)});
     }
