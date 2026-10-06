@@ -568,7 +568,7 @@ async function main() {
       if (s.id.startsWith("eplus-")) discovered.push(...parseEplusVenue(html,s));
       else if (s.id.startsWith("lawson-")) discovered.push(...parseLawsonVenue(html,s));
       else if (s.id==="seven-ueno") discovered.push(...parseSevenUeno(html,year,s));
-      else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
+      else if (s.id==="dragonflies") { const p=html.indexOf("10/10"); console.log("DRAGON_HTML_START", p>=0?html.slice(Math.max(0,p-3500),p+7000):html.slice(0,12000), "DRAGON_HTML_END"); discovered.push(...parseDragonflies(html,year,s)); }
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
       else if (s.id==="thunders") discovered.push(...parseThunders(html,now,s));
       else if (s.id==="icch") discovered.push(...parseIcch(html,s));
