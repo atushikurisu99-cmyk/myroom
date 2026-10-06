@@ -636,51 +636,6 @@ function endEstimate(e) {
 
 const PORT_MASTER_PATH="data/ports.json";
 
-function portKeyFromVenue(venue="") {
-  const v=venue.normalize("NFKC");
-  if (/宇品/.test(v)) return {id:"hiroshima-ujina",name:"宇品",port:"広島港"};
-  if (/五日市/.test(v)) return {id:"hiroshima-itsukaichi",name:"五日市",port:"広島港"};
-  if (/廿日市/.test(v)) return {id:"hatsukaichi",name:"廿日市",port:"廿日市港"};
-  const stem=Buffer.from(v||"unknown").toString("hex").slice(0,20);
-  return {id:`port-${stem}`,name:v||"名称未設定",port:v||"名称未設定"};
-}
-
-async function loadPortMaster() {
-  try {
-    const raw=JSON.parse(await readFile(PORT_MASTER_PATH,"utf-8"));
-    return Array.isArray(raw) ? raw : (raw.ports||[]);
-  } catch {
-    return [];
-  }
-}
-
-function mergePortMaster(previous, cruiseEvents, seenAt) {
-  const map=new Map((previous||[]).map(p=>[p.id,{...p}]));
-
-  for (const e of cruiseEvents.filter(x=>x.category==="cruise")) {
-    const key=portKeyFromVenue(e.venue);
-    const prev=map.get(key.id);
-    const sourceIds=[...new Set([...(prev?.sourceIds||[]),...(e.sourceIds||[])])];
-    map.set(key.id,{
-      id:key.id,
-      name:key.name,
-      port:key.port,
-      venue:e.venue,
-      area:e.area||prev?.area||null,
-      sourceIds,
-      firstSeenAt:prev?.firstSeenAt||seenAt,
-      lastSeenAt:seenAt,
-      enabled:prev?.enabled!==false,
-      retired:prev?.retired===true
-    });
-  }
-
-  // 取得結果に無い港も保持する。削除は管理側で retired=true にした時だけ。
-  return [...map.values()].sort((a,b)=>(a.name||"").localeCompare(b.name||"","ja"));
-}
-
-const PORT_MASTER_PATH="data/ports.json";
-
 async function loadPortMaster() {
   try {
     const raw=JSON.parse(await readFile(PORT_MASTER_PATH,"utf-8"));
@@ -695,7 +650,11 @@ function portIdentity(venue="") {
   if (v.includes("宇品")) return {id:"hiroshima-ujina",name:"宇品",port:"広島港"};
   if (v.includes("五日市")) return {id:"hiroshima-itsukaichi",name:"五日市",port:"広島港"};
   if (v.includes("廿日市")) return {id:"hatsukaichi",name:"廿日市",port:"廿日市港"};
-  return {id:"port-"+Buffer.from(v||"unknown").toString("hex").slice(0,20),name:v||"名称未設定",port:v||"名称未設定"};
+  return {
+    id:"port-"+Buffer.from(v||"unknown").toString("hex").slice(0,20),
+    name:v||"名称未設定",
+    port:v||"名称未設定"
+  };
 }
 
 function mergePortMaster(previous, events, seenAt) {
@@ -716,6 +675,7 @@ function mergePortMaster(previous, events, seenAt) {
       retired:old?.retired===true
     });
   }
+  // 最新取得に出てこない港も残す。消すのは管理側が retired=true にした時だけ。
   return [...map.values()].sort((a,b)=>(a.name||"").localeCompare(b.name||"","ja"));
 }
 
@@ -775,7 +735,8 @@ async function main() {
   const keep=[...fresh]
     .filter(e=>{
       const d=new Date(`${e.date}T23:59:59+09:00`);
-      return d>=new Date(now.getTime()-86400000) && d<=horizon && e.area==="広島市";
+      const inTargetArea=e.area==="広島市" || (e.category==="cruise" && e.area==="廿日市市");
+      return d>=new Date(now.getTime()-86400000) && d<=horizon && inTargetArea;
     })
     .map(endEstimate);
 
