@@ -774,6 +774,7 @@ window.AppComponents = (() => {
     onClose,
     selectedTemplate,
     onSelectTemplate,
+    records = [],
   }) {
     if (!show) return null;
 
@@ -861,6 +862,45 @@ window.AppComponents = (() => {
               <div className="mt-2 text-xs text-slate-500 leading-relaxed">
                 選択内容はこの端末に保存され、次回も同じひな形を使用します。
               </div>
+            </div>
+
+            <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
+                <div className="text-sm font-bold text-slate-800">帳票反映テスト</div>
+                <div className="mt-1 text-xs text-slate-500">
+                  実際の乗車操作で保存された履歴を、そのまま帳票入力候補として表示
+                </div>
+              </div>
+
+              {records.length === 0 ? (
+                <div className="px-4 py-5 text-sm text-slate-500">
+                  まだ乗車記録がありません。通常どおり「乗務開始 → 実車 → 降車 → 決済」まで操作すると、ここに反映されます。
+                </div>
+              ) : (
+                <div className="max-h-[240px] overflow-y-auto">
+                  {records.slice(0, 10).map((record, index) => (
+                    <div
+                      key={record.id || index}
+                      className="px-4 py-3 border-b border-slate-100 last:border-b-0"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="text-sm font-bold text-slate-800">
+                          {index + 1}件目
+                        </div>
+                        <div className="text-sm font-black text-slate-800">
+                          ¥{Number(record.金額 || record.amount || 0).toLocaleString("ja-JP")}
+                        </div>
+                      </div>
+                      <div className="mt-1 text-xs text-slate-500">
+                        {record.乗車地 || "未取得"} → {record.降車地 || "未取得"}
+                      </div>
+                      <div className="mt-1 text-xs text-slate-500">
+                        人数 {record.人数 || 1}人 ｜ {record.payment === "cash" ? "現金" : "カード・QR"}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
