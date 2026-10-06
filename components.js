@@ -433,7 +433,7 @@ window.AppComponents = (() => {
             <div className="text-xl font-bold text-slate-800">
               {formatMoney(record.金額)}
             </div>
-            <div className="mt-1 text-xs text-slate-500">
+            <div className="mt-1 tx-xs text-slate-500">
               {formatTime(record.乗車時刻)} → {formatTime(record.降車時刻)}
             </div>
           </div>
@@ -454,11 +454,11 @@ window.AppComponents = (() => {
           </div>
         </div>
 
-        <div className="mt-3 grid gap-1 text-sm text-slate-600">
+        <div className="mt-3 grid gap-1 tx-sm text-slate-600">
           <div className="truncate">乗車地：{record.乗車地 || "未取得"}</div>
           <div className="truncate">降車地：{record.降車地 || "未取得"}</div>
           {record.備考 ? (
-            <div className="truncate text-xs text-slate-500">備考：{record.備考}</div>
+            <div className="truncate tx-xs text-slate-500">備考：{record.備考}</div>
           ) : null}
           <div className="truncate text-xs text-slate-400">
             乗務日：{formatFullDate(record.乗務日 || record.乗車時刻)}
@@ -776,6 +776,8 @@ window.AppComponents = (() => {
     onSelectTemplate,
     records = [],
     businessProfile = {},
+    uiSize = "medium",
+    onUiSizeChange,
     onBusinessProfileChange,
   }) {
     if (!show) return null;
@@ -804,7 +806,7 @@ window.AppComponents = (() => {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-base font-bold text-slate-800">帳票ひな形</div>
-                <div className="mt-1 text-xs text-slate-500">
+                <div className="mt-1 tx-xs text-slate-500">
                   月報に使う組合バージョンを選択
                 </div>
               </div>
@@ -819,12 +821,44 @@ window.AppComponents = (() => {
 
             <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
               <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
-                <div className="text-sm font-bold text-slate-800">日報の固定情報</div>
-                <div className="mt-1 text-xs text-slate-500">一度登録すれば毎日の日報へ自動反映</div>
+                <div className="tx-sm font-black text-slate-800">文字サイズ</div>
+                <div className="mt-1 tx-xs font-semibold text-slate-500">標準は「中」。文字だけでなく余白と操作領域も連動します</div>
+              </div>
+              <div className="p-3 grid grid-cols-3 gap-2">
+                {[
+                  ["small", "小"],
+                  ["medium", "中"],
+                  ["large", "大"],
+                ].map(([value, label]) => {
+                  const active = uiSize === value;
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => onUiSizeChange?.(value)}
+                      className="ui-tap rounded-xl border font-black"
+                      style={{
+                        fontSize: "var(--tx-md)",
+                        borderColor: active ? "#0f172a" : "#cbd5e1",
+                        background: active ? "#0f172a" : "#ffffff",
+                        color: active ? "#ffffff" : "#334155",
+                      }}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
+              <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
+                <div className="tx-sm font-bold text-slate-800">日報の固定情報</div>
+                <div className="mt-1 tx-xs text-slate-500">一度登録すれば毎日の日報へ自動反映</div>
               </div>
               <div className="p-4 grid gap-3">
                 <label className="grid gap-1">
-                  <span className="text-xs font-bold text-slate-600">登録番号</span>
+                  <span className="tx-xs font-bold text-slate-600">登録番号</span>
                   <input
                     type="text"
                     value={businessProfile.registrationNumber || ""}
@@ -834,7 +868,7 @@ window.AppComponents = (() => {
                   />
                 </label>
                 <label className="grid gap-1">
-                  <span className="text-xs font-bold text-slate-600">氏名または名称</span>
+                  <span className="tx-xs font-bold text-slate-600">氏名または名称</span>
                   <input
                     type="text"
                     value={businessProfile.name || ""}
@@ -844,7 +878,7 @@ window.AppComponents = (() => {
                   />
                 </label>
                 <label className="grid gap-1">
-                  <span className="text-xs font-bold text-slate-600">事業者名</span>
+                  <span className="tx-xs font-bold text-slate-600">事業者名</span>
                   <input
                     type="text"
                     value={businessProfile.businessName || ""}
@@ -875,7 +909,7 @@ window.AppComponents = (() => {
                         <div className="text-[16px] font-bold text-slate-800">
                           {template.name}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">
+                        <div className="mt-1 tx-xs text-slate-500">
                           {template.note}
                         </div>
                       </div>
@@ -896,25 +930,25 @@ window.AppComponents = (() => {
             </div>
 
             <div className="mt-4 rounded-2xl bg-slate-50 border border-slate-200 px-4 py-3">
-              <div className="text-sm font-bold text-slate-800">選択中</div>
-              <div className="mt-1 text-sm text-slate-600">
+              <div className="tx-sm font-bold text-slate-800">選択中</div>
+              <div className="mt-1 tx-sm text-slate-600">
                 {templates.find((t) => t.id === selectedTemplate)?.name || "未選択"}
               </div>
-              <div className="mt-2 text-xs text-slate-500 leading-relaxed">
+              <div className="mt-2 tx-xs text-slate-500 leading-relaxed">
                 選択内容はこの端末に保存され、次回も同じひな形を使用します。
               </div>
             </div>
 
             <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <div className="text-sm font-bold text-slate-800">帳票反映テスト</div>
-                <div className="mt-1 text-xs text-slate-500">
+                <div className="tx-sm font-bold text-slate-800">帳票反映テスト</div>
+                <div className="mt-1 tx-xs text-slate-500">
                   実際の乗車操作で保存された履歴を、そのまま帳票入力候補として表示
                 </div>
               </div>
 
               {records.length === 0 ? (
-                <div className="px-4 py-5 text-sm text-slate-500">
+                <div className="px-4 py-5 tx-sm text-slate-500">
                   まだ乗車記録がありません。通常どおり「乗務開始 → 実車 → 降車 → 決済」まで操作すると、ここに反映されます。
                 </div>
               ) : (
@@ -925,17 +959,17 @@ window.AppComponents = (() => {
                       className="px-4 py-3 border-b border-slate-100 last:border-b-0"
                     >
                       <div className="flex items-center justify-between gap-3">
-                        <div className="text-sm font-bold text-slate-800">
+                        <div className="tx-sm font-bold text-slate-800">
                           {index + 1}件目
                         </div>
                         <div className="text-sm font-black text-slate-800">
                           ¥{Number(record.金額 || record.amount || 0).toLocaleString("ja-JP")}
                         </div>
                       </div>
-                      <div className="mt-1 text-xs text-slate-500">
+                      <div className="mt-1 tx-xs text-slate-500">
                         {record.乗車地 || "未取得"} → {record.降車地 || "未取得"}
                       </div>
-                      <div className="mt-1 text-xs text-slate-500">
+                      <div className="mt-1 tx-xs text-slate-500">
                         人数 {record.人数 || 1}人 ｜ {record.payment === "cash" ? "現金" : "カード・QR"}
                       </div>
                     </div>
@@ -989,16 +1023,16 @@ window.AppComponents = (() => {
           <div className="px-5 py-4 overflow-y-auto" style={{ maxHeight: "calc(82vh - 150px)" }}>
             <div className="rounded-2xl border border-slate-200 overflow-hidden">
               <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
-                <div className="text-[15px] font-black text-slate-800">日常点検</div>
-                <div className="mt-1 text-xs font-semibold text-slate-500">
+                <div className="tx-sm font-black text-slate-800">日常点検</div>
+                <div className="mt-1 tx-xs font-semibold text-slate-500">
                   基本項目は「異常なし」で記録します
                 </div>
               </div>
 
               <div className="px-4 py-3 flex items-center justify-between gap-3 border-b border-slate-100">
                 <div className="min-w-0">
-                  <div className="text-[15px] font-bold text-slate-800">アルコールチェック</div>
-                  <div className="mt-1 text-xs text-slate-500">毎回タップして確認</div>
+                  <div className="tx-sm font-bold text-slate-800">アルコールチェック</div>
+                  <div className="mt-1 tx-xs text-slate-500">毎回タップして確認</div>
                 </div>
                 <button
                   type="button"
@@ -1015,7 +1049,7 @@ window.AppComponents = (() => {
               </div>
 
               <div className="px-4 py-4">
-                <label className="text-[15px] font-bold text-slate-800">出庫時距離</label>
+                <label className="tx-sm font-bold text-slate-800">出庫時距離</label>
                 <div className="mt-2 flex items-center gap-2">
                   <input
                     type="text"
@@ -1030,7 +1064,7 @@ window.AppComponents = (() => {
               </div>
             </div>
 
-            <div className="mt-3 text-xs font-semibold text-slate-500 leading-relaxed">
+            <div className="mt-3 tx-xs font-semibold text-slate-500 leading-relaxed">
               この確認を完了すると、日付・出庫時距離・点検結果を本日の記録として保存して乗務を開始します。
             </div>
           </div>
@@ -1069,7 +1103,7 @@ window.AppComponents = (() => {
               ? `自動保存中${"・".repeat(Math.max(0, savingDots))}`
               : "保存中"}
           </div>
-          <div className="mt-3 text-sm text-slate-500">
+          <div className="mt-3 tx-sm text-slate-500">
             乗車位置精度：
             {pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}
             <br />
@@ -1097,7 +1131,7 @@ window.AppComponents = (() => {
           <div className="text-[18px] font-bold text-slate-800">
             現在地を経由地として記録します
           </div>
-          <div className="mt-3 text-sm text-slate-500 truncate">
+          <div className="mt-3 tx-sm text-slate-500 truncate">
             {pendingViaPlace || "未取得"}
           </div>
           <div className="mt-5 grid grid-cols-2 gap-3">
@@ -1128,7 +1162,7 @@ window.AppComponents = (() => {
           <div className="text-[20px] font-bold text-slate-800">
             {formatDutyDate(workDate)}の乗務を終了しますか？
           </div>
-          <div className="mt-4 grid gap-2 text-sm text-slate-600">
+          <div className="mt-4 grid gap-2 tx-sm text-slate-600">
             <div>乗車回数：{recordCount}回</div>
             <div>売上合計：{formatMoney(totalAmount)}</div>
           </div>
