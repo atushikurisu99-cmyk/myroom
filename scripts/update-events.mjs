@@ -9,6 +9,7 @@ const SOURCES = [
   { id:"eplus-hbg", type:"playguide", role:"discovery", category:"live", venue:"広島文化学園HBGホール", url:"https://eplus.jp/sf/venue/7300050/events" },
   { id:"eplus-quattro", type:"playguide", role:"discovery", category:"live", venue:"広島クラブクアトロ", url:"https://eplus.jp/sf/venue/7300090/events" },
   { id:"eplus-ueno", type:"playguide", role:"discovery", category:"live", venue:"上野学園ホール", url:"https://eplus.jp/sf/venue/7300130/events" },
+  { id:"eplus-bluelive", type:"playguide", role:"discovery", category:"live", venue:"BLUE LIVE 広島", url:"https://eplus.jp/sf/venue/7340030/events" },
 
   // 上野学園ホールはセブンチケットも取得元として使えるため、同格の発見元にする。
   { id:"seven-ueno", type:"playguide", role:"discovery", category:"live", venue:"上野学園ホール", url:"https://7ticket.jp/s/116553/d" },
@@ -21,6 +22,7 @@ const SOURCES = [
   { id:"lawson-hbg", type:"playguide", role:"discovery", category:"live", venue:"広島文化学園HBGホール", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB" },
   { id:"lawson-quattro", type:"playguide", role:"discovery", category:"live", venue:"広島クラブクアトロ", url:"https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD" },
   { id:"lawson-ueno", type:"playguide", role:"discovery", category:"live", venue:"上野学園ホール", url:"https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92" },
+  { id:"lawson-bluelive", type:"playguide", role:"discovery", category:"live", venue:"BLUE LIVE 広島", url:"https://l-tike.com/search/?keyword=BLUE%20LIVE%20%E5%BA%83%E5%B3%B6" },
   { id:"venue-ueno", type:"venue", role:"verify", category:"live", venue:"上野学園ホール", url:"https://www.rcchall.jp/" },
 
   // スポーツはチケット情報より試合公式情報の方が強いので従来通り公式を入口にする。
@@ -41,6 +43,7 @@ const VENUE_ALIASES = [
   ["広島文化学園HBGホール",["広島文化学園HBGホール","広島市文化交流会館"]],
   ["上野学園ホール",["上野学園ホール","広島上野学園ホール","広島県立文化芸術ホール"]],
   ["広島クラブクアトロ",["広島クラブクアトロ","クラブクアトロ"]],
+  ["BLUE LIVE 広島",["BLUE LIVE 広島","BLUE LIVE HIROSHIMA","BLUE LIVE広島","ブルーライブ広島"]],
   ["広島セカンド・クラッチ",["広島セカンド・クラッチ","SECOND CRUTCH","セカンド・クラッチ"]],
   ["広島Live space Reed",["広島Live space Reed","Live space Reed"]],
   ["広島4.14",["広島4.14","4.14"]],
