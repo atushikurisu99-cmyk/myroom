@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T10:38:20.406Z",
+  "generatedAt": "2026-10-06T10:42:59.120Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -163,8 +163,8 @@
   ],
   "stats": {
     "discovered": 252,
-    "confirmed": 23,
-    "candidate": 94,
+    "confirmed": 31,
+    "candidate": 86,
     "official": 135,
     "playguideBased": 111
   },
@@ -174,8 +174,8 @@
       "error": "503 https://eplus.jp/sf/venue/7300010/events"
     },
     {
-      "source": "eplus-quattro",
-      "error": "503 https://eplus.jp/sf/venue/7300090/events"
+      "source": "eplus-bluelive",
+      "error": "503 https://eplus.jp/sf/venue/7340030/events"
     }
   ],
   "events": [
@@ -422,6 +422,33 @@
       }
     },
     {
+      "category": "live",
+      "date": "2026-10-10",
+      "start": null,
+      "endEstimate": null,
+      "title": "coldrain",
+      "venue": "BLUE LIVE 広島",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-bluelive"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=BLUE%20LIVE%20%E5%BA%83%E5%B3%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261010-0000-636f6c647261696e",
+      "verifiedBy": 1,
+      "artist": "coldrain",
+      "calendarDisplay": {
+        "date": "2026-10-10",
+        "artist": "coldrain",
+        "venue": "BLUE LIVE 広島",
+        "start": null,
+        "endEstimate": null
+      }
+    },
+    {
       "category": "cruise",
       "date": "2026-10-10",
       "start": "09:30",
@@ -516,34 +543,6 @@
         "venue": "上野学園ホール",
         "start": "17:30",
         "endEstimate": "20:05"
-      }
-    },
-    {
-      "category": "live",
-      "date": "2026-10-10",
-      "start": "18:00",
-      "endEstimate": "20:20",
-      "title": "coldrain",
-      "venue": "BLUE LIVE 広島",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-bluelive",
-        "eplus-bluelive"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=BLUE%20LIVE%20%E5%BA%83%E5%B3%B6",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "confirmed",
-      "id": "live-20261010-0000-636f6c647261696e",
-      "verifiedBy": 2,
-      "artist": "coldrain",
-      "calendarDisplay": {
-        "date": "2026-10-10",
-        "artist": "coldrain",
-        "venue": "BLUE LIVE 広島",
-        "start": "18:00",
-        "endEstimate": "20:20"
       }
     },
     {
@@ -647,33 +646,6 @@
       }
     },
     {
-      "category": "live",
-      "date": "2026-10-12",
-      "start": null,
-      "endEstimate": null,
-      "title": "SHE’S",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261012-0000-736865e2809973",
-      "verifiedBy": 1,
-      "artist": "SHE’S",
-      "calendarDisplay": {
-        "date": "2026-10-12",
-        "artist": "SHE’S",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
-    },
-    {
       "category": "convention",
       "date": "2026-10-12",
       "start": null,
@@ -719,6 +691,34 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
+      }
+    },
+    {
+      "category": "live",
+      "date": "2026-10-12",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "SHE’S",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261012-0000-736865e2809973",
+      "verifiedBy": 2,
+      "artist": "SHE’S",
+      "calendarDisplay": {
+        "date": "2026-10-12",
+        "artist": "SHE’S",
+        "venue": "広島クラブクアトロ",
+        "start": "17:30",
+        "endEstimate": "19:50"
       }
     },
     {
@@ -958,33 +958,6 @@
       }
     },
     {
-      "category": "live",
-      "date": "2026-10-17",
-      "start": null,
-      "endEstimate": null,
-      "title": "Penthouse",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261017-0000-70656e74686f7573",
-      "verifiedBy": 1,
-      "artist": "Penthouse",
-      "calendarDisplay": {
-        "date": "2026-10-17",
-        "artist": "Penthouse",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
-    },
-    {
       "category": "convention",
       "date": "2026-10-17",
       "start": null,
@@ -1170,6 +1143,34 @@
         "venue": "上野学園ホール",
         "start": "17:30",
         "endEstimate": "20:05"
+      }
+    },
+    {
+      "category": "live",
+      "date": "2026-10-17",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "Penthouse",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261017-0000-70656e74686f7573",
+      "verifiedBy": 2,
+      "artist": "Penthouse",
+      "calendarDisplay": {
+        "date": "2026-10-17",
+        "artist": "Penthouse",
+        "venue": "広島クラブクアトロ",
+        "start": "18:00",
+        "endEstimate": "20:20"
       }
     },
     {
@@ -1690,35 +1691,6 @@
       }
     },
     {
-      "category": "live",
-      "date": "2026-10-24",
-      "start": null,
-      "endEstimate": null,
-      "title": "フラワーカンパニーズ",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro",
-        "candy"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide",
-        "promoter"
-      ],
-      "confidence": "confirmed",
-      "id": "live-20261024-0000-e38395e383a9e383",
-      "verifiedBy": 2,
-      "artist": "フラワーカンパニーズ",
-      "calendarDisplay": {
-        "date": "2026-10-24",
-        "artist": "フラワーカンパニーズ",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
-    },
-    {
       "category": "convention",
       "date": "2026-10-24",
       "start": null,
@@ -1894,6 +1866,36 @@
     {
       "category": "live",
       "date": "2026-10-24",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "フラワーカンパニーズ",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro",
+        "candy"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide",
+        "promoter"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261024-0000-e38395e383a9e383",
+      "verifiedBy": 3,
+      "artist": "フラワーカンパニーズ",
+      "calendarDisplay": {
+        "date": "2026-10-24",
+        "artist": "フラワーカンパニーズ",
+        "venue": "広島クラブクアトロ",
+        "start": "17:00",
+        "endEstimate": "19:20"
+      }
+    },
+    {
+      "category": "live",
+      "date": "2026-10-24",
       "start": "17:30",
       "endEstimate": "20:05",
       "title": "マンマ・ミーア！",
@@ -1941,35 +1943,6 @@
         "date": "2026-10-25",
         "artist": "センチミリメンタル",
         "venue": "JMSアステールプラザ",
-        "start": null,
-        "endEstimate": null
-      }
-    },
-    {
-      "category": "live",
-      "date": "2026-10-25",
-      "start": null,
-      "endEstimate": null,
-      "title": "YONA YONA WEEKENDERS",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro",
-        "candy"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide",
-        "promoter"
-      ],
-      "confidence": "confirmed",
-      "id": "live-20261025-0000-796f6e61796f6e61",
-      "verifiedBy": 2,
-      "artist": "YONA YONA WEEKENDERS",
-      "calendarDisplay": {
-        "date": "2026-10-25",
-        "artist": "YONA YONA WEEKENDERS",
-        "venue": "広島クラブクアトロ",
         "start": null,
         "endEstimate": null
       }
@@ -2064,6 +2037,36 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
+      }
+    },
+    {
+      "category": "live",
+      "date": "2026-10-25",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "YONA YONA WEEKENDERS",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro",
+        "candy"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide",
+        "promoter"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261025-0000-796f6e61796f6e61",
+      "verifiedBy": 3,
+      "artist": "YONA YONA WEEKENDERS",
+      "calendarDisplay": {
+        "date": "2026-10-25",
+        "artist": "YONA YONA WEEKENDERS",
+        "venue": "広島クラブクアトロ",
+        "start": "18:00",
+        "endEstimate": "20:20"
       }
     },
     {
@@ -2357,33 +2360,6 @@
       }
     },
     {
-      "category": "live",
-      "date": "2026-10-31",
-      "start": null,
-      "endEstimate": null,
-      "title": "リーガルリリー",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261031-0000-e383aae383bce382",
-      "verifiedBy": 1,
-      "artist": "リーガルリリー",
-      "calendarDisplay": {
-        "date": "2026-10-31",
-        "artist": "リーガルリリー",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
-    },
-    {
       "category": "convention",
       "date": "2026-10-31",
       "start": null,
@@ -2528,29 +2504,30 @@
     },
     {
       "category": "live",
-      "date": "2026-11-01",
-      "start": null,
-      "endEstimate": null,
-      "title": "木村カエラ",
+      "date": "2026-10-31",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "リーガルリリー",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
       "sourceIds": [
-        "lawson-quattro"
+        "lawson-quattro",
+        "eplus-quattro"
       ],
       "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
       "sourceTypes": [
         "playguide"
       ],
-      "confidence": "candidate",
-      "id": "live-20261101-0000-e69ca8e69d91e382",
-      "verifiedBy": 1,
-      "artist": "木村カエラ",
+      "confidence": "confirmed",
+      "id": "live-20261031-0000-e383aae383bce382",
+      "verifiedBy": 2,
+      "artist": "リーガルリリー",
       "calendarDisplay": {
-        "date": "2026-11-01",
-        "artist": "木村カエラ",
+        "date": "2026-10-31",
+        "artist": "リーガルリリー",
         "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
+        "start": "17:30",
+        "endEstimate": "19:50"
       }
     },
     {
@@ -2670,6 +2647,34 @@
       "confidence": "official",
       "id": "sport-20261101-1305-e5ba83e5b3b6c397",
       "verifiedBy": 1
+    },
+    {
+      "category": "live",
+      "date": "2026-11-01",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "木村カエラ",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261101-0000-e69ca8e69d91e382",
+      "verifiedBy": 2,
+      "artist": "木村カエラ",
+      "calendarDisplay": {
+        "date": "2026-11-01",
+        "artist": "木村カエラ",
+        "venue": "広島クラブクアトロ",
+        "start": "17:30",
+        "endEstimate": "19:50"
+      }
     },
     {
       "category": "live",
@@ -3265,33 +3270,6 @@
       }
     },
     {
-      "category": "live",
-      "date": "2026-11-14",
-      "start": null,
-      "endEstimate": null,
-      "title": "Chilli Beans.",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261114-0000-6368696c6c696265",
-      "verifiedBy": 1,
-      "artist": "Chilli Beans.",
-      "calendarDisplay": {
-        "date": "2026-11-14",
-        "artist": "Chilli Beans.",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
-    },
-    {
       "category": "convention",
       "date": "2026-11-14",
       "start": null,
@@ -3389,6 +3367,34 @@
     },
     {
       "category": "live",
+      "date": "2026-11-14",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "Chilli Beans.",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261114-0000-6368696c6c696265",
+      "verifiedBy": 2,
+      "artist": "Chilli Beans.",
+      "calendarDisplay": {
+        "date": "2026-11-14",
+        "artist": "Chilli Beans.",
+        "venue": "広島クラブクアトロ",
+        "start": "18:00",
+        "endEstimate": "20:20"
+      }
+    },
+    {
+      "category": "live",
       "date": "2026-11-15",
       "start": null,
       "endEstimate": null,
@@ -3437,6 +3443,33 @@
         "date": "2026-11-15",
         "artist": "~まほうの夜の音楽会 2026 ★ミステリアス&ダーク・スペシャル",
         "venue": "広島文化学園HBGホール",
+        "start": null,
+        "endEstimate": null
+      }
+    },
+    {
+      "category": "live",
+      "date": "2026-11-15",
+      "start": null,
+      "endEstimate": null,
+      "title": "jo0ji",
+      "venue": "BLUE LIVE 広島",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-bluelive"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=BLUE%20LIVE%20%E5%BA%83%E5%B3%B6",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261115-0000-6a6f306a69",
+      "verifiedBy": 1,
+      "artist": "jo0ji",
+      "calendarDisplay": {
+        "date": "2026-11-15",
+        "artist": "jo0ji",
+        "venue": "BLUE LIVE 広島",
         "start": null,
         "endEstimate": null
       }
@@ -3527,34 +3560,6 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
-    },
-    {
-      "category": "live",
-      "date": "2026-11-15",
-      "start": "17:00",
-      "endEstimate": "19:20",
-      "title": "jo0ji",
-      "venue": "BLUE LIVE 広島",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-bluelive",
-        "eplus-bluelive"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=BLUE%20LIVE%20%E5%BA%83%E5%B3%B6",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "confirmed",
-      "id": "live-20261115-0000-6a6f306a69",
-      "verifiedBy": 2,
-      "artist": "jo0ji",
-      "calendarDisplay": {
-        "date": "2026-11-15",
-        "artist": "jo0ji",
-        "venue": "BLUE LIVE 広島",
-        "start": "17:00",
-        "endEstimate": "19:20"
       }
     },
     {
@@ -3722,33 +3727,6 @@
       }
     },
     {
-      "category": "live",
-      "date": "2026-11-20",
-      "start": null,
-      "endEstimate": null,
-      "title": "ナナヲアカリ",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261120-0000-e3838ae3838ae383",
-      "verifiedBy": 1,
-      "artist": "ナナヲアカリ",
-      "calendarDisplay": {
-        "date": "2026-11-20",
-        "artist": "ナナヲアカリ",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
-    },
-    {
       "category": "convention",
       "date": "2026-11-20",
       "start": null,
@@ -3796,29 +3774,30 @@
     },
     {
       "category": "live",
-      "date": "2026-11-21",
-      "start": null,
-      "endEstimate": null,
-      "title": "山中さわお & ELPIS",
+      "date": "2026-11-20",
+      "start": "19:00",
+      "endEstimate": "21:20",
+      "title": "ナナヲアカリ",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
       "sourceIds": [
-        "lawson-quattro"
+        "lawson-quattro",
+        "eplus-quattro"
       ],
       "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
       "sourceTypes": [
         "playguide"
       ],
-      "confidence": "candidate",
-      "id": "live-20261121-0000-e5b1b1e4b8ade381",
-      "verifiedBy": 1,
-      "artist": "山中さわお & ELPIS",
+      "confidence": "confirmed",
+      "id": "live-20261120-0000-e3838ae3838ae383",
+      "verifiedBy": 2,
+      "artist": "ナナヲアカリ",
       "calendarDisplay": {
-        "date": "2026-11-21",
-        "artist": "山中さわお & ELPIS",
+        "date": "2026-11-20",
+        "artist": "ナナヲアカリ",
         "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
+        "start": "19:00",
+        "endEstimate": "21:20"
       }
     },
     {
@@ -3963,6 +3942,34 @@
         "venue": "上野学園ホール",
         "start": "17:30",
         "endEstimate": "20:05"
+      }
+    },
+    {
+      "category": "live",
+      "date": "2026-11-21",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "山中さわお & ELPIS",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261121-0000-e5b1b1e4b8ade381",
+      "verifiedBy": 2,
+      "artist": "山中さわお & ELPIS",
+      "calendarDisplay": {
+        "date": "2026-11-21",
+        "artist": "山中さわお & ELPIS",
+        "venue": "広島クラブクアトロ",
+        "start": "18:00",
+        "endEstimate": "20:20"
       }
     },
     {
@@ -4268,28 +4275,29 @@
     {
       "category": "live",
       "date": "2026-11-26",
-      "start": null,
-      "endEstimate": null,
+      "start": "19:00",
+      "endEstimate": "21:20",
       "title": "Michael Monroe",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
       "sourceIds": [
-        "lawson-quattro"
+        "lawson-quattro",
+        "eplus-quattro"
       ],
       "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
       "sourceTypes": [
         "playguide"
       ],
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "id": "live-20261126-0000-6d69636861656c6d",
-      "verifiedBy": 1,
+      "verifiedBy": 2,
       "artist": "Michael Monroe",
       "calendarDisplay": {
         "date": "2026-11-26",
         "artist": "Michael Monroe",
         "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
+        "start": "19:00",
+        "endEstimate": "21:20"
       }
     },
     {
