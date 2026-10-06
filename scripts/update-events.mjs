@@ -1,4 +1,4 @@
-// collector-version: playguide-first-2ofN-v3
+// collector-version: playguide-first-2ofN-v4
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 
 const SOURCES = [
