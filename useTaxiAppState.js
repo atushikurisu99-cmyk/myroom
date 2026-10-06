@@ -2,24 +2,60 @@ window.AppHooks = (() => {
   const { useEffect, useMemo, useRef, useState } = React;
   const Utils = window.AppUtils;
   const Geo = window.AppGeo;
+  const STORAGE_KEY = "taxiSalesAppStateV1";
+
+  const toDateOrNull = (value) => {
+    if (!value) return null;
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? null : d;
+  };
+
+  const loadPersistedState = () => {
+    try {
+      const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (!raw || typeof raw !== "object") return null;
+
+      const records = Array.isArray(raw.records)
+        ? raw.records.map((record) => ({
+            ...record,
+            乗務日: toDateOrNull(record.乗務日),
+            乗車時刻: toDateOrNull(record.乗車時刻),
+            降車時刻: toDateOrNull(record.降車時刻),
+          }))
+        : [];
+
+      return {
+        ...raw,
+        records,
+        workDate: toDateOrNull(raw.workDate),
+        rideStartAt: toDateOrNull(raw.rideStartAt),
+        rideEndAt: toDateOrNull(raw.rideEndAt),
+      };
+    } catch (_) {
+      return null;
+    }
+  };
 
   function useTaxiAppState() {
-    const [screen, setScreen] = useState("top");
-    const [dutyStarted, setDutyStarted] = useState(false);
-    const [isRiding, setIsRiding] = useState(false);
+    const persistedRef = useRef(undefined);
+    if (persistedRef.current === undefined) persistedRef.current = loadPersistedState();
+    const persisted = persistedRef.current || {};
+    const [screen, setScreen] = useState(persisted.screen || "top");
+    const [dutyStarted, setDutyStarted] = useState(Boolean(persisted.dutyStarted));
+    const [isRiding, setIsRiding] = useState(Boolean(persisted.isRiding));
 
-    const [rideStartAt, setRideStartAt] = useState(null);
-    const [rideEndAt, setRideEndAt] = useState(null);
+    const [rideStartAt, setRideStartAt] = useState(persisted.rideStartAt || null);
+    const [rideEndAt, setRideEndAt] = useState(persisted.rideEndAt || null);
 
-    const [pickup, setPickup] = useState("");
-    const [dropoff, setDropoff] = useState("");
-    const [pickupMeta, setPickupMeta] = useState(null);
-    const [dropoffMeta, setDropoffMeta] = useState(null);
+    const [pickup, setPickup] = useState(persisted.pickup || "");
+    const [dropoff, setDropoff] = useState(persisted.dropoff || "");
+    const [pickupMeta, setPickupMeta] = useState(persisted.pickupMeta || null);
+    const [dropoffMeta, setDropoffMeta] = useState(persisted.dropoffMeta || null);
 
-    const [amount, setAmount] = useState("");
-    const [selectedPassengers, setSelectedPassengers] = useState(null);
+    const [amount, setAmount] = useState(persisted.amount || "");
+    const [selectedPassengers, setSelectedPassengers] = useState(persisted.selectedPassengers ?? null);
 
-    const [records, setRecords] = useState([]);
+    const [records, setRecords] = useState(persisted.records || []);
     const [showSaved, setShowSaved] = useState(false);
     const [showHistoryModal, setShowHistoryModal] = useState(false);
     const [showOtherSheet, setShowOtherSheet] = useState(false);
@@ -32,7 +68,7 @@ window.AppHooks = (() => {
 
     const [showViaDialog, setShowViaDialog] = useState(false);
     const [pendingViaPlace, setPendingViaPlace] = useState("");
-    const [viaStops, setViaStops] = useState([]);
+    const [viaStops, setViaStops] = useState(Array.isArray(persisted.viaStops) ? persisted.viaStops : []);
 
     const [showFinishDialog, setShowFinishDialog] = useState(false);
     const [homeEndSheetOpen, setHomeEndSheetOpen] = useState(false);
@@ -44,7 +80,7 @@ window.AppHooks = (() => {
     const [editingRecord, setEditingRecord] = useState(null);
 
     const [cardMode, setCardMode] = useState(3);
-    const [workDate, setWorkDate] = useState(null);
+    const [workDate, setWorkDate] = useState(persisted.workDate || null);
 
     const [toastMessage, setToastMessage] = useState("");
     const [now, setNow] = useState(new Date());
@@ -89,6 +125,45 @@ window.AppHooks = (() => {
         if (clockTimerRef.current) clearInterval(clockTimerRef.current);
       };
     }, []);
+
+    useEffect(() => {
+      try {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({
+            screen,
+            dutyStarted,
+            isRiding,
+            rideStartAt,
+            rideEndAt,
+            pickup,
+            dropoff,
+            pickupMeta,
+            dropoffMeta,
+            amount,
+            selectedPassengers,
+            records,
+            viaStops,
+            workDate,
+          })
+        );
+      } catch (_) {}
+    }, [
+      screen,
+      dutyStarted,
+      isRiding,
+      rideStartAt,
+      rideEndAt,
+      pickup,
+      dropoff,
+      pickupMeta,
+      dropoffMeta,
+      amount,
+      selectedPassengers,
+      records,
+      viaStops,
+      workDate,
+    ]);
 
     useEffect(() => {
       ensureWeatherFresh();
@@ -142,27 +217,34 @@ window.AppHooks = (() => {
       return `${diffMin}分`;
     }, [rideStartAt, now]);
 
+    const currentDutyRecords = useMemo(() => {
+      if (!workDate) return [];
+      return records.filter((record) =>
+        Utils.isSameDay(Utils.getHistoryTargetDate(record), workDate)
+      );
+    }, [records, workDate]);
+
     const totalAmount = useMemo(
-      () => records.reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
-      [records]
+      () => currentDutyRecords.reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
+      [currentDutyRecords]
     );
 
-    const recordCount = useMemo(() => records.length, [records]);
+    const recordCount = useMemo(() => currentDutyRecords.length, [currentDutyRecords]);
 
     const amount1 = useMemo(
       () =>
-        records
+        currentDutyRecords
           .filter((record) => record.payment === "cash" && !record.receipt)
           .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
-      [records]
+      [currentDutyRecords]
     );
 
     const amount2 = useMemo(
       () =>
-        records
+        currentDutyRecords
           .filter((record) => !(record.payment === "cash" && !record.receipt))
           .reduce((sum, record) => sum + Number(record.amount || record.金額 || 0), 0),
-      [records]
+      [currentDutyRecords]
     );
 
     const topMainLabel = !dutyStarted ? "乗務開始" : isRiding ? "降車" : "実車";
