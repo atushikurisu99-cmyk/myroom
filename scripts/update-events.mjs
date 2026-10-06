@@ -524,7 +524,7 @@ async function main() {
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
       else if (s.id==="thunders") discovered.push(...parseThunders(html,now,s));
       else if (s.id==="icch") discovered.push(...parseIcch(html,s));
-      else if (s.id==="sangyo") console.log("SANGYO_DEBUG_START", clean(html).slice(-12000), "SANGYO_DEBUG_END");
+      else if (s.id==="sangyo") { const p=html.indexOf("IT総合展2026"); console.log("SANGYO_HTML_START", p>=0?html.slice(Math.max(0,p-2200),p+4200):html.slice(-9000), "SANGYO_HTML_END"); }
     } catch (err) {
       errors.push({source:s.id,error:String(err.message||err)});
     }
