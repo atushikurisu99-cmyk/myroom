@@ -26,6 +26,7 @@ const SOURCES = [
   // スポーツはチケット情報より試合公式情報の方が強いので従来通り公式を入口にする。
   { id:"dragonflies", type:"team", role:"discovery", category:"sport", url:"https://hiroshimadragonflies.com/schedule/list/" },
   { id:"sanfrecce", type:"team", role:"discovery", category:"sport", url:"https://www.sanfrecce.co.jp/matches/results" },
+  { id:"thunders", type:"team", role:"discovery", category:"sport", url:"https://www.hiroshima-thunders.com/game/score/2026/index.html" },
 ];
 
 const VENUE_ALIASES = [
@@ -319,6 +320,29 @@ function parseSanfrecce(html, year, source) {
   return out;
 }
 
+function parseThunders(html, now, source) {
+  const text=clean(html).normalize("NFKC");
+  const out=[];
+  const re=/(\d{1,2})\s+(\d{1,2})\s+(?:MON|TUE|WED|THU|FRI|SAT|SUN)\s+(\d{1,2}:\d{2})\s+試合開始[\s\S]{0,180}?広島サンダーズ\s+VS\s+([^\s]{1,24})[\s\S]{0,100}?会場\s+([^\s（(]{2,40})/g;
+  let m;
+  while ((m=re.exec(text))) {
+    const month=Number(m[1]), day=Number(m[2]);
+    let year=now.getUTCFullYear();
+    const currentMonth=now.getUTCMonth()+1;
+    if (month+4 < currentMonth) year+=1;
+    const venue=canonicalVenue(m[5]);
+    if (!["広島グリーンアリーナ","広島サンプラザホール"].includes(venue)) continue;
+    const e={
+      category:"sport", sport:"volleyball", date:isoDate(year,month,day), start:m[3], endEstimate:null,
+      title:`広島×${m[4]}`, venue, area:"広島市",
+      sourceIds:[source.id], sourceUrl:source.url, sourceTypes:["team"], confidence:"official"
+    };
+    e.id=makeId(e);
+    out.push(e);
+  }
+  return out;
+}
+
 function sourceConfirmsEvent(text,e,source) {
   if (!text) return false;
   if (source.venue && canonicalVenue(source.venue)!==canonicalVenue(e.venue)) return false;
@@ -410,7 +434,7 @@ function dedupe(events) {
 function endEstimate(e) {
   if (e.endEstimate || !e.start) return e;
   const mins=normalizeTitle(e.title).includes("マンマミーア") ? 155 :
-    e.sport==="soccer" ? 120 : e.sport==="basketball" ? 145 : 140;
+    e.sport==="soccer" ? 120 : e.sport==="basketball" ? 145 : e.sport==="volleyball" ? 150 : 140;
   const [h,m]=e.start.split(":").map(Number);
   const total=h*60+m+mins;
   return {...e,endEstimate:`${pad(Math.floor(total/60)%24)}:${pad(total%60)}`};
@@ -453,6 +477,7 @@ async function main() {
       else if (s.id==="seven-ueno") discovered.push(...parseSevenUeno(html,year,s));
       else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
       else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
+      else if (s.id==="thunders") discovered.push(...parseThunders(html,now,s));
     } catch (err) {
       errors.push({source:s.id,error:String(err.message||err)});
     }
