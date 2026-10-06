@@ -78,13 +78,13 @@ window.AppScreens.FareScreen = (() => {
           >
             <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-start">
               <div>
-                <div className="text-[16px] font-bold text-slate-800 leading-none">
+                <div className="tx-md font-bold text-slate-800 leading-none">
                   {formatTime(rideStartAt)}
                 </div>
-                <div className="mt-2 text-[14px] font-bold text-slate-700 truncate">
+                <div className="mt-2 tx-sm font-bold text-slate-700 truncate">
                   {pickup || "未取得"}
                 </div>
-                <div className="mt-1 text-[12px] font-semibold text-slate-400">
+                <div className="mt-1 tx-xs font-semibold text-slate-400">
                   精度：{pickupMeta?.accuracy != null ? `${pickupMeta.accuracy}m` : "--"}
                 </div>
               </div>
@@ -92,13 +92,13 @@ window.AppScreens.FareScreen = (() => {
               <div className="pt-[6px] text-[22px] text-slate-300">→</div>
 
               <div className="text-right">
-                <div className="text-[16px] font-bold text-slate-800 leading-none">
+                <div className="tx-md font-bold text-slate-800 leading-none">
                   {formatTime(rideEndAt)}
                 </div>
-                <div className="mt-2 text-[14px] font-bold text-slate-700 truncate">
+                <div className="mt-2 tx-sm font-bold text-slate-700 truncate">
                   {dropoff || "未取得"}
                 </div>
-                <div className="mt-1 text-[12px] font-semibold text-slate-400">
+                <div className="mt-1 tx-xs font-semibold text-slate-400">
                   精度：{dropoffMeta?.accuracy != null ? `${dropoffMeta.accuracy}m` : "--"}
                 </div>
               </div>
@@ -112,7 +112,7 @@ window.AppScreens.FareScreen = (() => {
             >
               <div className="flex items-center justify-between gap-4">
                 <div className="relative flex-1">
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 text-[22px] font-bold text-slate-800">
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 tx-xl font-bold text-slate-800">
                     ¥
                   </span>
                   <input
@@ -122,19 +122,19 @@ window.AppScreens.FareScreen = (() => {
                     value={formattedAmount}
                     onChange={handleAmountChange}
                     placeholder="0"
-                    className="w-full bg-transparent pl-[26px] pr-0 text-[34px] leading-none font-bold tracking-[-0.04em] text-slate-800 outline-none"
+                    className="w-full bg-transparent pl-[26px] pr-0 tx-2xl leading-none font-bold tracking-[-0.04em] text-slate-800 outline-none"
                   />
                 </div>
 
                 <div className="text-right min-w-[82px]">
-                  <div className="text-[12px] font-semibold text-slate-400">
+                  <div className="tx-xs font-semibold text-slate-400">
                     乗車人員
                   </div>
                   <div className="mt-1 flex items-end gap-1 justify-end">
-                    <span className="text-[12px] font-semibold text-slate-400">
+                    <span className="tx-xs font-semibold text-slate-400">
                       {hasPassengerSelected ? selectedPassengers : ""}
                     </span>
-                    <span className="text-[12px] font-semibold text-slate-400">
+                    <span className="tx-xs font-semibold text-slate-400">
                       {hasPassengerSelected ? "名" : ""}
                     </span>
                   </div>
@@ -189,7 +189,7 @@ window.AppScreens.FareScreen = (() => {
               type="button"
               onClick={() => hasPassengerSelected && openPaymentDialog("cash")}
               disabled={!hasPassengerSelected}
-              className="w-full h-[72px] rounded-[24px] text-[22px] font-bold shadow-[0_8px_16px_rgba(0,0,0,0.14)]"
+              className="w-full h-[72px] rounded-[24px] tx-xl font-bold shadow-[0_8px_16px_rgba(0,0,0,0.14)]"
               style={{
                 background: hasPassengerSelected ? C.PAYMENT_CASH : C.PAYMENT_DISABLED,
                 color: "#111827",
@@ -202,7 +202,7 @@ window.AppScreens.FareScreen = (() => {
               type="button"
               onClick={() => hasPassengerSelected && openPaymentDialog("cardQr")}
               disabled={!hasPassengerSelected}
-              className="w-full h-[72px] rounded-[24px] text-[22px] font-bold shadow-[0_8px_16px_rgba(0,0,0,0.14)]"
+              className="w-full h-[72px] rounded-[24px] tx-xl font-bold shadow-[0_8px_16px_rgba(0,0,0,0.14)]"
               style={{
                 background: hasPassengerSelected ? C.PAYMENT_CARD : C.PAYMENT_DISABLED,
                 color: "#111827",
@@ -215,7 +215,7 @@ window.AppScreens.FareScreen = (() => {
               type="button"
               onClick={() => hasPassengerSelected && openPaymentDialog("receipt")}
               disabled={!hasPassengerSelected}
-              className="w-full h-[72px] rounded-[24px] text-[22px] font-bold shadow-[0_8px_16px_rgba(0,0,0,0.14)]"
+              className="w-full h-[72px] rounded-[24px] tx-xl font-bold shadow-[0_8px_16px_rgba(0,0,0,0.14)]"
               style={{
                 background: hasPassengerSelected ? C.PAYMENT_RECEIPT : C.PAYMENT_DISABLED,
                 color: "#111827",
