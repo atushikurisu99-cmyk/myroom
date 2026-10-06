@@ -499,7 +499,7 @@ function parseHiroshimaPortCruise(html, source, now) {
   const text=clean(html).normalize("NFKC");
   const out=[];
   const currentYear=now.getUTCFullYear();
-  const re=/(\d{1,2})月\s*(\d{1,2})日\([^)]*\)\s*(\d{1,2})時(\d{2})分\s+(\d{1,2})月\s*(\d{1,2})日\([^)]*\)\s*(\d{1,2})時(\d{2})分\s+([\s\S]{1,80}?)\s+([^\s]{1,30})\s+([^\s]{1,30})\s+((?:宇品外貿第5バース|五日市-?11m[，,、\s]*-?12m岸壁))/g;
+  const re=/(\d{1,2})月\s*(\d{1,2})日\([^)]*\)\s*(\d{1,2})時(\d{2})分\s+(\d{1,2})月\s*(\d{1,2})日\([^)]*\)\s*(\d{1,2})時(\d{2})分\s+([\s\S]{1,80}?)\s+([^\s]{1,30})\s+([^\s]{1,30})\s+([^\s]{1,60}(?:岸壁|バース|港|沖泊め))/g;
   let m;
   while ((m=re.exec(text))) {
     const inMonth=Number(m[1]), inDay=Number(m[2]);
@@ -516,8 +516,10 @@ function parseHiroshimaPortCruise(html, source, now) {
       departureDate:isoDate(outYear,outMonth,outDay),
       title:ship,
       ship,
-      venue:berth.includes("五日市") ? "広島港・五日市岸壁" : "広島港・宇品外貿第5バース",
-      area:"広島市",
+      venue:berth.includes("五日市") ? "広島港・五日市岸壁" :
+        berth.includes("宇品") ? "広島港・宇品外貿第5バース" :
+        berth.includes("廿日市") ? `廿日市港・${berth}` : berth,
+      area:berth.includes("廿日市") ? "廿日市市" : "広島市",
       previousPort:m[10],
       nextPort:m[11],
       sourceIds:[source.id],
