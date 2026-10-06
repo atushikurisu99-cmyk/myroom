@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T10:28:23.615Z",
+  "generatedAt": "2026-10-06T10:29:41.737Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -142,17 +142,12 @@
   ],
   "stats": {
     "discovered": 232,
-    "confirmed": 36,
-    "candidate": 76,
+    "confirmed": 38,
+    "candidate": 74,
     "official": 120,
     "playguideBased": 106
   },
-  "errors": [
-    {
-      "source": "eplus-ueno",
-      "error": "503 https://eplus.jp/sf/venue/7300130/events"
-    }
-  ],
+  "errors": [],
   "events": [
     {
       "category": "convention",
@@ -356,7 +351,7 @@
       "date": "2026-10-10",
       "start": "14:05",
       "endEstimate": "16:30",
-      "title": "広島×10/10",
+      "title": "広島×滋賀",
       "venue": "広島サンプラザホール",
       "area": "広島市",
       "sourceIds": [
@@ -1179,7 +1174,7 @@
       "date": "2026-10-19",
       "start": "19:05",
       "endEstimate": "21:30",
-      "title": "広島×10/19",
+      "title": "広島×三遠",
       "venue": "広島グリーンアリーナ",
       "area": "広島市",
       "sourceIds": [
@@ -1295,7 +1290,7 @@
       "date": "2026-10-21",
       "start": "19:05",
       "endEstimate": "21:30",
-      "title": "広島×10/21",
+      "title": "広島×秋田",
       "venue": "広島グリーンアリーナ",
       "area": "広島市",
       "sourceIds": [
@@ -4183,28 +4178,29 @@
     {
       "category": "live",
       "date": "2026-12-04",
-      "start": null,
-      "endEstimate": null,
+      "start": "18:00",
+      "endEstimate": "20:20",
       "title": "REBECCA",
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "lawson-ueno"
+        "lawson-ueno",
+        "eplus-ueno"
       ],
       "sourceUrl": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92",
       "sourceTypes": [
         "playguide"
       ],
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "id": "live-20261204-0000-72656265636361",
-      "verifiedBy": 1,
+      "verifiedBy": 2,
       "artist": "REBECCA",
       "calendarDisplay": {
         "date": "2026-12-04",
         "artist": "REBECCA",
         "venue": "上野学園ホール",
-        "start": null,
-        "endEstimate": null
+        "start": "18:00",
+        "endEstimate": "20:20"
       }
     },
     {
