@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T10:24:32.525Z",
+  "generatedAt": "2026-10-06T10:26:52.476Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -141,11 +141,11 @@
     }
   ],
   "stats": {
-    "discovered": 233,
+    "discovered": 232,
     "confirmed": 38,
-    "candidate": 75,
+    "candidate": 74,
     "official": 120,
-    "playguideBased": 107
+    "playguideBased": 106
   },
   "errors": [],
   "events": [
@@ -3392,33 +3392,6 @@
         "venue": "広島クラブクアトロ",
         "start": "19:00",
         "endEstimate": "21:20"
-      }
-    },
-    {
-      "category": "live",
-      "date": "2026-11-21",
-      "start": null,
-      "endEstimate": null,
-      "title": "公演日: 2026/11/17(火) 会場: 広島文化学園HBGホール(広島県) 販売方法 先着 一般発売 受付期間 予定枚数終了 2026/9/11(金) 10:00 ~ 2026/11/9(月) 23:59 申込/詳細 詳細はこちら コ",
-      "venue": "広島文化学園HBGホール",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-hbg"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261121-0000-e585ace6bc94e697",
-      "verifiedBy": 1,
-      "artist": "公演日: 2026/11/17(火) 会場: 広島文化学園HBGホール(広島県) 販売方法 先着 一般発売 受付期間 予定枚数終了 2026/9/11(金) 10:00 ~ 2026/11/9(月) 23:59 申込/詳細 詳細はこちら コ",
-      "calendarDisplay": {
-        "date": "2026-11-21",
-        "artist": "公演日: 2026/11/17(火) 会場: 広島文化学園HBGホール(広島県) 販売方法 先着 一般発売 受付期間 予定枚数終了 2026/9/11(金) 10:00 ~ 2026/11/9(月) 23:59 申込/詳細 詳細はこちら コ",
-        "venue": "広島文化学園HBGホール",
-        "start": null,
-        "endEstimate": null
       }
     },
     {
