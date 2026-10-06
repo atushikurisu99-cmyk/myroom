@@ -226,11 +226,24 @@ function TaxiMiniApp() {
     // 起動画面を見ている間に先読み。前回キャッシュがあれば即時表示し、
     // 最新データだけバックグラウンドで差し替える。
     loadEventFeed();
+
     const timer = setInterval(loadEventFeed, 5 * 60 * 1000);
+    const refreshOnVisible = () => {
+      if (document.visibilityState === "visible") loadEventFeed();
+    };
+    const refreshOnFocus = () => loadEventFeed();
+    const refreshOnOnline = () => loadEventFeed();
+
+    document.addEventListener("visibilitychange", refreshOnVisible);
+    window.addEventListener("focus", refreshOnFocus);
+    window.addEventListener("online", refreshOnOnline);
 
     return () => {
       alive = false;
       clearInterval(timer);
+      document.removeEventListener("visibilitychange", refreshOnVisible);
+      window.removeEventListener("focus", refreshOnFocus);
+      window.removeEventListener("online", refreshOnOnline);
     };
   }, []);
 
