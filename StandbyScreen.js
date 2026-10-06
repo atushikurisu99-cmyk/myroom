@@ -1,6 +1,6 @@
 window.AppScreens = window.AppScreens || {};
 window.AppScreens.StandbyScreen = (() => {
-  const { useEffect, useMemo, useState } = React;
+  const { useMemo } = React;
   const { MainButton } = window.AppComponents;
   const L = window.AppConstants.TOP_LAYOUT;
 
@@ -78,21 +78,11 @@ window.AppScreens.StandbyScreen = (() => {
 
   return function StandbyScreen(props) {
     const {
+      events = [],
       handleStartRide,
       homeEndSheetOpen = false,
       handleFinishTap = () => {},
     } = props;
-
-    const [events, setEvents] = useState([]);
-
-    useEffect(() => {
-      let alive = true;
-      fetch(`./data/events.json?v=${Date.now()}`, { cache: "no-store" })
-        .then((r) => (r.ok ? r.json() : Promise.reject(new Error("events fetch failed"))))
-        .then((data) => { if (alive) setEvents(Array.isArray(data?.events) ? data.events : []); })
-        .catch(() => { if (alive) setEvents([]); });
-      return () => { alive = false; };
-    }, []);
 
     const liveEvent = useMemo(() => pickUpcoming(events, "live"), [events]);
     const sportEvent = useMemo(() => pickUpcoming(events, "sport"), [events]);
