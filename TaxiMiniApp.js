@@ -168,7 +168,7 @@ function SalesNotificationBanner({ alert, onDismiss }) {
           </div>
           <div style={{
             marginTop: "2px",
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 700,
             color: "#68758a",
             whiteSpace: "nowrap",
