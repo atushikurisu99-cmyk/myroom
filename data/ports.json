@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T11:55:23.525Z",
+  "generatedAt": "2026-10-06T13:02:14.324Z",
   "policy": "append-only discovery; missing from latest cruise schedule does not delete port; retire only by explicit admin action",
   "ports": [
     {
@@ -8,9 +8,11 @@
       "port": "広島港",
       "venue": "広島港・宇品外貿第5バース",
       "area": "広島市",
-      "sourceIds": ["hiroshima-port-cruise"],
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
       "firstSeenAt": "2026-10-06T11:55:23.525Z",
-      "lastSeenAt": "2026-10-06T11:55:23.525Z",
+      "lastSeenAt": "2026-10-06T13:02:14.324Z",
       "enabled": true,
       "retired": false
     },
@@ -20,9 +22,11 @@
       "port": "広島港",
       "venue": "広島港・五日市岸壁",
       "area": "広島市",
-      "sourceIds": ["hiroshima-port-cruise"],
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
       "firstSeenAt": "2026-10-06T11:55:23.525Z",
-      "lastSeenAt": "2026-10-06T11:55:23.525Z",
+      "lastSeenAt": "2026-10-06T13:02:14.324Z",
       "enabled": true,
       "retired": false
     }

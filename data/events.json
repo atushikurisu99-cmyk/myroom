@@ -1,6 +1,37 @@
 {
-  "generatedAt": "2026-10-06T11:55:23.525Z",
+  "generatedAt": "2026-10-06T13:02:14.324Z",
   "area": "hiroshima",
+  "ports": [
+    {
+      "id": "hiroshima-ujina",
+      "name": "宇品",
+      "port": "広島港",
+      "venue": "広島港・宇品外貿第5バース",
+      "area": "広島市",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "firstSeenAt": "2026-10-06T11:55:23.525Z",
+      "lastSeenAt": "2026-10-06T13:02:14.324Z",
+      "enabled": true,
+      "retired": false
+    },
+    {
+      "id": "hiroshima-itsukaichi",
+      "name": "五日市",
+      "port": "広島港",
+      "venue": "広島港・五日市岸壁",
+      "area": "広島市",
+      "sourceIds": [
+        "hiroshima-port-cruise"
+      ],
+      "firstSeenAt": "2026-10-06T11:55:23.525Z",
+      "lastSeenAt": "2026-10-06T13:02:14.324Z",
+      "enabled": true,
+      "retired": false
+    }
+  ],
+  "pendingFacilities": [],
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
     {
@@ -170,16 +201,12 @@
   ],
   "stats": {
     "discovered": 203,
-    "confirmed": 31,
-    "candidate": 103,
+    "confirmed": 41,
+    "candidate": 93,
     "official": 69,
     "playguideBased": 111
   },
   "errors": [
-    {
-      "source": "eplus-quattro",
-      "error": "503 https://eplus.jp/sf/venue/7300090/events"
-    },
     {
       "source": "sangyo",
       "error": "fetch failed"
@@ -207,7 +234,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261005-0900-6469616d6f6e6470",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -234,7 +263,9 @@
         "venue": "広島グリーンアリーナ",
         "start": "18:00",
         "endEstimate": "20:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -261,14 +292,16 @@
         "venue": "上野学園ホール",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
       "date": "2026-10-07",
       "start": "18:00",
       "endEstimate": "20:20",
-      "title": "[出演] Mrs. GREEN APPLE レビュー:--件 0 2 ロック Mrs. GREEN APPLE",
+      "title": "[出演] Mrs. GREEN APPLE レビュー:--件 セットリスト 0 3 ロック Mrs. GREEN APPLE",
       "venue": "広島グリーンアリーナ",
       "area": "広島市",
       "sourceIds": [
@@ -281,14 +314,16 @@
       "confidence": "candidate",
       "id": "live-20261007-1800-5be587bae6bc945d",
       "verifiedBy": 1,
-      "artist": "[出演] Mrs. GREEN APPLE レビュー:--件 0 2 ロック Mrs. GREEN APPLE",
+      "artist": "[出演] Mrs. GREEN APPLE レビュー:--件 セットリスト 0 3 ロック Mrs. GREEN APPLE",
       "calendarDisplay": {
         "date": "2026-10-07",
-        "artist": "[出演] Mrs. GREEN APPLE レビュー:--件 0 2 ロック Mrs. GREEN APPLE",
+        "artist": "[出演] Mrs. GREEN APPLE レビュー:--件 セットリスト 0 3 ロック Mrs. GREEN APPLE",
         "venue": "広島グリーンアリーナ",
         "start": "18:00",
         "endEstimate": "20:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "cruise",
@@ -311,7 +346,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261008-0800-73696c7665726d6f",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -330,7 +367,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261008-900-e7acac3635e59b9e",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -359,7 +398,9 @@
         "venue": "JMSアステールプラザ",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -386,7 +427,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -405,7 +448,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261009-900-e7acac3635e59b9e",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -432,7 +477,9 @@
         "venue": "JMSアステールプラザ",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "cruise",
@@ -455,7 +502,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261010-0930-63656c6562726974",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -482,7 +531,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "sport",
@@ -502,7 +553,9 @@
       ],
       "confidence": "official",
       "id": "sport-20261010-1405-e5ba83e5b3b6c397",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -530,7 +583,9 @@
         "venue": "JMSアステールプラザ",
         "start": "17:00",
         "endEstimate": "19:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -557,7 +612,9 @@
         "venue": "上野学園ホール",
         "start": "17:30",
         "endEstimate": "20:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -585,7 +642,9 @@
         "venue": "BLUE LIVE 広島",
         "start": "18:00",
         "endEstimate": "20:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -604,7 +663,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261010-900-e7acac3635e59b9e",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -632,7 +693,9 @@
         "venue": "JMSアステールプラザ",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -659,7 +722,9 @@
         "venue": "BLUE LIVE 広島",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -686,34 +751,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
-    },
-    {
-      "category": "live",
-      "date": "2026-10-12",
-      "start": null,
-      "endEstimate": null,
-      "title": "SHE’S",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261012-0000-736865e2809973",
-      "verifiedBy": 1,
-      "artist": "SHE’S",
-      "calendarDisplay": {
-        "date": "2026-10-12",
-        "artist": "SHE’S",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -740,7 +780,39 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
+    },
+    {
+      "category": "live",
+      "date": "2026-10-12",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "SHE’S",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261012-0000-736865e2809973",
+      "verifiedBy": 2,
+      "artist": "SHE’S",
+      "calendarDisplay": {
+        "date": "2026-10-12",
+        "artist": "SHE’S",
+        "venue": "広島クラブクアトロ",
+        "start": "17:30",
+        "endEstimate": "19:50"
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "cruise",
@@ -763,7 +835,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261013-0800-6c756d696e617261",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "cruise",
@@ -786,7 +860,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261014-1000-737461727365656b",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -813,7 +889,9 @@
         "venue": "上野学園ホール",
         "start": "18:30",
         "endEstimate": "21:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -840,7 +918,9 @@
         "venue": "広島クラブクアトロ",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -867,7 +947,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -886,7 +968,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261016-830-e7acac3639e59b9e",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -913,34 +997,9 @@
         "venue": "JMSアステールプラザ",
         "start": null,
         "endEstimate": null
-      }
-    },
-    {
-      "category": "live",
-      "date": "2026-10-17",
-      "start": null,
-      "endEstimate": null,
-      "title": "Penthouse",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261017-0000-70656e74686f7573",
-      "verifiedBy": 1,
-      "artist": "Penthouse",
-      "calendarDisplay": {
-        "date": "2026-10-17",
-        "artist": "Penthouse",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -967,7 +1026,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "sport",
@@ -987,7 +1048,9 @@
       ],
       "confidence": "official",
       "id": "sport-20261017-1400-e5ba83e5b3b6c397",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1017,7 +1080,9 @@
         "venue": "広島文化学園HBGホール",
         "start": "16:00",
         "endEstimate": "18:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1044,7 +1109,9 @@
         "venue": "広島グリーンアリーナ",
         "start": "17:00",
         "endEstimate": "19:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1071,7 +1138,39 @@
         "venue": "上野学園ホール",
         "start": "17:30",
         "endEstimate": "20:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
+    },
+    {
+      "category": "live",
+      "date": "2026-10-17",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "Penthouse",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261017-0000-70656e74686f7573",
+      "verifiedBy": 2,
+      "artist": "Penthouse",
+      "calendarDisplay": {
+        "date": "2026-10-17",
+        "artist": "Penthouse",
+        "venue": "広島クラブクアトロ",
+        "start": "18:00",
+        "endEstimate": "20:20"
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -1090,7 +1189,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261017-830-e7acac3639e59b9e",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "cruise",
@@ -1113,7 +1214,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261018-0800-737461727365656b",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1140,7 +1243,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1167,7 +1272,9 @@
         "venue": "広島グリーンアリーナ",
         "start": "16:00",
         "endEstimate": "18:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1194,7 +1301,9 @@
         "venue": "広島国際会議場",
         "start": "16:00",
         "endEstimate": "19:00"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1222,7 +1331,9 @@
         "venue": "JMSアステールプラザ",
         "start": "17:00",
         "endEstimate": "19:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1250,7 +1361,9 @@
         "venue": "広島文化学園HBGホール",
         "start": "17:00",
         "endEstimate": "19:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "sport",
@@ -1270,7 +1383,9 @@
       ],
       "confidence": "official",
       "id": "sport-20261019-1905-e5ba83e5b3b6c397",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "cruise",
@@ -1293,7 +1408,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261020-0800-73696c7665726d6f",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1320,7 +1437,9 @@
         "venue": "上野学園ホール",
         "start": "18:30",
         "endEstimate": "21:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1347,7 +1466,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "cruise",
@@ -1370,7 +1491,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261021-1400-76696b696e676f72",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "sport",
@@ -1390,7 +1513,9 @@
       ],
       "confidence": "official",
       "id": "sport-20261021-1905-e5ba83e5b3b6c397",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "cruise",
@@ -1413,7 +1538,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261022-0900-63656c6562726974",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1440,7 +1567,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "cruise",
@@ -1463,7 +1592,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261023-0830-6c756d696e617261",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1490,36 +1621,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
-    },
-    {
-      "category": "live",
-      "date": "2026-10-24",
-      "start": null,
-      "endEstimate": null,
-      "title": "フラワーカンパニーズ",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro",
-        "candy"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide",
-        "promoter"
-      ],
-      "confidence": "confirmed",
-      "id": "live-20261024-0000-e38395e383a9e383",
-      "verifiedBy": 2,
-      "artist": "フラワーカンパニーズ",
-      "calendarDisplay": {
-        "date": "2026-10-24",
-        "artist": "フラワーカンパニーズ",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "cruise",
@@ -1542,7 +1646,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261024-0800-6469616d6f6e6470",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -1561,7 +1667,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261024-1130-e59088e5908ce4bc",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1588,7 +1696,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "sport",
@@ -1608,7 +1718,41 @@
       ],
       "confidence": "official",
       "id": "sport-20261024-1400-e5ba83e5b3b6c397",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
+    },
+    {
+      "category": "live",
+      "date": "2026-10-24",
+      "start": "17:00",
+      "endEstimate": "19:20",
+      "title": "フラワーカンパニーズ",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro",
+        "candy"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide",
+        "promoter"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261024-0000-e38395e383a9e383",
+      "verifiedBy": 3,
+      "artist": "フラワーカンパニーズ",
+      "calendarDisplay": {
+        "date": "2026-10-24",
+        "artist": "フラワーカンパニーズ",
+        "venue": "広島クラブクアトロ",
+        "start": "17:00",
+        "endEstimate": "19:20"
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1635,7 +1779,9 @@
         "venue": "上野学園ホール",
         "start": "17:30",
         "endEstimate": "20:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1662,36 +1808,9 @@
         "venue": "JMSアステールプラザ",
         "start": null,
         "endEstimate": null
-      }
-    },
-    {
-      "category": "live",
-      "date": "2026-10-25",
-      "start": null,
-      "endEstimate": null,
-      "title": "YONA YONA WEEKENDERS",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro",
-        "candy"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide",
-        "promoter"
-      ],
-      "confidence": "confirmed",
-      "id": "live-20261025-0000-796f6e61796f6e61",
-      "verifiedBy": 2,
-      "artist": "YONA YONA WEEKENDERS",
-      "calendarDisplay": {
-        "date": "2026-10-25",
-        "artist": "YONA YONA WEEKENDERS",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "cruise",
@@ -1714,7 +1833,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261025-0700-736576656e736561",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1741,7 +1862,41 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
+    },
+    {
+      "category": "live",
+      "date": "2026-10-25",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "YONA YONA WEEKENDERS",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro",
+        "candy"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide",
+        "promoter"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261025-0000-796f6e61796f6e61",
+      "verifiedBy": 3,
+      "artist": "YONA YONA WEEKENDERS",
+      "calendarDisplay": {
+        "date": "2026-10-25",
+        "artist": "YONA YONA WEEKENDERS",
+        "venue": "広島クラブクアトロ",
+        "start": "18:00",
+        "endEstimate": "20:20"
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "cruise",
@@ -1764,7 +1919,9 @@
       ],
       "confidence": "official",
       "id": "cruise-20261027-1800-e9a39be9b3a533",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1791,7 +1948,9 @@
         "venue": "JMSアステールプラザ",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1818,7 +1977,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1845,7 +2006,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1872,7 +2035,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1899,7 +2064,9 @@
         "venue": "広島国際会議場",
         "start": "18:00",
         "endEstimate": "20:00"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1926,34 +2093,9 @@
         "venue": "広島文化学園HBGホール",
         "start": null,
         "endEstimate": null
-      }
-    },
-    {
-      "category": "live",
-      "date": "2026-10-31",
-      "start": null,
-      "endEstimate": null,
-      "title": "リーガルリリー",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261031-0000-e383aae383bce382",
-      "verifiedBy": 1,
-      "artist": "リーガルリリー",
-      "calendarDisplay": {
-        "date": "2026-10-31",
-        "artist": "リーガルリリー",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -1980,7 +2122,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "sport",
@@ -2000,7 +2144,9 @@
       ],
       "confidence": "official",
       "id": "sport-20261031-1405-e5ba83e5b3b6c397",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2027,7 +2173,9 @@
         "venue": "広島国際会議場",
         "start": "15:00",
         "endEstimate": "17:00"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2054,34 +2202,39 @@
         "venue": "上野学園ホール",
         "start": "17:30",
         "endEstimate": "20:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
-      "date": "2026-11-01",
-      "start": null,
-      "endEstimate": null,
-      "title": "木村カエラ",
+      "date": "2026-10-31",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "リーガルリリー",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
       "sourceIds": [
-        "lawson-quattro"
+        "lawson-quattro",
+        "eplus-quattro"
       ],
       "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
       "sourceTypes": [
         "playguide"
       ],
-      "confidence": "candidate",
-      "id": "live-20261101-0000-e69ca8e69d91e382",
-      "verifiedBy": 1,
-      "artist": "木村カエラ",
+      "confidence": "confirmed",
+      "id": "live-20261031-0000-e383aae383bce382",
+      "verifiedBy": 2,
+      "artist": "リーガルリリー",
       "calendarDisplay": {
-        "date": "2026-11-01",
-        "artist": "木村カエラ",
+        "date": "2026-10-31",
+        "artist": "リーガルリリー",
         "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
+        "start": "17:30",
+        "endEstimate": "19:50"
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2109,7 +2262,9 @@
         "venue": "広島文化学園HBGホール",
         "start": "10:30",
         "endEstimate": "12:50"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2137,7 +2292,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "sport",
@@ -2157,7 +2314,39 @@
       ],
       "confidence": "official",
       "id": "sport-20261101-1305-e5ba83e5b3b6c397",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
+    },
+    {
+      "category": "live",
+      "date": "2026-11-01",
+      "start": "17:30",
+      "endEstimate": "19:50",
+      "title": "木村カエラ",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261101-0000-e69ca8e69d91e382",
+      "verifiedBy": 2,
+      "artist": "木村カエラ",
+      "calendarDisplay": {
+        "date": "2026-11-01",
+        "artist": "木村カエラ",
+        "venue": "広島クラブクアトロ",
+        "start": "17:30",
+        "endEstimate": "19:50"
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2184,7 +2373,9 @@
         "venue": "広島国際会議場",
         "start": "18:00",
         "endEstimate": "20:00"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2211,7 +2402,9 @@
         "venue": "広島サンプラザホール",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2238,7 +2431,9 @@
         "venue": "JMSアステールプラザ",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2265,7 +2460,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2292,7 +2489,9 @@
         "venue": "広島文化学園HBGホール",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2319,7 +2518,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2346,7 +2547,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2373,7 +2576,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2400,7 +2605,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2427,7 +2634,9 @@
         "venue": "広島国際会議場",
         "start": "13:00",
         "endEstimate": "15:30"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2454,7 +2663,9 @@
         "venue": "上野学園ホール",
         "start": "17:30",
         "endEstimate": "20:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2481,7 +2692,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2508,7 +2721,9 @@
         "venue": "上野学園ホール",
         "start": "18:30",
         "endEstimate": "21:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2535,7 +2750,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2562,7 +2779,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2590,7 +2809,9 @@
         "venue": "広島文化学園HBGホール",
         "start": "18:30",
         "endEstimate": "20:50"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2617,7 +2838,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2645,34 +2868,9 @@
         "venue": "広島文化学園HBGホール",
         "start": "18:00",
         "endEstimate": "20:20"
-      }
-    },
-    {
-      "category": "live",
-      "date": "2026-11-14",
-      "start": null,
-      "endEstimate": null,
-      "title": "Chilli Beans.",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261114-0000-6368696c6c696265",
-      "verifiedBy": 1,
-      "artist": "Chilli Beans.",
-      "calendarDisplay": {
-        "date": "2026-11-14",
-        "artist": "Chilli Beans.",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2699,7 +2897,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2726,7 +2926,39 @@
         "venue": "上野学園ホール",
         "start": "17:30",
         "endEstimate": "20:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
+    },
+    {
+      "category": "live",
+      "date": "2026-11-14",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "Chilli Beans.",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261114-0000-6368696c6c696265",
+      "verifiedBy": 2,
+      "artist": "Chilli Beans.",
+      "calendarDisplay": {
+        "date": "2026-11-14",
+        "artist": "Chilli Beans.",
+        "venue": "広島クラブクアトロ",
+        "start": "18:00",
+        "endEstimate": "20:20"
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2753,7 +2985,9 @@
         "venue": "広島グリーンアリーナ",
         "start": "18:00",
         "endEstimate": "20:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2780,7 +3014,9 @@
         "venue": "JMSアステールプラザ",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2807,7 +3043,9 @@
         "venue": "広島文化学園HBGホール",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -2826,7 +3064,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261115-1000-e59bbde99a9be383",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2853,7 +3093,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2880,7 +3122,9 @@
         "venue": "広島グリーンアリーナ",
         "start": "16:30",
         "endEstimate": "18:50"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2908,7 +3152,9 @@
         "venue": "BLUE LIVE 広島",
         "start": "17:00",
         "endEstimate": "19:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2936,7 +3182,9 @@
         "venue": "JMSアステールプラザ",
         "start": "15:30",
         "endEstimate": "17:50"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -2964,7 +3212,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -2983,7 +3233,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261119-0000-e38397e383a9e382",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3010,34 +3262,9 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
-    },
-    {
-      "category": "live",
-      "date": "2026-11-20",
-      "start": null,
-      "endEstimate": null,
-      "title": "ナナヲアカリ",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261120-0000-e3838ae3838ae383",
-      "verifiedBy": 1,
-      "artist": "ナナヲアカリ",
-      "calendarDisplay": {
-        "date": "2026-11-20",
-        "artist": "ナナヲアカリ",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -3056,7 +3283,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261120-0000-e38397e383a9e382",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3083,34 +3312,39 @@
         "venue": "上野学園ホール",
         "start": "13:30",
         "endEstimate": "16:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
-      "date": "2026-11-21",
-      "start": null,
-      "endEstimate": null,
-      "title": "山中さわお & ELPIS",
+      "date": "2026-11-20",
+      "start": "19:00",
+      "endEstimate": "21:20",
+      "title": "ナナヲアカリ",
       "venue": "広島クラブクアトロ",
       "area": "広島市",
       "sourceIds": [
-        "lawson-quattro"
+        "lawson-quattro",
+        "eplus-quattro"
       ],
       "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
       "sourceTypes": [
         "playguide"
       ],
-      "confidence": "candidate",
-      "id": "live-20261121-0000-e5b1b1e4b8ade381",
-      "verifiedBy": 1,
-      "artist": "山中さわお & ELPIS",
+      "confidence": "confirmed",
+      "id": "live-20261120-0000-e3838ae3838ae383",
+      "verifiedBy": 2,
+      "artist": "ナナヲアカリ",
       "calendarDisplay": {
-        "date": "2026-11-21",
-        "artist": "山中さわお & ELPIS",
+        "date": "2026-11-20",
+        "artist": "ナナヲアカリ",
         "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
+        "start": "19:00",
+        "endEstimate": "21:20"
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3137,7 +3371,9 @@
         "venue": "BLUE LIVE 広島",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3165,7 +3401,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "sport",
@@ -3185,7 +3423,9 @@
       ],
       "confidence": "official",
       "id": "sport-20261121-1400-e5ba83e5b3b6c397",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "sport",
@@ -3205,7 +3445,9 @@
       ],
       "confidence": "official",
       "id": "sport-20261121-1405-e5ba83e5b3b6c397",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3232,7 +3474,9 @@
         "venue": "広島グリーンアリーナ",
         "start": "17:00",
         "endEstimate": "19:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3260,7 +3504,39 @@
         "venue": "上野学園ホール",
         "start": "17:30",
         "endEstimate": "20:05"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
+    },
+    {
+      "category": "live",
+      "date": "2026-11-21",
+      "start": "18:00",
+      "endEstimate": "20:20",
+      "title": "山中さわお & ELPIS",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261121-0000-e5b1b1e4b8ade381",
+      "verifiedBy": 2,
+      "artist": "山中さわお & ELPIS",
+      "calendarDisplay": {
+        "date": "2026-11-21",
+        "artist": "山中さわお & ELPIS",
+        "venue": "広島クラブクアトロ",
+        "start": "18:00",
+        "endEstimate": "20:20"
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3287,7 +3563,9 @@
         "venue": "JMSアステールプラザ",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3314,7 +3592,9 @@
         "venue": "BLUE LIVE 広島",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3341,7 +3621,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3368,7 +3650,9 @@
         "venue": "広島国際会議場",
         "start": "14:00",
         "endEstimate": "16:00"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "sport",
@@ -3388,7 +3672,9 @@
       ],
       "confidence": "official",
       "id": "sport-20261122-1405-e5ba83e5b3b6c397",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3415,7 +3701,9 @@
         "venue": "広島グリーンアリーナ",
         "start": "16:00",
         "endEstimate": "18:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3442,7 +3730,9 @@
         "venue": "JMSアステールプラザ",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3470,7 +3760,9 @@
         "venue": "上野学園ホール",
         "start": "13:00",
         "endEstimate": "15:35"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3497,34 +3789,9 @@
         "venue": "広島文化学園HBGホール",
         "start": null,
         "endEstimate": null
-      }
-    },
-    {
-      "category": "live",
-      "date": "2026-11-26",
-      "start": null,
-      "endEstimate": null,
-      "title": "Michael Monroe",
-      "venue": "広島クラブクアトロ",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-quattro"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261126-0000-6d69636861656c6d",
-      "verifiedBy": 1,
-      "artist": "Michael Monroe",
-      "calendarDisplay": {
-        "date": "2026-11-26",
-        "artist": "Michael Monroe",
-        "venue": "広島クラブクアトロ",
-        "start": null,
-        "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3552,7 +3819,39 @@
         "venue": "JMSアステールプラザ",
         "start": "18:30",
         "endEstimate": "20:50"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
+    },
+    {
+      "category": "live",
+      "date": "2026-11-26",
+      "start": "19:00",
+      "endEstimate": "21:20",
+      "title": "Michael Monroe",
+      "venue": "広島クラブクアトロ",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-quattro",
+        "eplus-quattro"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "confirmed",
+      "id": "live-20261126-0000-6d69636861656c6d",
+      "verifiedBy": 2,
+      "artist": "Michael Monroe",
+      "calendarDisplay": {
+        "date": "2026-11-26",
+        "artist": "Michael Monroe",
+        "venue": "広島クラブクアトロ",
+        "start": "19:00",
+        "endEstimate": "21:20"
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3580,14 +3879,16 @@
         "venue": "広島文化学園HBGホール",
         "start": "17:00",
         "endEstimate": "19:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
       "date": "2026-11-28",
       "start": "18:00",
       "endEstimate": "20:20",
-      "title": "[出演] Mr.Children レビュー:--件 2 8 ロック ポップス BUMP OF CHICKEN",
+      "title": "[出演] Mr.Children レビュー:--件 2 9 ロック ポップス BUMP OF CHICKEN",
       "venue": "広島グリーンアリーナ",
       "area": "広島市",
       "sourceIds": [
@@ -3600,14 +3901,16 @@
       "confidence": "candidate",
       "id": "live-20261128-1800-5be587bae6bc945d",
       "verifiedBy": 1,
-      "artist": "[出演] Mr.Children レビュー:--件 2 8 ロック ポップス BUMP OF CHICKEN",
+      "artist": "[出演] Mr.Children レビュー:--件 2 9 ロック ポップス BUMP OF CHICKEN",
       "calendarDisplay": {
         "date": "2026-11-28",
-        "artist": "[出演] Mr.Children レビュー:--件 2 8 ロック ポップス BUMP OF CHICKEN",
+        "artist": "[出演] Mr.Children レビュー:--件 2 9 ロック ポップス BUMP OF CHICKEN",
         "venue": "広島グリーンアリーナ",
         "start": "18:00",
         "endEstimate": "20:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -3626,7 +3929,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261129-1000-e697a5e69cace695",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3654,7 +3959,9 @@
         "venue": "JMSアステールプラザ",
         "start": "17:00",
         "endEstimate": "19:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3681,7 +3988,9 @@
         "venue": "広島グリーンアリーナ",
         "start": "18:00",
         "endEstimate": "20:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -3700,7 +4009,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261130-920-e5bf9ce794a8e789",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -3719,7 +4030,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261201-920-e5bf9ce794a8e789",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3746,7 +4059,9 @@
         "venue": "広島文化学園HBGホール",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "convention",
@@ -3765,7 +4080,9 @@
       ],
       "confidence": "official",
       "id": "convention-20261202-920-e5bf9ce794a8e789",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3793,7 +4110,9 @@
         "venue": "JMSアステールプラザ",
         "start": "19:00",
         "endEstimate": "21:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3821,7 +4140,9 @@
         "venue": "上野学園ホール",
         "start": "18:00",
         "endEstimate": "20:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3851,7 +4172,9 @@
         "venue": "広島グリーンアリーナ",
         "start": "11:00",
         "endEstimate": "13:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3878,7 +4201,9 @@
         "venue": "上野学園ホール",
         "start": null,
         "endEstimate": null
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "sport",
@@ -3898,7 +4223,9 @@
       ],
       "confidence": "official",
       "id": "sport-20261206-1400-e5ba83e5b3b6c397",
-      "verifiedBy": 1
+      "verifiedBy": 1,
+      "facilityVerification": "verified",
+      "publishable": true
     },
     {
       "category": "live",
@@ -3928,7 +4255,9 @@
         "venue": "広島文化学園HBGホール",
         "start": "16:00",
         "endEstimate": "18:20"
-      }
+      },
+      "facilityVerification": "verified",
+      "publishable": true
     }
   ]
 }
