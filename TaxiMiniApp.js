@@ -202,6 +202,13 @@ function TaxiMiniApp() {
       return "hiroshima-sogo";
     }
   });
+  const [businessProfile, setBusinessProfile] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("taxiBusinessProfile") || "{}");
+    } catch (_) {
+      return {};
+    }
+  });
 
   const [eventFeed, setEventFeed] = useState(() => {
     try {
@@ -415,6 +422,17 @@ function TaxiMiniApp() {
           show={showReportTemplateSettings}
           onClose={() => setShowReportTemplateSettings(false)}
           selectedTemplate={reportTemplate}
+          records={state.records}
+          businessProfile={businessProfile}
+          onBusinessProfileChange={(key, value) => {
+            setBusinessProfile((prev) => {
+              const next = { ...prev, [key]: value };
+              try {
+                localStorage.setItem("taxiBusinessProfile", JSON.stringify(next));
+              } catch (_) {}
+              return next;
+            });
+          }}
           onSelectTemplate={(templateId) => {
             setReportTemplate(templateId);
             try {
