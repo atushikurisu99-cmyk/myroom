@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T10:23:09.347Z",
+  "generatedAt": "2026-10-06T10:24:32.525Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -141,14 +141,35 @@
     }
   ],
   "stats": {
-    "discovered": 167,
+    "discovered": 233,
     "confirmed": 38,
-    "candidate": 98,
-    "official": 31,
+    "candidate": 75,
+    "official": 120,
     "playguideBased": 107
   },
   "errors": [],
   "events": [
+    {
+      "category": "convention",
+      "date": "2026-10-06",
+      "start": null,
+      "endEstimate": null,
+      "title": "進路相談会",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "進学相談会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e9%80%b2%e8%b7%af%e7%9b%b8%e8%ab%87%e4%bc%9a-5/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261006-0000-e980b2e8b7afe79b",
+      "verifiedBy": 1
+    },
     {
       "category": "live",
       "date": "2026-10-07",
@@ -191,7 +212,7 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261008-900-e7acac3635e59b9e",
       "verifiedBy": 1
     },
@@ -266,7 +287,7 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261009-900-e7acac3635e59b9e",
       "verifiedBy": 1
     },
@@ -414,7 +435,7 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261010-900-e7acac3635e59b9e",
       "verifiedBy": 1
     },
@@ -472,6 +493,27 @@
         "start": "13:00",
         "endEstimate": "15:35"
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-12",
+      "start": null,
+      "endEstimate": null,
+      "title": "ドラコンゲートプロレス 広島大会 2026",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "その他",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%89%e3%83%a9%e3%82%b3%e3%83%b3%e3%82%b2%e3%83%bc%e3%83%88%e3%83%97%e3%83%ad%e3%83%ac%e3%82%b9-%e5%ba%83%e5%b3%b6%e5%a4%a7%e4%bc%9a-2026/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261012-0000-e38389e383a9e382",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -583,6 +625,27 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-10-15",
+      "start": null,
+      "endEstimate": null,
+      "title": "IT総合展2026inひろしま",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "展示会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/it%e7%b7%8f%e5%90%88%e5%b1%952026%ef%bd%89%ef%bd%8e%e3%81%b2%e3%82%8d%e3%81%97%e3%81%be/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261015-0000-6974e7b78fe59088",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-10-15",
       "start": "13:30",
@@ -612,6 +675,48 @@
     {
       "category": "convention",
       "date": "2026-10-16",
+      "start": null,
+      "endEstimate": null,
+      "title": "IT総合展2026inひろしま",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "展示会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/it%e7%b7%8f%e5%90%88%e5%b1%952026%ef%bd%89%ef%bd%8e%e3%81%b2%e3%82%8d%e3%81%97%e3%81%be/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261016-0000-6974e7b78fe59088",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-16",
+      "start": null,
+      "endEstimate": null,
+      "title": "建設ディレクター導入セミナー",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e5%bb%ba%e8%a8%ad%e3%83%87%e3%82%a3%e3%83%ac%e3%82%af%e3%82%bf%e3%83%bc%e5%b0%8e%e5%85%a5%e3%82%bb%e3%83%9f%e3%83%8a%e3%83%bc/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261016-0000-e5bbbae8a8ade383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-16",
       "start": "8:30",
       "endEstimate": "17:30",
       "title": "第69回秋季日本歯周病学会学術大会",
@@ -624,7 +729,7 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261016-830-e7acac3639e59b9e",
       "verifiedBy": 1
     },
@@ -654,6 +759,90 @@
         "start": null,
         "endEstimate": null
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-17",
+      "start": null,
+      "endEstimate": null,
+      "title": "ひろしま中高年世代向け 求職者セミナー&合同企業説明会",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "その他",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%81%b2%e3%82%8d%e3%81%97%e3%81%be%e4%b8%ad%e9%ab%98%e5%b9%b4%e4%b8%96%e4%bb%a3%e5%90%91%e3%81%91%e3%80%80%e6%b1%82%e8%81%b7%e8%80%85%e3%82%bb%e3%83%9f%e3%83%8a%e3%83%bc%ef%bc%86%e5%90%88%e5%90%8c/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261017-0000-e381b2e3828de381",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-17",
+      "start": null,
+      "endEstimate": null,
+      "title": "ニート工法管理施工士認定研修会",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%8b%e3%83%bc%e3%83%88%e5%b7%a5%e6%b3%95%e7%ae%a1%e7%90%86%e6%96%bd%e5%b7%a5%e5%a3%ab%e8%aa%8d%e5%ae%9a%e7%a0%94%e4%bf%ae%e4%bc%9a/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261017-0000-e3838be383bce383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-17",
+      "start": null,
+      "endEstimate": null,
+      "title": "Ciメディカル広島営業所 7周年記念 大型機器展示会&新製品発表会",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "展示会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/ci%e3%83%a1%e3%83%87%e3%82%a3%e3%82%ab%e3%83%ab%e5%ba%83%e5%b3%b6%e5%96%b6%e6%a5%ad%e6%89%80-7%e5%91%a8%e5%b9%b4%e8%a8%98%e5%bf%b5%e3%80%80%e5%a4%a7%e5%9e%8b%e6%a9%9f%e5%99%a8%e5%b1%95%e7%a4%ba/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261017-0000-6369e383a1e38387",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-17",
+      "start": null,
+      "endEstimate": null,
+      "title": "住まいお宝発見フェア",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "展示会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e4%bd%8f%e3%81%be%e3%81%84%e3%81%8a%e5%ae%9d%e7%99%ba%e8%a6%8b%e3%83%95%e3%82%a7%e3%82%a2-5/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261017-0000-e4bd8fe381bee381",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -802,8 +991,71 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261017-830-e7acac3639e59b9e",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-18",
+      "start": null,
+      "endEstimate": null,
+      "title": "Ciメディカル広島営業所 7周年記念 大型機器展示会&新製品発表会",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "展示会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/ci%e3%83%a1%e3%83%87%e3%82%a3%e3%82%ab%e3%83%ab%e5%ba%83%e5%b3%b6%e5%96%b6%e6%a5%ad%e6%89%80-7%e5%91%a8%e5%b9%b4%e8%a8%98%e5%bf%b5%e3%80%80%e5%a4%a7%e5%9e%8b%e6%a9%9f%e5%99%a8%e5%b1%95%e7%a4%ba/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261018-0000-6369e383a1e38387",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-18",
+      "start": null,
+      "endEstimate": null,
+      "title": "住まいお宝発見フェア",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "展示会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e4%bd%8f%e3%81%be%e3%81%84%e3%81%8a%e5%ae%9d%e7%99%ba%e8%a6%8b%e3%83%95%e3%82%a7%e3%82%a2-5/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261018-0000-e4bd8fe381bee381",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-18",
+      "start": null,
+      "endEstimate": null,
+      "title": "マイナビインターンシップ&キャリア発見フェア【理系】広島会場",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "就職関連",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%9e%e3%82%a4%e3%83%8a%e3%83%93%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%bc%e3%83%b3%e3%82%b7%e3%83%83%e3%83%97%ef%bc%86%e3%82%ad%e3%83%a3%e3%83%aa%e3%82%a2%e7%99%ba%e8%a6%8b%e3%83%95%e3%82%a7%e3%82%a2/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261018-0000-e3839ee382a4e383",
       "verifiedBy": 1
     },
     {
@@ -937,6 +1189,27 @@
       "verifiedBy": 1
     },
     {
+      "category": "convention",
+      "date": "2026-10-20",
+      "start": null,
+      "endEstimate": null,
+      "title": "フォーションパッケージショー2026",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "展示会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%95%e3%82%a9%e3%83%bc%e3%82%b7%e3%83%a7%e3%83%b3%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%82%b7%e3%83%a7%e3%83%bc2026/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261020-0000-e38395e382a9e383",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-10-20",
       "start": "18:30",
@@ -962,6 +1235,27 @@
         "start": "18:30",
         "endEstimate": "21:05"
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-21",
+      "start": null,
+      "endEstimate": null,
+      "title": "フォーションパッケージショー2026",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "展示会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%95%e3%82%a9%e3%83%bc%e3%82%b7%e3%83%a7%e3%83%b3%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%82%b7%e3%83%a7%e3%83%bc2026/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261021-0000-e38395e382a9e383",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -1038,6 +1332,27 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-10-23",
+      "start": null,
+      "endEstimate": null,
+      "title": "警備員資格取得講習会(交通誘導警備業務2級)",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e8%ad%a6%e5%82%99%e5%93%a1%e8%b3%87%e6%a0%bc%e5%8f%96%e5%be%97%e8%ac%9b%e7%bf%92%e4%bc%9a%ef%bc%88%e4%ba%a4%e9%80%9a%e8%aa%98%e5%b0%8e%e8%ad%a6%e5%82%99%e6%a5%ad%e5%8b%99%ef%bc%92%e7%b4%9a%ef%bc%89/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261023-0000-e8ada6e58299e593",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-10-23",
       "start": "13:30",
@@ -1067,6 +1382,90 @@
     {
       "category": "convention",
       "date": "2026-10-24",
+      "start": null,
+      "endEstimate": null,
+      "title": "警備員資格取得講習会(交通誘導警備業務2級)",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e8%ad%a6%e5%82%99%e5%93%a1%e8%b3%87%e6%a0%bc%e5%8f%96%e5%be%97%e8%ac%9b%e7%bf%92%e4%bc%9a%ef%bc%88%e4%ba%a4%e9%80%9a%e8%aa%98%e5%b0%8e%e8%ad%a6%e5%82%99%e6%a5%ad%e5%8b%99%ef%bc%92%e7%b4%9a%ef%bc%89/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261024-0000-e8ada6e58299e593",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-24",
+      "start": null,
+      "endEstimate": null,
+      "title": "パロマエキスポ",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "イベント",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%91%e3%83%ad%e3%83%9e%e3%82%a8%e3%82%ad%e3%82%b9%e3%83%9d/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261024-0000-e38391e383ade383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-24",
+      "start": null,
+      "endEstimate": null,
+      "title": "マイナビ インターンシップ&キャリア発見フェア 広島会場",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "就職関連",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%9e%e3%82%a4%e3%83%8a%e3%83%93-%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%bc%e3%83%b3%e3%82%b7%e3%83%83%e3%83%97%ef%bc%86%e3%82%ad%e3%83%a3%e3%83%aa%e3%82%a2%e7%99%ba%e8%a6%8b%e3%83%95%e3%82%a7%e3%82%a2/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261024-0000-e3839ee382a4e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-24",
+      "start": null,
+      "endEstimate": null,
+      "title": "ベビー&キッズハロウィンフェスタ",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "子育て",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%99%e3%83%93%e3%83%bc%ef%bc%86%e3%82%ad%e3%83%83%e3%82%ba%e3%83%8f%e3%83%ad%e3%82%a6%e3%82%a3%e3%83%b3%e3%83%95%e3%82%a7%e3%82%b9%e3%82%bf/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261024-0000-e38399e38393e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-24",
       "start": "11:30",
       "endEstimate": "15:00",
       "title": "合同企業説明会 広島適職フェア",
@@ -1079,7 +1478,7 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261024-1130-e59088e5908ce4bc",
       "verifiedBy": 1
     },
@@ -1215,6 +1614,48 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-10-25",
+      "start": null,
+      "endEstimate": null,
+      "title": "警備員資格取得講習会(交通誘導警備業務2級)",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e8%ad%a6%e5%82%99%e5%93%a1%e8%b3%87%e6%a0%bc%e5%8f%96%e5%be%97%e8%ac%9b%e7%bf%92%e4%bc%9a%ef%bc%88%e4%ba%a4%e9%80%9a%e8%aa%98%e5%b0%8e%e8%ad%a6%e5%82%99%e6%a5%ad%e5%8b%99%ef%bc%92%e7%b4%9a%ef%bc%89/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261025-0000-e8ada6e58299e593",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-25",
+      "start": null,
+      "endEstimate": null,
+      "title": "マイナビ インターンシップ&キャリア発見フェア 広島会場",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "就職関連",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%9e%e3%82%a4%e3%83%8a%e3%83%93-%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%bc%e3%83%b3%e3%82%b7%e3%83%83%e3%83%97%ef%bc%86%e3%82%ad%e3%83%a3%e3%83%aa%e3%82%a2%e7%99%ba%e8%a6%8b%e3%83%95%e3%82%a7%e3%82%a2/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261025-0000-e3839ee382a4e383",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-10-25",
       "start": "13:00",
@@ -1272,6 +1713,48 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-10-26",
+      "start": null,
+      "endEstimate": null,
+      "title": "ICTステップアップ実践講座",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/ict%e3%82%b9%e3%83%86%e3%83%83%e3%83%97%e3%82%a2%e3%83%83%e3%83%97%e5%ae%9f%e8%b7%b5%e8%ac%9b%e5%ba%a7/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261026-0000-696374e382b9e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-26",
+      "start": null,
+      "endEstimate": null,
+      "title": "ICTチャレンジ実践講座",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/ict%e3%83%81%e3%83%a3%e3%83%ac%e3%83%b3%e3%82%b8%e5%ae%9f%e8%b7%b5%e8%ac%9b%e5%ba%a7-10/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261026-0000-696374e38381e383",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-10-28",
       "start": null,
@@ -1297,6 +1780,27 @@
         "start": null,
         "endEstimate": null
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-28",
+      "start": null,
+      "endEstimate": null,
+      "title": "陸上特殊無線技士養成課程講習会",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e9%99%b8%e4%b8%8a%e7%89%b9%e6%ae%8a%e7%84%a1%e7%b7%9a%e6%8a%80%e5%a3%ab%e9%a4%8a%e6%88%90%e8%aa%b2%e7%a8%8b%e8%ac%9b%e7%bf%92%e4%bc%9a-8/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261028-0000-e999b8e4b88ae789",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -1326,6 +1830,27 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-10-29",
+      "start": null,
+      "endEstimate": null,
+      "title": "建設技術フォーラム2026inちゅうごく",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館・西展示館",
+      "eventType": "その他",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e5%bb%ba%e8%a8%ad%e6%8a%80%e8%a1%93%e3%83%95%e3%82%a9%e3%83%bc%e3%83%a9%e3%83%a02026in%e3%81%a1%e3%82%85%e3%81%86%e3%81%94%e3%81%8f/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261029-0000-e5bbbae8a8ade68a",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-10-29",
       "start": "13:30",
@@ -1351,6 +1876,27 @@
         "start": "13:30",
         "endEstimate": "16:05"
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-30",
+      "start": null,
+      "endEstimate": null,
+      "title": "建設技術フォーラム2026inちゅうごく",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館・西展示館",
+      "eventType": "その他",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e5%bb%ba%e8%a8%ad%e6%8a%80%e8%a1%93%e3%83%95%e3%82%a9%e3%83%bc%e3%83%a9%e3%83%a02026in%e3%81%a1%e3%82%85%e3%81%86%e3%81%94%e3%81%8f/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261030-0000-e5bbbae8a8ade68a",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -1432,6 +1978,48 @@
         "start": null,
         "endEstimate": null
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-31",
+      "start": null,
+      "endEstimate": null,
+      "title": "第57回 スマイルロケーション",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "その他",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e7%ac%ac57%e5%9b%9e%e3%80%80%e3%82%b9%e3%83%9e%e3%82%a4%e3%83%ab%e3%83%ad%e3%82%b1%e3%83%bc%e3%82%b7%e3%83%a7%e3%83%b3/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261031-0000-e7acac3537e59b9e",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-31",
+      "start": null,
+      "endEstimate": null,
+      "title": "ホロカぐるっとツアー2026 in広島",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "コミック・ゲーム",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%9b%e3%83%ad%e3%82%ab%e3%81%90%e3%82%8b%e3%81%a3%e3%81%a8%e3%83%84%e3%82%a2%e3%83%bc2026-in%e5%ba%83%e5%b3%b6/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261031-0000-e3839be383ade382",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -1561,6 +2149,48 @@
         "start": "17:30",
         "endEstimate": "19:50"
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-01",
+      "start": null,
+      "endEstimate": null,
+      "title": "Fab託児付き幸せマルシェ",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "販売会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/fab%e8%a8%97%e5%85%90%e4%bb%98%e3%81%8d%e5%b9%b8%e3%81%9b%e3%83%9e%e3%83%ab%e3%82%b7%e3%82%a7/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261101-0000-666162e8a897e585",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-01",
+      "start": null,
+      "endEstimate": null,
+      "title": "ZINEフェス広島",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "販売会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/zine%e3%83%95%e3%82%a7%e3%82%b9%e5%ba%83%e5%b3%b6-2/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261101-0000-7a696e65e38395e3",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -1883,6 +2513,27 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-11-07",
+      "start": null,
+      "endEstimate": null,
+      "title": "第38回 清芳会 秋季盆栽展",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "展示会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e7%ac%ac38%e5%9b%9e%e3%80%80%e6%b8%85%e8%8a%b3%e4%bc%9a%e3%80%80%e7%a7%8b%e5%ad%a3%e7%9b%86%e6%a0%bd%e5%b1%95/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261107-0000-e7acac3338e59b9e",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-11-07",
       "start": "13:00",
@@ -1964,6 +2615,48 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-11-08",
+      "start": null,
+      "endEstimate": null,
+      "title": "第38回 清芳会 秋季盆栽展",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "展示会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e7%ac%ac38%e5%9b%9e%e3%80%80%e6%b8%85%e8%8a%b3%e4%bc%9a%e3%80%80%e7%a7%8b%e5%ad%a3%e7%9b%86%e6%a0%bd%e5%b1%95/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261108-0000-e7acac3338e59b9e",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-08",
+      "start": null,
+      "endEstimate": null,
+      "title": "ヒロジョブ インターンシップフェア",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "就職関連",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%92%e3%83%ad%e3%82%b8%e3%83%a7%e3%83%96%e3%80%80%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%bc%e3%83%b3%e3%82%b7%e3%83%83%e3%83%97%e3%83%95%e3%82%a7%e3%82%a2-2/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261108-0000-e38392e383ade382",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-11-08",
       "start": "13:00",
@@ -1991,6 +2684,27 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-11-09",
+      "start": null,
+      "endEstimate": null,
+      "title": "JTO広島大会",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "イベント",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/jto%e5%ba%83%e5%b3%b6%e5%a4%a7%e4%bc%9a-2/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261109-0000-6a746fe5ba83e5b3",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-11-10",
       "start": "18:30",
@@ -2016,6 +2730,27 @@
         "start": "18:30",
         "endEstimate": "21:05"
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-11",
+      "start": null,
+      "endEstimate": null,
+      "title": "第43回ひろしま技能フェア",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館・西展示館",
+      "eventType": "イベント",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e7%ac%ac43%e5%9b%9e%e3%81%b2%e3%82%8d%e3%81%97%e3%81%be%e6%8a%80%e8%83%bd%e3%83%95%e3%82%a7%e3%82%a2/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261111-0000-e7acac3433e59b9e",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -2153,6 +2888,48 @@
         "start": "18:00",
         "endEstimate": "20:20"
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-14",
+      "start": null,
+      "endEstimate": null,
+      "title": "アマチュア無線技士養成課程講習会",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%82%a2%e3%83%9e%e3%83%81%e3%83%a5%e3%82%a2%e7%84%a1%e7%b7%9a%e6%8a%80%e5%a3%ab%e9%a4%8a%e6%88%90%e8%aa%b2%e7%a8%8b%e8%ac%9b%e7%bf%92%e4%bc%9a-7/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261114-0000-e382a2e3839ee383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-14",
+      "start": null,
+      "endEstimate": null,
+      "title": "ダンススクールBRED 秋のダンスフェス",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "その他",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%80%e3%83%b3%e3%82%b9%e3%82%b9%e3%82%af%e3%83%bc%e3%83%abbred%e3%80%80%e7%a7%8b%e3%81%ae%e3%83%80%e3%83%b3%e3%82%b9%e3%83%95%e3%82%a7%e3%82%b9/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261114-0000-e38380e383b3e382",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -2293,6 +3070,48 @@
     {
       "category": "convention",
       "date": "2026-11-15",
+      "start": null,
+      "endEstimate": null,
+      "title": "アマチュア無線技士養成課程講習会",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%82%a2%e3%83%9e%e3%83%81%e3%83%a5%e3%82%a2%e7%84%a1%e7%b7%9a%e6%8a%80%e5%a3%ab%e9%a4%8a%e6%88%90%e8%aa%b2%e7%a8%8b%e8%ac%9b%e7%bf%92%e4%bc%9a-7/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261115-0000-e382a2e3839ee383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-15",
+      "start": null,
+      "endEstimate": null,
+      "title": "ダンススクールBRED 秋のダンスフェス",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "その他",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%80%e3%83%b3%e3%82%b9%e3%82%b9%e3%82%af%e3%83%bc%e3%83%abbred%e3%80%80%e7%a7%8b%e3%81%ae%e3%83%80%e3%83%b3%e3%82%b9%e3%83%95%e3%82%a7%e3%82%b9/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261115-0000-e38380e383b3e382",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-15",
       "start": "10:00",
       "endEstimate": "16:00",
       "title": "国際フェスタ2026",
@@ -2305,7 +3124,7 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261115-1000-e59bbde99a9be383",
       "verifiedBy": 1
     },
@@ -2337,6 +3156,27 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-11-16",
+      "start": null,
+      "endEstimate": null,
+      "title": "大日本プロレス",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "イベント",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e5%a4%a7%e6%97%a5%e6%9c%ac%e3%83%97%e3%83%ad%e3%83%ac%e3%82%b9/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261116-0000-e5a4a7e697a5e69c",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-11-16",
       "start": "15:30",
@@ -2363,6 +3203,27 @@
         "start": "15:30",
         "endEstimate": "17:50"
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-17",
+      "start": null,
+      "endEstimate": null,
+      "title": "Honda車 福祉車両体験会",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "展示会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/honda%e8%bb%8a%e3%80%80%e7%a6%8f%e7%a5%89%e8%bb%8a%e4%b8%a1%e4%bd%93%e9%a8%93%e4%bc%9a/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261117-0000-686f6e6461e8bb8a",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -2407,8 +3268,29 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261119-0000-e38397e383a9e382",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-19",
+      "start": null,
+      "endEstimate": null,
+      "title": "カーボンリサイクルサミット2026(広島県カーボンリサイクル関連技術研究開発支援補助金成果発表)",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "学会・会議",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%82%ab%e3%83%bc%e3%83%9c%e3%83%b3%e3%83%aa%e3%82%b5%e3%82%a4%e3%82%af%e3%83%ab%e3%82%b5%e3%83%9f%e3%83%83%e3%83%882026%ef%bc%88%e5%ba%83%e5%b3%b6%e7%9c%8c%e3%82%ab%e3%83%bc%e3%83%9c%e3%83%b3/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261119-0000-e382abe383bce383",
       "verifiedBy": 1
     },
     {
@@ -2453,7 +3335,7 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261120-0000-e38397e383a9e382",
       "verifiedBy": 1
     },
@@ -2538,6 +3420,27 @@
         "start": null,
         "endEstimate": null
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-21",
+      "start": null,
+      "endEstimate": null,
+      "title": "振袖展示会「reflet」 in 広島",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "展示販売会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e6%8c%af%e8%a2%96%e5%b1%95%e7%a4%ba%e4%bc%9a%e3%80%8creflet%e3%80%8d-in-%e5%ba%83%e5%b3%b6/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261121-0000-e68cafe8a296e5b1",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -2691,6 +3594,27 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-11-22",
+      "start": null,
+      "endEstimate": null,
+      "title": "振袖展示会「reflet」 in 広島",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "展示販売会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e6%8c%af%e8%a2%96%e5%b1%95%e7%a4%ba%e4%bc%9a%e3%80%8creflet%e3%80%8d-in-%e5%ba%83%e5%b3%b6/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261122-0000-e68cafe8a296e5b1",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-11-22",
       "start": "13:00",
@@ -2820,6 +3744,27 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-11-24",
+      "start": null,
+      "endEstimate": null,
+      "title": "ボイラー実技講習1(座学会場)",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%9c%e3%82%a4%e3%83%a9%e3%83%bc%e5%ae%9f%e6%8a%80%e8%ac%9b%e7%bf%92%e2%91%a0%ef%bc%88%e5%ba%a7%e5%ad%a6%e4%bc%9a%e5%a0%b4%ef%bc%89-2/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261124-0000-e3839ce382a4e383",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-11-25",
       "start": null,
@@ -2845,6 +3790,27 @@
         "start": null,
         "endEstimate": null
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-25",
+      "start": null,
+      "endEstimate": null,
+      "title": "ボイラー実技講習1(座学会場)",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%9c%e3%82%a4%e3%83%a9%e3%83%bc%e5%ae%9f%e6%8a%80%e8%ac%9b%e7%bf%92%e2%91%a0%ef%bc%88%e5%ba%a7%e5%ad%a6%e4%bc%9a%e5%a0%b4%ef%bc%89-2/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261125-0000-e3839ce382a4e383",
+      "verifiedBy": 1
     },
     {
       "category": "live",
@@ -2903,6 +3869,48 @@
       }
     },
     {
+      "category": "convention",
+      "date": "2026-11-28",
+      "start": null,
+      "endEstimate": null,
+      "title": "第16回南区安全・安心なまちづくりフェスティバル",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "イベント",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e7%ac%ac16%e5%9b%9e%e5%8d%97%e5%8c%ba%e5%ae%89%e5%85%a8%e3%83%bb%e5%ae%89%e5%bf%83%e3%81%aa%e3%81%be%e3%81%a1%e3%81%a5%e3%81%8f%e3%82%8a%e3%83%95%e3%82%a7%e3%82%b9%e3%83%86%e3%82%a3%e3%83%90%e3%83%ab/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261128-0000-e7acac3136e59b9e",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-28",
+      "start": null,
+      "endEstimate": null,
+      "title": "キャリタス就活フォーラム 広島会場",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "就職関連",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%82%ad%e3%83%a3%e3%83%aa%e3%82%bf%e3%82%b9%e5%b0%b1%e6%b4%bb%e3%83%95%e3%82%a9%e3%83%bc%e3%83%a9%e3%83%a0-%e5%ba%83%e5%b3%b6%e4%bc%9a%e5%a0%b4/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261128-0000-e382ade383a3e383",
+      "verifiedBy": 1
+    },
+    {
       "category": "live",
       "date": "2026-11-28",
       "start": "17:00",
@@ -2933,6 +3941,27 @@
     {
       "category": "convention",
       "date": "2026-11-29",
+      "start": null,
+      "endEstimate": null,
+      "title": "広島プロレスフェスタ",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "イベント",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e5%ba%83%e5%b3%b6%e3%83%97%e3%83%ad%e3%83%ac%e3%82%b9%e3%83%95%e3%82%a7%e3%82%b9%e3%82%bf/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261129-0000-e5ba83e5b3b6e383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-11-29",
       "start": "10:00",
       "endEstimate": "13:00",
       "title": "日本整形外科学会100周年記念事業 市民公開講座in広島",
@@ -2945,7 +3974,7 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261129-1000-e697a5e69cace695",
       "verifiedBy": 1
     },
@@ -2992,7 +4021,7 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261130-920-e5bf9ce794a8e789",
       "verifiedBy": 1
     },
@@ -3011,7 +4040,7 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261201-920-e5bf9ce794a8e789",
       "verifiedBy": 1
     },
@@ -3045,6 +4074,48 @@
     {
       "category": "convention",
       "date": "2026-12-02",
+      "start": null,
+      "endEstimate": null,
+      "title": "シンセイフェア",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "展示販売会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%82%b7%e3%83%b3%e3%82%bb%e3%82%a4%e3%83%95%e3%82%a7%e3%82%a2-2/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261202-0000-e382b7e383b3e382",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-12-02",
+      "start": null,
+      "endEstimate": null,
+      "title": "ヤマハPAS 2027年モデル内覧会",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "展示会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%83%a4%e3%83%9e%e3%83%8fpas%e3%80%802027%e5%b9%b4%e3%83%a2%e3%83%87%e3%83%ab%e5%86%85%e8%a6%a7%e4%bc%9a/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261202-0000-e383a4e3839ee383",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-12-02",
       "start": "9:20",
       "endEstimate": "18:00",
       "title": "応用物理学会 先進パワー半導体分科会第13回講演会",
@@ -3057,8 +4128,50 @@
       "sourceTypes": [
         "venue"
       ],
-      "confidence": "candidate",
+      "confidence": "official",
       "id": "convention-20261202-920-e5bf9ce794a8e789",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-12-03",
+      "start": null,
+      "endEstimate": null,
+      "title": "シンセイフェア",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "西展示館",
+      "eventType": "展示販売会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%82%b7%e3%83%b3%e3%82%bb%e3%82%a4%e3%83%95%e3%82%a7%e3%82%a2-2/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261203-0000-e382b7e383b3e382",
+      "verifiedBy": 1
+    },
+    {
+      "category": "convention",
+      "date": "2026-12-03",
+      "start": null,
+      "endEstimate": null,
+      "title": "スポナビキャリアセミナー2028",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "東展示館",
+      "eventType": "講習会",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e3%82%b9%e3%83%9d%e3%83%8a%e3%83%93%e3%82%ad%e3%83%a3%e3%83%aa%e3%82%a2%e3%82%bb%e3%83%9f%e3%83%8a%e3%83%bc%e3%83%97%e3%83%a9%e3%82%b92028/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261203-0000-e382b9e3839de383",
       "verifiedBy": 1
     },
     {
@@ -3116,6 +4229,27 @@
         "start": "18:00",
         "endEstimate": "20:20"
       }
+    },
+    {
+      "category": "convention",
+      "date": "2026-12-05",
+      "start": null,
+      "endEstimate": null,
+      "title": "第58回 スマイルロケーション",
+      "venue": "広島県立広島産業会館",
+      "subVenue": "本館",
+      "eventType": "イベント",
+      "area": "広島市",
+      "sourceIds": [
+        "sangyo"
+      ],
+      "sourceUrl": "https://sangyoukaikan.jp/event/%e7%ac%ac58%e5%9b%9e%e3%80%80%e3%82%b9%e3%83%9e%e3%82%a4%e3%83%ab%e3%83%ad%e3%82%b1%e3%83%bc%e3%82%b7%e3%83%a7%e3%83%b3/",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261205-0000-e7acac3538e59b9e",
+      "verifiedBy": 1
     },
     {
       "category": "live",
