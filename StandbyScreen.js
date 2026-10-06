@@ -8,11 +8,22 @@ window.AppScreens.StandbyScreen = (() => {
     return new Date(`${event.date}T${event.start || "00:00"}:00+09:00`);
   }
 
+  function eventVisibleUntil(event) {
+    const start = toDateTime(event);
+    if (event.endEstimate) {
+      const end = new Date(`${event.date}T${event.endEstimate}:00+09:00`);
+      if (!Number.isNaN(end.getTime())) return new Date(end.getTime() + 60 * 60 * 1000);
+    }
+
+    // 終了時刻が取れない場合も、開始後すぐ消さない。
+    const fallbackMinutes = event.category === "sport" ? 180 : 200;
+    return new Date(start.getTime() + fallbackMinutes * 60 * 1000);
+  }
+
   function pickUpcoming(events, category) {
     const now = new Date();
-    const cutoff = new Date(now.getTime() - 60 * 60 * 1000);
     return (events || [])
-      .filter((e) => e.category === category && toDateTime(e) >= cutoff)
+      .filter((e) => e.category === category && eventVisibleUntil(e) >= now)
       .sort((a, b) => toDateTime(a) - toDateTime(b))[0] || null;
   }
 
