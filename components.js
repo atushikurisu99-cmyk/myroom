@@ -124,7 +124,7 @@ window.AppComponents = (() => {
             textAlign: "center",
           }}
         >
-          <div className="text-[11px] font-semibold text-[#7a869f] leading-none">
+          <div className="text-[12px] font-semibold text-[#7a869f] leading-none">
             {`${base.getMonth() + 1}/${base.getDate()}`}
           </div>
           <div className="mt-[8px] flex items-center justify-center">
@@ -141,7 +141,7 @@ window.AppComponents = (() => {
             textAlign: "center",
           }}
         >
-          <div className="text-[11px] font-semibold text-[#7a869f] leading-none">
+          <div className="text-[12px] font-semibold text-[#7a869f] leading-none">
             {`${tomorrow.getMonth() + 1}/${tomorrow.getDate()}`}
           </div>
           <div className="mt-[8px] flex items-center justify-center">
@@ -411,7 +411,7 @@ window.AppComponents = (() => {
         </div>
 
         {viaStops?.length > 0 && (
-          <div className="mt-2 text-[11px] font-semibold text-[#6e7a93] truncate">
+          <div className="mt-2 text-[12px] font-semibold text-[#6e7a93] truncate">
             経由あり（{viaStops.length}件）
           </div>
         )}
@@ -448,7 +448,7 @@ window.AppComponents = (() => {
             >
               {type === "1" ? "①" : "②"}
             </div>
-            <div className="mt-2 text-[11px] text-slate-500">
+            <div className="mt-2 text-[12px] text-slate-500">
               {type === "1" ? "現金" : "カード・QR / 領収証"}
             </div>
           </div>
@@ -573,8 +573,8 @@ window.AppComponents = (() => {
           left: "50%",
           transform: "translateX(-50%)",
           bottom: `${L.BOTTOM_BAND_BOTTOM + L.BOTTOM_BAND_H - 52}px`,
-          width: "38px",
-          height: "38px",
+          width: "44px",
+          height: "44px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -727,7 +727,7 @@ window.AppComponents = (() => {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold"
+                className="min-h-[44px] px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-semibold"
               >
                 閉じる
               </button>
