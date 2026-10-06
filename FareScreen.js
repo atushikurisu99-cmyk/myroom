@@ -22,7 +22,7 @@ window.AppScreens.FareScreen = (() => {
 
     const hasPassengerSelected = selectedPassengers !== null;
     const safeMaxPassengers = Math.max(4, Math.min(6, Number(maxPassengers) || 4));
-    const passengerSlots = [1, 2, 3, 4, 5, 6];
+    const passengerSlots = Array.from({ length: safeMaxPassengers }, (_, i) => i + 1);
 
     const onSelectPassenger = (count) => {
       handlePassengerSelect(count);
@@ -144,7 +144,10 @@ window.AppScreens.FareScreen = (() => {
           </div>
 
           <div className="mt-4">
-            <div className="flex gap-4">
+            <div
+              className="grid gap-3"
+              style={{ gridTemplateColumns: `repeat(${safeMaxPassengers}, minmax(0, 1fr))` }}
+            >
               {passengerSlots.map((count) => {
                 const enabled = count <= safeMaxPassengers;
 
@@ -154,7 +157,7 @@ window.AppScreens.FareScreen = (() => {
                     type="button"
                     disabled={!enabled}
                     onClick={() => enabled && onSelectPassenger(count)}
-                    className="w-[62px] h-[62px] rounded-full flex items-center justify-center active:scale-[0.97] transition-transform duration-75"
+                    className="w-full aspect-square max-w-[62px] justify-self-center rounded-full flex items-center justify-center active:scale-[0.97] transition-transform duration-75"
                     style={getPassengerStyle(count, enabled)}
                     aria-hidden={!enabled}
                   >
