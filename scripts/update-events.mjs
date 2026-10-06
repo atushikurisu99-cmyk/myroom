@@ -659,7 +659,7 @@ function portIdentity(venue="") {
 
 function mergePortMaster(previous, events, seenAt) {
   const map=new Map((previous||[]).map(p=>[p.id,{...p}]));
-  for (const e of events.filter(x=>x.category==="cruise")) {
+  for (const e of events.filter(x=>x.category==="cruise" && x.facilityVerification==="verified")) {
     const key=portIdentity(e.venue);
     const old=map.get(key.id);
     map.set(key.id,{
@@ -677,6 +677,39 @@ function mergePortMaster(previous, events, seenAt) {
   }
   // 最新取得に出てこない港も残す。消すのは管理側が retired=true にした時だけ。
   return [...map.values()].sort((a,b)=>(a.name||"").localeCompare(b.name||"","ja"));
+}
+
+const VERIFIED_VENUES = new Map([
+  ["広島グリーンアリーナ",{type:"live",official:true}],
+  ["広島サンプラザホール",{type:"live",official:true}],
+  ["JMSアステールプラザ",{type:"live",official:true}],
+  ["広島文化学園HBGホール",{type:"live",official:true}],
+  ["広島クラブクアトロ",{type:"live",official:true}],
+  ["上野学園ホール",{type:"live",official:true}],
+  ["BLUE LIVE 広島",{type:"live",official:true}],
+  ["広島国際会議場",{type:"convention",official:true}],
+  ["広島県立広島産業会館",{type:"convention",official:true}],
+  ["Eピース",{type:"sport",official:true}]
+]);
+
+const VERIFIED_PORT_IDS = new Set(["hiroshima-ujina","hiroshima-itsukaichi"]);
+
+function venueVerificationState(e) {
+  const venue=canonicalVenue(e.venue||"");
+  if (e.category==="cruise") {
+    const id=portIdentity(venue).id;
+    return VERIFIED_PORT_IDS.has(id) ? "verified" : "pending";
+  }
+  return VERIFIED_VENUES.has(venue) ? "verified" : "pending";
+}
+
+function applyFacilityVerification(e) {
+  const facilityState=venueVerificationState(e);
+  return {
+    ...e,
+    facilityVerification:facilityState,
+    publishable:facilityState==="verified"
+  };
 }
 
 function withCalendarDisplay(e) {
@@ -740,12 +773,16 @@ async function main() {
     })
     .map(endEstimate);
 
-  const events=dedupe(keep).map(withCalendarDisplay);
+  const events=dedupe(keep).map(withCalendarDisplay).map(applyFacilityVerification);
 
   // 港マスターは寄港予定とは別管理。今回0件の港も消さず、新しい港だけ追加する。
   const previousPorts=await loadPortMaster();
   const seenAt=new Date().toISOString();
   const ports=mergePortMaster(previousPorts,events,seenAt);
+
+  const pendingFacilities=events
+    .filter(e=>e.facilityVerification!=="verified")
+    .map(e=>({category:e.category,venue:e.venue,title:e.title,date:e.date,sourceIds:e.sourceIds||[]}));
 
   const stats={
     discovered:fresh.length,
@@ -766,6 +803,7 @@ async function main() {
     generatedAt:seenAt,
     area:"hiroshima",
     ports,
+    pendingFacilities,
     strategy:"playguide-first; verify with any independent second source including venue/promoter/another playguide",
     sources:SOURCES.map(({id,type,role,url,venue})=>({id,type,role,url,venue})),
     stats,errors,events
