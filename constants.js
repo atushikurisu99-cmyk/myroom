@@ -19,7 +19,7 @@ window.AppConstants = {
 
     HEADER_H: 180,
     BUTTON_H: 142,
-    CONTENT_PLACEHOLDER_H: 124,
+    CONTENT_PLACEHOLDER_H: 136,
 
     HEADER_INNER_X: 16,
     TOP_BAND_TOP: 40,
