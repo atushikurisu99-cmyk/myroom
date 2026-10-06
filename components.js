@@ -957,7 +957,6 @@ window.AppComponents = (() => {
     alcoholChecked,
     onOdometerChange,
     onAlcoholToggle,
-    onCancel,
     onConfirm,
   }) {
     if (!show) return null;
@@ -968,68 +967,82 @@ window.AppComponents = (() => {
     const ready = Boolean(String(odometer || "").trim()) && alcoholChecked;
 
     return (
-      <div className="absolute inset-0 z-50 bg-slate-900/45 flex items-end">
-        <div className="w-full rounded-t-[28px] bg-white shadow-2xl px-4 pt-3 pb-5">
-          <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
+      <div
+        className="absolute inset-0 z-50 bg-slate-950/55 flex items-center justify-center px-4"
+        role="dialog"
+        aria-modal="true"
+        aria-label="乗務開始前の確認"
+      >
+        <div
+          className="w-full bg-white shadow-2xl overflow-hidden"
+          style={{
+            maxWidth: "390px",
+            maxHeight: "82vh",
+            borderRadius: "24px",
+          }}
+        >
+          <div className="px-5 pt-5 pb-4 border-b border-slate-200">
+            <div className="text-[20px] font-black text-slate-900">乗務開始前の確認</div>
+            <div className="mt-1 text-[14px] font-bold text-slate-500">{dateLabel}</div>
+          </div>
 
-          <div className="text-[18px] font-black text-slate-800">乗務開始前の確認</div>
-          <div className="mt-1 text-sm font-semibold text-slate-500">{dateLabel}</div>
+          <div className="px-5 py-4 overflow-y-auto" style={{ maxHeight: "calc(82vh - 150px)" }}>
+            <div className="rounded-2xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
+                <div className="text-[15px] font-black text-slate-800">日常点検</div>
+                <div className="mt-1 text-xs font-semibold text-slate-500">
+                  基本項目は「異常なし」で記録します
+                </div>
+              </div>
 
-          <div className="mt-4 rounded-2xl border border-slate-200 overflow-hidden">
-            <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
-              <div className="text-sm font-bold text-slate-800">日常点検</div>
-              <div className="mt-1 text-xs text-slate-500">基本項目はすべて「異常なし」で記録します</div>
+              <div className="px-4 py-3 flex items-center justify-between gap-3 border-b border-slate-100">
+                <div className="min-w-0">
+                  <div className="text-[15px] font-bold text-slate-800">アルコールチェック</div>
+                  <div className="mt-1 text-xs text-slate-500">毎回タップして確認</div>
+                </div>
+                <button
+                  type="button"
+                  onClick={onAlcoholToggle}
+                  className="shrink-0 min-w-[104px] h-[46px] rounded-xl font-black"
+                  style={{
+                    background: alcoholChecked ? "#16a34a" : "#eef2f7",
+                    color: alcoholChecked ? "#ffffff" : "#475569",
+                    border: alcoholChecked ? "1px solid #15803d" : "1px solid #d7dee8",
+                  }}
+                >
+                  {alcoholChecked ? "確認済み" : "確認する"}
+                </button>
+              </div>
+
+              <div className="px-4 py-4">
+                <label className="text-[15px] font-bold text-slate-800">出庫時距離</label>
+                <div className="mt-2 flex items-center gap-2">
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={odometer}
+                    onChange={(e) => onOdometerChange(e.target.value.replace(/[^\\d]/g, ""))}
+                    placeholder="例 123456"
+                    className="w-full h-[52px] rounded-xl border border-slate-300 px-4 text-[20px] font-black outline-none"
+                  />
+                  <span className="text-sm font-bold text-slate-500">km</span>
+                </div>
+              </div>
             </div>
 
-            <div className="px-4 py-3 flex items-center justify-between gap-3 border-b border-slate-100">
-              <div>
-                <div className="text-sm font-bold text-slate-800">アルコールチェック</div>
-                <div className="mt-1 text-xs text-slate-500">ここだけ毎回本人確認</div>
-              </div>
-              <button
-                type="button"
-                onClick={onAlcoholToggle}
-                className="min-w-[96px] h-[44px] rounded-xl font-bold"
-                style={{
-                  background: alcoholChecked ? "#0f172a" : "#f1f5f9",
-                  color: alcoholChecked ? "#fff" : "#475569",
-                }}
-              >
-                {alcoholChecked ? "確認済み" : "確認する"}
-              </button>
-            </div>
-
-            <div className="px-4 py-3">
-              <label className="text-sm font-bold text-slate-800">出庫時距離</label>
-              <div className="mt-2 flex items-center gap-2">
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  value={odometer}
-                  onChange={(e) => onOdometerChange(e.target.value.replace(/[^\d]/g, ""))}
-                  placeholder="例 123456"
-                  className="w-full h-[48px] rounded-xl border border-slate-300 px-4 text-[18px] font-bold outline-none"
-                />
-                <span className="text-sm font-bold text-slate-500">km</span>
-              </div>
+            <div className="mt-3 text-xs font-semibold text-slate-500 leading-relaxed">
+              この確認を完了すると、日付・出庫時距離・点検結果を本日の記録として保存して乗務を開始します。
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={onCancel}
-              className="h-[48px] rounded-2xl bg-slate-100 text-slate-700 font-bold"
-            >
-              戻る
-            </button>
+          <div className="px-5 pt-2 pb-5 bg-white border-t border-slate-100">
             <button
               type="button"
               onClick={onConfirm}
               disabled={!ready}
-              className="h-[48px] rounded-2xl bg-slate-800 text-white font-bold disabled:opacity-40"
+              className="w-full h-[54px] rounded-2xl bg-slate-900 text-white text-[17px] font-black disabled:opacity-35"
             >
-              乗務開始
+              確認して乗務開始
             </button>
           </div>
         </div>
