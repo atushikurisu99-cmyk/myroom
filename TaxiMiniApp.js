@@ -154,12 +154,12 @@ function SalesNotificationBanner({ alert, onDismiss }) {
       <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0 }}>
         <div style={{ fontSize: "17px", lineHeight: 1 }}>{alert.kind === "cruise" ? "🚢" : "🏢"}</div>
         <div style={{ minWidth: 0, flex: 1 }}>
-          <div style={{ fontSize: "12px", fontWeight: 900, color: "#24324a", lineHeight: 1.1 }}>
+          <div style={{ fontSize: "var(--tx-xs)", fontWeight: 900, color: "#24324a", lineHeight: 1.1 }}>
             {alert.title}
           </div>
           <div style={{
             marginTop: "3px",
-            fontSize: "13px",
+            fontSize: "var(--tx-sm)",
             fontWeight: 900,
             color: "#172033",
             whiteSpace: "nowrap",
@@ -170,7 +170,7 @@ function SalesNotificationBanner({ alert, onDismiss }) {
           </div>
           <div style={{
             marginTop: "2px",
-            fontSize: "12px",
+            fontSize: "var(--tx-xs)",
             fontWeight: 700,
             color: "#68758a",
             whiteSpace: "nowrap",
@@ -403,13 +403,13 @@ function TaxiMiniApp() {
 
       <div className="w-full max-w-[430px] h-full relative overflow-hidden bg-[#dfe5ee]">
         {state.showSaved && startupPhase === "done" && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white text-sm font-bold px-5 py-2.5 shadow-lg">
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-emerald-500 text-white tx-sm font-bold px-5 py-2.5 shadow-lg">
             保存しました
           </div>
         )}
 
         {state.toastMessage && startupPhase === "done" && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-slate-800 text-white text-sm font-semibold px-4 py-2 shadow-lg">
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 rounded-full bg-slate-800 text-white tx-sm font-semibold px-4 py-2 shadow-lg">
             {state.toastMessage}
           </div>
         )}
