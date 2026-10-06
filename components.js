@@ -124,7 +124,7 @@ window.AppComponents = (() => {
             textAlign: "center",
           }}
         >
-          <div className="text-[12px] font-semibold text-[#7a869f] leading-none">
+          <div className="tx-xs font-semibold text-[#7a869f] leading-none">
             {`${base.getMonth() + 1}/${base.getDate()}`}
           </div>
           <div className="mt-[8px] flex items-center justify-center">
@@ -141,7 +141,7 @@ window.AppComponents = (() => {
             textAlign: "center",
           }}
         >
-          <div className="text-[12px] font-semibold text-[#7a869f] leading-none">
+          <div className="tx-xs font-semibold text-[#7a869f] leading-none">
             {`${tomorrow.getMonth() + 1}/${tomorrow.getDate()}`}
           </div>
           <div className="mt-[8px] flex items-center justify-center">
@@ -448,7 +448,7 @@ window.AppComponents = (() => {
             >
               {type === "1" ? "①" : "②"}
             </div>
-            <div className="mt-2 text-[12px] text-slate-500">
+            <div className="mt-2 tx-xs text-slate-500">
               {type === "1" ? "現金" : "カード・QR / 領収証"}
             </div>
           </div>
@@ -805,7 +805,7 @@ window.AppComponents = (() => {
 
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-base font-bold text-slate-800">帳票ひな形</div>
+                <div className="tx-md font-bold text-slate-800">帳票ひな形</div>
                 <div className="mt-1 tx-xs text-slate-500">
                   月報に使う組合バージョンを選択
                 </div>
