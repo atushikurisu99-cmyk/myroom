@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T10:26:52.476Z",
+  "generatedAt": "2026-10-06T10:28:23.615Z",
   "area": "hiroshima",
   "strategy": "playguide-first; verify with any independent second source including venue/promoter/another playguide",
   "sources": [
@@ -142,12 +142,17 @@
   ],
   "stats": {
     "discovered": 232,
-    "confirmed": 38,
-    "candidate": 74,
+    "confirmed": 36,
+    "candidate": 76,
     "official": 120,
     "playguideBased": 106
   },
-  "errors": [],
+  "errors": [
+    {
+      "source": "eplus-ueno",
+      "error": "503 https://eplus.jp/sf/venue/7300130/events"
+    }
+  ],
   "events": [
     {
       "category": "convention",
@@ -4178,29 +4183,28 @@
     {
       "category": "live",
       "date": "2026-12-04",
-      "start": "18:00",
-      "endEstimate": "20:20",
+      "start": null,
+      "endEstimate": null,
       "title": "REBECCA",
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "lawson-ueno",
-        "eplus-ueno"
+        "lawson-ueno"
       ],
       "sourceUrl": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92",
       "sourceTypes": [
         "playguide"
       ],
-      "confidence": "confirmed",
+      "confidence": "candidate",
       "id": "live-20261204-0000-72656265636361",
-      "verifiedBy": 2,
+      "verifiedBy": 1,
       "artist": "REBECCA",
       "calendarDisplay": {
         "date": "2026-12-04",
         "artist": "REBECCA",
         "venue": "上野学園ホール",
-        "start": "18:00",
-        "endEstimate": "20:20"
+        "start": null,
+        "endEstimate": null
       }
     },
     {
