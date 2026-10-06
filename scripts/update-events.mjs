@@ -323,15 +323,23 @@ function parseDragonflies(html, year, source) {
 }
 
 function parseSanfrecce(html, year, source) {
-  const text=clean(html);
   const out=[];
-  const re=/HOME\s+エディオンピースウイング広島[\s\S]{0,120}?(\d{1,2})\.(\d{1,2})[^0-9]{0,8}(\d{1,2}:\d{2})/g;
-  let m;
-  while ((m=re.exec(text))) {
-    const around=text.slice(m.index,Math.min(text.length,re.lastIndex+160));
-    const opponent=(around.match(/Image\s*([^ ]{1,16})/)||[])[1]||"対戦";
+  const blockRe=/<div class="container-lg px-lg-1spc pt-4"[^>]*>([\s\S]*?)(?=<div class="container-lg px-lg-1spc pt-4"|$)/gi;
+  let bm;
+  while ((bm=blockRe.exec(html))) {
+    const block=bm[1];
+    if (!/match--ha-type is-home/.test(block)) continue;
+
+    const stadium=clean((block.match(/match--item--stadium[^>]*>([\s\S]*?)<\/span>/i)||[])[1]||"");
+    if (!stadium.includes("エディオンピースウイング広島")) continue;
+
+    const date=(block.match(/match--item--date[^>]*>\s*(\d{1,2})\.(\d{1,2})\s*<\/span>/i)||[]);
+    const ko=(block.match(/match--item--ko[^>]*>\s*(\d{1,2}:\d{2})\s*<\/span>/i)||[]);
+    const opponent=clean((block.match(/match--item--vsteam[\s\S]*?<span class="d-none d-lg-block">([\s\S]*?)<\/span>/i)||[])[1]||"");
+    if (!date[1] || !date[2] || !ko[1] || !opponent) continue;
+
     const e={
-      category:"sport", sport:"soccer", date:isoDate(year,m[1],m[2]), start:m[3], endEstimate:null,
+      category:"sport", sport:"soccer", date:isoDate(year,date[1],date[2]), start:ko[1], endEstimate:null,
       title:`広島×${opponent}`, venue:"Eピース", area:"広島市",
       sourceIds:[source.id], sourceUrl:source.url, sourceTypes:["team"], confidence:"official"
     };
@@ -577,7 +585,7 @@ async function main() {
       else if (s.id.startsWith("lawson-")) discovered.push(...parseLawsonVenue(html,s));
       else if (s.id==="seven-ueno") discovered.push(...parseSevenUeno(html,year,s));
       else if (s.id==="dragonflies") discovered.push(...parseDragonflies(html,year,s));
-      else if (s.id==="sanfrecce") { const p=html.indexOf("10.17"); console.log("SANFRECCE_HTML_START", p>=0?html.slice(Math.max(0,p-4200),p+8500):html.slice(0,14000), "SANFRECCE_HTML_END"); discovered.push(...parseSanfrecce(html,year,s)); }
+      else if (s.id==="sanfrecce") discovered.push(...parseSanfrecce(html,year,s));
       else if (s.id==="thunders") discovered.push(...parseThunders(html,now,s));
       else if (s.id==="icch") discovered.push(...parseIcch(html,s));
       else if (s.id==="sangyo") discovered.push(...parseSangyo(html,s));
