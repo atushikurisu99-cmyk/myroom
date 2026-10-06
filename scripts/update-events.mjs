@@ -31,6 +31,7 @@ const SOURCES = [
   // コンベンション系は会場公式の催事表を直接取得する。
   { id:"icch", type:"venue", role:"discovery", category:"convention", venue:"広島国際会議場", encoding:"shift_jis", url:"https://www.pcf.city.hiroshima.jp/icch/event.cgi" },
   { id:"sangyo", type:"venue", role:"discovery", category:"convention", venue:"広島県立広島産業会館", url:"https://sangyoukaikan.jp/event/" },
+  { id:"hiroshima-port-cruise", type:"port", role:"discovery", category:"cruise", venue:"広島港", url:"https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html" },
 ];
 
 const VENUE_ALIASES = [
@@ -450,6 +451,42 @@ function parseSangyo(html, source) {
   return [...unique.values()];
 }
 
+function parseHiroshimaPortCruise(html, source, now) {
+  const text=clean(html).normalize("NFKC");
+  const out=[];
+  const currentYear=now.getUTCFullYear();
+  const re=/(\d{1,2})月\s*(\d{1,2})日\([^)]*\)\s*(\d{1,2})時(\d{2})分\s+(\d{1,2})月\s*(\d{1,2})日\([^)]*\)\s*(\d{1,2})時(\d{2})分\s+([\s\S]{1,80}?)\s+([^\s]{1,30})\s+([^\s]{1,30})\s+((?:宇品外貿第5バース|五日市-?11m[，,、\s]*-?12m岸壁))/g;
+  let m;
+  while ((m=re.exec(text))) {
+    const inMonth=Number(m[1]), inDay=Number(m[2]);
+    const outMonth=Number(m[5]), outDay=Number(m[6]);
+    let inYear=currentYear, outYear=currentYear;
+    if (inMonth===12 && outMonth===1) outYear=currentYear+1;
+    const ship=m[9].trim().replace(/\s+/g," ");
+    const berth=m[12].replace(/，/g,",").replace(/\s+/g," ").trim();
+    const e={
+      category:"cruise",
+      date:isoDate(inYear,inMonth,inDay),
+      start:`${pad(m[3])}:${m[4]}`,
+      endEstimate:`${pad(m[7])}:${m[8]}`,
+      departureDate:isoDate(outYear,outMonth,outDay),
+      title:ship,
+      ship,
+      venue:berth.includes("五日市") ? "広島港・五日市岸壁" : "広島港・宇品外貿第5バース",
+      area:"広島市",
+      previousPort:m[10],
+      nextPort:m[11],
+      sourceIds:[source.id],
+      sourceUrl:source.url,
+      sourceTypes:["port"],
+      confidence:"official"
+    };
+    e.id=makeId(e);
+    out.push(e);
+  }
+  return out;
+}
+
 function sourceConfirmsEvent(text,e,source) {
   if (!text) return false;
   if (source.venue && canonicalVenue(source.venue)!==canonicalVenue(e.venue)) return false;
@@ -502,7 +539,8 @@ function mergeAndVerify(discovered, evidenceTexts) {
 
     const distinctSources=new Set(sourceIds).size;
     const confidence=(g.base.category==="sport" && sourceTypes.includes("team")) ||
-      (g.base.category==="convention" && sourceTypes.includes("venue"))
+      (g.base.category==="convention" && sourceTypes.includes("venue")) ||
+      (g.base.category==="cruise" && sourceTypes.includes("port"))
       ? "official"
       : distinctSources>=2 ? "confirmed" : "candidate";
 
@@ -531,7 +569,8 @@ function dedupe(events) {
       const sourceTypes=[...new Set([...(prev.sourceTypes||[]),...(e.sourceTypes||[])])];
       const verifiedBy=sourceIds.length;
       const confidence=(e.category==="sport" && sourceTypes.includes("team")) ||
-        (e.category==="convention" && sourceTypes.includes("venue"))
+        (e.category==="convention" && sourceTypes.includes("venue")) ||
+        (e.category==="cruise" && sourceTypes.includes("port"))
         ? "official"
         : verifiedBy>=2 ? "confirmed" : "candidate";
       map.set(key,{...prev,...e,sourceIds,sourceTypes,verifiedBy,confidence});
@@ -589,6 +628,7 @@ async function main() {
       else if (s.id==="thunders") discovered.push(...parseThunders(html,now,s));
       else if (s.id==="icch") discovered.push(...parseIcch(html,s));
       else if (s.id==="sangyo") discovered.push(...parseSangyo(html,s));
+      else if (s.id==="hiroshima-port-cruise") discovered.push(...parseHiroshimaPortCruise(html,s,now));
     } catch (err) {
       errors.push({source:s.id,error:String(err.message||err)});
     }
