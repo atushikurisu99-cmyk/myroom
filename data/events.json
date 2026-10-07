@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T23:07:23.686Z",
+  "generatedAt": "2026-10-07T23:37:59.324Z",
   "area": "hiroshima",
   "ports": [
     {
@@ -12,7 +12,7 @@
         "hiroshima-port-cruise"
       ],
       "firstSeenAt": "2026-10-06T11:55:23.525Z",
-      "lastSeenAt": "2026-10-06T23:07:23.686Z",
+      "lastSeenAt": "2026-10-07T23:37:59.324Z",
       "enabled": true,
       "retired": false
     },
@@ -26,7 +26,7 @@
         "hiroshima-port-cruise"
       ],
       "firstSeenAt": "2026-10-06T11:55:23.525Z",
-      "lastSeenAt": "2026-10-06T23:07:23.686Z",
+      "lastSeenAt": "2026-10-07T23:37:59.324Z",
       "enabled": true,
       "retired": false
     }
@@ -200,17 +200,22 @@
     }
   ],
   "stats": {
-    "discovered": 267,
-    "confirmed": 41,
+    "discovered": 265,
+    "confirmed": 38,
     "candidate": 92,
-    "official": 134,
-    "playguideBased": 110
+    "official": 135,
+    "playguideBased": 107
   },
-  "errors": [],
+  "errors": [
+    {
+      "source": "eplus-ueno",
+      "error": "503 https://eplus.jp/sf/venue/7300130/events"
+    }
+  ],
   "events": [
     {
       "category": "live",
-      "date": "2026-10-07",
+      "date": "2026-10-08",
       "start": null,
       "endEstimate": null,
       "title": "劇団四季『マンマ・ミーア!』",
@@ -224,11 +229,11 @@
         "playguide"
       ],
       "confidence": "candidate",
-      "id": "live-20261007-0000-e3839ee383b3e383",
+      "id": "live-20261008-0000-e3839ee383b3e383",
       "verifiedBy": 1,
       "artist": "劇団四季『マンマ・ミーア!』",
       "calendarDisplay": {
-        "date": "2026-10-07",
+        "date": "2026-10-08",
         "artist": "劇団四季『マンマ・ミーア!』",
         "venue": "上野学園ホール",
         "start": null,
@@ -238,31 +243,27 @@
       "publishable": true
     },
     {
-      "category": "live",
-      "date": "2026-10-07",
-      "start": "18:00",
-      "endEstimate": "20:20",
-      "title": "Next≫ Mrs. GREEN APPLE",
-      "venue": "広島グリーンアリーナ",
+      "category": "cruise",
+      "date": "2026-10-08",
+      "start": "08:00",
+      "endEstimate": "22:00",
+      "departureDate": "2026-10-08",
+      "title": "AZAMARA PURSUIT",
+      "ship": "AZAMARA PURSUIT",
+      "venue": "広島港・宇品外貿第5バース",
       "area": "広島市",
+      "previousPort": "高知",
+      "nextPort": "別府",
       "sourceIds": [
-        "livefans-green"
+        "hiroshima-port-cruise"
       ],
-      "sourceUrl": "https://www.livefans.jp/search/venue/2971?year=after",
+      "sourceUrl": "https://www.pref.hiroshima.lg.jp/soshiki/221/cruise-joho.html",
       "sourceTypes": [
-        "eventguide"
+        "port"
       ],
-      "confidence": "candidate",
-      "id": "live-20261007-1800-6e657874e289ab6d",
+      "confidence": "official",
+      "id": "cruise-20261008-0800-617a616d61726170",
       "verifiedBy": 1,
-      "artist": "Next≫ Mrs. GREEN APPLE",
-      "calendarDisplay": {
-        "date": "2026-10-07",
-        "artist": "Next≫ Mrs. GREEN APPLE",
-        "venue": "広島グリーンアリーナ",
-        "start": "18:00",
-        "endEstimate": "20:20"
-      },
       "facilityVerification": "verified",
       "publishable": true
     },
@@ -419,35 +420,6 @@
       "publishable": true
     },
     {
-      "category": "live",
-      "date": "2026-10-10",
-      "start": "13:00",
-      "endEstimate": "15:35",
-      "title": "マンマ・ミーア！",
-      "venue": "上野学園ホール",
-      "area": "広島市",
-      "sourceIds": [
-        "seven-ueno"
-      ],
-      "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261010-1300-e3839ee383b3e383",
-      "verifiedBy": 1,
-      "artist": "マンマ・ミーア！",
-      "calendarDisplay": {
-        "date": "2026-10-10",
-        "artist": "マンマ・ミーア！",
-        "venue": "上野学園ホール",
-        "start": "13:00",
-        "endEstimate": "15:35"
-      },
-      "facilityVerification": "verified",
-      "publishable": true
-    },
-    {
       "category": "sport",
       "sport": "basketball",
       "date": "2026-10-10",
@@ -495,35 +467,6 @@
         "venue": "JMSアステールプラザ",
         "start": "17:00",
         "endEstimate": "19:20"
-      },
-      "facilityVerification": "verified",
-      "publishable": true
-    },
-    {
-      "category": "live",
-      "date": "2026-10-10",
-      "start": "17:30",
-      "endEstimate": "20:05",
-      "title": "マンマ・ミーア！",
-      "venue": "上野学園ホール",
-      "area": "広島市",
-      "sourceIds": [
-        "seven-ueno"
-      ],
-      "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261010-1730-e3839ee383b3e383",
-      "verifiedBy": 1,
-      "artist": "マンマ・ミーア！",
-      "calendarDisplay": {
-        "date": "2026-10-10",
-        "artist": "マンマ・ミーア！",
-        "venue": "上野学園ホール",
-        "start": "17:30",
-        "endEstimate": "20:05"
       },
       "facilityVerification": "verified",
       "publishable": true
@@ -1185,7 +1128,7 @@
       "date": "2026-10-17",
       "start": "17:00",
       "endEstimate": "19:20",
-      "title": "[出演] Mrs. GREEN APPLE レビュー:--件 0 0 ロック NEWS",
+      "title": "Next≫ NEWS",
       "venue": "広島グリーンアリーナ",
       "area": "広島市",
       "sourceIds": [
@@ -1196,12 +1139,12 @@
         "eventguide"
       ],
       "confidence": "candidate",
-      "id": "live-20261017-1700-5be587bae6bc945d",
+      "id": "live-20261017-1700-6e657874e289ab6e",
       "verifiedBy": 1,
-      "artist": "[出演] Mrs. GREEN APPLE レビュー:--件 0 0 ロック NEWS",
+      "artist": "Next≫ NEWS",
       "calendarDisplay": {
         "date": "2026-10-17",
-        "artist": "[出演] Mrs. GREEN APPLE レビュー:--件 0 0 ロック NEWS",
+        "artist": "Next≫ NEWS",
         "venue": "広島グリーンアリーナ",
         "start": "17:00",
         "endEstimate": "19:20"
@@ -5225,29 +5168,28 @@
     {
       "category": "live",
       "date": "2026-12-04",
-      "start": "18:00",
-      "endEstimate": "20:20",
+      "start": null,
+      "endEstimate": null,
       "title": "REBECCA",
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "lawson-ueno",
-        "eplus-ueno"
+        "lawson-ueno"
       ],
       "sourceUrl": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92",
       "sourceTypes": [
         "playguide"
       ],
-      "confidence": "confirmed",
+      "confidence": "candidate",
       "id": "live-20261204-0000-72656265636361",
-      "verifiedBy": 2,
+      "verifiedBy": 1,
       "artist": "REBECCA",
       "calendarDisplay": {
         "date": "2026-12-04",
         "artist": "REBECCA",
         "venue": "上野学園ホール",
-        "start": "18:00",
-        "endEstimate": "20:20"
+        "start": null,
+        "endEstimate": null
       },
       "facilityVerification": "verified",
       "publishable": true
@@ -5360,32 +5302,30 @@
     },
     {
       "category": "live",
-      "date": "2026-12-06",
-      "start": "16:00",
-      "endEstimate": "18:20",
-      "title": "清水ミチコ",
-      "venue": "広島文化学園HBGホール",
+      "date": "2026-12-08",
+      "start": "19:00",
+      "endEstimate": "21:20",
+      "title": "ギターウルフ",
+      "venue": "広島クラブクアトロ",
       "area": "広島市",
       "sourceIds": [
-        "lawson-hbg",
-        "eplus-hbg",
-        "candy"
+        "lawson-quattro",
+        "eplus-quattro"
       ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E3%82%AF%E3%83%A9%E3%83%96%E3%82%AF%E3%82%A2%E3%83%88%E3%83%AD",
       "sourceTypes": [
-        "playguide",
-        "promoter"
+        "playguide"
       ],
       "confidence": "confirmed",
-      "id": "live-20261206-0000-e6b885e6b0b4e383",
-      "verifiedBy": 3,
-      "artist": "清水ミチコ",
+      "id": "live-20261208-0000-e382aee382bfe383",
+      "verifiedBy": 2,
+      "artist": "ギターウルフ",
       "calendarDisplay": {
-        "date": "2026-12-06",
-        "artist": "清水ミチコ",
-        "venue": "広島文化学園HBGホール",
-        "start": "16:00",
-        "endEstimate": "18:20"
+        "date": "2026-12-08",
+        "artist": "ギターウルフ",
+        "venue": "広島クラブクアトロ",
+        "start": "19:00",
+        "endEstimate": "21:20"
       },
       "facilityVerification": "verified",
       "publishable": true
