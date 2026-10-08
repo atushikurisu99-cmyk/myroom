@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T23:37:59.324Z",
+  "generatedAt": "2026-10-08T23:47:53.208Z",
   "area": "hiroshima",
   "ports": [
     {
@@ -12,7 +12,7 @@
         "hiroshima-port-cruise"
       ],
       "firstSeenAt": "2026-10-06T11:55:23.525Z",
-      "lastSeenAt": "2026-10-07T23:37:59.324Z",
+      "lastSeenAt": "2026-10-08T23:47:53.208Z",
       "enabled": true,
       "retired": false
     },
@@ -26,7 +26,7 @@
         "hiroshima-port-cruise"
       ],
       "firstSeenAt": "2026-10-06T11:55:23.525Z",
-      "lastSeenAt": "2026-10-07T23:37:59.324Z",
+      "lastSeenAt": "2026-10-08T23:47:53.208Z",
       "enabled": true,
       "retired": false
     }
@@ -200,56 +200,22 @@
     }
   ],
   "stats": {
-    "discovered": 265,
-    "confirmed": 38,
-    "candidate": 92,
-    "official": 135,
+    "discovered": 266,
+    "confirmed": 40,
+    "candidate": 90,
+    "official": 136,
     "playguideBased": 107
   },
-  "errors": [
-    {
-      "source": "eplus-ueno",
-      "error": "503 https://eplus.jp/sf/venue/7300130/events"
-    }
-  ],
+  "errors": [],
   "events": [
-    {
-      "category": "live",
-      "date": "2026-10-08",
-      "start": null,
-      "endEstimate": null,
-      "title": "劇団四季『マンマ・ミーア!』",
-      "venue": "上野学園ホール",
-      "area": "広島市",
-      "sourceIds": [
-        "lawson-ueno"
-      ],
-      "sourceUrl": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261008-0000-e3839ee383b3e383",
-      "verifiedBy": 1,
-      "artist": "劇団四季『マンマ・ミーア!』",
-      "calendarDisplay": {
-        "date": "2026-10-08",
-        "artist": "劇団四季『マンマ・ミーア!』",
-        "venue": "上野学園ホール",
-        "start": null,
-        "endEstimate": null
-      },
-      "facilityVerification": "verified",
-      "publishable": true
-    },
     {
       "category": "cruise",
       "date": "2026-10-08",
       "start": "08:00",
       "endEstimate": "22:00",
       "departureDate": "2026-10-08",
-      "title": "AZAMARA PURSUIT",
-      "ship": "AZAMARA PURSUIT",
+      "title": "Azamara Pursuit",
+      "ship": "Azamara Pursuit",
       "venue": "広島港・宇品外貿第5バース",
       "area": "広島市",
       "previousPort": "高知",
@@ -345,6 +311,35 @@
       "publishable": true
     },
     {
+      "category": "live",
+      "date": "2026-10-09",
+      "start": null,
+      "endEstimate": null,
+      "title": "劇団四季『マンマ・ミーア!』",
+      "venue": "上野学園ホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-ueno"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261009-0000-e3839ee383b3e383",
+      "verifiedBy": 1,
+      "artist": "劇団四季『マンマ・ミーア!』",
+      "calendarDisplay": {
+        "date": "2026-10-09",
+        "artist": "劇団四季『マンマ・ミーア!』",
+        "venue": "上野学園ホール",
+        "start": null,
+        "endEstimate": null
+      },
+      "facilityVerification": "verified",
+      "publishable": true
+    },
+    {
       "category": "convention",
       "date": "2026-10-09",
       "start": "9:00",
@@ -397,7 +392,7 @@
     {
       "category": "cruise",
       "date": "2026-10-10",
-      "start": "09:30",
+      "start": "11:30",
       "endEstimate": "21:00",
       "departureDate": "2026-10-10",
       "title": "Celebrity Millennium",
@@ -414,7 +409,7 @@
         "port"
       ],
       "confidence": "official",
-      "id": "cruise-20261010-0930-63656c6562726974",
+      "id": "cruise-20261010-1130-63656c6562726974",
       "verifiedBy": 1,
       "facilityVerification": "verified",
       "publishable": true
@@ -582,35 +577,6 @@
       "publishable": true
     },
     {
-      "category": "live",
-      "date": "2026-10-11",
-      "start": "13:00",
-      "endEstimate": "15:35",
-      "title": "マンマ・ミーア！",
-      "venue": "上野学園ホール",
-      "area": "広島市",
-      "sourceIds": [
-        "seven-ueno"
-      ],
-      "sourceUrl": "https://7ticket.jp/s/116553/d",
-      "sourceTypes": [
-        "playguide"
-      ],
-      "confidence": "candidate",
-      "id": "live-20261011-1300-e3839ee383b3e383",
-      "verifiedBy": 1,
-      "artist": "マンマ・ミーア！",
-      "calendarDisplay": {
-        "date": "2026-10-11",
-        "artist": "マンマ・ミーア！",
-        "venue": "上野学園ホール",
-        "start": "13:00",
-        "endEstimate": "15:35"
-      },
-      "facilityVerification": "verified",
-      "publishable": true
-    },
-    {
       "category": "convention",
       "date": "2026-10-12",
       "start": null,
@@ -689,6 +655,27 @@
         "start": "17:30",
         "endEstimate": "19:50"
       },
+      "facilityVerification": "verified",
+      "publishable": true
+    },
+    {
+      "category": "convention",
+      "date": "2026-10-12",
+      "start": "9:50",
+      "endEstimate": "18:30",
+      "title": "WFF SENBAZURU HIROSHIMA 2026",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261012-950-77666673656e6261",
+      "verifiedBy": 1,
       "facilityVerification": "verified",
       "publishable": true
     },
@@ -4744,6 +4731,35 @@
       "publishable": true
     },
     {
+      "category": "live",
+      "date": "2026-11-27",
+      "start": null,
+      "endEstimate": null,
+      "title": "&TEAM",
+      "venue": "広島文化学園HBGホール",
+      "area": "広島市",
+      "sourceIds": [
+        "lawson-hbg"
+      ],
+      "sourceUrl": "https://l-tike.com/search/?keyword=%E5%BA%83%E5%B3%B6%E6%96%87%E5%8C%96%E5%AD%A6%E5%9C%92HBG%E3%83%9B%E3%83%BC%E3%83%AB",
+      "sourceTypes": [
+        "playguide"
+      ],
+      "confidence": "candidate",
+      "id": "live-20261127-0000-267465616d",
+      "verifiedBy": 1,
+      "artist": "&TEAM",
+      "calendarDisplay": {
+        "date": "2026-11-27",
+        "artist": "&TEAM",
+        "venue": "広島文化学園HBGホール",
+        "start": null,
+        "endEstimate": null
+      },
+      "facilityVerification": "verified",
+      "publishable": true
+    },
+    {
       "category": "convention",
       "date": "2026-11-28",
       "start": null,
@@ -5168,28 +5184,29 @@
     {
       "category": "live",
       "date": "2026-12-04",
-      "start": null,
-      "endEstimate": null,
+      "start": "18:00",
+      "endEstimate": "20:20",
       "title": "REBECCA",
       "venue": "上野学園ホール",
       "area": "広島市",
       "sourceIds": [
-        "lawson-ueno"
+        "lawson-ueno",
+        "eplus-ueno"
       ],
       "sourceUrl": "https://l-tike.com/search/?keyword=%E4%B8%8A%E9%87%8E%E5%AD%A6%E5%9C%92",
       "sourceTypes": [
         "playguide"
       ],
-      "confidence": "candidate",
+      "confidence": "confirmed",
       "id": "live-20261204-0000-72656265636361",
-      "verifiedBy": 1,
+      "verifiedBy": 2,
       "artist": "REBECCA",
       "calendarDisplay": {
         "date": "2026-12-04",
         "artist": "REBECCA",
         "venue": "上野学園ホール",
-        "start": null,
-        "endEstimate": null
+        "start": "18:00",
+        "endEstimate": "20:20"
       },
       "facilityVerification": "verified",
       "publishable": true
@@ -5327,6 +5344,27 @@
         "start": "19:00",
         "endEstimate": "21:20"
       },
+      "facilityVerification": "verified",
+      "publishable": true
+    },
+    {
+      "category": "convention",
+      "date": "2026-12-09",
+      "start": "9:20",
+      "endEstimate": "19:00",
+      "title": "大学 ICT 推進協議会 2026 年度年次大会 (AXIES2026)",
+      "venue": "広島国際会議場",
+      "area": "広島市",
+      "sourceIds": [
+        "icch"
+      ],
+      "sourceUrl": "https://www.pcf.city.hiroshima.jp/icch/event.cgi",
+      "sourceTypes": [
+        "venue"
+      ],
+      "confidence": "official",
+      "id": "convention-20261209-920-e5a4a7e5ada66963",
+      "verifiedBy": 1,
       "facilityVerification": "verified",
       "publishable": true
     }
